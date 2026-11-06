@@ -1,4 +1,4 @@
-# Dpkg for FluentCI
+# Dpkg
 
 Build a Debian package from a prepared filesystem directory using PureScript
 and `dpkg-deb`. Package names, versions, payloads, and dependencies come from

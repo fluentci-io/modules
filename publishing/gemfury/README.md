@@ -1,4 +1,4 @@
-# Gemfury for FluentCI
+# Gemfury
 
 Upload existing Linux packages to any Gemfury account. Package names, versions,
 architectures, and build tools belong to your project: this module accepts

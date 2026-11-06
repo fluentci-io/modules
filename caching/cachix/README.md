@@ -1,4 +1,4 @@
-# Cachix for FluentCI
+# Cachix
 
 Configure a Cachix binary cache and upload Nix build outputs from FluentCI.
 The module is written in PureScript and compiled to WebAssembly.

@@ -1,4 +1,4 @@
-# Docker Buildx for FluentCI
+# Docker Buildx
 
 Run Docker Buildx commands through FluentCI using typed arguments and native
 execution plans. The module is written in PureScript and compiled to

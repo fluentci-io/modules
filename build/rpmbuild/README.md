@@ -1,4 +1,4 @@
-# Rpmbuild for FluentCI
+# Rpmbuild
 
 Build RPM packages from a project-owned RPM directory tree using PureScript.
 Your spec defines the package metadata, payload, dependencies, and build steps.
