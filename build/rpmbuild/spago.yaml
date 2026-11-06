@@ -1,0 +1,10 @@
+package:
+  name: fluentci-rpmbuild
+  dependencies: [argonaut-codecs, argonaut-core, arrays, effect, either, exceptions, fluentci, foldable-traversable, foreign-object, maybe, prelude, strings]
+workspace:
+  packageSet:
+    registry: 81.11.0
+  extraPackages:
+    fluentci:
+      git: https://github.com/fluentci-io/purescript-fluentci.git
+      ref: 954d03568935c26f92434119a110635a41a6fa4c
