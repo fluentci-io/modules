@@ -1,25 +1,25 @@
 [[modules]]
-name = "cachix"
-version = "0.1.0"
-path = "caching/cachix"
-sdk = "purescript"
-
-[[modules]]
 name = "buildx"
 version = "0.1.0"
 path = "containers/buildx"
 sdk = "purescript"
 
 [[modules]]
-name = "gemfury"
+name = "cachix"
 version = "0.1.0"
-path = "publishing/gemfury"
+path = "caching/cachix"
 sdk = "purescript"
 
 [[modules]]
 name = "dpkg"
 version = "0.1.0"
 path = "build/dpkg"
+sdk = "purescript"
+
+[[modules]]
+name = "gemfury"
+version = "0.1.0"
+path = "publishing/gemfury"
 sdk = "purescript"
 
 [[modules]]
