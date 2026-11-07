@@ -26,7 +26,10 @@ if registry validation or any module/OS job fails or is cancelled.
 CLI module tests cover every named export and field, supported host routing,
 missing tools, and execution failures. Local executable fixtures exercise plan
 execution on both hosts. Formatter and linter jobs also install pinned Python
-and Node tools and require native formatting/linting tests. Provider commands
+and Node tools and require native formatting/linting tests. Browser testing jobs use Bun 1.4.3 to install pinned Playwright/Cypress packages
+and require real headless browser assertions, including expected failing tests.
+Betterleaks, Gitleaks, and Syft jobs install checksum-pinned binaries and require offline
+secret-detection and SBOM fixtures. Other service integrations
 use controlled host responses; CI does not deploy to real accounts or clusters.
 
 ## Live runtime smoke tests
