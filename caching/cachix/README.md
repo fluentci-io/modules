@@ -78,8 +78,6 @@ Only `setup` and `push` are exported as WebAssembly entry points.
 ## Development
 
 Install Node.js, Spago, the PureScript compiler, and the `extism-js` compiler.
-The workspace configuration also requires the `fluentci-ci-common` package at
-`../common`, relative to this module.
 
 ```sh
 npm ci

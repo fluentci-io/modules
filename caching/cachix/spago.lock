@@ -7,8 +7,8 @@
           "dependencies": [
             "effect",
             "either",
+            "exceptions",
             "fluentci",
-            "fluentci-ci-common",
             "foldable-traversable",
             "prelude",
             "strings"
@@ -686,9 +686,6 @@
       "fluentci": {
         "git": "https://github.com/fluentci-io/purescript-fluentci.git",
         "ref": "954d03568935c26f92434119a110635a41a6fa4c"
-      },
-      "fluentci-ci-common": {
-        "path": "../common"
       }
     }
   },
@@ -925,17 +922,6 @@
         "maybe",
         "prelude",
         "tuples"
-      ]
-    },
-    "fluentci-ci-common": {
-      "type": "local",
-      "path": "../common",
-      "dependencies": [
-        "effect",
-        "either",
-        "fluentci",
-        "foldable-traversable",
-        "prelude"
       ]
     },
     "foldable-traversable": {

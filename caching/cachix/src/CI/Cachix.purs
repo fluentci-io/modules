@@ -1,7 +1,7 @@
 module CI.Cachix (setup, setupWith, push, pushResultWith, runWithCache) where
 
 import Prelude
-import CI.Support (run, unwrap, requiredEnv)
+import CI.Cachix.Support (run, unwrap, requiredEnv)
 import Data.Foldable (all)
 import Data.String.CodeUnits as String
 import Data.String.Common (trim)
