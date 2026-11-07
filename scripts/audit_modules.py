@@ -2,6 +2,7 @@
 """Keep a reviewable inventory of every public WebAssembly pipeline function."""
 import argparse
 import json
+import re
 from pathlib import Path
 import sys
 import tomllib
@@ -59,7 +60,8 @@ def inventory():
             description = commands.get(name, {}).get('description', '')
             if commands and not description.strip():
                 raise ValueError(f'{path}/{name}: missing function purpose')
-            functions.append(f'`{name}` ({role})')
+            wit_name=re.sub(r'([a-z0-9])([A-Z])',r'\1-\2',name).replace('_','-').lower()
+            functions.append(f'`{wit_name}` ({role})')
         rows.append(f'| [{module["name"]}](../{path}/README.md) | {PURPOSES[category]} | {", ".join(functions)} |')
     return registry, rows
 
@@ -69,7 +71,8 @@ def render():
     return '\n'.join([
         '# Pipeline module audit', '',
         f'The registry contains {len(registry)} modules. This inventory covers every public',
-        'WebAssembly function, including diagnostics and literal-argument escape hatches.',
+        'native component function, including diagnostics and literal-argument escape hatches.',
+        'Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.',
         'Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.', '',
         '## Execution and failure contracts', '',
         '- Setup functions install prerequisites, verify the executable/version, and publish PATH.',
@@ -79,7 +82,7 @@ def render():
         '  Upload file arguments marked in the catalog are checked before starting the command.',
         '  Every invocation needs a fresh run directory, records stdout/stderr and result JSON,',
         '  and propagates a nonzero command exit, timeout, cancellation, or host failure.',
-        '- `artifacts` declares named output files for size/SHA-256 reporting. Output files and',
+        '- `artifacts` uses typed NAME=PATH string lists to declare output files for size/SHA-256 reporting. Output files and',
         '  remote identifiers still depend on the native command; see each module’s OPTIONS.md.',
         '- Diagnostics support toolchain troubleshooting and cache inspection; `run` supports',
         '  native features without inventing unsupported service endpoints. Ubicloud is a',

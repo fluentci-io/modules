@@ -5,14 +5,15 @@
 [CI](./workflows/ci.yml) runs on pushes to `main`, pull requests, and manual dispatch. Feature branches
 use their pull request run, avoiding duplicate push and PR executions.
 It validates the registry, npm metadata and lockfiles, source/test presence,
-MIT licenses, guest entry point declarations, generated Buildx and CLI files, and the
+MIT licenses, guest entry point declarations, generated Buildx, CLI, setup, and component contracts, and the
 workflow syntax. Validator tests run alongside these checks.
 
 The build matrix is generated from `fluentci.toml`: every registered module
 runs on Ubuntu 24.04 and macOS 15. Modules are divided into four batches per OS (eight test runners total), rather
 than spawning one runner for every module. Each batch installs dependencies with `npm ci` (Bun for testing modules),
 builds the WebAssembly plugin, runs the entire module test suite, and checks
-that compiled public WASM exports match `entry.mjs`. Builds must preserve the
+that each artifact is a native component whose exports, argument records,
+descriptions, return types, and metadata checksum match the public source contract. Builds must preserve the
 committed source and lockfiles. Test logs and plugins are retained for seven
 days. Batches continue after a module fails and retain separate per-module logs.
 The matrix continues after another batch fails so failures remain visible.
@@ -54,10 +55,9 @@ of the deterministic PR test suite.
 
 The [composite action](./actions/setup-toolchain/action.yml) uses Node 24 and
 Python 3.12. PureScript 0.15.16 and Spago 1.0.5 are pinned in
-[`toolchain/package-lock.json`](./toolchain/package-lock.json). Extism JS PDK
-v1.7.0 and Binaryen version_125 downloads are pinned by URL and SHA-256 in
-[`toolchain/releases.json`](./toolchain/releases.json). Changing these files
-invalidates the compiler cache. Spago dependencies are cached by platform,
+[`toolchain/package-lock.json`](./toolchain/package-lock.json). Native components use the pinned ComponentizeJS/Jco versions in
+[`lib/component/package.json`](../lib/component/package.json) and its frozen Bun
+lockfile. No Extism guest compiler is used. Spago dependencies are cached by platform,
 batch, and lockfile. Workflow actions are pinned to commit hashes.
 
 Run registry and artifact checks locally:
@@ -65,10 +65,11 @@ Run registry and artifact checks locally:
 ```sh
 python3 scripts/validate_modules.py
 python3 -m unittest discover -s test/ci -p 'test_*.py' -v
-node --test test/ci/*.test.mjs
+node --test test/ci/*.test.mjs lib/component/test/*.test.mjs
 python3 containers/buildx/generate.py --check
 python3 scripts/generate_cli_modules.py --check
 python3 scripts/generate_setup_tools.py --check
+python3 scripts/generate_components.py --check
 python3 scripts/audit_modules.py --check
 node scripts/validate_wasm.mjs setup/purescript
 ```

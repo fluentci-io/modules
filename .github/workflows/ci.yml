@@ -28,19 +28,26 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.4.3'
+      - name: Install component contract validators
+        run: bun install --cwd lib/component --frozen-lockfile
       - name: Validate every registered module
         id: modules
         run: python scripts/validate_modules.py --github-output
       - name: Test CI validators
         run: |
           python -m unittest discover -s test/ci -p 'test_*.py' -v
-          node --test test/ci/*.test.mjs
+          node --test test/ci/*.test.mjs lib/component/test/*.test.mjs
       - name: Check generated Buildx sources and schema
         run: python containers/buildx/generate.py --check
       - name: Check generated CLI sources and schemas
         run: python scripts/generate_cli_modules.py --check
       - name: Check generated setup sources and schemas
         run: python scripts/generate_setup_tools.py --check
+      - name: Check typed component sources and schemas
+        run: python scripts/generate_components.py --check
       - name: Audit pipeline exports
         run: python scripts/audit_modules.py --check
       - name: Lint workflows
@@ -71,19 +78,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends dpkg-dev rpm zip unzip
-      - name: Set up Bun for JavaScript integration tests
-        if: matrix.bun
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: '1.4.3'
       - name: Install formatter and linter integration tools
         if: matrix.formatters
         shell: bash
         run: |
           python3 -m venv "$RUNNER_TEMP/cli-python"
-          "$RUNNER_TEMP/cli-python/bin/pip" install black==25.1.0 ruff==0.11.5 yamllint==1.37.0
+          "$RUNNER_TEMP/cli-python/bin/pip" install black==25.1.0 ruff==0.11.5 yamllint==1.37.0 sqlfluff==4.5.0 sqruff==0.44.0
           mkdir -p "$RUNNER_TEMP/cli-node"
           bun add --cwd "$RUNNER_TEMP/cli-node" --dev --exact prettier@3.5.3 @biomejs/biome@1.9.4
+          npm_package_version=0.58.0 bun add --cwd "$RUNNER_TEMP/cli-node" --dev --exact --trust protolint@0.58.0
           {
             echo "$RUNNER_TEMP/cli-python/bin"
             echo "$RUNNER_TEMP/cli-node/node_modules/.bin"

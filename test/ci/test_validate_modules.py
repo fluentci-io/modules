@@ -16,7 +16,7 @@ class ModuleValidationTests(unittest.TestCase):
         self.module = self.root / "setup/example"
         self.module.mkdir(parents=True)
         (self.root / "LICENSE").write_text("MIT License\n")
-        (self.root / "fluentci.toml").write_text('[[modules]]\nname="example"\nversion="0.1.0"\npath="setup/example"\nsdk="purescript"\n')
+        (self.root / "fluentci.toml").write_text('[[modules]]\nname="example"\nversion="0.1.0"\npath="setup/example"\nsdk="purescript"\nruntime="component"\n')
         package = {"name": "example", "license": "MIT", "scripts": {"build": "node build.mjs", "test": "node --test"}}
         files = {
             "README.md": "# Example\n", "LICENSE": "MIT License\n",
@@ -24,13 +24,14 @@ class ModuleValidationTests(unittest.TestCase):
             "package-lock.json": json.dumps({"name": "example", "packages": {"": {"name": "example", "license": "MIT"}}}),
             "spago.yaml": "package:\n  name: example\n", "spago.lock": "{}",
             "build.mjs": "", "entry.mjs": 'export { setup } from "./output/Main/index.js";\n',
-            "imports.d.ts": 'declare module "main" { export function setup(): I32; }\n',
+            "schema.json": json.dumps({"runtime":"component","exports":{"setup":{}}}),
             ".gitignore": "dist/\n", "test.test.mjs": "",
         }
         for name, text in files.items():
             (self.module / name).write_text(text)
         (self.module / "src").mkdir()
-        (self.module / "src/Main.purs").write_text("module Main where\n")
+        (self.module / "src/CI").mkdir()
+        (self.module / "src/CI/Component.purs").write_text("module CI.Component where\nsetup :: { version :: String } -> Effect String\n")
 
     def test_complete_module_is_included(self):
         self.assertEqual(validate(self.root), [{"name": "example", "path": "setup/example"}])
@@ -58,7 +59,7 @@ class ModuleValidationTests(unittest.TestCase):
             validate(self.root)
 
     def test_declared_guest_exports_must_match(self):
-        (self.module / "imports.d.ts").write_text('declare module "main" { export function other(): I32; }')
+        (self.module / "src/CI/Component.purs").write_text("other :: { version :: String } -> Effect String\n")
         with self.assertRaisesRegex(ValueError, "entry points"):
             validate(self.root)
 

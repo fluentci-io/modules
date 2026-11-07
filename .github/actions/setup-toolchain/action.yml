@@ -1,5 +1,5 @@
 name: Setup CI toolchain
-description: Install the pinned Node, Python, PureScript, Spago, and Extism build tools.
+description: Install the pinned Node, Python, PureScript, Spago, and native component build tools.
 runs:
   using: composite
   steps:
@@ -11,6 +11,12 @@ runs:
     - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
       with:
         python-version: '3.12'
+    - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      with:
+        bun-version: '1.4.3'
+    - name: Install pinned component toolchain
+      shell: bash
+      run: bun install --cwd lib/component --frozen-lockfile
     - name: Install Linux compiler libraries
       if: runner.os == 'Linux'
       shell: bash
@@ -29,15 +35,12 @@ runs:
     - name: Add tools to PATH
       shell: bash
       run: |
-        echo "$HOME/.cache/fluentci-ci/toolchain/bin" >> "$GITHUB_PATH"
         echo "$HOME/.cache/fluentci-ci/toolchain/npm/node_modules/.bin" >> "$GITHUB_PATH"
-        echo "$HOME/.cache/fluentci-ci/toolchain/binaryen/bin" >> "$GITHUB_PATH"
     - name: Verify tools
       shell: bash
       run: |
         node --version
         purs --version
         spago --version
-        extism-js --version
-        wasm-opt --version
-        wasm-merge --version
+        bun --version
+        node -e 'import("./lib/component/node_modules/@bytecodealliance/componentize-js/src/componentize.js").then(() => console.log("ComponentizeJS ready"))'

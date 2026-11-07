@@ -19,12 +19,16 @@ def entry_points(directory):
     names = [name.strip() for name in match[1].split(",") if name.strip()]
     if len(names) != len(set(names)) or not all(re.fullmatch(r"[a-z][a-zA-Z0-9_]*", name) for name in names):
         raise ValueError(f"{directory}: invalid or duplicate entry points")
-    main = re.search(r'declare module "main"\s*\{(.*?)\}', (directory / "imports.d.ts").read_text(), re.S)
-    if not main:
-        raise ValueError(f"{directory}: imports.d.ts has no main module")
-    declared = re.findall(r"export function (\w+)\(\): I32;", main[1])
+    source = (directory / "src/CI/Component.purs").read_text()
+    public = re.search(r"module CI\.Component \(([^)]+)\) where", source)
+    if public and sorted(n.strip() for n in public[1].split(",")) != sorted(names):
+        raise ValueError(f"{directory}: entry points and PureScript exports differ")
+    declared = [n for n in re.findall(r"^(\w+) :: .* -> Effect ", source, re.M) if n in names]
     if sorted(declared) != sorted(names):
-        raise ValueError(f"{directory}: entry points and main import declarations differ")
+        raise ValueError(f"{directory}: entry points and typed PureScript declarations differ")
+    schema = json.loads((directory / "schema.json").read_text())
+    if schema.get("runtime") != "component" or sorted(schema.get("exports", {})) != sorted(names):
+        raise ValueError(f"{directory}: typed component schema differs from entry points")
     return names
 
 
@@ -58,6 +62,8 @@ def validate(root=ROOT):
             raise ValueError(f"Invalid module name: {name}")
         if not re.fullmatch(r"[a-z][a-z0-9-]*/[a-z][a-z0-9-]*", path):
             raise ValueError(f"Invalid module path: {path}")
+        if module.get("runtime") != "component":
+            raise ValueError(f"{name}: native component runtime is required")
         if module.get("sdk") != "purescript":
             raise ValueError(f"{name}: unsupported SDK")
         if not re.fullmatch(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?", module.get("version", "")):
@@ -65,7 +71,7 @@ def validate(root=ROOT):
         directory = root / path
         if not directory.resolve().is_relative_to(root):
             raise ValueError(f"{name}: directory escapes the repository")
-        for file in ["README.md", "LICENSE", "package.json", "package-lock.json", "spago.yaml", "spago.lock", "build.mjs", "entry.mjs", "imports.d.ts", ".gitignore"]:
+        for file in ["README.md", "LICENSE", "package.json", "package-lock.json", "spago.yaml", "spago.lock", "build.mjs", "entry.mjs", "schema.json", ".gitignore"]:
             if not (directory / file).is_file():
                 raise ValueError(f"{name}: missing {file}")
         if (directory / "LICENSE").read_text() != license_text:
@@ -108,9 +114,9 @@ def batches(modules, shards=4):
             names = {module["name"] for module in bucket}
             result.append({"os": os_name, "shard": index + 1, "modules": bucket,
                            "browser": bool(names & {"cypress", "playwright"}),
-                           "bun": bool(names & {"cypress", "playwright", "gh-artifact", "gitlab-artifacts", "scorecard", "black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint"}),
+                           "bun": bool(names & {"cypress", "playwright", "gh-artifact", "gitlab-artifacts", "scorecard", "black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint", "sqlfluff", "protolint", "sqruff"}),
                            "build": bool(names & {"cmake", "meson", "ninja", "sccache"}),
-                           "formatters": bool(names & {"black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint"}),
+                           "formatters": bool(names & {"black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint", "sqlfluff", "protolint", "sqruff"}),
                            "uv": "uv" in names,
                            "security": sorted(names & {"betterleaks", "gitleaks", "syft"})})
     return {"include": result}
