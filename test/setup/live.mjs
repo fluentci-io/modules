@@ -15,6 +15,7 @@ export function runLive(tool, bundle) {
   const { setup } = createRequire(import.meta.url)(fileURLToPath(bundle));
   const supported = ["linux", "darwin"].includes(process.platform);
   const erl = tool !== "elixir" || spawnSync("which", ["erl"]).status === 0;
+  if (process.env.FLUENTCI_REQUIRE_NATIVE_TESTS === "1" && (!supported || !erl)) throw new Error(`${tool}: live setup prerequisites are missing`);
   test(`${tool}: installs and executes the actual upstream release`, { skip: !supported || !erl }, () => {
     const root = mkdtempSync(join(tmpdir(), "fluentci-setup-live-"));
     try {

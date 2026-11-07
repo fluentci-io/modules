@@ -23,6 +23,7 @@ All modules are registered in [fluentci.toml](./fluentci.toml).
 | [java](./setup/java/README.md) | Install Java and select a version. | `setup` |
 | [nix](./setup/nix/README.md) | Install Nix and select a version. | `setup` |
 | [node](./setup/node/README.md) | Install Node.js and select a version. | `setup` |
+| [purescript](./setup/purescript/README.md) | Install Node, Bun, npm, PureScript, and Spago. | `setup` |
 | [rpmbuild](./build/rpmbuild/README.md) | Build `.rpm` packages from a validated RPM tree. | `validate`, `build` |
 | [rust](./setup/rust/README.md) | Install Rust and select a version. | `setup` |
 | [zig](./setup/zig/README.md) | Install Zig and select a version. | `setup` |
@@ -108,10 +109,12 @@ Each build produces `dist/plugin.wasm`. Linux integration tests for dpkg and
 rpmbuild create and inspect real packages when their native tools are
 available; those tests are skipped on other hosts.
 
-Some existing modules need additional development resources: Cachix references
-`caching/common`, while Buildx requires schema files absent from this checkout.
-Their READMEs describe these prerequisites. Buildx also requires Python 3 for
-its generator checks.
+Buildx requires Python 3 for its generator checks. All module source dependencies
+and its generated command schema are included in this checkout.
+
+GitHub Actions builds and tests every registered module on Linux and macOS,
+validates compiled WASM exports, and runs scheduled upstream runtime smoke tests.
+See [the CI guide](./.github/README.md) for coverage and local checks.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution conventions and
 verification guidance.

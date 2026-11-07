@@ -1,0 +1,60 @@
+name: Runtime setup smoke tests
+
+on:
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: setup-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  upstream:
+    name: Live runtime installs / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: ./.github/actions/setup-toolchain
+      - name: Validate registered modules
+        run: python scripts/validate_modules.py
+      - name: Install Linux runtime test dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends erlang-base erlang-crypto erlang-public-key erlang-ssl zip unzip
+      - name: Install macOS Erlang
+        if: runner.os == 'macOS'
+        run: brew install erlang
+      - name: Build runtime setup modules
+        shell: bash
+        run: |
+          for directory in setup/*; do
+            test -f "$directory/package.json" || continue
+            npm ci --prefix "$directory"
+            npm run build --prefix "$directory"
+            node scripts/validate_wasm.mjs "$directory"
+          done
+      - name: Install and execute real upstream runtimes in temporary directories
+        shell: bash
+        env:
+          FLUENTCI_SETUP_LIVE: '1'
+          FLUENTCI_REQUIRE_NATIVE_TESTS: '1'
+          FLUENTCI_SETUP_ELIXIR_VERSION: ${{ runner.os == 'Linux' && '1.18.0' || 'latest' }}
+        run: node --test --test-name-pattern='actual upstream release' setup/*/test/setup.test.mjs 2>&1 | tee "$RUNNER_TEMP/setup-smoke.log"
+      - name: Preserve smoke test log
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: setup-smoke-${{ matrix.os }}
+          path: ${{ runner.temp }}/setup-smoke.log
+          if-no-files-found: warn
+          retention-days: 7

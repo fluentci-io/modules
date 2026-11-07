@@ -18,9 +18,8 @@ npm test
 
 Build before testing because tests load compiled PureScript or a bundled
 plugin. Each build produces `dist/plugin.wasm`. Buildx additionally requires
-Python 3 and the schema resources described in its README. Cachix currently
-references a local `fluentci-ci-common` package at `caching/common`; provide
-that dependency before building it.
+Python 3. Its generated input schema and Cachix support code are included in
+the checkout.
 
 ## Module conventions
 
@@ -68,8 +67,11 @@ a target architecture does not provide a cross-compiler.
 
 For Buildx, edit `buildx-options.json` and regenerate using `python3 generate.py`
 rather than editing generated command sources or `OPTIONS.md` directly.
-Generation requires the schema resources listed in the module README;
 `python3 generate.py --check` checks generated files without rewriting them.
+
+Run `python3 scripts/validate_modules.py` after changing module metadata or
+registration. CI derives its Linux/macOS matrix from this registry and validates
+compiled guest exports; see [the CI guide](./.github/README.md).
 
 Before submitting, check for whitespace errors:
 

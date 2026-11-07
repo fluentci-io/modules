@@ -24,6 +24,7 @@ export function runNative(tool, bundle) {
   const { setup } = createRequire(import.meta.url)(fileURLToPath(bundle));
   const needed = ["tar", "which", ...(["bun", "deno", "elixir"].includes(tool) ? ["zip", "unzip"] : [])];
   const available = ["linux", "darwin"].includes(process.platform) && needed.every(name => spawnSync("which", [name]).status === 0);
+  if (process.env.FLUENTCI_REQUIRE_NATIVE_TESTS === "1" && !available) throw new Error(`${tool}: native setup test tools are missing`);
   test(`${tool}: real filesystem installation, verification, environment publication, and archive reuse`, { skip: !available }, () => {
     const root = mkdtempSync(join(tmpdir(), "fluentci-setup-native-"));
     try {

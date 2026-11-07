@@ -9,6 +9,8 @@ import { fixture } from "./host.mjs";
 
 const { build, validate } = createRequire(import.meta.url)("../dist/plugin.cjs");
 const available = process.platform === "linux" && ["rpmbuild", "rpmspec", "rpm", "realpath"].every(tool => spawnSync(tool, ["--version"]).status === 0);
+if (process.env.FLUENTCI_REQUIRE_NATIVE_TESTS === "1" && process.platform === "linux" && !available) throw new Error("Native Linux packaging tests require their build tools");
+
 function command(program, args) {
   const result = spawnSync(program, args, { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);

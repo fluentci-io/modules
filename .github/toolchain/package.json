@@ -1,0 +1,9 @@
+{
+  "name": "fluentci-ci-toolchain",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "purescript": "0.15.16",
+    "spago": "1.0.5"
+  }
+}
