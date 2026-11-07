@@ -42,7 +42,7 @@ Build an existing CMake build tree.
 | --- | --- | --- | --- |
 | `buildDir` | `string` | `--build <value>` (global) | `"build"` |
 | `config` | `string` | `--config=<value>` | Omitted |
-| `parallel` | `integer` | `--parallel=<value>` | Omitted |
+| `parallel` | `integer` | `--parallel <value>` | Omitted |
 | `target` | `strings` | `--target=<value>` | Omitted |
 | `cleanFirst` | `boolean` | `--clean-first` | Omitted |
 
@@ -65,5 +65,5 @@ Run CTest tests in a configured build tree.
 | --- | --- | --- | --- |
 | `buildDir` | `string` | `--test-dir <value>` (global) | `"build"` |
 | `config` | `string` | `-C <value>` | Omitted |
-| `parallel` | `integer` | `--parallel=<value>` | Omitted |
+| `parallel` | `integer` | `--parallel <value>` | Omitted |
 | `outputOnFailure` | `boolean` | `--output-on-failure` | `true` |

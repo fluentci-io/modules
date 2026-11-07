@@ -3016,7 +3016,7 @@
             "default": null,
             "required": false,
             "sample": 2,
-            "style": "value",
+            "style": "separate",
             "scope": "option",
             "description": "parallel",
             "choices": []
@@ -3146,7 +3146,7 @@
             "default": null,
             "required": false,
             "sample": 2,
-            "style": "value",
+            "style": "separate",
             "scope": "option",
             "description": "parallel",
             "choices": []
