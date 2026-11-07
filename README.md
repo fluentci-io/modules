@@ -6,15 +6,26 @@ cache Nix build outputs using independently configured modules.
 
 ## Modules
 
-All five modules are registered in [fluentci.toml](./fluentci.toml).
+All modules are registered in [fluentci.toml](./fluentci.toml).
 
 | Module | Purpose | WebAssembly functions |
 | --- | --- | --- |
-| [cachix](./caching/cachix/README.md) | Configure a Cachix cache and upload Nix outputs. | `setup`, `push` |
 | [buildx](./containers/buildx/README.md) | Run Docker Buildx with typed command arguments. | `build`, `bake`, `create`, and [other commands](./containers/buildx/OPTIONS.md) |
-| [gemfury](./publishing/gemfury/README.md) | Upload existing packages to a Gemfury account. | `upload` |
+| [bun](./setup/bun/README.md) | Install Bun and select a version. | `setup` |
+| [cachix](./caching/cachix/README.md) | Configure a Cachix cache and upload Nix outputs. | `setup`, `push` |
+| [deno](./setup/deno/README.md) | Install Deno and select a version. | `setup` |
+| [determinate-nix](./setup/determinate-nix/README.md) | Install Determinate Nix and select a version. | `setup` |
 | [dpkg](./build/dpkg/README.md) | Build `.deb` packages from a validated package root. | `validate`, `build` |
+| [elixir](./setup/elixir/README.md) | Install Elixir and select a version. | `setup` |
+| [gemfury](./publishing/gemfury/README.md) | Upload existing packages to a Gemfury account. | `upload` |
+| [gleam](./setup/gleam/README.md) | Install Gleam and select a version. | `setup` |
+| [go](./setup/go/README.md) | Install Go and select a version. | `setup` |
+| [java](./setup/java/README.md) | Install Java and select a version. | `setup` |
+| [nix](./setup/nix/README.md) | Install Nix and select a version. | `setup` |
+| [node](./setup/node/README.md) | Install Node.js and select a version. | `setup` |
 | [rpmbuild](./build/rpmbuild/README.md) | Build `.rpm` packages from a validated RPM tree. | `validate`, `build` |
+| [rust](./setup/rust/README.md) | Install Rust and select a version. | `setup` |
+| [zig](./setup/zig/README.md) | Install Zig and select a version. | `setup` |
 
 Each module has its own dependencies, build scripts, tests, and documentation.
 Source APIs also expose helpers for composition in PureScript pipelines.
@@ -64,6 +75,22 @@ selection does not cross-compile the payload.
 See each module's README for complete input formats, required host tools,
 authentication, and examples. Buildx requires a fresh `runDir` for every
 invocation; Cachix requires a Nix flake workspace.
+
+## Runtime setup
+
+The [setup modules](./setup/README.md) install runtimes on Linux and macOS
+and use native package repositories on FreeBSD, OpenBSD, and NetBSD. BSD
+availability depends on the selected repository. Nix and Determinate Nix are
+limited to Linux/macOS. Select a specific version when available:
+
+```sh
+fluentci run node setup 22.14.0
+fluentci run rust setup stable
+```
+
+Setup verifies the installed runtime and publishes its PATH and runtime
+environment to later FluentCI commands. The shared setup guide documents
+version channels, BSD package selectors, and platform prerequisites.
 
 ## Development
 

@@ -47,6 +47,12 @@ Keep generated build output and installed dependencies out of Git, including
 `dist/`, `output/`, `.spago/`, and `node_modules/`. Never commit credentials or
 local environment files such as `.envrc`.
 
+The setup modules share the checked-in `lib/setup` package and the fixtures
+in `test/setup`. Rebuild every setup module after changing that shared library,
+then run their tests. See [the setup guide](./setup/README.md) for OS coverage
+and optional upstream smoke tests. Keep new module registrations alphabetized
+by name in `fluentci.toml`.
+
 ## Verification
 
 Run the affected module's build and tests. Add tests for meaningful changes

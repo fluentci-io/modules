@@ -5,9 +5,27 @@ path = "containers/buildx"
 sdk = "purescript"
 
 [[modules]]
+name = "bun"
+version = "0.1.0"
+path = "setup/bun"
+sdk = "purescript"
+
+[[modules]]
 name = "cachix"
 version = "0.1.0"
 path = "caching/cachix"
+sdk = "purescript"
+
+[[modules]]
+name = "deno"
+version = "0.1.0"
+path = "setup/deno"
+sdk = "purescript"
+
+[[modules]]
+name = "determinate-nix"
+version = "0.1.0"
+path = "setup/determinate-nix"
 sdk = "purescript"
 
 [[modules]]
@@ -17,13 +35,61 @@ path = "build/dpkg"
 sdk = "purescript"
 
 [[modules]]
+name = "elixir"
+version = "0.1.0"
+path = "setup/elixir"
+sdk = "purescript"
+
+[[modules]]
 name = "gemfury"
 version = "0.1.0"
 path = "publishing/gemfury"
 sdk = "purescript"
 
 [[modules]]
+name = "gleam"
+version = "0.1.0"
+path = "setup/gleam"
+sdk = "purescript"
+
+[[modules]]
+name = "go"
+version = "0.1.0"
+path = "setup/go"
+sdk = "purescript"
+
+[[modules]]
+name = "java"
+version = "0.1.0"
+path = "setup/java"
+sdk = "purescript"
+
+[[modules]]
+name = "nix"
+version = "0.1.0"
+path = "setup/nix"
+sdk = "purescript"
+
+[[modules]]
+name = "node"
+version = "0.1.0"
+path = "setup/node"
+sdk = "purescript"
+
+[[modules]]
 name = "rpmbuild"
 version = "0.1.0"
 path = "build/rpmbuild"
+sdk = "purescript"
+
+[[modules]]
+name = "rust"
+version = "0.1.0"
+path = "setup/rust"
+sdk = "purescript"
+
+[[modules]]
+name = "zig"
+version = "0.1.0"
+path = "setup/zig"
 sdk = "purescript"
