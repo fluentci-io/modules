@@ -20,7 +20,12 @@ Every export accepts a JSON object. `runDir` is required and must identify a
 fresh execution directory. `project` defaults to `.` and selects the local
 working directory. `executable` overrides the native CLI program; an absolute
 path avoids ambiguity when using wrappers. `timeoutMs` is a positive integer,
-with a default of 900000. Command-specific fields are listed in the module's
+with a default of 900000. The optional `artifacts` object maps output names to paths for size/SHA-256
+metadata in the host execution report. File inputs marked in the catalog are
+checked before the command starts. Artifact collection is separate from remote
+upload and retention in the CI provider.
+
+Command-specific fields are listed in the module's
 `OPTIONS.md` and schema.
 
 The runtime checks the host OS, project directory, and required executable,

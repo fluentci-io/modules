@@ -34,6 +34,7 @@ def generated():
         schemas = {}
         for command in tool['commands']:
             properties = {'project':{'type':'string','default':'.','minLength':1},'runDir':{'type':'string','minLength':1},'executable':{'type':'string','minLength':1},'timeoutMs':{'type':'integer','minimum':1,'default':900000}}
+            properties['artifacts']={'type':'object','additionalProperties':{'type':'string','minLength':1},'description':'Named output files to collect with their sizes and SHA-256 digests in the execution report.'}
             required = ['runDir']
             for field in command['fields']:
                 kind = field['kind']
@@ -50,7 +51,8 @@ def generated():
         yield directory / 'schema.json', json.dumps({'name':tool['name'],'exports':schemas},indent=2)+'\n'
         docs=[f'# {tool["title"]} module arguments','', 'Generated from [the CLI catalog](../../lib/cli/catalog.json).','',
               'Every export requires a fresh `runDir`. Common fields are `project` (default `.`),',
-              '`executable` (the CLI program or path), and `timeoutMs` (default `900000`).','']
+              '`executable` (the CLI program or path), `timeoutMs` (default `900000`), and',
+              '`artifacts` (an object mapping output names to file paths).','']
         for command in tool['commands']:
             docs += [f'## `{command["name"]}`','',command['description'],'', '| Field | Type | CLI argument | Default / required |','| --- | --- | --- | --- |']
             for field in command['fields']:
@@ -58,7 +60,7 @@ def generated():
                 argument = field['flag'] or '<' + field['key'] + '>'
                 if field['style'].startswith('prefix:'):
                     argument = (field['flag'] + '=' if field['flag'] else '') + field['style'][7:] + '<value>'
-                elif field['style'] == 'separate':
+                elif field['style'] in ['separate','file-separate','directory-separate']:
                     argument = field['flag'] + ' <value>'
                 elif field['style'] == 'space-list':
                     argument = field['flag'] + ' <values...>'

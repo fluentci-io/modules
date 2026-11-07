@@ -23,6 +23,14 @@
             "minimum": 1,
             "default": 900000
           },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
           "arguments": {
             "type": "array",
             "items": {
@@ -65,6 +73,14 @@
             "type": "integer",
             "minimum": 1,
             "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
           }
         },
         "required": [
@@ -98,6 +114,14 @@
             "type": "integer",
             "minimum": 1,
             "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
           },
           "backend": {
             "type": "boolean",
@@ -152,6 +176,14 @@
             "minimum": 1,
             "default": 900000
           },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
           "json": {
             "type": "boolean",
             "description": "json"
@@ -188,6 +220,14 @@
             "type": "integer",
             "minimum": 1,
             "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
           },
           "check": {
             "type": "boolean",
@@ -233,6 +273,14 @@
             "type": "integer",
             "minimum": 1,
             "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
           },
           "out": {
             "type": "string",
@@ -304,6 +352,14 @@
             "minimum": 1,
             "default": 900000
           },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
           "autoApprove": {
             "type": "boolean",
             "description": "autoApprove"
@@ -370,6 +426,14 @@
             "minimum": 1,
             "default": 900000
           },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
           "autoApprove": {
             "type": "boolean",
             "description": "autoApprove"
@@ -430,6 +494,14 @@
             "type": "integer",
             "minimum": 1,
             "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
           },
           "json": {
             "type": "boolean",

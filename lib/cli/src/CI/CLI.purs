@@ -7,7 +7,7 @@ import Data.Argonaut.Decode (class DecodeJson, decodeJson, getFieldOptional)
 import Data.Argonaut.Parser (jsonParser)
 import Data.Array as Array
 import Data.Either (Either(..), either)
-import Data.Foldable (all, foldl)
+import Data.Foldable (all, foldl, traverse_)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as String
 import Data.String.Common (trim)
@@ -30,7 +30,7 @@ type Command =
   }
 type Tool = { name :: String, program :: String, environment :: Object.Object String, commands :: Array Command }
 type Runtime = { project :: String, runDir :: String, executable :: String, timeoutMs :: Int }
-type Prepared = { runtime :: Runtime, plan :: Plan.Plan }
+type Prepared = { runtime :: Runtime, plan :: Plan.Plan, checks :: Array { kind :: String, path :: String } }
 
 jsonValue :: forall a. DecodeJson a => Json -> Either String a
 jsonValue = either (Left <<< show) Right <<< decodeJson
@@ -84,7 +84,7 @@ valueTokens field value = do
       Nothing -> tokens
     else if field.style == "switch" then if Array.null tokens then [] else [ field.flag ]
     else if field.style == "space-list" then if Array.null tokens then [] else [ field.flag ] <> tokens
-    else if field.style == "separate" then Array.concatMap (\token -> [ field.flag, token ]) tokens
+    else if Array.elem field.style [ "separate", "file-separate", "directory-separate" ] then Array.concatMap (\token -> [ field.flag, token ]) tokens
     else case String.stripPrefix (Pattern "prefix:") field.style of
       Just prefix -> map (\token -> field.flag <> "=" <> prefix <> token) tokens
       Nothing -> map (\token -> field.flag <> "=" <> token) tokens
@@ -100,7 +100,7 @@ prepare :: String -> String -> Json -> Either String Prepared
 prepare name commandName json = do
   { tool, command } <- lookup name commandName
   object <- jsonValue json
-  let allowed = [ "project", "runDir", "executable", "timeoutMs" ] <> map _.key command.fields
+  let allowed = [ "project", "runDir", "executable", "timeoutMs", "artifacts" ] <> map _.key command.fields
   case Array.find (\key -> not (Array.elem key allowed)) (Object.keys object) of
     Just key -> Left ("Unknown " <> name <> " argument: " <> key)
     Nothing -> pure unit
@@ -112,14 +112,23 @@ prepare name commandName json = do
   unless (all (\text -> trim text /= "" && validText text) [ project, runDir, executable ]) $
     Left "project, runDir, and executable must be nonempty strings without NUL"
   unless (timeoutMs > 0) $ Left "timeoutMs must be positive"
+  artifacts <- optional object "artifacts" Object.empty
+  unless (all (\text -> trim text /= "" && validText text) (Object.keys artifacts <> Object.values artifacts)) $
+    Left "Artifact names and paths must be nonempty strings without NUL"
   fields <- traverse (resolveField object) command.fields
+  fileFields <- traverse (\field -> do
+    resolved <- resolveField object (field { flag = "", style = "value" })
+    pure (map (\path -> { kind: if String.startsWith (Pattern "directory") field.style then "-d" else "-f", path }) resolved.args))
+      (Array.filter (\field -> Array.elem field.style [ "file", "directory", "file-separate", "directory-separate" ]) command.fields)
   let scope scopeName = Array.concatMap _.args (Array.filter (\field -> field.scope == scopeName) fields)
       args = scope "global" <> command.args <> scope "option" <> scope "positional" <> scope "raw"
       environment = Object.union command.environment tool.environment
       task = Plan.task name executable project # Plan.withArgs args # Plan.withTimeout timeoutMs
       configured = foldl (\current key -> current # Plan.withEnv key (fromMaybe "" (Object.lookup key environment))) task (Object.keys environment)
+      declared = foldl (\current key -> current # Plan.artifact key (fromMaybe "" (Object.lookup key artifacts))) configured (Object.keys artifacts)
   pure { runtime: { project, runDir, executable, timeoutMs }
-       , plan: Plan.plan [ configured ] # Plan.withInheritedEnv true # Plan.withJobs 1 }
+       , checks: Array.concat fileFields
+       , plan: Plan.plan [ declared ] # Plan.withInheritedEnv true # Plan.withJobs 1 }
 
 makePlan :: String -> String -> Json -> Either String Plan.Plan
 makePlan name commandName json = _.plan <$> prepare name commandName json
@@ -148,6 +157,7 @@ invoke name commandName = do
   catchException (\error -> throw ("Required CLI is unavailable: " <> prepared.runtime.executable <> ". " <> message error)) do
     void (capture (if String.contains (Pattern "/") prepared.runtime.executable
       then [ "test", "-x", prepared.runtime.executable ] else [ "which", prepared.runtime.executable ]))
+  traverse_ (\check -> void (capture [ "test", check.kind, if String.startsWith (Pattern "/") check.path then check.path else prepared.runtime.project <> "/" <> check.path ])) prepared.checks
   report <- P.runPlan prepared.runtime.runDir prepared.plan >>= unwrap
   unless (report.outcome == Just RunSucceeded) $
     throw (name <> " failed; inspect " <> prepared.runtime.runDir <> "/result.json")

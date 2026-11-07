@@ -58,3 +58,18 @@ Tests execute the compiled module against a controlled host without contacting
 cloud accounts or clusters.
 
 [Upstream CLI documentation](https://github.com/ossf/scorecard). Licensed under the [MIT License](./LICENSE).
+
+## Enforce a pipeline policy
+
+`scan` produces findings without enforcing a score threshold. Pass its JSON stdout
+report to `gate` to require every reported check to score at least the requested
+`minimum` (default 7, range 1–10). Unscored checks and empty/invalid reports fail.
+The gate requires Bun (`setup-scorecard` installs it on Linux/macOS).
+
+```json
+{"runDir":".fluentci/score-gate","report":".fluentci/score-scan/scorecard.stdout","minimum":8}
+```
+
+Run `scan` with JSON format first, then invoke `scorecard gate` with this input.
+The gate evaluates checks present in that report; select your required checks in
+the scan configuration. It does not assert that omitted checks were evaluated.

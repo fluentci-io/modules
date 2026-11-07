@@ -6,6 +6,7 @@ import { createRequire } from "node:module";
 import { test } from "node:test";
 import { fixture } from "./host.mjs";
 import { nativeSuite } from "./native.mjs";
+import { artifactSuite } from "./artifacts.mjs";
 
 const catalog = JSON.parse(readFileSync(new URL('../../lib/cli/catalog.json', import.meta.url)));
 const right = result => { assert.equal(result.constructor.name, "Right", result.value0); return result.value0; };
@@ -19,6 +20,7 @@ export async function suite(directory) {
   const plan = (command, input) => JSON.parse(right(compile(right(makePlan(tool.name)(command)(input)))));
   const inputFor = command => Object.fromEntries([['runDir', '/tmp/fresh-run'], ...command.fields.filter(f => f.required && f.default === null).map(f => [f.key, sample(f)])]);
   nativeSuite(tool, plugin);
+  artifactSuite(tool, plugin);
   test('schema and WASM entry point declarations agree', () => {
     assert.deepEqual(Object.keys(plugin).sort(), tool.commands.map(c => c.name).sort());
     assert.deepEqual(Object.keys(schema.exports).sort(), Object.keys(plugin).sort());
@@ -54,7 +56,7 @@ export async function suite(directory) {
         }
         const values = Array.isArray(value) ? value : [String(value)];
         for (const token of values) {
-          const expected = !field.flag ? (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token : ['space-list','separate'].includes(field.style) ? token : field.flag + '=' + (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token;
+          const expected = !field.flag ? (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token : ['space-list','separate','file-separate','directory-separate'].includes(field.style) ? token : field.flag + '=' + (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token;
           assert.ok(task.args.includes(expected), command.name + ': missing ' + expected);
           if (field.scope === 'global' && command.args.length) assert.ok(task.args.indexOf(expected) < task.args.indexOf(command.args[0]));
         }
@@ -66,7 +68,7 @@ export async function suite(directory) {
     });
     test(command.name + ': rejects malformed inputs before host calls', () => {
       const base = inputFor(command);
-      const invalid = [[],null,{}, {...base,unknown:true},{...base,runDir:''},{...base,runDir:null},{...base,project:4},{...base,project:'bad\0path'},{...base,timeoutMs:0},{...base,timeoutMs:1.5},{...base,timeoutMs:'100'},{...base,executable:''}];
+      const invalid = [[],null,{}, {...base,unknown:true},{...base,artifacts:{report:''}},{...base,artifacts:[]},{...base,runDir:''},{...base,runDir:null},{...base,project:4},{...base,project:'bad\0path'},{...base,timeoutMs:0},{...base,timeoutMs:1.5},{...base,timeoutMs:'100'},{...base,executable:''}];
       for (const field of command.fields) {
         invalid.push({...base,[field.key]:null},{...base,[field.key]:{} });
         if (field.required && field.default === null) { const missing={...base}; delete missing[field.key]; invalid.push(missing); }
@@ -85,6 +87,16 @@ export async function suite(directory) {
       }
     });
   }
+  test('declares output artifacts and checks upload inputs before executing', () => {
+    const command=tool.commands.find(c=>c.fields.some(f=>['file','file-separate'].includes(f.style)));
+    if(command){
+      const f=fixture({input:inputFor(command),fail:args=>args[0]==='test'&&args[1]==='-f'});
+      assert.throws(plugin[command.name]); assert.equal(f.plans.length,0);
+    }
+    const base=inputFor(tool.commands[0]);
+    const task=plan(tool.commands[0].name,{...base,artifacts:{report:'output.json'}}).tasks[0];
+    assert.ok(JSON.stringify(task).includes('output.json'));
+  });
   if (tool.path.startsWith('secrets/')) test('authentication stays in inherited environment and out of plan/input', () => {
     const f=fixture({input:inputFor(tool.commands[0]),env:{DOPPLER_TOKEN:'secret-sentinel',INFISICAL_TOKEN:'secret-sentinel',VAULT_TOKEN:'secret-sentinel',BAO_TOKEN:'secret-sentinel'}});
     plugin.run(); assert.ok(!JSON.stringify(f.plans).includes('secret-sentinel'));

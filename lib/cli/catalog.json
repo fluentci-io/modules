@@ -378,6 +378,250 @@
     ]
   },
   {
+    "name": "artifactory",
+    "path": "artifacts/artifactory",
+    "program": "jf",
+    "title": "JFrog Artifactory",
+    "docs": "https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli",
+    "notes": "Install JFrog CLI or use setup-artifactory. Configure an authenticated server through the native CLI credential store before use. serverId selects that server; credentials are not JSON inputs. Patterns are expanded by JFrog CLI, not a shell. buildName/buildNumber associate uploaded artifacts with build information. This module does not automatically collect environment variables into build metadata.",
+    "environment": {
+      "JFROG_CLI_OFFER_CONFIG": "false",
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "rt",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "flat",
+            "kind": "boolean",
+            "flag": "--flat",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "flat",
+            "choices": []
+          },
+          {
+            "key": "recursive",
+            "kind": "boolean",
+            "flag": "--recursive",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "recursive",
+            "choices": []
+          },
+          {
+            "key": "buildName",
+            "kind": "string",
+            "flag": "--build-name",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "buildName",
+            "choices": []
+          },
+          {
+            "key": "buildNumber",
+            "kind": "string",
+            "flag": "--build-number",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "buildNumber",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/*.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "pattern",
+            "choices": []
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "generic-local/releases/",
+            "style": "value",
+            "scope": "positional",
+            "description": "target",
+            "choices": []
+          }
+        ],
+        "description": "Upload build artifacts using a configured JFrog server.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "download",
+        "args": [
+          "rt",
+          "download"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "flat",
+            "kind": "boolean",
+            "flag": "--flat",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "flat",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "generic-local/releases/*.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "pattern",
+            "choices": []
+          },
+          {
+            "key": "destination",
+            "kind": "string",
+            "flag": "",
+            "default": "dist/",
+            "required": false,
+            "sample": "dist/",
+            "style": "value",
+            "scope": "positional",
+            "description": "destination",
+            "choices": []
+          }
+        ],
+        "description": "download",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "search",
+        "args": [
+          "rt",
+          "search"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "generic-local/releases/*",
+            "style": "value",
+            "scope": "positional",
+            "description": "pattern",
+            "choices": []
+          }
+        ],
+        "description": "search",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "aws",
     "path": "cloud/aws",
     "program": "aws",
@@ -1029,6 +1273,427 @@
           }
         ],
         "description": "webapp deploy",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "bazel",
+    "path": "build/bazel",
+    "program": "bazel",
+    "title": "Bazel",
+    "docs": "https://bazel.build/reference/command-line-reference",
+    "notes": "Install Bazel or use setup-bazel. Java, compilers, and external repositories depend on the workspace. Bazel startup flags are available through run.arguments. run_target executes a built program; command arguments follow --.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [
+          "build"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "compilationMode",
+            "kind": "string",
+            "flag": "-c",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "compilationMode",
+            "choices": [
+              "fastbuild",
+              "dbg",
+              "opt"
+            ]
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "--jobs",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "define",
+            "kind": "strings",
+            "flag": "--define",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "define",
+            "choices": []
+          },
+          {
+            "key": "copt",
+            "kind": "strings",
+            "flag": "--copt",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "copt",
+            "choices": []
+          },
+          {
+            "key": "targets",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "//..."
+            ],
+            "required": false,
+            "sample": [
+              "//..."
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "targets",
+            "choices": []
+          }
+        ],
+        "description": "Build selected Bazel targets.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [
+          "test"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "compilationMode",
+            "kind": "string",
+            "flag": "-c",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "compilationMode",
+            "choices": [
+              "fastbuild",
+              "dbg",
+              "opt"
+            ]
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "--jobs",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "define",
+            "kind": "strings",
+            "flag": "--define",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "define",
+            "choices": []
+          },
+          {
+            "key": "copt",
+            "kind": "strings",
+            "flag": "--copt",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "copt",
+            "choices": []
+          },
+          {
+            "key": "testOutput",
+            "kind": "string",
+            "flag": "--test-output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "testOutput",
+            "choices": [
+              "summary",
+              "errors",
+              "all",
+              "streamed"
+            ]
+          },
+          {
+            "key": "targets",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "//..."
+            ],
+            "required": false,
+            "sample": [
+              "//..."
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "targets",
+            "choices": []
+          }
+        ],
+        "description": "Build and test selected Bazel targets.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_target",
+        "args": [
+          "run"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "compilationMode",
+            "kind": "string",
+            "flag": "-c",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "compilationMode",
+            "choices": [
+              "fastbuild",
+              "dbg",
+              "opt"
+            ]
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "--jobs",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "define",
+            "kind": "strings",
+            "flag": "--define",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "define",
+            "choices": []
+          },
+          {
+            "key": "copt",
+            "kind": "strings",
+            "flag": "--copt",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "copt",
+            "choices": []
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "//app:main",
+            "style": "value",
+            "scope": "positional",
+            "description": "target",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "--",
+            "default": null,
+            "required": false,
+            "sample": [
+              "--help"
+            ],
+            "style": "space-list",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Build and run a target with literal program arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "query",
+        "args": [
+          "query"
+        ],
+        "fields": [
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "expression",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "//...",
+            "style": "value",
+            "scope": "positional",
+            "description": "expression",
+            "choices": []
+          }
+        ],
+        "description": "query",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "clean",
+        "args": [
+          "clean"
+        ],
+        "fields": [
+          {
+            "key": "expunge",
+            "kind": "boolean",
+            "flag": "--expunge",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "expunge",
+            "choices": []
+          }
+        ],
+        "description": "clean",
         "program": "",
         "environment": {},
         "example": {}
@@ -2183,6 +2848,324 @@
         ],
         "description": "Scan infrastructure code, failing when policy checks fail.",
         "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "cmake",
+    "path": "build/cmake",
+    "program": "cmake",
+    "title": "CMake",
+    "docs": "https://cmake.org/cmake/help/latest/manual/cmake.1.html",
+    "notes": "Install CMake (including CTest) or use setup-cmake. A generator and compiler must be available for configuration. definitions contains nonsecret NAME=VALUE entries. Use CMAKE_C_COMPILER_LAUNCHER=sccache and CMAKE_CXX_COMPILER_LAUNCHER=sccache to enable compiler caching.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "configure",
+        "args": [],
+        "fields": [
+          {
+            "key": "sourceDir",
+            "kind": "string",
+            "flag": "-S",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "separate",
+            "scope": "option",
+            "description": "sourceDir",
+            "choices": []
+          },
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "-B",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "option",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "generator",
+            "kind": "string",
+            "flag": "-G",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "generator",
+            "choices": []
+          },
+          {
+            "key": "preset",
+            "kind": "string",
+            "flag": "--preset",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "preset",
+            "choices": []
+          },
+          {
+            "key": "buildType",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "Release",
+            "style": "prefix:-DCMAKE_BUILD_TYPE=",
+            "scope": "positional",
+            "description": "buildType",
+            "choices": []
+          },
+          {
+            "key": "definitions",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": [
+              "BUILD_TESTING=ON"
+            ],
+            "style": "prefix:-D",
+            "scope": "positional",
+            "description": "definitions",
+            "choices": []
+          }
+        ],
+        "description": "Configure a CMake build tree.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [],
+        "fields": [
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "--build",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "global",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "integer",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "parallel",
+            "choices": []
+          },
+          {
+            "key": "target",
+            "kind": "strings",
+            "flag": "--target",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "target",
+            "choices": []
+          },
+          {
+            "key": "cleanFirst",
+            "kind": "boolean",
+            "flag": "--clean-first",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "cleanFirst",
+            "choices": []
+          }
+        ],
+        "description": "Build an existing CMake build tree.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "install",
+        "args": [],
+        "fields": [
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "--install",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "global",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "prefix",
+            "kind": "string",
+            "flag": "--prefix",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "prefix",
+            "choices": []
+          },
+          {
+            "key": "component",
+            "kind": "string",
+            "flag": "--component",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "component",
+            "choices": []
+          }
+        ],
+        "description": "Install build artifacts into the selected prefix.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [],
+        "fields": [
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "--test-dir",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "global",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "-C",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "integer",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "parallel",
+            "choices": []
+          },
+          {
+            "key": "outputOnFailure",
+            "kind": "boolean",
+            "flag": "--output-on-failure",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "outputOnFailure",
+            "choices": []
+          }
+        ],
+        "description": "Run CTest tests in a configured build tree.",
+        "program": "ctest",
         "environment": {},
         "example": {}
       }
@@ -4183,6 +5166,513 @@
     ]
   },
   {
+    "name": "gh-artifact",
+    "path": "artifacts/gh-artifact",
+    "program": "gh",
+    "title": "GitHub artifacts",
+    "docs": "https://github.com/actions/toolkit/tree/main/packages/artifact",
+    "notes": "Use setup-gh-artifact to install gh and the official @actions/artifact client. Job-artifact upload is GitHub Actions-only and needs ACTIONS_RUNTIME_TOKEN/ACTIONS_RESULTS_URL; outside Actions, use release_upload or another artifact backend. GH_TOKEN authenticates gh operations. FLUENTCI_GH_ARTIFACT_CLIENT selects the installed client module. Uploaded job artifacts are immutable; choose unique names per producer. Download by run ID or release tag for downstream stages.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "-e",
+          "const [name,root,retention,...files]=process.argv.slice(1); if(!process.env.ACTIONS_RUNTIME_TOKEN||!process.env.ACTIONS_RESULTS_URL)throw new Error(\"GitHub Actions artifact runtime credentials are required\"); const location=process.env.FLUENTCI_GH_ARTIFACT_CLIENT; const sdk=location?await import(location):await import(\"@actions/artifact\"); const client=new sdk.DefaultArtifactClient(); const result=await client.uploadArtifact(name,files,root,{retentionDays:Number(retention)}); console.log(JSON.stringify(result));",
+          "--"
+        ],
+        "fields": [
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "build-artifact",
+            "style": "value",
+            "scope": "positional",
+            "description": "name",
+            "choices": []
+          },
+          {
+            "key": "rootDirectory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "rootDirectory",
+            "choices": []
+          },
+          {
+            "key": "retentionDays",
+            "kind": "integer",
+            "flag": "",
+            "default": 14,
+            "required": false,
+            "sample": 14,
+            "style": "value",
+            "scope": "positional",
+            "description": "retentionDays",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "dist/app.zip"
+            ],
+            "style": "file",
+            "scope": "raw",
+            "description": "files",
+            "choices": []
+          }
+        ],
+        "description": "Upload job artifacts using GitHub Actions runtime credentials and the official artifact client.",
+        "program": "bun",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "download",
+        "args": [
+          "run",
+          "download"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "repo",
+            "choices": []
+          },
+          {
+            "key": "dir",
+            "kind": "string",
+            "flag": "--dir",
+            "default": "dist",
+            "required": false,
+            "sample": "dist",
+            "style": "value",
+            "scope": "option",
+            "description": "dir",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "strings",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "name",
+            "choices": []
+          },
+          {
+            "key": "runId",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "123456",
+            "style": "value",
+            "scope": "positional",
+            "description": "runId",
+            "choices": []
+          }
+        ],
+        "description": "download",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_upload",
+        "args": [
+          "release",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "repo",
+            "choices": []
+          },
+          {
+            "key": "clobber",
+            "kind": "boolean",
+            "flag": "--clobber",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "clobber",
+            "choices": []
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "v1.2.3",
+            "style": "value",
+            "scope": "positional",
+            "description": "tag",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "dist/app.zip"
+            ],
+            "style": "file",
+            "scope": "positional",
+            "description": "files",
+            "choices": []
+          }
+        ],
+        "description": "release upload",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_download",
+        "args": [
+          "release",
+          "download"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "repo",
+            "choices": []
+          },
+          {
+            "key": "dir",
+            "kind": "string",
+            "flag": "--dir",
+            "default": "dist",
+            "required": false,
+            "sample": "dist",
+            "style": "value",
+            "scope": "option",
+            "description": "dir",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "strings",
+            "flag": "--pattern",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "pattern",
+            "choices": []
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "v1.2.3",
+            "style": "value",
+            "scope": "positional",
+            "description": "tag",
+            "choices": []
+          }
+        ],
+        "description": "release download",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "gitlab-artifacts",
+    "path": "artifacts/gitlab-artifacts",
+    "program": "glab",
+    "title": "GitLab artifacts",
+    "docs": "https://docs.gitlab.com/cli/ci/artifact/",
+    "notes": "Use setup-gitlab-artifacts to install glab and Bun. upload accepts a prebuilt ZIP and the running job ID; CI_JOB_TOKEN is read only at execution time. apiUrl supports self-hosted GitLab. GitLab runner artifact permissions and job lifecycle apply. For standard GitLab pipelines, native artifacts: declarations remain preferable when no explicit upload step is needed. download fetches the named job artifact for a ref; glab uses its native login or GITLAB_TOKEN.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "-e",
+          "const [archive,jobId,baseUrl]=process.argv.slice(1); const token=process.env.CI_JOB_TOKEN; if(!token)throw new Error(\"CI_JOB_TOKEN is required for job artifact upload\"); const form=new FormData();form.append(\"file\",Bun.file(archive),archive.split(\"/\").pop());const response=await fetch(baseUrl.replace(/\\/$/,\"\")+\"/jobs/\"+encodeURIComponent(jobId)+\"/artifacts?artifact_format=zip&artifact_type=archive\",{method:\"POST\",headers:{\"JOB-TOKEN\":token},body:form});if(!response.ok)throw new Error(\"GitLab artifact upload failed: HTTP \"+response.status);console.log(JSON.stringify({jobId,status:response.status,body:await response.text()}));",
+          "--"
+        ],
+        "fields": [
+          {
+            "key": "archive",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/artifacts.zip",
+            "style": "file",
+            "scope": "positional",
+            "description": "archive",
+            "choices": []
+          },
+          {
+            "key": "jobId",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "123456",
+            "style": "value",
+            "scope": "positional",
+            "description": "jobId",
+            "choices": []
+          },
+          {
+            "key": "apiUrl",
+            "kind": "string",
+            "flag": "",
+            "default": "https://gitlab.com/api/v4",
+            "required": false,
+            "sample": "https://gitlab.com/api/v4",
+            "style": "value",
+            "scope": "positional",
+            "description": "apiUrl",
+            "choices": []
+          }
+        ],
+        "description": "Upload a prebuilt ZIP to the current job using GitLab job-token authentication.",
+        "program": "bun",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "download",
+        "args": [
+          "ci",
+          "artifact"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "repo",
+            "choices": []
+          },
+          {
+            "key": "job",
+            "kind": "string",
+            "flag": "--job",
+            "default": null,
+            "required": true,
+            "sample": "build",
+            "style": "value",
+            "scope": "option",
+            "description": "job",
+            "choices": []
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "--path",
+            "default": "dist",
+            "required": false,
+            "sample": "dist",
+            "style": "value",
+            "scope": "option",
+            "description": "path",
+            "choices": []
+          },
+          {
+            "key": "ref",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "main",
+            "style": "value",
+            "scope": "positional",
+            "description": "ref",
+            "choices": []
+          }
+        ],
+        "description": "download",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_upload",
+        "args": [
+          "release",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "repo",
+            "choices": []
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "v1.2.3",
+            "style": "value",
+            "scope": "positional",
+            "description": "tag",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "dist/app.zip"
+            ],
+            "style": "file",
+            "scope": "positional",
+            "description": "files",
+            "choices": []
+          }
+        ],
+        "description": "release upload",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "gitleaks",
     "path": "security/gitleaks",
     "program": "gitleaks",
@@ -4983,6 +6473,384 @@
     ]
   },
   {
+    "name": "jfrog-cli",
+    "path": "artifacts/jfrog-cli",
+    "program": "jf",
+    "title": "JFrog CLI",
+    "docs": "https://docs.jfrog-applications.jfrog.io/jfrog-applications/jfrog-cli",
+    "notes": "Install JFrog CLI or use setup-jfrog-cli. Configure an authenticated server through the native CLI credential store before use. serverId selects that server; credentials are not JSON inputs. Patterns are expanded by JFrog CLI, not a shell. buildName/buildNumber associate uploaded artifacts with build information. This module does not automatically collect environment variables into build metadata.",
+    "environment": {
+      "JFROG_CLI_OFFER_CONFIG": "false",
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "rt",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "flat",
+            "kind": "boolean",
+            "flag": "--flat",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "flat",
+            "choices": []
+          },
+          {
+            "key": "recursive",
+            "kind": "boolean",
+            "flag": "--recursive",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "recursive",
+            "choices": []
+          },
+          {
+            "key": "buildName",
+            "kind": "string",
+            "flag": "--build-name",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "buildName",
+            "choices": []
+          },
+          {
+            "key": "buildNumber",
+            "kind": "string",
+            "flag": "--build-number",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "buildNumber",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/*.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "pattern",
+            "choices": []
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "generic-local/releases/",
+            "style": "value",
+            "scope": "positional",
+            "description": "target",
+            "choices": []
+          }
+        ],
+        "description": "Upload build artifacts using a configured JFrog server.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "download",
+        "args": [
+          "rt",
+          "download"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "flat",
+            "kind": "boolean",
+            "flag": "--flat",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "flat",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "generic-local/releases/*.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "pattern",
+            "choices": []
+          },
+          {
+            "key": "destination",
+            "kind": "string",
+            "flag": "",
+            "default": "dist/",
+            "required": false,
+            "sample": "dist/",
+            "style": "value",
+            "scope": "positional",
+            "description": "destination",
+            "choices": []
+          }
+        ],
+        "description": "download",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "search",
+        "args": [
+          "rt",
+          "search"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "generic-local/releases/*",
+            "style": "value",
+            "scope": "positional",
+            "description": "pattern",
+            "choices": []
+          }
+        ],
+        "description": "search",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build_publish",
+        "args": [
+          "rt",
+          "build-publish"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "buildName",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "buildName",
+            "choices": []
+          },
+          {
+            "key": "buildNumber",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "123",
+            "style": "value",
+            "scope": "positional",
+            "description": "buildNumber",
+            "choices": []
+          }
+        ],
+        "description": "build publish",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build_promote",
+        "args": [
+          "rt",
+          "build-promote"
+        ],
+        "fields": [
+          {
+            "key": "serverId",
+            "kind": "string",
+            "flag": "--server-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "serverId",
+            "choices": []
+          },
+          {
+            "key": "copy",
+            "kind": "boolean",
+            "flag": "--copy",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "copy",
+            "choices": []
+          },
+          {
+            "key": "status",
+            "kind": "string",
+            "flag": "--status",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "status",
+            "choices": []
+          },
+          {
+            "key": "buildName",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "buildName",
+            "choices": []
+          },
+          {
+            "key": "buildNumber",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "123",
+            "style": "value",
+            "scope": "positional",
+            "description": "buildNumber",
+            "choices": []
+          },
+          {
+            "key": "targetRepository",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "releases-local",
+            "style": "value",
+            "scope": "positional",
+            "description": "targetRepository",
+            "choices": []
+          }
+        ],
+        "description": "build promote",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "kamal",
     "path": "deployment/kamal",
     "program": "kamal",
@@ -5537,6 +7405,330 @@
     ]
   },
   {
+    "name": "meson",
+    "path": "build/meson",
+    "program": "meson",
+    "title": "Meson",
+    "docs": "https://mesonbuild.com/Commands.html",
+    "notes": "Install Meson or use setup-meson. Most builds also require Ninja and a compiler; use setup-ninja for the default backend. Build definitions determine language dependencies and installation behavior.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "configure",
+        "args": [
+          "setup"
+        ],
+        "fields": [
+          {
+            "key": "buildtype",
+            "kind": "string",
+            "flag": "--buildtype",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "buildtype",
+            "choices": [
+              "plain",
+              "debug",
+              "debugoptimized",
+              "release",
+              "minsize",
+              "custom"
+            ]
+          },
+          {
+            "key": "prefix",
+            "kind": "string",
+            "flag": "--prefix",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "prefix",
+            "choices": []
+          },
+          {
+            "key": "backend",
+            "kind": "string",
+            "flag": "--backend",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "backend",
+            "choices": []
+          },
+          {
+            "key": "reconfigure",
+            "kind": "boolean",
+            "flag": "--reconfigure",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "reconfigure",
+            "choices": []
+          },
+          {
+            "key": "definitions",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": [
+              "warning_level=3"
+            ],
+            "style": "prefix:-D",
+            "scope": "positional",
+            "description": "definitions",
+            "choices": []
+          },
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "value",
+            "scope": "positional",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "sourceDir",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "sourceDir",
+            "choices": []
+          }
+        ],
+        "description": "configure",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "compile",
+        "args": [
+          "compile"
+        ],
+        "fields": [
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "-C",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "option",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "-j",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "separate",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "verbose",
+            "choices": []
+          },
+          {
+            "key": "targets",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [],
+            "style": "value",
+            "scope": "positional",
+            "description": "targets",
+            "choices": []
+          }
+        ],
+        "description": "compile",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [
+          "test",
+          "--print-errorlogs"
+        ],
+        "fields": [
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "-C",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "option",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "-j",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "separate",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "suite",
+            "kind": "strings",
+            "flag": "--suite",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "suite",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [
+              "unit"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "names",
+            "choices": []
+          }
+        ],
+        "description": "test",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "install",
+        "args": [
+          "install"
+        ],
+        "fields": [
+          {
+            "key": "buildDir",
+            "kind": "string",
+            "flag": "-C",
+            "default": "build",
+            "required": false,
+            "sample": "build",
+            "style": "separate",
+            "scope": "option",
+            "description": "buildDir",
+            "choices": []
+          },
+          {
+            "key": "destdir",
+            "kind": "string",
+            "flag": "--destdir",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "destdir",
+            "choices": []
+          },
+          {
+            "key": "noRebuild",
+            "kind": "boolean",
+            "flag": "--no-rebuild",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "noRebuild",
+            "choices": []
+          }
+        ],
+        "description": "install",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "netlify",
     "path": "deployment/netlify",
     "program": "netlify",
@@ -5685,6 +7877,461 @@
         ],
         "fields": [],
         "description": "sites list",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "nexus",
+    "path": "artifacts/nexus",
+    "program": "curl",
+    "title": "Nexus Repository",
+    "docs": "https://help.sonatype.com/en/raw-repositories.html",
+    "notes": "Requires curl 7.76+ or setup-nexus. Supply the full repository URL. Authenticate through a private curl config or netrc file; never place tokens or passwords in the URL or JSON. upload targets raw repositories; Maven/NPM/Docker repositories require their native package clients. HTTP status failures propagate to the pipeline.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "--fail-with-body",
+          "--location",
+          "--silent",
+          "--show-error",
+          "--retry",
+          "3",
+          "--netrc-optional"
+        ],
+        "fields": [
+          {
+            "key": "curlConfig",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "curlConfig",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--upload-file",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.zip",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "url",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "https://nexus.example/repository/releases/app.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "url",
+            "choices": []
+          }
+        ],
+        "description": "Upload a file to a Nexus raw-repository URL.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "download",
+        "args": [
+          "--fail-with-body",
+          "--location",
+          "--silent",
+          "--show-error",
+          "--retry",
+          "3",
+          "--netrc-optional"
+        ],
+        "fields": [
+          {
+            "key": "curlConfig",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "curlConfig",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.zip",
+            "style": "separate",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "url",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "https://nexus.example/repository/releases/app.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "url",
+            "choices": []
+          }
+        ],
+        "description": "Download a raw artifact, failing on HTTP errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "head",
+        "args": [
+          "--fail",
+          "--head",
+          "--location",
+          "--silent",
+          "--show-error",
+          "--netrc-optional"
+        ],
+        "fields": [
+          {
+            "key": "curlConfig",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "curlConfig",
+            "choices": []
+          },
+          {
+            "key": "url",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "https://nexus.example/repository/releases/app.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "url",
+            "choices": []
+          }
+        ],
+        "description": "head",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "ninja",
+    "path": "build/ninja",
+    "program": "ninja",
+    "title": "Ninja",
+    "docs": "https://ninja-build.org/manual.html",
+    "notes": "Install Ninja or use setup-ninja. Run in a directory containing build.ninja, or supply directory/file. Ninja executes commands defined by the project build graph.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [],
+        "fields": [
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "-C",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "separate",
+            "scope": "option",
+            "description": "directory",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "-f",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "-j",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "separate",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "-v",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "verbose",
+            "choices": []
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "-n",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "dryRun",
+            "choices": []
+          },
+          {
+            "key": "targets",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [],
+            "style": "value",
+            "scope": "positional",
+            "description": "targets",
+            "choices": []
+          }
+        ],
+        "description": "build",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "clean",
+        "args": [],
+        "fields": [
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "-C",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "separate",
+            "scope": "option",
+            "description": "directory",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "-f",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "-j",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "separate",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "tool",
+            "kind": "string",
+            "flag": "-t",
+            "default": "clean",
+            "required": false,
+            "sample": "clean",
+            "style": "separate",
+            "scope": "option",
+            "description": "tool",
+            "choices": [
+              "clean"
+            ]
+          },
+          {
+            "key": "targets",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [],
+            "style": "value",
+            "scope": "positional",
+            "description": "targets",
+            "choices": []
+          }
+        ],
+        "description": "clean",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "targets",
+        "args": [],
+        "fields": [
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "-C",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "separate",
+            "scope": "option",
+            "description": "directory",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "-f",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "-j",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "separate",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "tool",
+            "kind": "string",
+            "flag": "-t",
+            "default": "targets",
+            "required": false,
+            "sample": "targets",
+            "style": "separate",
+            "scope": "option",
+            "description": "tool",
+            "choices": [
+              "targets"
+            ]
+          }
+        ],
+        "description": "targets",
         "program": "",
         "environment": {},
         "example": {}
@@ -6709,6 +9356,236 @@
     ]
   },
   {
+    "name": "oras",
+    "path": "artifacts/oras",
+    "program": "oras",
+    "title": "ORAS",
+    "docs": "https://oras.land/docs/commands/",
+    "notes": "Install ORAS or use setup-oras. Authenticate with the native registry credential store before invocation. files use ORAS path:mediaType notation. References may use immutable digests for reproducible downstream downloads. OCI registries must support the selected artifact/referrer features.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "push",
+        "args": [
+          "push"
+        ],
+        "fields": [
+          {
+            "key": "artifactType",
+            "kind": "string",
+            "flag": "--artifact-type",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "artifactType",
+            "choices": []
+          },
+          {
+            "key": "annotation",
+            "kind": "strings",
+            "flag": "--annotation",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "annotation",
+            "choices": []
+          },
+          {
+            "key": "reference",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/project/artifact:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "reference",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "dist/app.zip:application/zip"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "files",
+            "choices": []
+          }
+        ],
+        "description": "Publish typed artifacts to an OCI registry.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pull",
+        "args": [
+          "pull"
+        ],
+        "fields": [
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "dist",
+            "required": false,
+            "sample": "dist",
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "reference",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/project/artifact:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "reference",
+            "choices": []
+          }
+        ],
+        "description": "pull",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "copy",
+        "args": [
+          "copy"
+        ],
+        "fields": [
+          {
+            "key": "recursive",
+            "kind": "boolean",
+            "flag": "--recursive",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "recursive",
+            "choices": []
+          },
+          {
+            "key": "source",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/source:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "source",
+            "choices": []
+          },
+          {
+            "key": "destination",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/releases:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "destination",
+            "choices": []
+          }
+        ],
+        "description": "copy",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "discover",
+        "args": [
+          "discover"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": []
+          },
+          {
+            "key": "reference",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/project/artifact:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "reference",
+            "choices": []
+          }
+        ],
+        "description": "discover",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "playwright",
     "path": "testing/playwright",
     "program": "playwright",
@@ -7111,6 +9988,233 @@
           }
         ],
         "description": "Install operating-system browser dependencies; may require elevated privileges.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "plumber",
+    "path": "security/plumber",
+    "program": "plumber",
+    "title": "Plumber",
+    "docs": "https://getplumber.io/docs/cli/reference",
+    "notes": "Install Plumber or use setup-plumber. analyze needs GH_TOKEN/GITHUB_TOKEN or GITLAB_TOKEN with the documented read scopes. The upstream default gate is 100 points; minScore selects a letter gate, while minPoints selects a numeric gate. Provider, authentication, incomplete collection, and failed gates remain failures. Reports are written only when requested. Public score publication, comments, and badge mutations are not enabled by these wrappers.",
+    "environment": {
+      "PLUMBER_NO_UPDATE_CHECK": "1"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "analyze",
+        "args": [
+          "analyze",
+          "--fail-warnings"
+        ],
+        "fields": [
+          {
+            "key": "provider",
+            "kind": "string",
+            "flag": "--provider",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "provider",
+            "choices": [
+              "github",
+              "gitlab"
+            ]
+          },
+          {
+            "key": "repository",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "repository",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "minScore",
+            "kind": "string",
+            "flag": "--min-score",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "minScore",
+            "choices": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E"
+            ]
+          },
+          {
+            "key": "minPoints",
+            "kind": "integer",
+            "flag": "--min-points",
+            "default": null,
+            "required": false,
+            "sample": 90,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "minPoints",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "sarif",
+            "kind": "string",
+            "flag": "--sarif",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "sarif",
+            "choices": []
+          },
+          {
+            "key": "glsast",
+            "kind": "string",
+            "flag": "--glsast",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "glsast",
+            "choices": []
+          },
+          {
+            "key": "pbom",
+            "kind": "string",
+            "flag": "--pbom",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "pbom",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "branch",
+            "choices": []
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "github.com/example/project",
+            "style": "value",
+            "scope": "positional",
+            "description": "target",
+            "choices": []
+          }
+        ],
+        "description": "Audit GitHub Actions/GitLab CI with a score gate and failing provider/collection errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "validate_config",
+        "args": [
+          "config",
+          "validate"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          }
+        ],
+        "description": "Validate Plumber policy configuration without running a repository audit.",
         "program": "",
         "environment": {},
         "example": {}
@@ -8171,6 +11275,268 @@
     ]
   },
   {
+    "name": "rclone",
+    "path": "artifacts/rclone",
+    "program": "rclone",
+    "title": "rclone",
+    "docs": "https://rclone.org/commands/",
+    "notes": "Install rclone or use setup-rclone. Configure remotes using native rclone config or its backend environment variables. RCLONE_CONFIG may point to a private config file. copy/copyto do not delete unrelated destination files. immutable prevents replacing existing differing files; check detects transfer/content mismatches.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "copy",
+        "args": [
+          "copy"
+        ],
+        "fields": [
+          {
+            "key": "checksum",
+            "kind": "boolean",
+            "flag": "--checksum",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "checksum",
+            "choices": []
+          },
+          {
+            "key": "immutable",
+            "kind": "boolean",
+            "flag": "--immutable",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "immutable",
+            "choices": []
+          },
+          {
+            "key": "transfers",
+            "kind": "integer",
+            "flag": "--transfers",
+            "default": null,
+            "required": false,
+            "sample": 4,
+            "style": "value",
+            "scope": "option",
+            "description": "transfers",
+            "choices": []
+          },
+          {
+            "key": "source",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/",
+            "style": "value",
+            "scope": "positional",
+            "description": "source",
+            "choices": []
+          },
+          {
+            "key": "destination",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "remote:artifacts/build-123/",
+            "style": "value",
+            "scope": "positional",
+            "description": "destination",
+            "choices": []
+          }
+        ],
+        "description": "copy",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "copyto",
+        "args": [
+          "copyto"
+        ],
+        "fields": [
+          {
+            "key": "checksum",
+            "kind": "boolean",
+            "flag": "--checksum",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "checksum",
+            "choices": []
+          },
+          {
+            "key": "immutable",
+            "kind": "boolean",
+            "flag": "--immutable",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "immutable",
+            "choices": []
+          },
+          {
+            "key": "source",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "source",
+            "choices": []
+          },
+          {
+            "key": "destination",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "remote:artifacts/app.zip",
+            "style": "value",
+            "scope": "positional",
+            "description": "destination",
+            "choices": []
+          }
+        ],
+        "description": "copyto",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "check",
+        "args": [
+          "check"
+        ],
+        "fields": [
+          {
+            "key": "oneWay",
+            "kind": "boolean",
+            "flag": "--one-way",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "oneWay",
+            "choices": []
+          },
+          {
+            "key": "source",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/",
+            "style": "value",
+            "scope": "positional",
+            "description": "source",
+            "choices": []
+          },
+          {
+            "key": "destination",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "remote:artifacts/build-123/",
+            "style": "value",
+            "scope": "positional",
+            "description": "destination",
+            "choices": []
+          }
+        ],
+        "description": "Verify transferred artifact content against the source.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "lsjson",
+        "args": [
+          "lsjson"
+        ],
+        "fields": [
+          {
+            "key": "recursive",
+            "kind": "boolean",
+            "flag": "--recursive",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "recursive",
+            "choices": []
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "remote:artifacts/build-123/",
+            "style": "value",
+            "scope": "positional",
+            "description": "path",
+            "choices": []
+          }
+        ],
+        "description": "lsjson",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "render",
     "path": "deployment/render",
     "program": "render",
@@ -8749,6 +12115,151 @@
     ]
   },
   {
+    "name": "sccache",
+    "path": "caching/sccache",
+    "program": "sccache",
+    "title": "sccache",
+    "docs": "https://github.com/mozilla/sccache",
+    "notes": "Install sccache or use setup-sccache. Configure SCCACHE_DIR and remote storage credentials through the host environment. setup-sccache publishes RUSTC_WRAPPER for Rust builds. CMake can use sccache as CMAKE_C_COMPILER_LAUNCHER/CMAKE_CXX_COMPILER_LAUNCHER. start_server and stop_server manage the host cache daemon; compile requires its compiler on PATH.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "start_server",
+        "args": [
+          "--start-server"
+        ],
+        "fields": [],
+        "description": "start server",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "stop_server",
+        "args": [
+          "--stop-server"
+        ],
+        "fields": [],
+        "description": "stop server",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "stats",
+        "args": [
+          "--show-stats"
+        ],
+        "fields": [
+          {
+            "key": "statsFormat",
+            "kind": "string",
+            "flag": "--stats-format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "statsFormat",
+            "choices": [
+              "text",
+              "json"
+            ]
+          }
+        ],
+        "description": "stats",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "zero_stats",
+        "args": [
+          "--zero-stats"
+        ],
+        "fields": [],
+        "description": "zero stats",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "compile",
+        "args": [],
+        "fields": [
+          {
+            "key": "compiler",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "cc",
+            "style": "value",
+            "scope": "positional",
+            "description": "compiler",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [
+              "-c",
+              "source.c",
+              "-o",
+              "source.o"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Compile through sccache using a native compiler and literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "scorecard",
     "path": "security/scorecard",
     "program": "scorecard",
@@ -8915,6 +12426,41 @@
         "program": "",
         "environment": {},
         "example": {}
+      },
+      {
+        "name": "gate",
+        "description": "Fail CI when any reported check is unscored or below the requested minimum.",
+        "program": "bun",
+        "environment": {},
+        "args": [
+          "-e",
+          "const [report,minimumText]=process.argv.slice(1);const minimum=Number(minimumText);if(!Number.isInteger(minimum)||minimum<1||minimum>10)throw Error(\"minimum must be between 1 and 10\");const data=await Bun.file(report).json();if(!Array.isArray(data.checks)||!data.checks.length)throw Error(\"Scorecard report has no checks\");const failed=data.checks.filter(c=>!Number.isFinite(c.score)||c.score<minimum);console.log(JSON.stringify({minimum,passed:!failed.length,failed:failed.map(c=>({name:c.name,score:c.score}))}));if(failed.length)process.exitCode=1;",
+          "--"
+        ],
+        "fields": [
+          {
+            "key": "report",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "Scorecard JSON report path."
+          },
+          {
+            "key": "minimum",
+            "kind": "integer",
+            "flag": "",
+            "default": 7,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Minimum score for every reported check (1\u201310)."
+          }
+        ]
       }
     ]
   },
@@ -9923,6 +13469,101 @@
           }
         ],
         "description": "Convert an existing SBOM to a supported output format.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "tangled-artifacts",
+    "path": "artifacts/tangled-artifacts",
+    "program": "tangled-release-asset-uploader",
+    "title": "Tangled release artifacts",
+    "docs": "https://tangled.org/joshghiloni.me/tangled-release-asset-uploader",
+    "notes": "Install tangled-release-asset-uploader or use setup-tangled-artifacts. This purpose-built uploader is separate from aly.codes/tg. The annotated tag must already be pushed to the repository. username must own that repository; provide its app password through TNGL_UPLOADER_APP_PASSWORD. Passwords are never module inputs or task arguments. Files are checked locally before upload. The uploader prints each created AT URI in task stdout; the execution report preserves it for downstream steps.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [],
+        "fields": [
+          {
+            "key": "username",
+            "kind": "string",
+            "flag": "--username",
+            "default": null,
+            "required": true,
+            "sample": "publisher.example",
+            "style": "value",
+            "scope": "option",
+            "description": "username",
+            "choices": []
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "--repo-tag",
+            "default": null,
+            "required": true,
+            "sample": "v1.2.3",
+            "style": "value",
+            "scope": "option",
+            "description": "tag",
+            "choices": []
+          },
+          {
+            "key": "repository",
+            "kind": "string",
+            "flag": "--target-repo",
+            "default": null,
+            "required": true,
+            "sample": "https://tangled.org/publisher.example/project",
+            "style": "value",
+            "scope": "option",
+            "description": "repository",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "dist/app.zip"
+            ],
+            "style": "file",
+            "scope": "positional",
+            "description": "files",
+            "choices": []
+          }
+        ],
+        "description": "Upload files as assets attached to an existing annotated Tangled tag.",
         "program": "",
         "environment": {},
         "example": {}

@@ -3,6 +3,7 @@ declare module "main" {
   export function version(): I32;
   export function scan(): I32;
   export function scan_local(): I32;
+  export function gate(): I32;
 }
 declare module "extism:host" {
   interface user {
