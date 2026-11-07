@@ -1,4 +1,46 @@
 [[modules]]
+name = "actionlint"
+version = "0.1.0"
+path = "linting/actionlint"
+sdk = "purescript"
+
+[[modules]]
+name = "argocd"
+version = "0.1.0"
+path = "deployment/argocd"
+sdk = "purescript"
+
+[[modules]]
+name = "aws"
+version = "0.1.0"
+path = "cloud/aws"
+sdk = "purescript"
+
+[[modules]]
+name = "azure"
+version = "0.1.0"
+path = "cloud/azure"
+sdk = "purescript"
+
+[[modules]]
+name = "biome"
+version = "0.1.0"
+path = "linting/biome"
+sdk = "purescript"
+
+[[modules]]
+name = "black"
+version = "0.1.0"
+path = "formatting/black"
+sdk = "purescript"
+
+[[modules]]
+name = "buildkit"
+version = "0.1.0"
+path = "containers/buildkit"
+sdk = "purescript"
+
+[[modules]]
 name = "buildx"
 version = "0.1.0"
 path = "containers/buildx"
@@ -29,15 +71,45 @@ path = "setup/determinate-nix"
 sdk = "purescript"
 
 [[modules]]
+name = "digitalocean"
+version = "0.1.0"
+path = "cloud/digitalocean"
+sdk = "purescript"
+
+[[modules]]
+name = "docker"
+version = "0.1.0"
+path = "containers/docker"
+sdk = "purescript"
+
+[[modules]]
+name = "doppler"
+version = "0.1.0"
+path = "secrets/doppler"
+sdk = "purescript"
+
+[[modules]]
 name = "dpkg"
 version = "0.1.0"
-path = "build/dpkg"
+path = "packaging/dpkg"
 sdk = "purescript"
 
 [[modules]]
 name = "elixir"
 version = "0.1.0"
 path = "setup/elixir"
+sdk = "purescript"
+
+[[modules]]
+name = "flyctl"
+version = "0.1.0"
+path = "deployment/flyctl"
+sdk = "purescript"
+
+[[modules]]
+name = "gcloud"
+version = "0.1.0"
+path = "cloud/gcloud"
 sdk = "purescript"
 
 [[modules]]
@@ -59,9 +131,39 @@ path = "setup/go"
 sdk = "purescript"
 
 [[modules]]
+name = "helm"
+version = "0.1.0"
+path = "deployment/helm"
+sdk = "purescript"
+
+[[modules]]
+name = "infisical"
+version = "0.1.0"
+path = "secrets/infisical"
+sdk = "purescript"
+
+[[modules]]
 name = "java"
 version = "0.1.0"
 path = "setup/java"
+sdk = "purescript"
+
+[[modules]]
+name = "kamal"
+version = "0.1.0"
+path = "deployment/kamal"
+sdk = "purescript"
+
+[[modules]]
+name = "kubectl"
+version = "0.1.0"
+path = "deployment/kubectl"
+sdk = "purescript"
+
+[[modules]]
+name = "netlify"
+version = "0.1.0"
+path = "deployment/netlify"
 sdk = "purescript"
 
 [[modules]]
@@ -71,9 +173,45 @@ path = "setup/nix"
 sdk = "purescript"
 
 [[modules]]
+name = "nix-package"
+version = "0.1.0"
+path = "package-management/nix"
+sdk = "purescript"
+
+[[modules]]
 name = "node"
 version = "0.1.0"
 path = "setup/node"
+sdk = "purescript"
+
+[[modules]]
+name = "openbao"
+version = "0.1.0"
+path = "secrets/openbao"
+sdk = "purescript"
+
+[[modules]]
+name = "opentofu"
+version = "0.1.0"
+path = "infrastructure/opentofu"
+sdk = "purescript"
+
+[[modules]]
+name = "podman"
+version = "0.1.0"
+path = "containers/podman"
+sdk = "purescript"
+
+[[modules]]
+name = "prettier"
+version = "0.1.0"
+path = "formatting/prettier"
+sdk = "purescript"
+
+[[modules]]
+name = "pulumi"
+version = "0.1.0"
+path = "infrastructure/pulumi"
 sdk = "purescript"
 
 [[modules]]
@@ -83,15 +221,87 @@ path = "setup/purescript"
 sdk = "purescript"
 
 [[modules]]
+name = "railway"
+version = "0.1.0"
+path = "deployment/railway"
+sdk = "purescript"
+
+[[modules]]
+name = "render"
+version = "0.1.0"
+path = "deployment/render"
+sdk = "purescript"
+
+[[modules]]
 name = "rpmbuild"
 version = "0.1.0"
-path = "build/rpmbuild"
+path = "packaging/rpmbuild"
+sdk = "purescript"
+
+[[modules]]
+name = "ruff"
+version = "0.1.0"
+path = "linting/ruff"
 sdk = "purescript"
 
 [[modules]]
 name = "rust"
 version = "0.1.0"
 path = "setup/rust"
+sdk = "purescript"
+
+[[modules]]
+name = "rustfmt"
+version = "0.1.0"
+path = "formatting/rustfmt"
+sdk = "purescript"
+
+[[modules]]
+name = "shellcheck"
+version = "0.1.0"
+path = "linting/shellcheck"
+sdk = "purescript"
+
+[[modules]]
+name = "terraform"
+version = "0.1.0"
+path = "infrastructure/terraform"
+sdk = "purescript"
+
+[[modules]]
+name = "terragrunt"
+version = "0.1.0"
+path = "infrastructure/terragrunt"
+sdk = "purescript"
+
+[[modules]]
+name = "ubicloud"
+version = "0.1.0"
+path = "cloud/ubicloud"
+sdk = "purescript"
+
+[[modules]]
+name = "uv"
+version = "0.1.0"
+path = "package-management/uv"
+sdk = "purescript"
+
+[[modules]]
+name = "vault"
+version = "0.1.0"
+path = "secrets/vault"
+sdk = "purescript"
+
+[[modules]]
+name = "vercel"
+version = "0.1.0"
+path = "deployment/vercel"
+sdk = "purescript"
+
+[[modules]]
+name = "yamllint"
+version = "0.1.0"
+path = "linting/yamllint"
 sdk = "purescript"
 
 [[modules]]

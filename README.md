@@ -2,7 +2,8 @@
 
 Reusable CI/CD modules written in PureScript and compiled to WebAssembly for
 FluentCI. Build containers, package Linux applications, publish artifacts, and
-cache Nix build outputs using independently configured modules.
+cache Nix build outputs, format and lint sources, manage infrastructure, and
+deploy applications using independently configured modules.
 
 ## Modules
 
@@ -10,22 +11,57 @@ All modules are registered in [fluentci.toml](./fluentci.toml).
 
 | Module | Purpose | WebAssembly functions |
 | --- | --- | --- |
+| [actionlint](./linting/actionlint/README.md) | Run Actionlint commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/actionlint/OPTIONS.md) |
+| [argocd](./deployment/argocd/README.md) | Run Argo CD commands with validated JSON inputs. | `run`, `version`, `app_get`, `app_sync`, [all commands](./deployment/argocd/OPTIONS.md) |
+| [aws](./cloud/aws/README.md) | Run AWS commands with validated JSON inputs. | `run`, `version`, `identity`, `s3_cp`, [all commands](./cloud/aws/OPTIONS.md) |
+| [azure](./cloud/azure/README.md) | Run Azure commands with validated JSON inputs. | `run`, `version`, `account_show`, `group_deploy`, [all commands](./cloud/azure/OPTIONS.md) |
+| [biome](./linting/biome/README.md) | Run Biome commands with validated JSON inputs. | `run`, `version`, `check`, `lint`, [all commands](./linting/biome/OPTIONS.md) |
+| [black](./formatting/black/README.md) | Run Black commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/black/OPTIONS.md) |
+| [buildkit](./containers/buildkit/README.md) | Run BuildKit commands with validated JSON inputs. | `run`, `version`, `build`, `prune`, [all commands](./containers/buildkit/OPTIONS.md) |
 | [buildx](./containers/buildx/README.md) | Run Docker Buildx with typed command arguments. | `build`, `bake`, `create`, and [other commands](./containers/buildx/OPTIONS.md) |
 | [bun](./setup/bun/README.md) | Install Bun and select a version. | `setup` |
 | [cachix](./caching/cachix/README.md) | Configure a Cachix cache and upload Nix outputs. | `setup`, `push` |
 | [deno](./setup/deno/README.md) | Install Deno and select a version. | `setup` |
 | [determinate-nix](./setup/determinate-nix/README.md) | Install Determinate Nix and select a version. | `setup` |
-| [dpkg](./build/dpkg/README.md) | Build `.deb` packages from a validated package root. | `validate`, `build` |
+| [digitalocean](./cloud/digitalocean/README.md) | Run DigitalOcean commands with validated JSON inputs. | `run`, `version`, `account_get`, `droplets_list`, [all commands](./cloud/digitalocean/OPTIONS.md) |
+| [docker](./containers/docker/README.md) | Run Docker commands with validated JSON inputs. | `run`, `version`, `build`, `pull`, [all commands](./containers/docker/OPTIONS.md) |
+| [doppler](./secrets/doppler/README.md) | Manage Doppler secrets through the native CLI. | `run`, `version`, `run_command`, `names`, [all commands](./secrets/doppler/OPTIONS.md) |
+| [dpkg](./packaging/dpkg/README.md) | Build `.deb` packages from a validated package root. | `validate`, `build` |
 | [elixir](./setup/elixir/README.md) | Install Elixir and select a version. | `setup` |
+| [flyctl](./deployment/flyctl/README.md) | Run Fly.io commands with validated JSON inputs. | `run`, `version`, `deploy`, `status`, [all commands](./deployment/flyctl/OPTIONS.md) |
+| [gcloud](./cloud/gcloud/README.md) | Run Google Cloud commands with validated JSON inputs. | `run`, `version`, `config_list`, `run_deploy`, [all commands](./cloud/gcloud/OPTIONS.md) |
 | [gemfury](./publishing/gemfury/README.md) | Upload existing packages to a Gemfury account. | `upload` |
 | [gleam](./setup/gleam/README.md) | Install Gleam and select a version. | `setup` |
 | [go](./setup/go/README.md) | Install Go and select a version. | `setup` |
+| [helm](./deployment/helm/README.md) | Run Helm commands with validated JSON inputs. | `run`, `version`, `lint`, `template`, [all commands](./deployment/helm/OPTIONS.md) |
+| [infisical](./secrets/infisical/README.md) | Manage Infisical secrets through the native CLI. | `run`, `version`, `run_command`, [all commands](./secrets/infisical/OPTIONS.md) |
 | [java](./setup/java/README.md) | Install Java and select a version. | `setup` |
+| [kamal](./deployment/kamal/README.md) | Run Kamal commands with validated JSON inputs. | `run`, `version`, `deploy`, `setup`, [all commands](./deployment/kamal/OPTIONS.md) |
+| [kubectl](./deployment/kubectl/README.md) | Run Kubectl commands with validated JSON inputs. | `run`, `version`, `apply`, `get`, [all commands](./deployment/kubectl/OPTIONS.md) |
+| [netlify](./deployment/netlify/README.md) | Run Netlify commands with validated JSON inputs. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/netlify/OPTIONS.md) |
 | [nix](./setup/nix/README.md) | Install Nix and select a version. | `setup` |
+| [nix-package](./package-management/nix/README.md) | Run Nix packages commands with validated JSON inputs. | `run`, `version`, `build`, `eval`, [all commands](./package-management/nix/OPTIONS.md) |
 | [node](./setup/node/README.md) | Install Node.js and select a version. | `setup` |
+| [openbao](./secrets/openbao/README.md) | Manage OpenBao secrets through the native CLI. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/openbao/OPTIONS.md) |
+| [opentofu](./infrastructure/opentofu/README.md) | Run OpenTofu commands with validated JSON inputs. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/opentofu/OPTIONS.md) |
+| [podman](./containers/podman/README.md) | Run Podman commands with validated JSON inputs. | `run`, `version`, `build`, `pull`, [all commands](./containers/podman/OPTIONS.md) |
+| [prettier](./formatting/prettier/README.md) | Run Prettier commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/prettier/OPTIONS.md) |
+| [pulumi](./infrastructure/pulumi/README.md) | Run Pulumi commands with validated JSON inputs. | `run`, `version`, `preview`, `up`, [all commands](./infrastructure/pulumi/OPTIONS.md) |
 | [purescript](./setup/purescript/README.md) | Install Node, Bun, npm, PureScript, and Spago. | `setup` |
-| [rpmbuild](./build/rpmbuild/README.md) | Build `.rpm` packages from a validated RPM tree. | `validate`, `build` |
+| [railway](./deployment/railway/README.md) | Run Railway commands with validated JSON inputs. | `run`, `version`, `up`, `status`, [all commands](./deployment/railway/OPTIONS.md) |
+| [render](./deployment/render/README.md) | Run Render commands with validated JSON inputs. | `run`, `version`, `services`, `deploy`, [all commands](./deployment/render/OPTIONS.md) |
+| [rpmbuild](./packaging/rpmbuild/README.md) | Build `.rpm` packages from a validated RPM tree. | `validate`, `build` |
+| [ruff](./linting/ruff/README.md) | Run Ruff commands with validated JSON inputs. | `run`, `version`, `check`, `format`, [all commands](./linting/ruff/OPTIONS.md) |
 | [rust](./setup/rust/README.md) | Install Rust and select a version. | `setup` |
+| [rustfmt](./formatting/rustfmt/README.md) | Run Rustfmt commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/rustfmt/OPTIONS.md) |
+| [shellcheck](./linting/shellcheck/README.md) | Run ShellCheck commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/shellcheck/OPTIONS.md) |
+| [terraform](./infrastructure/terraform/README.md) | Run Terraform commands with validated JSON inputs. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/terraform/OPTIONS.md) |
+| [terragrunt](./infrastructure/terragrunt/README.md) | Run Terragrunt commands with validated JSON inputs. | `run`, `version`, `hcl_fmt`, `init`, [all commands](./infrastructure/terragrunt/OPTIONS.md) |
+| [ubicloud](./cloud/ubicloud/README.md) | Run Ubicloud commands with validated JSON inputs. | `run`, `help`, [all commands](./cloud/ubicloud/OPTIONS.md) |
+| [uv](./package-management/uv/README.md) | Manage Python dependencies and build or publish distributions. | `sync`, `lock`, `run_command`, [all commands](./package-management/uv/OPTIONS.md) |
+| [vault](./secrets/vault/README.md) | Manage Vault secrets through the native CLI. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/vault/OPTIONS.md) |
+| [vercel](./deployment/vercel/README.md) | Run Vercel commands with validated JSON inputs. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/vercel/OPTIONS.md) |
+| [yamllint](./linting/yamllint/README.md) | Run Yamllint commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/yamllint/OPTIONS.md) |
 | [zig](./setup/zig/README.md) | Install Zig and select a version. | `setup` |
 
 Each module has its own dependencies, build scripts, tests, and documentation.
@@ -56,8 +92,8 @@ export FURY_USER=publisher
 fluentci run gemfury upload dist/widget_1.2.0_arm64.deb
 ```
 
-Buildx, dpkg, and rpmbuild accept JSON objects as plugin input. For example,
-the dpkg `build` function accepts:
+Buildx, the CLI modules, dpkg, and rpmbuild accept JSON objects as plugin input.
+For example, the dpkg `build` function accepts:
 
 ```json
 {
@@ -75,7 +111,10 @@ selection does not cross-compile the payload.
 
 See each module's README for complete input formats, required host tools,
 authentication, and examples. Buildx requires a fresh `runDir` for every
-invocation; Cachix requires a Nix flake workspace.
+invocation; Cachix requires a Nix flake workspace. The CLI modules also require
+a fresh `runDir`, use an existing native CLI installation, and inherit its
+authentication configuration. See [the shared CLI guide](./lib/cli/README.md).
+The `nix-package` module manages packages; `nix` installs the runtime.
 
 ## Runtime setup
 
@@ -99,7 +138,7 @@ Install Node.js, Spago, the PureScript compiler, and `extism-js`. Build and
 test modules from their own directories:
 
 ```sh
-cd build/dpkg
+cd packaging/dpkg
 npm ci
 npm run build
 npm test

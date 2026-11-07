@@ -23,7 +23,7 @@ the checkout.
 
 ## Module conventions
 
-- Place modules under the appropriate category, such as `build/`,
+- Place modules under the appropriate category, such as `packaging/`,
   `containers/`, `caching/`, or `publishing/`.
 - Write module behavior in PureScript and expose WebAssembly entry points
   through `entry.mjs` and the matching `main` declarations in `imports.d.ts`.
@@ -51,6 +51,11 @@ in `test/setup`. Rebuild every setup module after changing that shared library,
 then run their tests. See [the setup guide](./setup/README.md) for OS coverage
 and optional upstream smoke tests. Keep new module registrations alphabetized
 by name in `fluentci.toml`.
+
+The cloud, container, deployment, formatting, infrastructure, linting, secrets,
+and Python/Nix package modules share `lib/cli` and `test/cli`. Edit `lib/cli/catalog.json`, run
+`python3 scripts/generate_cli_modules.py`, and rebuild and test all affected CLI
+modules. CI checks generated entry points, argument references, and schemas.
 
 ## Verification
 
