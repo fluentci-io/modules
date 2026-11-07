@@ -4,7 +4,7 @@
 
 [CI](./workflows/ci.yml) runs on every push, pull request, and manual dispatch.
 It validates the registry, npm metadata and lockfiles, source/test presence,
-MIT licenses, guest entry point declarations, generated Buildx files, and the
+MIT licenses, guest entry point declarations, generated Buildx and CLI files, and the
 workflow syntax. Validator tests run alongside these checks.
 
 The build matrix is generated from `fluentci.toml`: every registered module
@@ -22,6 +22,12 @@ covered by stub-host tests, not native BSD virtual machines.
 
 Use **All modules passed** as the aggregate branch-protection check. It fails
 if registry validation or any module/OS job fails or is cancelled.
+
+CLI module tests cover every named export and field, supported host routing,
+missing tools, and execution failures. Local executable fixtures exercise plan
+execution on both hosts. Formatter and linter jobs also install pinned Python
+and Node tools and require native formatting/linting tests. Provider commands
+use controlled host responses; CI does not deploy to real accounts or clusters.
 
 ## Live runtime smoke tests
 
@@ -55,6 +61,7 @@ python3 scripts/validate_modules.py
 python3 -m unittest discover -s test/ci -p 'test_*.py' -v
 node --test test/ci/*.test.mjs
 python3 containers/buildx/generate.py --check
+python3 scripts/generate_cli_modules.py --check
 node scripts/validate_wasm.mjs setup/purescript
 ```
 

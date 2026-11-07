@@ -36,6 +36,8 @@ jobs:
           node --test test/ci/*.test.mjs
       - name: Check generated Buildx sources and schema
         run: python containers/buildx/generate.py --check
+      - name: Check generated CLI sources and schemas
+        run: python scripts/generate_cli_modules.py --check
       - name: Lint workflows
         shell: bash
         run: |
@@ -64,6 +66,32 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends dpkg-dev rpm zip unzip
+      - name: Install formatter and linter integration tools
+        if: startsWith(matrix.path, 'formatting/') || contains(fromJSON('["ruff", "biome", "shellcheck", "yamllint"]'), matrix.name)
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/cli-python"
+          "$RUNNER_TEMP/cli-python/bin/pip" install black==25.1.0 ruff==0.11.5 yamllint==1.37.0
+          npm install --prefix "$RUNNER_TEMP/cli-node" prettier@3.5.3 @biomejs/biome@1.9.4
+          echo "$RUNNER_TEMP/cli-python/bin" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/cli-node/node_modules/.bin" >> "$GITHUB_PATH"
+          if ! command -v rustfmt >/dev/null; then rustup component add rustfmt; fi
+          if ! command -v shellcheck >/dev/null; then
+            if [ "$RUNNER_OS" = Linux ]; then
+              sudo apt-get install --yes --no-install-recommends shellcheck
+            else
+              brew install shellcheck
+            fi
+          fi
+          echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
+      - name: Install uv integration tool
+        if: matrix.name == 'uv'
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/cli-uv"
+          "$RUNNER_TEMP/cli-uv/bin/pip" install uv==0.11.0
+          echo "$RUNNER_TEMP/cli-uv/bin" >> "$GITHUB_PATH"
+          echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
       - name: Cache PureScript dependencies
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
