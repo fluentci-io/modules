@@ -1,0 +1,385 @@
+{
+  "name": "aws",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "arguments"
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "identity": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "region"
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "profile"
+          },
+          "endpointUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "endpointUrl"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "text",
+              "table",
+              "yaml",
+              "yaml-stream"
+            ],
+            "description": "output"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "s3_cp": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "region"
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "profile"
+          },
+          "endpointUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "endpointUrl"
+          },
+          "recursive": {
+            "type": "boolean",
+            "description": "recursive"
+          },
+          "exclude": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "exclude"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "include"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "description": "source"
+          },
+          "destination": {
+            "type": "string",
+            "minLength": 1,
+            "description": "destination"
+          }
+        },
+        "required": [
+          "runDir",
+          "source",
+          "destination"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "s3_sync": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "region"
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "profile"
+          },
+          "endpointUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "endpointUrl"
+          },
+          "delete": {
+            "type": "boolean",
+            "description": "delete"
+          },
+          "dryrun": {
+            "type": "boolean",
+            "description": "dryrun"
+          },
+          "exclude": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "exclude"
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "include"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "description": "source"
+          },
+          "destination": {
+            "type": "string",
+            "minLength": 1,
+            "description": "destination"
+          }
+        },
+        "required": [
+          "runDir",
+          "source",
+          "destination"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "cloudformation_deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "region"
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "profile"
+          },
+          "endpointUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "endpointUrl"
+          },
+          "templateFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "templateFile"
+          },
+          "stackName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "stackName"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "capabilities"
+          },
+          "parameterOverrides": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "parameterOverrides"
+          },
+          "noFailOnEmptyChangeset": {
+            "type": "boolean",
+            "description": "noFailOnEmptyChangeset"
+          }
+        },
+        "required": [
+          "runDir",
+          "templateFile",
+          "stackName"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

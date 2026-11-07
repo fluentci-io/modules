@@ -1,0 +1,249 @@
+{
+  "name": "argocd",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "arguments"
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "server": {
+            "type": "string",
+            "minLength": 1,
+            "description": "server"
+          },
+          "grpcWeb": {
+            "type": "boolean",
+            "description": "grpcWeb"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml",
+              "wide"
+            ],
+            "description": "output"
+          },
+          "application": {
+            "type": "string",
+            "minLength": 1,
+            "description": "application"
+          }
+        },
+        "required": [
+          "runDir",
+          "application"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_sync": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "server": {
+            "type": "string",
+            "minLength": 1,
+            "description": "server"
+          },
+          "grpcWeb": {
+            "type": "boolean",
+            "description": "grpcWeb"
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "description": "revision"
+          },
+          "prune": {
+            "type": "boolean",
+            "description": "prune"
+          },
+          "application": {
+            "type": "string",
+            "minLength": 1,
+            "description": "application"
+          }
+        },
+        "required": [
+          "runDir",
+          "application"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_wait": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "server": {
+            "type": "string",
+            "minLength": 1,
+            "description": "server"
+          },
+          "grpcWeb": {
+            "type": "boolean",
+            "description": "grpcWeb"
+          },
+          "timeout": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "timeout"
+          },
+          "application": {
+            "type": "string",
+            "minLength": 1,
+            "description": "application"
+          }
+        },
+        "required": [
+          "runDir",
+          "application"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}
