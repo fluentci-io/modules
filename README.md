@@ -15,12 +15,18 @@ All modules are registered in [fluentci.toml](./fluentci.toml).
 | [argocd](./deployment/argocd/README.md) | Run Argo CD commands with validated JSON inputs. | `run`, `version`, `app_get`, `app_sync`, [all commands](./deployment/argocd/OPTIONS.md) |
 | [aws](./cloud/aws/README.md) | Run AWS commands with validated JSON inputs. | `run`, `version`, `identity`, `s3_cp`, [all commands](./cloud/aws/OPTIONS.md) |
 | [azure](./cloud/azure/README.md) | Run Azure commands with validated JSON inputs. | `run`, `version`, `account_show`, `group_deploy`, [all commands](./cloud/azure/OPTIONS.md) |
+| [betterleaks](./security/betterleaks/README.md) | Scan secrets with Betterleaks 1.x and redacted reports. | `scan_dir`, `scan_git`, `version`, [all commands](./security/betterleaks/OPTIONS.md) |
 | [biome](./linting/biome/README.md) | Run Biome commands with validated JSON inputs. | `run`, `version`, `check`, `lint`, [all commands](./linting/biome/OPTIONS.md) |
 | [black](./formatting/black/README.md) | Run Black commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/black/OPTIONS.md) |
 | [buildkit](./containers/buildkit/README.md) | Run BuildKit commands with validated JSON inputs. | `run`, `version`, `build`, `prune`, [all commands](./containers/buildkit/OPTIONS.md) |
 | [buildx](./containers/buildx/README.md) | Run Docker Buildx with typed command arguments. | `build`, `bake`, `create`, and [other commands](./containers/buildx/OPTIONS.md) |
 | [bun](./setup/bun/README.md) | Install Bun and select a version. | `setup` |
 | [cachix](./caching/cachix/README.md) | Configure a Cachix cache and upload Nix outputs. | `setup`, `push` |
+| [checkov](./security/checkov/README.md) | Run Checkov through validated native CLI commands. | `run`, `version`, `scan`, [all commands](./security/checkov/OPTIONS.md) |
+| [codacy](./code-quality/codacy/README.md) | Run Codacy through validated native CLI commands. | `run`, `help`, `upload`, [all commands](./code-quality/codacy/OPTIONS.md) |
+| [codecov](./code-quality/codecov/README.md) | Run Codecov through validated native CLI commands. | `run`, `version`, `upload`, [all commands](./code-quality/codecov/OPTIONS.md) |
+| [coveralls](./code-quality/coveralls/README.md) | Run Coveralls through validated native CLI commands. | `run`, `version`, `upload`, `done`, [all commands](./code-quality/coveralls/OPTIONS.md) |
+| [cypress](./testing/cypress/README.md) | Run Cypress tests and install browser binaries. | `run`, `version`, `test`, `install`, [all commands](./testing/cypress/OPTIONS.md) |
 | [deno](./setup/deno/README.md) | Install Deno and select a version. | `setup` |
 | [determinate-nix](./setup/determinate-nix/README.md) | Install Determinate Nix and select a version. | `setup` |
 | [digitalocean](./cloud/digitalocean/README.md) | Run DigitalOcean commands with validated JSON inputs. | `run`, `version`, `account_get`, `droplets_list`, [all commands](./cloud/digitalocean/OPTIONS.md) |
@@ -31,8 +37,10 @@ All modules are registered in [fluentci.toml](./fluentci.toml).
 | [flyctl](./deployment/flyctl/README.md) | Run Fly.io commands with validated JSON inputs. | `run`, `version`, `deploy`, `status`, [all commands](./deployment/flyctl/OPTIONS.md) |
 | [gcloud](./cloud/gcloud/README.md) | Run Google Cloud commands with validated JSON inputs. | `run`, `version`, `config_list`, `run_deploy`, [all commands](./cloud/gcloud/OPTIONS.md) |
 | [gemfury](./publishing/gemfury/README.md) | Upload existing packages to a Gemfury account. | `upload` |
+| [gitleaks](./security/gitleaks/README.md) | Run Gitleaks through validated native CLI commands. | `run`, `version`, `scan_dir`, `scan_git`, [all commands](./security/gitleaks/OPTIONS.md) |
 | [gleam](./setup/gleam/README.md) | Install Gleam and select a version. | `setup` |
 | [go](./setup/go/README.md) | Install Go and select a version. | `setup` |
+| [grype](./security/grype/README.md) | Run Grype through validated native CLI commands. | `run`, `version`, `scan`, `db_update`, [all commands](./security/grype/OPTIONS.md) |
 | [helm](./deployment/helm/README.md) | Run Helm commands with validated JSON inputs. | `run`, `version`, `lint`, `template`, [all commands](./deployment/helm/OPTIONS.md) |
 | [infisical](./secrets/infisical/README.md) | Manage Infisical secrets through the native CLI. | `run`, `version`, `run_command`, [all commands](./secrets/infisical/OPTIONS.md) |
 | [java](./setup/java/README.md) | Install Java and select a version. | `setup` |
@@ -44,6 +52,8 @@ All modules are registered in [fluentci.toml](./fluentci.toml).
 | [node](./setup/node/README.md) | Install Node.js and select a version. | `setup` |
 | [openbao](./secrets/openbao/README.md) | Manage OpenBao secrets through the native CLI. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/openbao/OPTIONS.md) |
 | [opentofu](./infrastructure/opentofu/README.md) | Run OpenTofu commands with validated JSON inputs. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/opentofu/OPTIONS.md) |
+| [pkl](./setup/pkl/README.md) | Install Pkl and select a version. | `setup` |
+| [playwright](./testing/playwright/README.md) | Run Playwright tests and install browser binaries. | `run`, `version`, `test`, `list`, [all commands](./testing/playwright/OPTIONS.md) |
 | [podman](./containers/podman/README.md) | Run Podman commands with validated JSON inputs. | `run`, `version`, `build`, `pull`, [all commands](./containers/podman/OPTIONS.md) |
 | [prettier](./formatting/prettier/README.md) | Run Prettier commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/prettier/OPTIONS.md) |
 | [pulumi](./infrastructure/pulumi/README.md) | Run Pulumi commands with validated JSON inputs. | `run`, `version`, `preview`, `up`, [all commands](./infrastructure/pulumi/OPTIONS.md) |
@@ -54,9 +64,16 @@ All modules are registered in [fluentci.toml](./fluentci.toml).
 | [ruff](./linting/ruff/README.md) | Run Ruff commands with validated JSON inputs. | `run`, `version`, `check`, `format`, [all commands](./linting/ruff/OPTIONS.md) |
 | [rust](./setup/rust/README.md) | Install Rust and select a version. | `setup` |
 | [rustfmt](./formatting/rustfmt/README.md) | Run Rustfmt commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/rustfmt/OPTIONS.md) |
+| [scorecard](./security/scorecard/README.md) | Run OpenSSF Scorecard through validated native CLI commands. | `run`, `version`, `scan`, `scan_local`, [all commands](./security/scorecard/OPTIONS.md) |
+| [semgrep](./security/semgrep/README.md) | Run Semgrep through validated native CLI commands. | `run`, `version`, `scan`, `ci`, [all commands](./security/semgrep/OPTIONS.md) |
 | [shellcheck](./linting/shellcheck/README.md) | Run ShellCheck commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/shellcheck/OPTIONS.md) |
+| [snyk](./security/snyk/README.md) | Run Snyk through validated native CLI commands. | `run`, `version`, `setup`, `test`, [all commands](./security/snyk/OPTIONS.md) |
+| [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube through validated native CLI commands. | `run`, `version`, `scan`, [all commands](./code-quality/sonarqube/OPTIONS.md) |
+| [syft](./security/syft/README.md) | Run Syft through validated native CLI commands. | `run`, `version`, `scan`, `convert`, [all commands](./security/syft/OPTIONS.md) |
 | [terraform](./infrastructure/terraform/README.md) | Run Terraform commands with validated JSON inputs. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/terraform/OPTIONS.md) |
 | [terragrunt](./infrastructure/terragrunt/README.md) | Run Terragrunt commands with validated JSON inputs. | `run`, `version`, `hcl_fmt`, `init`, [all commands](./infrastructure/terragrunt/OPTIONS.md) |
+| [trivy](./security/trivy/README.md) | Run Trivy through validated native CLI commands. | `run`, `version`, `filesystem`, `image`, [all commands](./security/trivy/OPTIONS.md) |
+| [trufflehog](./security/trufflehog/README.md) | Run TruffleHog through validated native CLI commands. | `run`, `version`, `filesystem`, `git`, [all commands](./security/trufflehog/OPTIONS.md) |
 | [ubicloud](./cloud/ubicloud/README.md) | Run Ubicloud commands with validated JSON inputs. | `run`, `help`, [all commands](./cloud/ubicloud/OPTIONS.md) |
 | [uv](./package-management/uv/README.md) | Manage Python dependencies and build or publish distributions. | `sync`, `lock`, `run_command`, [all commands](./package-management/uv/OPTIONS.md) |
 | [vault](./secrets/vault/README.md) | Manage Vault secrets through the native CLI. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/vault/OPTIONS.md) |

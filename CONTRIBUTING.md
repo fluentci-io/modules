@@ -52,8 +52,8 @@ then run their tests. See [the setup guide](./setup/README.md) for OS coverage
 and optional upstream smoke tests. Keep new module registrations alphabetized
 by name in `fluentci.toml`.
 
-The cloud, container, deployment, formatting, infrastructure, linting, secrets,
-and Python/Nix package modules share `lib/cli` and `test/cli`. Edit `lib/cli/catalog.json`, run
+The cloud, code-quality, container, deployment, formatting, infrastructure,
+linting, secrets, security, testing, and Python/Nix package modules share `lib/cli` and `test/cli`. Edit `lib/cli/catalog.json`, run
 `python3 scripts/generate_cli_modules.py`, and rebuild and test all affected CLI
 modules. CI checks generated entry points, argument references, and schemas.
 

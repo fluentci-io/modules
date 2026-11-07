@@ -23,6 +23,12 @@ path = "cloud/azure"
 sdk = "purescript"
 
 [[modules]]
+name = "betterleaks"
+version = "0.1.0"
+path = "security/betterleaks"
+sdk = "purescript"
+
+[[modules]]
 name = "biome"
 version = "0.1.0"
 path = "linting/biome"
@@ -56,6 +62,36 @@ sdk = "purescript"
 name = "cachix"
 version = "0.1.0"
 path = "caching/cachix"
+sdk = "purescript"
+
+[[modules]]
+name = "checkov"
+version = "0.1.0"
+path = "security/checkov"
+sdk = "purescript"
+
+[[modules]]
+name = "codacy"
+version = "0.1.0"
+path = "code-quality/codacy"
+sdk = "purescript"
+
+[[modules]]
+name = "codecov"
+version = "0.1.0"
+path = "code-quality/codecov"
+sdk = "purescript"
+
+[[modules]]
+name = "coveralls"
+version = "0.1.0"
+path = "code-quality/coveralls"
+sdk = "purescript"
+
+[[modules]]
+name = "cypress"
+version = "0.1.0"
+path = "testing/cypress"
 sdk = "purescript"
 
 [[modules]]
@@ -119,6 +155,12 @@ path = "publishing/gemfury"
 sdk = "purescript"
 
 [[modules]]
+name = "gitleaks"
+version = "0.1.0"
+path = "security/gitleaks"
+sdk = "purescript"
+
+[[modules]]
 name = "gleam"
 version = "0.1.0"
 path = "setup/gleam"
@@ -128,6 +170,12 @@ sdk = "purescript"
 name = "go"
 version = "0.1.0"
 path = "setup/go"
+sdk = "purescript"
+
+[[modules]]
+name = "grype"
+version = "0.1.0"
+path = "security/grype"
 sdk = "purescript"
 
 [[modules]]
@@ -197,6 +245,18 @@ path = "infrastructure/opentofu"
 sdk = "purescript"
 
 [[modules]]
+name = "pkl"
+version = "0.1.0"
+path = "setup/pkl"
+sdk = "purescript"
+
+[[modules]]
+name = "playwright"
+version = "0.1.0"
+path = "testing/playwright"
+sdk = "purescript"
+
+[[modules]]
 name = "podman"
 version = "0.1.0"
 path = "containers/podman"
@@ -257,9 +317,39 @@ path = "formatting/rustfmt"
 sdk = "purescript"
 
 [[modules]]
+name = "scorecard"
+version = "0.1.0"
+path = "security/scorecard"
+sdk = "purescript"
+
+[[modules]]
+name = "semgrep"
+version = "0.1.0"
+path = "security/semgrep"
+sdk = "purescript"
+
+[[modules]]
 name = "shellcheck"
 version = "0.1.0"
 path = "linting/shellcheck"
+sdk = "purescript"
+
+[[modules]]
+name = "snyk"
+version = "0.1.0"
+path = "security/snyk"
+sdk = "purescript"
+
+[[modules]]
+name = "sonarqube"
+version = "0.1.0"
+path = "code-quality/sonarqube"
+sdk = "purescript"
+
+[[modules]]
+name = "syft"
+version = "0.1.0"
+path = "security/syft"
 sdk = "purescript"
 
 [[modules]]
@@ -272,6 +362,18 @@ sdk = "purescript"
 name = "terragrunt"
 version = "0.1.0"
 path = "infrastructure/terragrunt"
+sdk = "purescript"
+
+[[modules]]
+name = "trivy"
+version = "0.1.0"
+path = "security/trivy"
+sdk = "purescript"
+
+[[modules]]
+name = "trufflehog"
+version = "0.1.0"
+path = "security/trufflehog"
 sdk = "purescript"
 
 [[modules]]
