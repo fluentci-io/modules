@@ -204,10 +204,7 @@ def generated():
     yield HERE / "src/Main.purs", "\n".join(main)
     yield HERE / "entry.mjs", 'export { ' + ', '.join(exports) + ' } from "./output/Main/index.js";\n'
     yield HERE / "OPTIONS.md", "\n".join(docs)
-    plugins_path = ROOT / "schema/plugins.json"
-    plugins = json.loads(plugins_path.read_text())
-    plugins["buildx"] = exports
-    yield plugins_path, json.dumps(plugins, indent=2) + "\n"
+    yield HERE / "schema.json", json.dumps({"name": "buildx", "exports": exports}, indent=2) + "\n"
 
 
 if __name__ == "__main__":

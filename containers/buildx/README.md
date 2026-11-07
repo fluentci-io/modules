@@ -99,13 +99,12 @@ npm test
 
 The build checks generated files, compiles PureScript, and produces
 `dist/plugin.wasm`. Tests check typed options and execution plans without
-launching Docker. Generation requires the repository's `schema/plugins.json`,
-and tests require `schema/generated/buildx.json`. These files are not currently
-included in this checkout.
+launching Docker. The generated `schema.json` contains each export's JSON input
+schema and is checked alongside the PureScript types and `OPTIONS.md`.
 
-To regenerate command types, exports, the plugin index, and `OPTIONS.md` after changing
-the option snapshot, run `python3 generate.py`. Supply `schema/plugins.json`
-first. Generated files identify themselves in their headers.
+To regenerate command types, exports, schema, and `OPTIONS.md` after changing
+the option snapshot, run `python3 generate.py`. Generated files identify
+themselves in their headers.
 
 ## License
 

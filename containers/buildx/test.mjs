@@ -5,7 +5,7 @@ import * as C from "./output/Buildx.Commands/index.js";
 import { compile } from "./output/FluentCI.Host.Plan/index.js";
 
 const snapshot = JSON.parse(readFileSync(new URL("buildx-options.json", import.meta.url)));
-const schema = JSON.parse(readFileSync(new URL("../../schema/generated/buildx.json", import.meta.url)));
+const schema = JSON.parse(readFileSync(new URL("schema.json", import.meta.url)));
 const camel = value => value.replace(/-([a-z])/g, (_, character) => character.toUpperCase());
 const command = path => path.length ? path.join("_").replaceAll("-", "_") : "buildx";
 const pure = path => path.length ? camel(path.join("-")) : "buildx";
@@ -20,7 +20,7 @@ test("every public, experimental and inherited Buildx option is a typed named mo
   for (const node of snapshot.commands) {
     const name = pure(node.path);
     const endpoint = schema.exports[command(node.path)];
-    const input = schema.components.schemas[endpoint.input.$ref.split("/").at(-1)];
+    const input = endpoint.input;
     const flags = new Map();
     for (let depth = 0; depth <= node.path.length; depth++) {
       const parent = snapshot.commands.find(row => JSON.stringify(row.path) === JSON.stringify(node.path.slice(0, depth)));
