@@ -4,6 +4,9 @@ Install Bun, Deno, Elixir, Gleam, Go, Java, Node.js, Rust, Zig, Nix, or
 Determinate Nix from FluentCI. Every module exports `setup` and has a
 `setupWith` PureScript helper.
 
+The [PureScript toolchain module](./purescript/README.md) composes runtime setup
+with npm, the compiler, and Spago, with independent version selection.
+
 ## Platforms
 
 | Host OS | Runtime modules | Nix and Determinate Nix |
@@ -65,6 +68,7 @@ arguments; version strings and paths are not interpolated into shell commands.
 | [go](./go/README.md) | Exact release or `latest`. |
 | [java](./java/README.md) | JDK major, exact Temurin release such as `21.0.5+11`, or `latest` LTS. Default `21`. |
 | [node](./node/README.md) | Exact release, `latest`, or `lts`. |
+| [purescript](./purescript/README.md) | Compiler, Node, Bun, npm, and Spago versions can be selected independently. |
 | [rust](./rust/README.md) | Exact release, `stable`, `beta`, `nightly`, or dated rustup toolchain. Default `stable`. |
 | [zig](./zig/README.md) | Exact release in the official index or `latest` stable. |
 | [nix](./nix/README.md) | Exact upstream Nix release or `latest`. Optional `daemon`. |

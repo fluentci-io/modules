@@ -77,6 +77,12 @@ path = "setup/node"
 sdk = "purescript"
 
 [[modules]]
+name = "purescript"
+version = "0.1.0"
+path = "setup/purescript"
+sdk = "purescript"
+
+[[modules]]
 name = "rpmbuild"
 version = "0.1.0"
 path = "build/rpmbuild"

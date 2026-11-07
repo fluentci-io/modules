@@ -17,6 +17,7 @@ import Foreign.Object as Object
 
 packageName :: String -> String -> String -> String
 packageName os tool version = case tool of
+  "purescript" -> if os == "freebsd" then "hs-purescript" else "purescript"
   "node" -> if os == "netbsd" then "nodejs" else "node"
   "java" -> do
     let major = if version == "latest" then "21" else fromMaybe "21" (Array.head (String.split (Pattern ".") version))
@@ -70,7 +71,7 @@ install tool host config = do
     else pure selector
   listing <- H.capture (if host.os == "freebsd" then [ "pkg", "info", "-l", query ] else [ "pkg_info", "-L", query ])
   let paths = Array.filter (String.startsWith (Pattern "/")) (map trim (String.split (Pattern "\n") listing))
-      executableName = if tool == "rust" then "rustc" else tool
+      executableName = if tool == "rust" then "rustc" else if tool == "purescript" then "purs" else tool
       candidates = Array.filter (ownedExecutable executableName) paths
   selected <- choose tool config.version candidates
   let nativeBin = fromMaybe "" (Array.head (String.split (Pattern "/bin/") selected.path)) <> "/bin"

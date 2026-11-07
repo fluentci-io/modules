@@ -1,6 +1,6 @@
 # Shared setup library
 
-PureScript implementation shared by the eleven [runtime setup modules](../../setup/README.md).
+PureScript implementation shared by the [runtime setup modules](../../setup/README.md).
 This is a local Spago library, not a separately registered WebAssembly module.
 
 - `CI.Setup` dispatches installers and exposes the shared entry point.
