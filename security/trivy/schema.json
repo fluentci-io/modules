@@ -1,0 +1,347 @@
+{
+  "name": "trivy",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "arguments"
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "filesystem": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "severity": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HIGH,CRITICAL",
+            "description": "severity"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "description": "format"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "output"
+          },
+          "scanners": {
+            "type": "string",
+            "minLength": 1,
+            "description": "scanners"
+          },
+          "ignoreUnfixed": {
+            "type": "boolean",
+            "description": "ignoreUnfixed"
+          },
+          "skipDbUpdate": {
+            "type": "boolean",
+            "description": "skipDbUpdate"
+          },
+          "offlineScan": {
+            "type": "boolean",
+            "description": "offlineScan"
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "directory"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "image": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "severity": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HIGH,CRITICAL",
+            "description": "severity"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "description": "format"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "output"
+          },
+          "scanners": {
+            "type": "string",
+            "minLength": 1,
+            "description": "scanners"
+          },
+          "ignoreUnfixed": {
+            "type": "boolean",
+            "description": "ignoreUnfixed"
+          },
+          "skipDbUpdate": {
+            "type": "boolean",
+            "description": "skipDbUpdate"
+          },
+          "offlineScan": {
+            "type": "boolean",
+            "description": "offlineScan"
+          },
+          "image": {
+            "type": "string",
+            "minLength": 1,
+            "description": "image"
+          }
+        },
+        "required": [
+          "runDir",
+          "image"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "severity": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HIGH,CRITICAL",
+            "description": "severity"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "description": "format"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "output"
+          },
+          "skipCheckUpdate": {
+            "type": "boolean",
+            "description": "skipCheckUpdate"
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "directory"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "sbom": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "severity": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HIGH,CRITICAL",
+            "description": "severity"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "description": "format"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "output"
+          },
+          "skipDbUpdate": {
+            "type": "boolean",
+            "description": "skipDbUpdate"
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "file"
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}
