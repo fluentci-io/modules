@@ -1,0 +1,146 @@
+{
+  "name": "sonarqube",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "arguments"
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "scan": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "projectKey"
+          },
+          "sources": {
+            "type": "string",
+            "minLength": 1,
+            "description": "sources"
+          },
+          "hostUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "hostUrl"
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1,
+            "description": "organization"
+          },
+          "qualityGateWait": {
+            "type": "boolean",
+            "description": "qualityGateWait"
+          },
+          "properties": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "properties"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}
