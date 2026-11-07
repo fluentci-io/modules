@@ -115,10 +115,12 @@ jobs:
             CYPRESS_INSTALL_BINARY=0 bun add --cwd "$RUNNER_TEMP/browser-tools" --dev --exact cypress@16.2.1
             "$RUNNER_TEMP/browser-tools/node_modules/.bin/cypress" install
           fi
-          echo "CYPRESS_CACHE_FOLDER=$CYPRESS_CACHE_FOLDER" >> "$GITHUB_ENV"
-          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
-          echo "FLUENTCI_BROWSER_TOOLS=$RUNNER_TEMP/browser-tools" >> "$GITHUB_ENV"
-          echo 'FLUENTCI_REQUIRE_BROWSER_TESTS=1' >> "$GITHUB_ENV"
+          {
+            echo "CYPRESS_CACHE_FOLDER=$CYPRESS_CACHE_FOLDER"
+            echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH"
+            echo "FLUENTCI_BROWSER_TOOLS=$RUNNER_TEMP/browser-tools"
+            echo 'FLUENTCI_REQUIRE_BROWSER_TESTS=1'
+          } >> "$GITHUB_ENV"
       - name: Install offline security integration tools
         if: contains(fromJSON('["betterleaks", "gitleaks", "syft"]'), matrix.name)
         shell: bash
