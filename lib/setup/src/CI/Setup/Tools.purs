@@ -46,8 +46,8 @@ stripV value = fromMaybe value (String.stripPrefix (Pattern "v") value)
 verify :: Tool -> String -> String -> Effect String
 verify tool expected executable = do
   H.run [ "test", "-x", executable ]
-  text <- H.capture ([ executable ] <> tool.versionArgs)
   if not tool.checkVersion then pure expected else do
+    text <- H.capture ([ executable ] <> tool.versionArgs)
     actual <- H.versionFrom tool.name text
     when (tool.name == "aws" && not (String.startsWith (Pattern "2.") actual)) $ throw "AWS CLI v2 is required"
     let wanted = stripV expected
@@ -56,7 +56,7 @@ verify tool expected executable = do
     pure actual
 
 available :: String -> Effect Boolean
-available name = isRight <$> try (H.run [ "which", name ])
+available name = (_ /= "") <$> H.findExecutable name
 
 firstManager :: Array String -> Effect String
 firstManager names = case Array.uncons names of
@@ -68,7 +68,7 @@ firstManager names = case Array.uncons names of
 native :: Tool -> Host -> Config -> Effect Result
 native tool host config = do
   existing <- try do
-    executable <- trim <$> H.capture [ "which", tool.program ]
+    executable <- H.findExecutable tool.program
     unless (String.startsWith (Pattern "/") executable) $ throw "Executable not found"
     found <- H.exists executable
     unless found $ throw "Executable not found"
@@ -130,6 +130,8 @@ substitute host version template = foldl (\value pair -> String.replaceAll (Patt
   substitutions =
     [ { key: "{version}", value: version }, { key: "{os}", value: os }
     , { key: "{hostos}", value: host.os }
+    , { key: "{pkgxarch}", value: if arm then "aarch64" else "x86-64" }
+    , { key: "{sqruffplatform}", value: (if mac then "darwin-" else "linux-") <> (if arm then "aarch64" else "x86_64") <> (if mac then "" else "-musl") }
     , { key: "{doppleros}", value: if mac then "macOS" else "linux" }
     , { key: "{rcloneos}", value: if mac then "osx" else "linux" }
     , { key: "{ghos}", value: if mac then "macOS" else "linux" }
@@ -351,7 +353,7 @@ install name host config = do
         else if tool.backend == "cachix" then do
           H.requireTools [ "nix", "curl" ]
           selected <- if config.version == "latest" then _.version <$> release tool "latest" else pure config.version
-          H.run [ "nix", "--extra-experimental-features", "nix-command flakes", "profile", "install", "--profile", destination <> "/profile", "github:cachix/cachix/v" <> stripV selected ]
+          H.run [ "nix", "--extra-experimental-features", "nix-command flakes", "profile", "install", "--profile", destination <> "/profile", "github:" <> tool.repository <> "/v" <> stripV selected ]
           H.run [ "ln", "-s", destination <> "/profile/bin", destination <> "/bin" ]
           pure selected
         else if tool.backend == "kubectl" then do

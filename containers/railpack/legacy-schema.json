@@ -1,0 +1,406 @@
+{
+  "name": "railpack",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal native command argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "prepare": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "envNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Names of host environment variables to forward to Railpack, without embedding their values."
+          },
+          "configFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Railpack project configuration file."
+          },
+          "buildCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Override the project build command; executed by Railpack inside the build."
+          },
+          "startCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Container start command to include in the image."
+          },
+          "previous": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Previously selected package versions as NAME@VERSION entries."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Project source directory to analyze or build."
+          },
+          "planOut": {
+            "type": "string",
+            "minLength": 1,
+            "default": "railpack-plan.json",
+            "description": "Destination for the generated JSON build plan."
+          },
+          "infoOut": {
+            "type": "string",
+            "minLength": 1,
+            "default": "railpack-info.json",
+            "description": "Destination for structured project/build metadata."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "build": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "envNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Names of host environment variables to forward to Railpack, without embedding their values."
+          },
+          "configFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Railpack project configuration file."
+          },
+          "buildCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Override the project build command; executed by Railpack inside the build."
+          },
+          "startCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Container start command to include in the image."
+          },
+          "previous": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Previously selected package versions as NAME@VERSION entries."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Project source directory to analyze or build."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Container image name/tag to produce."
+          },
+          "platform": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target image platform, for example linux/amd64."
+          },
+          "progress": {
+            "type": "string",
+            "minLength": 1,
+            "default": "plain",
+            "description": "BuildKit progress mode: auto, plain, or tty."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Export the final filesystem to a local directory."
+          },
+          "cacheFrom": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "BuildKit cache import specifications."
+          },
+          "cacheTo": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "BuildKit cache export specifications."
+          },
+          "noCache": {
+            "type": "boolean",
+            "description": "Build without reading cached layers."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "info": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "description": "Project information output format: json or pretty."
+          },
+          "out": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional JSON information output file."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Project source directory."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "schema": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

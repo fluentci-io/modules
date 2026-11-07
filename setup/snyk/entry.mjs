@@ -1,1 +1,1 @@
-export { setup } from "./output/CI.Setup.Snyk/index.js";
+export { setup } from "./output/CI.Component/index.js";

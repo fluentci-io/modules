@@ -1,989 +1,1273 @@
 [[modules]]
 name = "actionlint"
-version = "0.1.0"
+version = "0.2.0"
 path = "linting/actionlint"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "apko"
+version = "0.2.0"
+path = "containers/apko"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "argocd"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/argocd"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "artifactory"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/artifactory"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "aws"
-version = "0.1.0"
+version = "0.2.0"
 path = "cloud/aws"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "azure"
-version = "0.1.0"
+version = "0.2.0"
 path = "cloud/azure"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "bazel"
-version = "0.1.0"
+version = "0.2.0"
 path = "build/bazel"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "betterleaks"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/betterleaks"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "biome"
-version = "0.1.0"
+version = "0.2.0"
 path = "linting/biome"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "black"
-version = "0.1.0"
+version = "0.2.0"
 path = "formatting/black"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "buildkit"
-version = "0.1.0"
+version = "0.2.0"
 path = "containers/buildkit"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "buildx"
-version = "0.1.0"
+version = "0.2.0"
 path = "containers/buildx"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "cachix"
-version = "0.1.0"
+version = "0.2.0"
 path = "caching/cachix"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "checkov"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/checkov"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "cmake"
-version = "0.1.0"
+version = "0.2.0"
 path = "build/cmake"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "codacy"
-version = "0.1.0"
+version = "0.2.0"
 path = "code-quality/codacy"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "codecov"
-version = "0.1.0"
+version = "0.2.0"
 path = "code-quality/codecov"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "coveralls"
-version = "0.1.0"
+version = "0.2.0"
 path = "code-quality/coveralls"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "cypress"
-version = "0.1.0"
+version = "0.2.0"
 path = "testing/cypress"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "digitalocean"
-version = "0.1.0"
+version = "0.2.0"
 path = "cloud/digitalocean"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "docker"
-version = "0.1.0"
+version = "0.2.0"
 path = "containers/docker"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "doppler"
-version = "0.1.0"
+version = "0.2.0"
 path = "secrets/doppler"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "dpkg"
-version = "0.1.0"
+version = "0.2.0"
 path = "packaging/dpkg"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "flyctl"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/flyctl"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "gcloud"
-version = "0.1.0"
+version = "0.2.0"
 path = "cloud/gcloud"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "gemfury"
-version = "0.1.0"
+version = "0.2.0"
 path = "publishing/gemfury"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "gh-artifact"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/gh-artifact"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "gitlab-artifacts"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/gitlab-artifacts"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "gitleaks"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/gitleaks"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "grype"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/grype"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "helm"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/helm"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "infisical"
-version = "0.1.0"
+version = "0.2.0"
 path = "secrets/infisical"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "jfrog-cli"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/jfrog-cli"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "kamal"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/kamal"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "kubectl"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/kubectl"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "meson"
-version = "0.1.0"
+version = "0.2.0"
 path = "build/meson"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "netlify"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/netlify"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "nexus"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/nexus"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "ninja"
-version = "0.1.0"
+version = "0.2.0"
 path = "build/ninja"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "nix-package"
-version = "0.1.0"
+version = "0.2.0"
 path = "package-management/nix"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "openbao"
-version = "0.1.0"
+version = "0.2.0"
 path = "secrets/openbao"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "opentofu"
-version = "0.1.0"
+version = "0.2.0"
 path = "infrastructure/opentofu"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "oras"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/oras"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "playwright"
-version = "0.1.0"
+version = "0.2.0"
 path = "testing/playwright"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "plumber"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/plumber"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "podman"
-version = "0.1.0"
+version = "0.2.0"
 path = "containers/podman"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "prettier"
-version = "0.1.0"
+version = "0.2.0"
 path = "formatting/prettier"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "protolint"
+version = "0.2.0"
+path = "linting/protolint"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "pulumi"
-version = "0.1.0"
+version = "0.2.0"
 path = "infrastructure/pulumi"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "railpack"
+version = "0.2.0"
+path = "containers/railpack"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "railway"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/railway"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "rclone"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/rclone"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "render"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/render"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "rpmbuild"
-version = "0.1.0"
+version = "0.2.0"
 path = "packaging/rpmbuild"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "ruff"
-version = "0.1.0"
+version = "0.2.0"
 path = "linting/ruff"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "rustfmt"
-version = "0.1.0"
+version = "0.2.0"
 path = "formatting/rustfmt"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "sccache"
-version = "0.1.0"
+version = "0.2.0"
 path = "caching/sccache"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "scorecard"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/scorecard"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "semgrep"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/semgrep"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-actionlint"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/actionlint"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-apko"
+version = "0.2.0"
+path = "setup/apko"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-argocd"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/argocd"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-artifactory"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/artifactory"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-aws"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/aws"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-azure"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/azure"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-babashka"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/babashka"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-bazel"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/bazel"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-betterleaks"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/betterleaks"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-binaryen"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/binaryen"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-biome"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/biome"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-black"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/black"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-buf"
+version = "0.2.0"
+path = "setup/buf"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-buildkit"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/buildkit"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-buildx"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/buildx"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-bun"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/bun"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-cachix"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/cachix"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-checkov"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/checkov"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-clojure"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/clojure"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-cmake"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/cmake"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-codacy"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/codacy"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-codecov"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/codecov"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-coveralls"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/coveralls"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-cypress"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/cypress"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-deno"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/deno"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-determinate-nix"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/determinate-nix"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-devbox"
+version = "0.2.0"
+path = "setup/devbox"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-devenv"
+version = "0.2.0"
+path = "setup/devenv"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-digitalocean"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/digitalocean"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-docker"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/docker"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-doppler"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/doppler"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-dpkg"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/dpkg"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-elixir"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/elixir"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-expo"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/expo"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-extism"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/extism"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-extism-cli"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/extism-cli"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-extism-js"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/extism-js"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-extism-py"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/extism-py"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-flox"
+version = "0.2.0"
+path = "setup/flox"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-flyctl"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/flyctl"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-gcloud"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/gcloud"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-gemfury"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/gemfury"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-gh-artifact"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/gh-artifact"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-gitlab-artifacts"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/gitlab-artifacts"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-gitleaks"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/gitleaks"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-gleam"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/gleam"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-go"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/go"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-grype"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/grype"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-helm"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/helm"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-infisical"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/infisical"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-java"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/java"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-jfrog-cli"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/jfrog-cli"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-kamal"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/kamal"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-kubectl"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/kubectl"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-meson"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/meson"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-mise"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/mise"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-netlify"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/netlify"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-nexus"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/nexus"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-ninja"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/ninja"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-nix"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/nix"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-nix-package"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/nix-package"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-node"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/node"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-openbao"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/openbao"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-opentofu"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/opentofu"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-oras"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/oras"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-pkgx"
+version = "0.2.0"
+path = "setup/pkgx"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-pkl"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/pkl"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-playwright"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/playwright"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-plumber"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/plumber"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-podman"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/podman"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-prettier"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/prettier"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-protolint"
+version = "0.2.0"
+path = "setup/protolint"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-pulumi"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/pulumi"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-purescript"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/purescript"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-railpack"
+version = "0.2.0"
+path = "setup/railpack"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-railway"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/railway"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-rclone"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/rclone"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-render"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/render"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-rpmbuild"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/rpmbuild"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-ruff"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/ruff"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-rust"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/rust"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-rustfmt"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/rustfmt"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-sccache"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/sccache"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-scorecard"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/scorecard"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-semgrep"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/semgrep"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-shellcheck"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/shellcheck"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-snyk"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/snyk"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-sonarqube"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/sonarqube"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-sqlfluff"
+version = "0.2.0"
+path = "setup/sqlfluff"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-sqruff"
+version = "0.2.0"
+path = "setup/sqruff"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-syft"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/syft"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-tangled-artifacts"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/tangled-artifacts"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-terraform"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/terraform"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-terragrunt"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/terragrunt"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-tg"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/tg"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-trivy"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/trivy"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-trufflehog"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/trufflehog"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-turborepo"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/turborepo"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-ubicloud"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/ubicloud"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-uv"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/uv"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-vault"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/vault"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-vercel"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/vercel"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-wrangler"
+version = "0.2.0"
+path = "setup/wrangler"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-xtp"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/xtp"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-yamllint"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/yamllint"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "setup-zig"
-version = "0.1.0"
+version = "0.2.0"
 path = "setup/zig"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "shellcheck"
-version = "0.1.0"
+version = "0.2.0"
 path = "linting/shellcheck"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "snyk"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/snyk"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "sonarqube"
-version = "0.1.0"
+version = "0.2.0"
 path = "code-quality/sonarqube"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "sqlfluff"
+version = "0.2.0"
+path = "linting/sqlfluff"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "sqruff"
+version = "0.2.0"
+path = "linting/sqruff"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "syft"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/syft"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "tangled-artifacts"
-version = "0.1.0"
+version = "0.2.0"
 path = "artifacts/tangled-artifacts"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "terraform"
-version = "0.1.0"
+version = "0.2.0"
 path = "infrastructure/terraform"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "terragrunt"
-version = "0.1.0"
+version = "0.2.0"
 path = "infrastructure/terragrunt"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "trivy"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/trivy"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "trufflehog"
-version = "0.1.0"
+version = "0.2.0"
 path = "security/trufflehog"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "ubicloud"
-version = "0.1.0"
+version = "0.2.0"
 path = "cloud/ubicloud"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "uv"
-version = "0.1.0"
+version = "0.2.0"
 path = "package-management/uv"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "vault"
-version = "0.1.0"
+version = "0.2.0"
 path = "secrets/vault"
 sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "vercel"
-version = "0.1.0"
+version = "0.2.0"
 path = "deployment/vercel"
 sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "wrangler"
+version = "0.2.0"
+path = "deployment/wrangler"
+sdk = "purescript"
+runtime = "component"
 
 [[modules]]
 name = "yamllint"
-version = "0.1.0"
+version = "0.2.0"
 path = "linting/yamllint"
 sdk = "purescript"
+runtime = "component"

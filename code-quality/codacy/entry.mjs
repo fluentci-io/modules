@@ -1,1 +1,1 @@
-export { run, help, upload } from "./output/CI.Modules.Codacy/index.js";
+export { run, help, upload } from "./output/CI.Component/index.js";

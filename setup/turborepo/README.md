@@ -1,40 +1,54 @@
 # Setup Turborepo
 
-Install the `turbo` CLI with Bun and publish its directory on PATH for later
-FluentCI tasks. Node.js and Bun are installed first when missing.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Function signatures and argument descriptions come from the compiled PureScript
+source and are embedded in the component; no raw JSON plugin input is required.
+
+## Usage
 
 ```sh
-fluentci run setup-turborepo setup 2.5.6
+fluentci run setup-turborepo setup --version 2.5.6
 ```
 
-Omit input to install `latest`, or pass JSON:
-
-```json
-{"version":"2.5.6","installDir":"/home/runner/tools/turbo"}
+```sh
+fluentci run setup-turborepo --help
+fluentci run setup-turborepo setup --help
 ```
 
-The `setup` export returns the verified `version`, `binDir`, and `environment`.
-The PureScript `setupWith` helper accepts the shared setup configuration.
-Linux and macOS use the official `turbo` npm package, installed through Bun into
-an isolated prefix. FreeBSD, OpenBSD, and NetBSD use their native package
-repositories; unavailable packages or versions fail clearly. `packageName` can
-select a locally available port. Native packages require installation privileges.
+See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
+required flag, and return type. The [schema](./schema.json) describes the same
+contract. Optional values retain the native module defaults. Lists use JSON array
+syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
 
-Use Turborepo after setup to build or test a monorepo, for example `turbo run
-build test`. Configure remote cache credentials through `TURBO_TOKEN` and
-`TURBO_TEAM` in your CI secret store. Setup does not require those credentials.
-A prefix installed with `latest` is reused until removed; pin a release for
-reproducible builds or choose a fresh `installDir` when upgrading.
+## Requirements and behavior
 
-See the [shared setup guide](../README.md), [configuration schema](./schema.json),
-and [official Turborepo installation guide](https://turborepo.com/docs/getting-started/installation).
+Installs and verifies `turbo`, then returns `tool`, `version`, `bin-dir`, and
+`environment` (a list of `{name, value}` records). Environment updates are visible
+to later tasks in the same host session. Separate shell invocations must add the
+returned installation directory to PATH explicitly.
+
+
+
+Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
+are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
+Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
+pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
+Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
 
 ## Development
 
+From this module directory, with Node.js, Bun, PureScript, and Spago installed:
+
 ```sh
+bun install --cwd ../../lib/component --frozen-lockfile
 npm ci
 npm run build
 npm test
 ```
 
+`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
+checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
+private regression tests and are not the published module interface.
+
+See the [component migration guide](../../docs/COMPONENTS.md) and
 [MIT License](./LICENSE).

@@ -1,35 +1,40 @@
 {
   "name": "flyctl",
+  "runtime": "component",
   "exports": {
     "run": {
+      "description": "Execute arbitrary literal CLI arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "arguments": {
             "type": "array",
@@ -38,7 +43,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -48,39 +53,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Print the CLI version.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           }
         },
         "required": [
@@ -89,59 +122,87 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "deploy": {
+      "description": "deploy",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "app": {
             "type": "string",
             "minLength": 1,
-            "description": "app"
+            "description": "App supplied to the flyctl deploy operation."
           },
           "config": {
             "type": "string",
             "minLength": 1,
-            "description": "config"
+            "description": "Named configuration selected by the native tool."
           },
           "image": {
             "type": "string",
             "minLength": 1,
-            "description": "image"
+            "description": "Image supplied to the flyctl deploy operation."
           },
           "region": {
             "type": "string",
             "minLength": 1,
-            "description": "region"
+            "description": "Region supplied to the flyctl deploy operation."
           }
         },
         "required": [
@@ -150,48 +211,76 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "status": {
+      "description": "status",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "app": {
             "type": "string",
             "minLength": 1,
-            "description": "app"
+            "description": "App supplied to the flyctl status operation."
           },
           "json": {
             "type": "boolean",
-            "description": "json"
+            "description": "Json supplied to the flyctl status operation."
           }
         },
         "required": [
@@ -200,44 +289,72 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "logs": {
+      "description": "logs",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "app": {
             "type": "string",
             "minLength": 1,
-            "description": "app"
+            "description": "App supplied to the flyctl logs operation."
           }
         },
         "required": [
@@ -246,8 +363,32 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

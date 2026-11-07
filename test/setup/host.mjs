@@ -51,6 +51,10 @@ export function fixture(tool, options = {}) {
       if (result.status !== 0) throw Error(`${args[0]} failed: ${result.stdout}\n${result.stderr}`);
       return stderr ? result.stderr : result.stdout;
     }
+    if (args[0] === "sh" && args[3] === "fluentci-probe-exists") {
+      return options.existing && args[4] !== "/etc/alpine-release" ? "yes" : "";
+    }
+    if (args[0] === "sh" && args[3] === "fluentci-probe-tool") return "/usr/local/bin/" + args[4];
     if (args[0] === "test" && args[1] === "-e") {
       if (!options.existing || args[2] === "/etc/alpine-release") throw Error("not found");
       return "";

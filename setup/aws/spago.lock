@@ -6,6 +6,7 @@
         "core": {
           "dependencies": [
             "effect",
+            "fluentci-component-contract",
             "fluentci-setup-common",
             "prelude"
           ]
@@ -683,6 +684,9 @@
         "git": "https://github.com/fluentci-io/purescript-fluentci.git",
         "ref": "954d03568935c26f92434119a110635a41a6fa4c"
       },
+      "fluentci-component-contract": {
+        "path": "../../lib/component"
+      },
       "fluentci-setup-common": {
         "path": "../../lib/setup"
       }
@@ -921,6 +925,23 @@
         "maybe",
         "prelude",
         "tuples"
+      ]
+    },
+    "fluentci-component-contract": {
+      "type": "local",
+      "path": "../../lib/component",
+      "dependencies": [
+        "argonaut-codecs",
+        "argonaut-core",
+        "arrays",
+        "effect",
+        "either",
+        "exceptions",
+        "foldable-traversable",
+        "foreign-object",
+        "maybe",
+        "prelude",
+        "strings"
       ]
     },
     "fluentci-setup-common": {

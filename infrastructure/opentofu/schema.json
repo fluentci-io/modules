@@ -1,35 +1,40 @@
 {
   "name": "opentofu",
+  "runtime": "component",
   "exports": {
     "run": {
+      "description": "Execute arbitrary literal CLI arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "arguments": {
             "type": "array",
@@ -38,7 +43,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -48,39 +53,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Print the CLI version.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           }
         },
         "required": [
@@ -89,43 +122,71 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "init": {
+      "description": "Initialize providers and the configured backend noninteractively.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "backend": {
             "type": "boolean",
-            "description": "backend"
+            "description": "Backend supplied to the opentofu init operation."
           },
           "backendConfig": {
             "type": "array",
@@ -133,15 +194,15 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "backendConfig"
+            "description": "Backend Config supplied to the opentofu init operation."
           },
           "upgrade": {
             "type": "boolean",
-            "description": "upgrade"
+            "description": "Upgrade supplied to the opentofu init operation."
           },
           "reconfigure": {
             "type": "boolean",
-            "description": "reconfigure"
+            "description": "Reconfigure supplied to the opentofu init operation."
           }
         },
         "required": [
@@ -150,43 +211,71 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "validate": {
+      "description": "Validate the initialized configuration.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "json": {
             "type": "boolean",
-            "description": "json"
+            "description": "Json supplied to the opentofu validate operation."
           }
         },
         "required": [
@@ -195,51 +284,79 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "fmt": {
+      "description": "Format configuration, or check when check=true.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "check": {
             "type": "boolean",
-            "description": "check"
+            "description": "Check supplied to the opentofu fmt operation."
           },
           "diff": {
             "type": "boolean",
-            "description": "diff"
+            "description": "Diff supplied to the opentofu fmt operation."
           },
           "recursive": {
             "type": "boolean",
-            "description": "recursive"
+            "description": "Recursive supplied to the opentofu fmt operation."
           }
         },
         "required": [
@@ -248,52 +365,80 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "plan": {
+      "description": "Create an infrastructure plan without applying it.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "out": {
             "type": "string",
             "minLength": 1,
-            "description": "out"
+            "description": "Out supplied to the opentofu plan operation."
           },
           "refresh": {
             "type": "boolean",
-            "description": "refresh"
+            "description": "Refresh supplied to the opentofu plan operation."
           },
           "lock": {
             "type": "boolean",
-            "description": "lock"
+            "description": "Lock supplied to the opentofu plan operation."
           },
           "var": {
             "type": "array",
@@ -301,7 +446,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "var"
+            "description": "Var supplied to the opentofu plan operation."
           },
           "varFile": {
             "type": "array",
@@ -309,7 +454,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "varFile"
+            "description": "Var File supplied to the opentofu plan operation."
           },
           "target": {
             "type": "array",
@@ -317,7 +462,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "target"
+            "description": "Target selected for this native operation."
           }
         },
         "required": [
@@ -326,43 +471,71 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "apply": {
+      "description": "Apply changes; use a saved plan or autoApprove=true.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "autoApprove": {
             "type": "boolean",
-            "description": "autoApprove"
+            "description": "Auto Approve supplied to the opentofu apply operation."
           },
           "var": {
             "type": "array",
@@ -370,7 +543,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "var"
+            "description": "Var supplied to the opentofu apply operation."
           },
           "varFile": {
             "type": "array",
@@ -378,7 +551,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "varFile"
+            "description": "Var File supplied to the opentofu apply operation."
           },
           "target": {
             "type": "array",
@@ -386,12 +559,12 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "target"
+            "description": "Target selected for this native operation."
           },
           "planFile": {
             "type": "string",
             "minLength": 1,
-            "description": "planFile"
+            "description": "Plan File supplied to the opentofu apply operation."
           }
         },
         "required": [
@@ -400,43 +573,71 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "destroy": {
+      "description": "Destroy managed infrastructure; autoApprove=true is required for unattended runs.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "autoApprove": {
             "type": "boolean",
-            "description": "autoApprove"
+            "description": "Auto Approve supplied to the opentofu destroy operation."
           },
           "var": {
             "type": "array",
@@ -444,7 +645,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "var"
+            "description": "Var supplied to the opentofu destroy operation."
           },
           "varFile": {
             "type": "array",
@@ -452,7 +653,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "varFile"
+            "description": "Var File supplied to the opentofu destroy operation."
           },
           "target": {
             "type": "array",
@@ -460,7 +661,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "target"
+            "description": "Target selected for this native operation."
           }
         },
         "required": [
@@ -469,52 +670,80 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "output": {
+      "description": "Read state output values.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "json": {
             "type": "boolean",
-            "description": "json"
+            "description": "Json supplied to the opentofu output operation."
           },
           "raw": {
             "type": "boolean",
-            "description": "raw"
+            "description": "Raw supplied to the opentofu output operation."
           },
           "name": {
             "type": "string",
             "minLength": 1,
-            "description": "name"
+            "description": "Name supplied to the opentofu output operation."
           }
         },
         "required": [
@@ -523,8 +752,32 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

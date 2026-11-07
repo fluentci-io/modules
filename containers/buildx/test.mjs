@@ -5,7 +5,7 @@ import * as C from "./output/Buildx.Commands/index.js";
 import { compile } from "./output/FluentCI.Host.Plan/index.js";
 
 const snapshot = JSON.parse(readFileSync(new URL("buildx-options.json", import.meta.url)));
-const schema = JSON.parse(readFileSync(new URL("schema.json", import.meta.url)));
+const schema = JSON.parse(readFileSync(new URL("legacy-schema.json", import.meta.url)));
 const camel = value => value.replace(/-([a-z])/g, (_, character) => character.toUpperCase());
 const command = path => path.length ? path.join("_").replaceAll("-", "_") : "buildx";
 const pure = path => path.length ? camel(path.join("-")) : "buildx";

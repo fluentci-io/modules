@@ -1,4 +1,4 @@
-module CI.CLI (makePlan, invoke) where
+module CI.CLI (makePlan, invoke, execute) where
 
 import Prelude
 import CI.CLI.Catalog as Catalog
@@ -73,7 +73,7 @@ valueTokens field value = do
         else [ if enabled then "true" else "false" ]
     "integer" -> do
       number <- jsonValue value :: Either String Int
-      unless (number >= if field.style == "nonnegative" then 0 else 1) $
+      unless (field.style == "signed" || number >= if field.style == "nonnegative" then 0 else 1) $
         Left (field.key <> if field.style == "nonnegative" then " must be nonnegative" else " must be positive")
       pure [ show number ]
     _ -> Left ("Unknown CLI field type: " <> field.kind)
@@ -141,10 +141,8 @@ unwrap = case _ of
 capture :: Array String -> Effect String
 capture args = P.pipeline "cli-preflight" # P.exec args # P.stdout >>= unwrap
 
-invoke :: String -> String -> Effect Unit
-invoke name commandName = do
-  input <- P.input >>= unwrap
-  json <- either throw pure (jsonParser input)
+execute :: String -> String -> Json -> Effect { outcome :: String, runDir :: String, reportPath :: String, stdoutPath :: String, stderrPath :: String }
+execute name commandName json = do
   prepared <- either throw pure (prepare name commandName json)
   os <- P.getOS >>= unwrap
   unless (Array.elem os [ "linux", "macos", "freebsd", "openbsd", "netbsd" ]) $
@@ -161,4 +159,14 @@ invoke name commandName = do
   report <- P.runPlan prepared.runtime.runDir prepared.plan >>= unwrap
   unless (report.outcome == Just RunSucceeded) $
     throw (name <> " failed; inspect " <> prepared.runtime.runDir <> "/result.json")
-  capture [ "cat", prepared.runtime.runDir <> "/result.json" ] >>= P.output >>= unwrap
+  pure { outcome: "succeeded", runDir: prepared.runtime.runDir
+       , reportPath: prepared.runtime.runDir <> "/result.json"
+       , stdoutPath: prepared.runtime.runDir <> "/" <> name <> ".stdout"
+       , stderrPath: prepared.runtime.runDir <> "/" <> name <> ".stderr" }
+
+invoke :: String -> String -> Effect Unit
+invoke name commandName = do
+  input <- P.input >>= unwrap
+  json <- either throw pure (jsonParser input)
+  result <- execute name commandName json
+  capture [ "cat", result.reportPath ] >>= P.output >>= unwrap

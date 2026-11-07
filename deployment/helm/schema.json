@@ -1,35 +1,40 @@
 {
   "name": "helm",
+  "runtime": "component",
   "exports": {
     "run": {
+      "description": "Execute arbitrary literal CLI arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "arguments": {
             "type": "array",
@@ -38,7 +43,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -48,39 +53,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Print the CLI version.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           }
         },
         "required": [
@@ -89,43 +122,71 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "lint": {
+      "description": "lint",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "strict": {
             "type": "boolean",
-            "description": "strict"
+            "description": "Strict supplied to the helm lint operation."
           },
           "values": {
             "type": "array",
@@ -133,12 +194,12 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "values"
+            "description": "Values supplied to the helm lint operation."
           },
           "chart": {
             "type": "string",
             "minLength": 1,
-            "description": "chart"
+            "description": "Chart supplied to the helm lint operation."
           }
         },
         "required": [
@@ -148,44 +209,72 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "template": {
+      "description": "template",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "namespace": {
             "type": "string",
             "minLength": 1,
-            "description": "namespace"
+            "description": "Namespace supplied to the helm template operation."
           },
           "values": {
             "type": "array",
@@ -193,7 +282,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "values"
+            "description": "Values supplied to the helm template operation."
           },
           "set": {
             "type": "array",
@@ -201,17 +290,17 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "set"
+            "description": "Set supplied to the helm template operation."
           },
           "release": {
             "type": "string",
             "minLength": 1,
-            "description": "release"
+            "description": "Release supplied to the helm template operation."
           },
           "chart": {
             "type": "string",
             "minLength": 1,
-            "description": "chart"
+            "description": "Chart supplied to the helm template operation."
           }
         },
         "required": [
@@ -222,44 +311,72 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "upgrade": {
+      "description": "Install or upgrade a release in the configured cluster.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "namespace": {
             "type": "string",
             "minLength": 1,
-            "description": "namespace"
+            "description": "Namespace supplied to the helm upgrade operation."
           },
           "values": {
             "type": "array",
@@ -267,7 +384,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "values"
+            "description": "Values supplied to the helm upgrade operation."
           },
           "set": {
             "type": "array",
@@ -275,30 +392,30 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "set"
+            "description": "Set supplied to the helm upgrade operation."
           },
           "createNamespace": {
             "type": "boolean",
-            "description": "createNamespace"
+            "description": "Create Namespace supplied to the helm upgrade operation."
           },
           "wait": {
             "type": "boolean",
-            "description": "wait"
+            "description": "Wait supplied to the helm upgrade operation."
           },
           "timeout": {
             "type": "string",
             "minLength": 1,
-            "description": "timeout"
+            "description": "Timeout supplied to the helm upgrade operation."
           },
           "release": {
             "type": "string",
             "minLength": 1,
-            "description": "release"
+            "description": "Release supplied to the helm upgrade operation."
           },
           "chart": {
             "type": "string",
             "minLength": 1,
-            "description": "chart"
+            "description": "Chart supplied to the helm upgrade operation."
           }
         },
         "required": [
@@ -309,53 +426,81 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "uninstall": {
+      "description": "uninstall",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "namespace": {
             "type": "string",
             "minLength": 1,
-            "description": "namespace"
+            "description": "Namespace supplied to the helm uninstall operation."
           },
           "wait": {
             "type": "boolean",
-            "description": "wait"
+            "description": "Wait supplied to the helm uninstall operation."
           },
           "release": {
             "type": "string",
             "minLength": 1,
-            "description": "release"
+            "description": "Release supplied to the helm uninstall operation."
           }
         },
         "required": [
@@ -365,8 +510,32 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

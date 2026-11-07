@@ -1,0 +1,350 @@
+{
+  "name": "sqlfluff",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal native command argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "lint": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQLFluff configuration file; repository configuration remains available when omitted."
+          },
+          "dialect": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQL dialect, such as postgres, ansi, bigquery, or snowflake."
+          },
+          "templater": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Template engine; requires its Python dependencies in the SQLFluff environment."
+          },
+          "rules": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated rule codes to enable."
+          },
+          "excludeRules": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated rule codes to exclude."
+          },
+          "processes": {
+            "type": "integer",
+            "description": "Worker count; zero uses all CPUs and negative values reserve CPUs."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Report format, for example human, json, github-annotation, or sarif."
+          },
+          "writeOutput": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Report output file to retain as an artifact."
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "default": [
+              "."
+            ],
+            "description": "SQL files or directories to process."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "fix": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQLFluff configuration file; repository configuration remains available when omitted."
+          },
+          "dialect": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQL dialect, such as postgres, ansi, bigquery, or snowflake."
+          },
+          "templater": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Template engine; requires its Python dependencies in the SQLFluff environment."
+          },
+          "rules": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated rule codes to enable."
+          },
+          "excludeRules": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated rule codes to exclude."
+          },
+          "processes": {
+            "type": "integer",
+            "description": "Worker count; zero uses all CPUs and negative values reserve CPUs."
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "default": [
+              "."
+            ],
+            "description": "SQL files or directories to process."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "parse": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQLFluff configuration file; repository configuration remains available when omitted."
+          },
+          "dialect": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQL dialect, such as postgres, ansi, bigquery, or snowflake."
+          },
+          "templater": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Template engine; requires its Python dependencies in the SQLFluff environment."
+          },
+          "rules": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated rule codes to enable."
+          },
+          "excludeRules": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated rule codes to exclude."
+          },
+          "processes": {
+            "type": "integer",
+            "description": "Worker count; zero uses all CPUs and negative values reserve CPUs."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Parse output format, such as yaml or json."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "SQL file or directory to parse."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

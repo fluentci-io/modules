@@ -21,12 +21,13 @@ export async function suite(directory) {
   const inputFor = command => Object.fromEntries([['runDir', '/tmp/fresh-run'], ...command.fields.filter(f => f.required && f.default === null).map(f => [f.key, sample(f)])]);
   nativeSuite(tool, plugin);
   artifactSuite(tool, plugin);
-  test('schema and WASM entry point declarations agree', () => {
+  test('private regression exports agree with the command catalog', () => {
     assert.deepEqual(Object.keys(plugin).sort(), tool.commands.map(c => c.name).sort());
     assert.deepEqual(Object.keys(schema.exports).sort(), Object.keys(plugin).sort());
   });
   for (const command of tool.commands) {
     test(command.name + ': defaults and native command prefix', () => {
+      for(const field of command.fields.filter(field=>field.kind==='integer'&&field.style==='signed'))for(const value of [0,-1])assert.ok(plan(command.name,{...inputFor(command),[field.key]:value}).tasks[0].args.includes(field.flag+'='+value));
       const document = plan(command.name, inputFor(command));
       assert.equal(document.inherit_env, true);
       assert.equal(document.jobs, 1);
@@ -73,7 +74,7 @@ export async function suite(directory) {
         invalid.push({...base,[field.key]:null},{...base,[field.key]:{} });
         if (field.required && field.default === null) { const missing={...base}; delete missing[field.key]; invalid.push(missing); }
         if (field.kind === 'strings') invalid.push({...base,[field.key]:[42]}, {...base,[field.key]:['']});
-        if (field.kind === 'integer') {
+        if (field.kind === 'integer' && field.style !== 'signed') {
           invalid.push({...base,[field.key]:field.style === 'nonnegative' ? -1 : 0});
           if (field.style === 'nonnegative') assert.ok(plan(command.name,{...base,[field.key]:0}).tasks[0].args.includes(field.flag+'=0'));
         }

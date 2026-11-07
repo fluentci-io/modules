@@ -1,6 +1,6 @@
 package:
   name: fluentci-setup-checkov
-  dependencies: [effect, prelude, fluentci-setup-common]
+  dependencies: [fluentci-component-contract, effect, prelude, fluentci-setup-common]
 workspace:
   packageSet:
     registry: 81.11.0
@@ -10,3 +10,5 @@ workspace:
       ref: 954d03568935c26f92434119a110635a41a6fa4c
     fluentci-setup-common:
       path: ../../lib/setup
+    fluentci-component-contract:
+      path: ../../lib/component

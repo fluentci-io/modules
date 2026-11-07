@@ -1,1 +1,1 @@
-export { run, version, push, pull, copy, discover } from "./output/CI.Modules.Oras/index.js";
+export { run, version, push, pull, copy, discover } from "./output/CI.Component/index.js";

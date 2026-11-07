@@ -1,0 +1,16 @@
+{
+  "name": "fluentci-module-components",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "esbuild": "0.25.3",
+    "typescript": "5.9.3",
+    "@bytecodealliance/componentize-js": "0.23.0",
+    "@bytecodealliance/jco": "1.40.0",
+    "@bytecodealliance/preview2-shim": "0.31.0"
+  }
+}

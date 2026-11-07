@@ -1,0 +1,608 @@
+{
+  "name": "wrangler",
+  "runtime": "component",
+  "exports": {
+    "run": {
+      "description": "Run a Wrangler operation with literal arguments.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal Wrangler argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Report the installed Wrangler version.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "deploy": {
+      "description": "Deploy a Worker using existing Cloudflare credentials.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the Wrangler configuration file."
+          },
+          "env": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named Wrangler environment to deploy."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          "outdir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for generated Worker bundle files."
+          },
+          "minify": {
+            "type": "boolean",
+            "description": "Minify the generated Worker bundle."
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dry_run": {
+      "description": "Bundle a Worker locally without deploying it.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the Wrangler configuration file."
+          },
+          "env": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named Wrangler environment to deploy."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          "outdir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for generated Worker bundle files."
+          },
+          "minify": {
+            "type": "boolean",
+            "description": "Minify the generated Worker bundle."
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "versions_upload": {
+      "description": "Upload a Worker version without deploying it to traffic.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the Wrangler configuration file."
+          },
+          "env": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named Wrangler environment to deploy."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          "outdir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for generated Worker bundle files."
+          },
+          "minify": {
+            "type": "boolean",
+            "description": "Minify the generated Worker bundle."
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pages_deploy": {
+      "description": "Deploy a built site to an existing Cloudflare Pages project.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "projectName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Cloudflare Pages project name."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git branch name identifying the production or preview deployment."
+          },
+          "commitHash": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git commit SHA attached to the deployment."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory containing the built static site to upload."
+          }
+        },
+        "required": [
+          "runDir",
+          "projectName",
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pages_projects": {
+      "description": "List Cloudflare Pages projects available to the authenticated account.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

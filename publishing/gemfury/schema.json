@@ -1,0 +1,44 @@
+{
+  "name": "gemfury",
+  "runtime": "component",
+  "exports": {
+    "upload": {
+      "description": "Upload Linux packages to Gemfury using credentials from the host environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Files selected for the native operation; paths are passed literally without shell expansion."
+          }
+        },
+        "required": [
+          "files"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "uploaded": {
+            "type": "boolean"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "uploaded",
+          "files"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

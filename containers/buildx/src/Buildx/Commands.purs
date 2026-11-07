@@ -6,6 +6,7 @@ import Buildx as B
 import Data.Argonaut.Core (Json)
 import Data.Either (Either)
 import Data.Maybe (Maybe(..))
+import Foreign.Object as Object
 import FluentCI.Host.Plan as Plan
 
 type BuildxArgs =
@@ -376,9 +377,8 @@ bakeArgs project runDir =
   , help: Nothing
   }
 
-decodeBakeArgs :: Json -> Either String BakeArgs
-decodeBakeArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "targets", "builder", "debug", "allow", "call", "check", "file", "list", "load", "metadataFile", "noCache", "policy", "print", "progress", "provenance", "pull", "push", "sbom", "set", "var", "help"] json
+decodeBakeChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, targets :: Array String, builder :: Maybe (String), debug :: Maybe (Boolean), allow :: Maybe (Array String), call :: Maybe (String), check :: Maybe (Boolean), file :: Maybe (Array String) }
+decodeBakeChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -391,6 +391,10 @@ decodeBakeArgs json = do
   argumentCall <- B.optional object "call"
   argumentCheck <- B.optional object "check"
   argumentFile <- B.optional object "file"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, targets: argumentTargets, builder: argumentBuilder, debug: argumentDebug, allow: argumentAllow, call: argumentCall, check: argumentCheck, file: argumentFile }
+
+decodeBakeChunk1 :: Object.Object Json -> Either String { list :: Maybe (String), load :: Maybe (Boolean), metadataFile :: Maybe (String), noCache :: Maybe (Boolean), policy :: Maybe (Array String), print :: Maybe (Boolean), progress :: Maybe (String), provenance :: Maybe (String), pull :: Maybe (Boolean), push :: Maybe (Boolean), sbom :: Maybe (String), set :: Maybe (Array String) }
+decodeBakeChunk1 object = do
   argumentList <- B.optional object "list"
   argumentLoad <- B.optional object "load"
   argumentMetadataFile <- B.optional object "metadataFile"
@@ -403,9 +407,21 @@ decodeBakeArgs json = do
   argumentPush <- B.optional object "push"
   argumentSbom <- B.optional object "sbom"
   argumentSet <- B.optional object "set"
+  pure { list: argumentList, load: argumentLoad, metadataFile: argumentMetadataFile, noCache: argumentNoCache, policy: argumentPolicy, print: argumentPrint, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, sbom: argumentSbom, set: argumentSet }
+
+decodeBakeChunk2 :: Object.Object Json -> Either String { var :: Maybe (Array String), help :: Maybe (Boolean) }
+decodeBakeChunk2 object = do
   argumentVar <- B.optional object "var"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, targets: argumentTargets, builder: argumentBuilder, debug: argumentDebug, allow: argumentAllow, call: argumentCall, check: argumentCheck, file: argumentFile, list: argumentList, load: argumentLoad, metadataFile: argumentMetadataFile, noCache: argumentNoCache, policy: argumentPolicy, print: argumentPrint, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, sbom: argumentSbom, set: argumentSet, var: argumentVar, help: argumentHelp }
+  pure { var: argumentVar, help: argumentHelp }
+
+decodeBakeArgs :: Json -> Either String BakeArgs
+decodeBakeArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "targets", "builder", "debug", "allow", "call", "check", "file", "list", "load", "metadataFile", "noCache", "policy", "print", "progress", "provenance", "pull", "push", "sbom", "set", "var", "help"] json
+  chunk0 <- decodeBakeChunk0 object
+  chunk1 <- decodeBakeChunk1 object
+  chunk2 <- decodeBakeChunk2 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, targets: chunk0.targets, builder: chunk0.builder, debug: chunk0.debug, allow: chunk0.allow, call: chunk0.call, check: chunk0.check, file: chunk0.file, list: chunk1.list, load: chunk1.load, metadataFile: chunk1.metadataFile, noCache: chunk1.noCache, policy: chunk1.policy, print: chunk1.print, progress: chunk1.progress, provenance: chunk1.provenance, pull: chunk1.pull, push: chunk1.push, sbom: chunk1.sbom, set: chunk1.set, var: chunk2.var, help: chunk2.help }
 
 runtimeBake :: BakeArgs -> B.Runtime
 runtimeBake arguments =
@@ -531,9 +547,8 @@ buildArgs project runDir =
   , help: Nothing
   }
 
-decodeBuildArgs :: Json -> Either String BuildArgs
-decodeBuildArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "context", "builder", "debug", "addHost", "allow", "annotation", "attest", "buildArg", "buildContext", "cacheFrom", "cacheTo", "call", "cgroupParent", "check", "file", "iidfile", "label", "load", "metadataFile", "network", "noCache", "noCacheFilter", "output", "platform", "policy", "progress", "provenance", "pull", "push", "quiet", "resource", "sbom", "secret", "shmSize", "ssh", "tag", "target", "ulimit", "help"] json
+decodeBuildChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, context :: String, builder :: Maybe (String), debug :: Maybe (Boolean), addHost :: Maybe (Array String), allow :: Maybe (Array String), annotation :: Maybe (Array String), attest :: Maybe (Array String) }
+decodeBuildChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -546,6 +561,10 @@ decodeBuildArgs json = do
   argumentAllow <- B.optional object "allow"
   argumentAnnotation <- B.optional object "annotation"
   argumentAttest <- B.optional object "attest"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, context: argumentContext, builder: argumentBuilder, debug: argumentDebug, addHost: argumentAddHost, allow: argumentAllow, annotation: argumentAnnotation, attest: argumentAttest }
+
+decodeBuildChunk1 :: Object.Object Json -> Either String { buildArg :: Maybe (Array String), buildContext :: Maybe (Array String), cacheFrom :: Maybe (Array String), cacheTo :: Maybe (Array String), call :: Maybe (String), cgroupParent :: Maybe (String), check :: Maybe (Boolean), file :: Maybe (String), iidfile :: Maybe (String), label :: Maybe (Array String), load :: Maybe (Boolean), metadataFile :: Maybe (String) }
+decodeBuildChunk1 object = do
   argumentBuildArg <- B.optional object "buildArg"
   argumentBuildContext <- B.optional object "buildContext"
   argumentCacheFrom <- B.optional object "cacheFrom"
@@ -558,6 +577,10 @@ decodeBuildArgs json = do
   argumentLabel <- B.optional object "label"
   argumentLoad <- B.optional object "load"
   argumentMetadataFile <- B.optional object "metadataFile"
+  pure { buildArg: argumentBuildArg, buildContext: argumentBuildContext, cacheFrom: argumentCacheFrom, cacheTo: argumentCacheTo, call: argumentCall, cgroupParent: argumentCgroupParent, check: argumentCheck, file: argumentFile, iidfile: argumentIidfile, label: argumentLabel, load: argumentLoad, metadataFile: argumentMetadataFile }
+
+decodeBuildChunk2 :: Object.Object Json -> Either String { network :: Maybe (String), noCache :: Maybe (Boolean), noCacheFilter :: Maybe (Array String), output :: Maybe (Array String), platform :: Maybe (Array String), policy :: Maybe (Array String), progress :: Maybe (String), provenance :: Maybe (String), pull :: Maybe (Boolean), push :: Maybe (Boolean), quiet :: Maybe (Boolean), resource :: Maybe (Array String) }
+decodeBuildChunk2 object = do
   argumentNetwork <- B.optional object "network"
   argumentNoCache <- B.optional object "noCache"
   argumentNoCacheFilter <- B.optional object "noCacheFilter"
@@ -570,6 +593,10 @@ decodeBuildArgs json = do
   argumentPush <- B.optional object "push"
   argumentQuiet <- B.optional object "quiet"
   argumentResource <- B.optional object "resource"
+  pure { network: argumentNetwork, noCache: argumentNoCache, noCacheFilter: argumentNoCacheFilter, output: argumentOutput, platform: argumentPlatform, policy: argumentPolicy, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, quiet: argumentQuiet, resource: argumentResource }
+
+decodeBuildChunk3 :: Object.Object Json -> Either String { sbom :: Maybe (String), secret :: Maybe (Array String), shmSize :: Maybe (String), ssh :: Maybe (Array String), tag :: Maybe (Array String), target :: Maybe (String), ulimit :: Maybe (Array String), help :: Maybe (Boolean) }
+decodeBuildChunk3 object = do
   argumentSbom <- B.optional object "sbom"
   argumentSecret <- B.optional object "secret"
   argumentShmSize <- B.optional object "shmSize"
@@ -578,7 +605,16 @@ decodeBuildArgs json = do
   argumentTarget <- B.optional object "target"
   argumentUlimit <- B.optional object "ulimit"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, context: argumentContext, builder: argumentBuilder, debug: argumentDebug, addHost: argumentAddHost, allow: argumentAllow, annotation: argumentAnnotation, attest: argumentAttest, buildArg: argumentBuildArg, buildContext: argumentBuildContext, cacheFrom: argumentCacheFrom, cacheTo: argumentCacheTo, call: argumentCall, cgroupParent: argumentCgroupParent, check: argumentCheck, file: argumentFile, iidfile: argumentIidfile, label: argumentLabel, load: argumentLoad, metadataFile: argumentMetadataFile, network: argumentNetwork, noCache: argumentNoCache, noCacheFilter: argumentNoCacheFilter, output: argumentOutput, platform: argumentPlatform, policy: argumentPolicy, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, quiet: argumentQuiet, resource: argumentResource, sbom: argumentSbom, secret: argumentSecret, shmSize: argumentShmSize, ssh: argumentSsh, tag: argumentTag, target: argumentTarget, ulimit: argumentUlimit, help: argumentHelp }
+  pure { sbom: argumentSbom, secret: argumentSecret, shmSize: argumentShmSize, ssh: argumentSsh, tag: argumentTag, target: argumentTarget, ulimit: argumentUlimit, help: argumentHelp }
+
+decodeBuildArgs :: Json -> Either String BuildArgs
+decodeBuildArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "context", "builder", "debug", "addHost", "allow", "annotation", "attest", "buildArg", "buildContext", "cacheFrom", "cacheTo", "call", "cgroupParent", "check", "file", "iidfile", "label", "load", "metadataFile", "network", "noCache", "noCacheFilter", "output", "platform", "policy", "progress", "provenance", "pull", "push", "quiet", "resource", "sbom", "secret", "shmSize", "ssh", "tag", "target", "ulimit", "help"] json
+  chunk0 <- decodeBuildChunk0 object
+  chunk1 <- decodeBuildChunk1 object
+  chunk2 <- decodeBuildChunk2 object
+  chunk3 <- decodeBuildChunk3 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, context: chunk0.context, builder: chunk0.builder, debug: chunk0.debug, addHost: chunk0.addHost, allow: chunk0.allow, annotation: chunk0.annotation, attest: chunk0.attest, buildArg: chunk1.buildArg, buildContext: chunk1.buildContext, cacheFrom: chunk1.cacheFrom, cacheTo: chunk1.cacheTo, call: chunk1.call, cgroupParent: chunk1.cgroupParent, check: chunk1.check, file: chunk1.file, iidfile: chunk1.iidfile, label: chunk1.label, load: chunk1.load, metadataFile: chunk1.metadataFile, network: chunk2.network, noCache: chunk2.noCache, noCacheFilter: chunk2.noCacheFilter, output: chunk2.output, platform: chunk2.platform, policy: chunk2.policy, progress: chunk2.progress, provenance: chunk2.provenance, pull: chunk2.pull, push: chunk2.push, quiet: chunk2.quiet, resource: chunk2.resource, sbom: chunk3.sbom, secret: chunk3.secret, shmSize: chunk3.shmSize, ssh: chunk3.ssh, tag: chunk3.tag, target: chunk3.target, ulimit: chunk3.ulimit, help: chunk3.help }
 
 runtimeBuild :: BuildArgs -> B.Runtime
 runtimeBuild arguments =
@@ -676,9 +712,8 @@ createArgs project runDir =
   , help: Nothing
   }
 
-decodeCreateArgs :: Json -> Either String CreateArgs
-decodeCreateArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "endpoint", "builder", "debug", "append", "bootstrap", "buildkitdConfig", "buildkitdFlags", "driver", "driverOpt", "leave", "name", "node", "platform", "timeout", "use", "help"] json
+decodeCreateChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, endpoint :: Maybe String, builder :: Maybe (String), debug :: Maybe (Boolean), append :: Maybe (Boolean), bootstrap :: Maybe (Boolean), buildkitdConfig :: Maybe (String), buildkitdFlags :: Maybe (String) }
+decodeCreateChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -691,6 +726,10 @@ decodeCreateArgs json = do
   argumentBootstrap <- B.optional object "bootstrap"
   argumentBuildkitdConfig <- B.optional object "buildkitdConfig"
   argumentBuildkitdFlags <- B.optional object "buildkitdFlags"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, endpoint: argumentEndpoint, builder: argumentBuilder, debug: argumentDebug, append: argumentAppend, bootstrap: argumentBootstrap, buildkitdConfig: argumentBuildkitdConfig, buildkitdFlags: argumentBuildkitdFlags }
+
+decodeCreateChunk1 :: Object.Object Json -> Either String { driver :: Maybe (String), driverOpt :: Maybe (Array String), leave :: Maybe (Boolean), name :: Maybe (String), node :: Maybe (String), platform :: Maybe (Array String), timeout :: Maybe (String), use :: Maybe (Boolean), help :: Maybe (Boolean) }
+decodeCreateChunk1 object = do
   argumentDriver <- B.optional object "driver"
   argumentDriverOpt <- B.optional object "driverOpt"
   argumentLeave <- B.optional object "leave"
@@ -700,7 +739,14 @@ decodeCreateArgs json = do
   argumentTimeout <- B.optional object "timeout"
   argumentUse <- B.optional object "use"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, endpoint: argumentEndpoint, builder: argumentBuilder, debug: argumentDebug, append: argumentAppend, bootstrap: argumentBootstrap, buildkitdConfig: argumentBuildkitdConfig, buildkitdFlags: argumentBuildkitdFlags, driver: argumentDriver, driverOpt: argumentDriverOpt, leave: argumentLeave, name: argumentName, node: argumentNode, platform: argumentPlatform, timeout: argumentTimeout, use: argumentUse, help: argumentHelp }
+  pure { driver: argumentDriver, driverOpt: argumentDriverOpt, leave: argumentLeave, name: argumentName, node: argumentNode, platform: argumentPlatform, timeout: argumentTimeout, use: argumentUse, help: argumentHelp }
+
+decodeCreateArgs :: Json -> Either String CreateArgs
+decodeCreateArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "endpoint", "builder", "debug", "append", "bootstrap", "buildkitdConfig", "buildkitdFlags", "driver", "driverOpt", "leave", "name", "node", "platform", "timeout", "use", "help"] json
+  chunk0 <- decodeCreateChunk0 object
+  chunk1 <- decodeCreateChunk1 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, endpoint: chunk0.endpoint, builder: chunk0.builder, debug: chunk0.debug, append: chunk0.append, bootstrap: chunk0.bootstrap, buildkitdConfig: chunk0.buildkitdConfig, buildkitdFlags: chunk0.buildkitdFlags, driver: chunk1.driver, driverOpt: chunk1.driverOpt, leave: chunk1.leave, name: chunk1.name, node: chunk1.node, platform: chunk1.platform, timeout: chunk1.timeout, use: chunk1.use, help: chunk1.help }
 
 runtimeCreate :: CreateArgs -> B.Runtime
 runtimeCreate arguments =
@@ -1001,9 +1047,8 @@ pruneArgs project runDir =
   , help: Nothing
   }
 
-decodePruneArgs :: Json -> Either String PruneArgs
-decodePruneArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "builder", "debug", "all", "filter", "force", "maxUsedSpace", "minFreeSpace", "reservedSpace", "timeout", "verbose", "help"] json
+decodePruneChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, builder :: Maybe (String), debug :: Maybe (Boolean), all :: Maybe (Boolean), filter :: Maybe (Array String), force :: Maybe (Boolean), maxUsedSpace :: Maybe (String), minFreeSpace :: Maybe (String) }
+decodePruneChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -1016,11 +1061,22 @@ decodePruneArgs json = do
   argumentForce <- B.optional object "force"
   argumentMaxUsedSpace <- B.optional object "maxUsedSpace"
   argumentMinFreeSpace <- B.optional object "minFreeSpace"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, builder: argumentBuilder, debug: argumentDebug, all: argumentAll, filter: argumentFilter, force: argumentForce, maxUsedSpace: argumentMaxUsedSpace, minFreeSpace: argumentMinFreeSpace }
+
+decodePruneChunk1 :: Object.Object Json -> Either String { reservedSpace :: Maybe (String), timeout :: Maybe (String), verbose :: Maybe (Boolean), help :: Maybe (Boolean) }
+decodePruneChunk1 object = do
   argumentReservedSpace <- B.optional object "reservedSpace"
   argumentTimeout <- B.optional object "timeout"
   argumentVerbose <- B.optional object "verbose"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, builder: argumentBuilder, debug: argumentDebug, all: argumentAll, filter: argumentFilter, force: argumentForce, maxUsedSpace: argumentMaxUsedSpace, minFreeSpace: argumentMinFreeSpace, reservedSpace: argumentReservedSpace, timeout: argumentTimeout, verbose: argumentVerbose, help: argumentHelp }
+  pure { reservedSpace: argumentReservedSpace, timeout: argumentTimeout, verbose: argumentVerbose, help: argumentHelp }
+
+decodePruneArgs :: Json -> Either String PruneArgs
+decodePruneArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "builder", "debug", "all", "filter", "force", "maxUsedSpace", "minFreeSpace", "reservedSpace", "timeout", "verbose", "help"] json
+  chunk0 <- decodePruneChunk0 object
+  chunk1 <- decodePruneChunk1 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, builder: chunk0.builder, debug: chunk0.debug, all: chunk0.all, filter: chunk0.filter, force: chunk0.force, maxUsedSpace: chunk0.maxUsedSpace, minFreeSpace: chunk0.minFreeSpace, reservedSpace: chunk1.reservedSpace, timeout: chunk1.timeout, verbose: chunk1.verbose, help: chunk1.help }
 
 runtimePrune :: PruneArgs -> B.Runtime
 runtimePrune arguments =
@@ -1076,9 +1132,8 @@ rmArgs project runDir =
   , help: Nothing
   }
 
-decodeRmArgs :: Json -> Either String RmArgs
-decodeRmArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "names", "builder", "debug", "allInactive", "force", "keepDaemon", "keepState", "timeout", "help"] json
+decodeRmChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, names :: Array String, builder :: Maybe (String), debug :: Maybe (Boolean), allInactive :: Maybe (Boolean), force :: Maybe (Boolean), keepDaemon :: Maybe (Boolean), keepState :: Maybe (Boolean) }
+decodeRmChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -1091,9 +1146,20 @@ decodeRmArgs json = do
   argumentForce <- B.optional object "force"
   argumentKeepDaemon <- B.optional object "keepDaemon"
   argumentKeepState <- B.optional object "keepState"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, names: argumentNames, builder: argumentBuilder, debug: argumentDebug, allInactive: argumentAllInactive, force: argumentForce, keepDaemon: argumentKeepDaemon, keepState: argumentKeepState }
+
+decodeRmChunk1 :: Object.Object Json -> Either String { timeout :: Maybe (String), help :: Maybe (Boolean) }
+decodeRmChunk1 object = do
   argumentTimeout <- B.optional object "timeout"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, names: argumentNames, builder: argumentBuilder, debug: argumentDebug, allInactive: argumentAllInactive, force: argumentForce, keepDaemon: argumentKeepDaemon, keepState: argumentKeepState, timeout: argumentTimeout, help: argumentHelp }
+  pure { timeout: argumentTimeout, help: argumentHelp }
+
+decodeRmArgs :: Json -> Either String RmArgs
+decodeRmArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "names", "builder", "debug", "allInactive", "force", "keepDaemon", "keepState", "timeout", "help"] json
+  chunk0 <- decodeRmChunk0 object
+  chunk1 <- decodeRmChunk1 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, names: chunk0.names, builder: chunk0.builder, debug: chunk0.debug, allInactive: chunk0.allInactive, force: chunk0.force, keepDaemon: chunk0.keepDaemon, keepState: chunk0.keepState, timeout: chunk1.timeout, help: chunk1.help }
 
 runtimeRm :: RmArgs -> B.Runtime
 runtimeRm arguments =
@@ -1364,9 +1430,8 @@ dapBuildArgs project runDir =
   , help: Nothing
   }
 
-decodeDapBuildArgs :: Json -> Either String DapBuildArgs
-decodeDapBuildArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "context", "builder", "debug", "addHost", "allow", "annotation", "attest", "buildArg", "buildContext", "cacheFrom", "cacheTo", "call", "cgroupParent", "check", "file", "iidfile", "label", "load", "metadataFile", "network", "noCache", "noCacheFilter", "output", "platform", "policy", "progress", "provenance", "pull", "push", "quiet", "resource", "sbom", "secret", "shmSize", "ssh", "tag", "target", "ulimit", "help"] json
+decodeDapBuildChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, context :: String, builder :: Maybe (String), debug :: Maybe (Boolean), addHost :: Maybe (Array String), allow :: Maybe (Array String), annotation :: Maybe (Array String), attest :: Maybe (Array String) }
+decodeDapBuildChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -1379,6 +1444,10 @@ decodeDapBuildArgs json = do
   argumentAllow <- B.optional object "allow"
   argumentAnnotation <- B.optional object "annotation"
   argumentAttest <- B.optional object "attest"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, context: argumentContext, builder: argumentBuilder, debug: argumentDebug, addHost: argumentAddHost, allow: argumentAllow, annotation: argumentAnnotation, attest: argumentAttest }
+
+decodeDapBuildChunk1 :: Object.Object Json -> Either String { buildArg :: Maybe (Array String), buildContext :: Maybe (Array String), cacheFrom :: Maybe (Array String), cacheTo :: Maybe (Array String), call :: Maybe (String), cgroupParent :: Maybe (String), check :: Maybe (Boolean), file :: Maybe (String), iidfile :: Maybe (String), label :: Maybe (Array String), load :: Maybe (Boolean), metadataFile :: Maybe (String) }
+decodeDapBuildChunk1 object = do
   argumentBuildArg <- B.optional object "buildArg"
   argumentBuildContext <- B.optional object "buildContext"
   argumentCacheFrom <- B.optional object "cacheFrom"
@@ -1391,6 +1460,10 @@ decodeDapBuildArgs json = do
   argumentLabel <- B.optional object "label"
   argumentLoad <- B.optional object "load"
   argumentMetadataFile <- B.optional object "metadataFile"
+  pure { buildArg: argumentBuildArg, buildContext: argumentBuildContext, cacheFrom: argumentCacheFrom, cacheTo: argumentCacheTo, call: argumentCall, cgroupParent: argumentCgroupParent, check: argumentCheck, file: argumentFile, iidfile: argumentIidfile, label: argumentLabel, load: argumentLoad, metadataFile: argumentMetadataFile }
+
+decodeDapBuildChunk2 :: Object.Object Json -> Either String { network :: Maybe (String), noCache :: Maybe (Boolean), noCacheFilter :: Maybe (Array String), output :: Maybe (Array String), platform :: Maybe (Array String), policy :: Maybe (Array String), progress :: Maybe (String), provenance :: Maybe (String), pull :: Maybe (Boolean), push :: Maybe (Boolean), quiet :: Maybe (Boolean), resource :: Maybe (Array String) }
+decodeDapBuildChunk2 object = do
   argumentNetwork <- B.optional object "network"
   argumentNoCache <- B.optional object "noCache"
   argumentNoCacheFilter <- B.optional object "noCacheFilter"
@@ -1403,6 +1476,10 @@ decodeDapBuildArgs json = do
   argumentPush <- B.optional object "push"
   argumentQuiet <- B.optional object "quiet"
   argumentResource <- B.optional object "resource"
+  pure { network: argumentNetwork, noCache: argumentNoCache, noCacheFilter: argumentNoCacheFilter, output: argumentOutput, platform: argumentPlatform, policy: argumentPolicy, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, quiet: argumentQuiet, resource: argumentResource }
+
+decodeDapBuildChunk3 :: Object.Object Json -> Either String { sbom :: Maybe (String), secret :: Maybe (Array String), shmSize :: Maybe (String), ssh :: Maybe (Array String), tag :: Maybe (Array String), target :: Maybe (String), ulimit :: Maybe (Array String), help :: Maybe (Boolean) }
+decodeDapBuildChunk3 object = do
   argumentSbom <- B.optional object "sbom"
   argumentSecret <- B.optional object "secret"
   argumentShmSize <- B.optional object "shmSize"
@@ -1411,7 +1488,16 @@ decodeDapBuildArgs json = do
   argumentTarget <- B.optional object "target"
   argumentUlimit <- B.optional object "ulimit"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, context: argumentContext, builder: argumentBuilder, debug: argumentDebug, addHost: argumentAddHost, allow: argumentAllow, annotation: argumentAnnotation, attest: argumentAttest, buildArg: argumentBuildArg, buildContext: argumentBuildContext, cacheFrom: argumentCacheFrom, cacheTo: argumentCacheTo, call: argumentCall, cgroupParent: argumentCgroupParent, check: argumentCheck, file: argumentFile, iidfile: argumentIidfile, label: argumentLabel, load: argumentLoad, metadataFile: argumentMetadataFile, network: argumentNetwork, noCache: argumentNoCache, noCacheFilter: argumentNoCacheFilter, output: argumentOutput, platform: argumentPlatform, policy: argumentPolicy, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, quiet: argumentQuiet, resource: argumentResource, sbom: argumentSbom, secret: argumentSecret, shmSize: argumentShmSize, ssh: argumentSsh, tag: argumentTag, target: argumentTarget, ulimit: argumentUlimit, help: argumentHelp }
+  pure { sbom: argumentSbom, secret: argumentSecret, shmSize: argumentShmSize, ssh: argumentSsh, tag: argumentTag, target: argumentTarget, ulimit: argumentUlimit, help: argumentHelp }
+
+decodeDapBuildArgs :: Json -> Either String DapBuildArgs
+decodeDapBuildArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "context", "builder", "debug", "addHost", "allow", "annotation", "attest", "buildArg", "buildContext", "cacheFrom", "cacheTo", "call", "cgroupParent", "check", "file", "iidfile", "label", "load", "metadataFile", "network", "noCache", "noCacheFilter", "output", "platform", "policy", "progress", "provenance", "pull", "push", "quiet", "resource", "sbom", "secret", "shmSize", "ssh", "tag", "target", "ulimit", "help"] json
+  chunk0 <- decodeDapBuildChunk0 object
+  chunk1 <- decodeDapBuildChunk1 object
+  chunk2 <- decodeDapBuildChunk2 object
+  chunk3 <- decodeDapBuildChunk3 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, context: chunk0.context, builder: chunk0.builder, debug: chunk0.debug, addHost: chunk0.addHost, allow: chunk0.allow, annotation: chunk0.annotation, attest: chunk0.attest, buildArg: chunk1.buildArg, buildContext: chunk1.buildContext, cacheFrom: chunk1.cacheFrom, cacheTo: chunk1.cacheTo, call: chunk1.call, cgroupParent: chunk1.cgroupParent, check: chunk1.check, file: chunk1.file, iidfile: chunk1.iidfile, label: chunk1.label, load: chunk1.load, metadataFile: chunk1.metadataFile, network: chunk2.network, noCache: chunk2.noCache, noCacheFilter: chunk2.noCacheFilter, output: chunk2.output, platform: chunk2.platform, policy: chunk2.policy, progress: chunk2.progress, provenance: chunk2.provenance, pull: chunk2.pull, push: chunk2.push, quiet: chunk2.quiet, resource: chunk2.resource, sbom: chunk3.sbom, secret: chunk3.secret, shmSize: chunk3.shmSize, ssh: chunk3.ssh, tag: chunk3.tag, target: chunk3.target, ulimit: chunk3.ulimit, help: chunk3.help }
 
 runtimeDapBuild :: DapBuildArgs -> B.Runtime
 runtimeDapBuild arguments =
@@ -1560,9 +1646,8 @@ debugBuildArgs project runDir =
   , help: Nothing
   }
 
-decodeDebugBuildArgs :: Json -> Either String DebugBuildArgs
-decodeDebugBuildArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "context", "builder", "debug", "invoke", "on", "addHost", "allow", "annotation", "attest", "buildArg", "buildContext", "cacheFrom", "cacheTo", "call", "cgroupParent", "check", "file", "iidfile", "label", "load", "metadataFile", "network", "noCache", "noCacheFilter", "output", "platform", "policy", "progress", "provenance", "pull", "push", "quiet", "resource", "sbom", "secret", "shmSize", "ssh", "tag", "target", "ulimit", "help"] json
+decodeDebugBuildChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, context :: String, builder :: Maybe (String), debug :: Maybe (Boolean), invoke :: Maybe (String), on :: Maybe (String), addHost :: Maybe (Array String), allow :: Maybe (Array String) }
+decodeDebugBuildChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -1575,6 +1660,10 @@ decodeDebugBuildArgs json = do
   argumentOn <- B.optional object "on"
   argumentAddHost <- B.optional object "addHost"
   argumentAllow <- B.optional object "allow"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, context: argumentContext, builder: argumentBuilder, debug: argumentDebug, invoke: argumentInvoke, on: argumentOn, addHost: argumentAddHost, allow: argumentAllow }
+
+decodeDebugBuildChunk1 :: Object.Object Json -> Either String { annotation :: Maybe (Array String), attest :: Maybe (Array String), buildArg :: Maybe (Array String), buildContext :: Maybe (Array String), cacheFrom :: Maybe (Array String), cacheTo :: Maybe (Array String), call :: Maybe (String), cgroupParent :: Maybe (String), check :: Maybe (Boolean), file :: Maybe (String), iidfile :: Maybe (String), label :: Maybe (Array String) }
+decodeDebugBuildChunk1 object = do
   argumentAnnotation <- B.optional object "annotation"
   argumentAttest <- B.optional object "attest"
   argumentBuildArg <- B.optional object "buildArg"
@@ -1587,6 +1676,10 @@ decodeDebugBuildArgs json = do
   argumentFile <- B.optional object "file"
   argumentIidfile <- B.optional object "iidfile"
   argumentLabel <- B.optional object "label"
+  pure { annotation: argumentAnnotation, attest: argumentAttest, buildArg: argumentBuildArg, buildContext: argumentBuildContext, cacheFrom: argumentCacheFrom, cacheTo: argumentCacheTo, call: argumentCall, cgroupParent: argumentCgroupParent, check: argumentCheck, file: argumentFile, iidfile: argumentIidfile, label: argumentLabel }
+
+decodeDebugBuildChunk2 :: Object.Object Json -> Either String { load :: Maybe (Boolean), metadataFile :: Maybe (String), network :: Maybe (String), noCache :: Maybe (Boolean), noCacheFilter :: Maybe (Array String), output :: Maybe (Array String), platform :: Maybe (Array String), policy :: Maybe (Array String), progress :: Maybe (String), provenance :: Maybe (String), pull :: Maybe (Boolean), push :: Maybe (Boolean) }
+decodeDebugBuildChunk2 object = do
   argumentLoad <- B.optional object "load"
   argumentMetadataFile <- B.optional object "metadataFile"
   argumentNetwork <- B.optional object "network"
@@ -1599,6 +1692,10 @@ decodeDebugBuildArgs json = do
   argumentProvenance <- B.optional object "provenance"
   argumentPull <- B.optional object "pull"
   argumentPush <- B.optional object "push"
+  pure { load: argumentLoad, metadataFile: argumentMetadataFile, network: argumentNetwork, noCache: argumentNoCache, noCacheFilter: argumentNoCacheFilter, output: argumentOutput, platform: argumentPlatform, policy: argumentPolicy, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush }
+
+decodeDebugBuildChunk3 :: Object.Object Json -> Either String { quiet :: Maybe (Boolean), resource :: Maybe (Array String), sbom :: Maybe (String), secret :: Maybe (Array String), shmSize :: Maybe (String), ssh :: Maybe (Array String), tag :: Maybe (Array String), target :: Maybe (String), ulimit :: Maybe (Array String), help :: Maybe (Boolean) }
+decodeDebugBuildChunk3 object = do
   argumentQuiet <- B.optional object "quiet"
   argumentResource <- B.optional object "resource"
   argumentSbom <- B.optional object "sbom"
@@ -1609,7 +1706,16 @@ decodeDebugBuildArgs json = do
   argumentTarget <- B.optional object "target"
   argumentUlimit <- B.optional object "ulimit"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, context: argumentContext, builder: argumentBuilder, debug: argumentDebug, invoke: argumentInvoke, on: argumentOn, addHost: argumentAddHost, allow: argumentAllow, annotation: argumentAnnotation, attest: argumentAttest, buildArg: argumentBuildArg, buildContext: argumentBuildContext, cacheFrom: argumentCacheFrom, cacheTo: argumentCacheTo, call: argumentCall, cgroupParent: argumentCgroupParent, check: argumentCheck, file: argumentFile, iidfile: argumentIidfile, label: argumentLabel, load: argumentLoad, metadataFile: argumentMetadataFile, network: argumentNetwork, noCache: argumentNoCache, noCacheFilter: argumentNoCacheFilter, output: argumentOutput, platform: argumentPlatform, policy: argumentPolicy, progress: argumentProgress, provenance: argumentProvenance, pull: argumentPull, push: argumentPush, quiet: argumentQuiet, resource: argumentResource, sbom: argumentSbom, secret: argumentSecret, shmSize: argumentShmSize, ssh: argumentSsh, tag: argumentTag, target: argumentTarget, ulimit: argumentUlimit, help: argumentHelp }
+  pure { quiet: argumentQuiet, resource: argumentResource, sbom: argumentSbom, secret: argumentSecret, shmSize: argumentShmSize, ssh: argumentSsh, tag: argumentTag, target: argumentTarget, ulimit: argumentUlimit, help: argumentHelp }
+
+decodeDebugBuildArgs :: Json -> Either String DebugBuildArgs
+decodeDebugBuildArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "context", "builder", "debug", "invoke", "on", "addHost", "allow", "annotation", "attest", "buildArg", "buildContext", "cacheFrom", "cacheTo", "call", "cgroupParent", "check", "file", "iidfile", "label", "load", "metadataFile", "network", "noCache", "noCacheFilter", "output", "platform", "policy", "progress", "provenance", "pull", "push", "quiet", "resource", "sbom", "secret", "shmSize", "ssh", "tag", "target", "ulimit", "help"] json
+  chunk0 <- decodeDebugBuildChunk0 object
+  chunk1 <- decodeDebugBuildChunk1 object
+  chunk2 <- decodeDebugBuildChunk2 object
+  chunk3 <- decodeDebugBuildChunk3 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, context: chunk0.context, builder: chunk0.builder, debug: chunk0.debug, invoke: chunk0.invoke, on: chunk0.on, addHost: chunk0.addHost, allow: chunk0.allow, annotation: chunk1.annotation, attest: chunk1.attest, buildArg: chunk1.buildArg, buildContext: chunk1.buildContext, cacheFrom: chunk1.cacheFrom, cacheTo: chunk1.cacheTo, call: chunk1.call, cgroupParent: chunk1.cgroupParent, check: chunk1.check, file: chunk1.file, iidfile: chunk1.iidfile, label: chunk1.label, load: chunk2.load, metadataFile: chunk2.metadataFile, network: chunk2.network, noCache: chunk2.noCache, noCacheFilter: chunk2.noCacheFilter, output: chunk2.output, platform: chunk2.platform, policy: chunk2.policy, progress: chunk2.progress, provenance: chunk2.provenance, pull: chunk2.pull, push: chunk2.push, quiet: chunk3.quiet, resource: chunk3.resource, sbom: chunk3.sbom, secret: chunk3.secret, shmSize: chunk3.shmSize, ssh: chunk3.ssh, tag: chunk3.tag, target: chunk3.target, ulimit: chunk3.ulimit, help: chunk3.help }
 
 runtimeDebugBuild :: DebugBuildArgs -> B.Runtime
 runtimeDebugBuild arguments =
@@ -2168,9 +2274,8 @@ imagetoolsCreateArgs project runDir =
   , help: Nothing
   }
 
-decodeImagetoolsCreateArgs :: Json -> Either String ImagetoolsCreateArgs
-decodeImagetoolsCreateArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "sources", "builder", "debug", "annotation", "append", "dryRun", "file", "metadataFile", "platform", "preferIndex", "progress", "tag", "help"] json
+decodeImagetoolsCreateChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, sources :: Array String, builder :: Maybe (String), debug :: Maybe (Boolean), annotation :: Maybe (Array String), append :: Maybe (Boolean), dryRun :: Maybe (Boolean), file :: Maybe (Array String) }
+decodeImagetoolsCreateChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -2183,13 +2288,24 @@ decodeImagetoolsCreateArgs json = do
   argumentAppend <- B.optional object "append"
   argumentDryRun <- B.optional object "dryRun"
   argumentFile <- B.optional object "file"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, sources: argumentSources, builder: argumentBuilder, debug: argumentDebug, annotation: argumentAnnotation, append: argumentAppend, dryRun: argumentDryRun, file: argumentFile }
+
+decodeImagetoolsCreateChunk1 :: Object.Object Json -> Either String { metadataFile :: Maybe (String), platform :: Maybe (Array String), preferIndex :: Maybe (Boolean), progress :: Maybe (String), tag :: Maybe (Array String), help :: Maybe (Boolean) }
+decodeImagetoolsCreateChunk1 object = do
   argumentMetadataFile <- B.optional object "metadataFile"
   argumentPlatform <- B.optional object "platform"
   argumentPreferIndex <- B.optional object "preferIndex"
   argumentProgress <- B.optional object "progress"
   argumentTag <- B.optional object "tag"
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, sources: argumentSources, builder: argumentBuilder, debug: argumentDebug, annotation: argumentAnnotation, append: argumentAppend, dryRun: argumentDryRun, file: argumentFile, metadataFile: argumentMetadataFile, platform: argumentPlatform, preferIndex: argumentPreferIndex, progress: argumentProgress, tag: argumentTag, help: argumentHelp }
+  pure { metadataFile: argumentMetadataFile, platform: argumentPlatform, preferIndex: argumentPreferIndex, progress: argumentProgress, tag: argumentTag, help: argumentHelp }
+
+decodeImagetoolsCreateArgs :: Json -> Either String ImagetoolsCreateArgs
+decodeImagetoolsCreateArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "sources", "builder", "debug", "annotation", "append", "dryRun", "file", "metadataFile", "platform", "preferIndex", "progress", "tag", "help"] json
+  chunk0 <- decodeImagetoolsCreateChunk0 object
+  chunk1 <- decodeImagetoolsCreateChunk1 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, sources: chunk0.sources, builder: chunk0.builder, debug: chunk0.debug, annotation: chunk0.annotation, append: chunk0.append, dryRun: chunk0.dryRun, file: chunk0.file, metadataFile: chunk1.metadataFile, platform: chunk1.platform, preferIndex: chunk1.preferIndex, progress: chunk1.progress, tag: chunk1.tag, help: chunk1.help }
 
 runtimeImagetoolsCreate :: ImagetoolsCreateArgs -> B.Runtime
 runtimeImagetoolsCreate arguments =
@@ -2306,9 +2422,8 @@ policyEvalArgs project runDir =
   , help: Nothing
   }
 
-decodePolicyEvalArgs :: Json -> Either String PolicyEvalArgs
-decodePolicyEvalArgs json = do
-  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "source", "builder", "debug", "fields", "file", "platform", "print", "help"] json
+decodePolicyEvalChunk0 :: Object.Object Json -> Either String { project :: String, runDir :: String, docker :: String, timeoutMs :: Int, experimental :: Boolean, source :: String, builder :: Maybe (String), debug :: Maybe (Boolean), fields :: Maybe (Array String), file :: Maybe (String), platform :: Maybe (String), print :: Maybe (Boolean) }
+decodePolicyEvalChunk0 object = do
   argumentProject <- B.field object "project" "."
   argumentRunDir <- B.field object "runDir" ""
   argumentDocker <- B.field object "docker" "docker"
@@ -2321,8 +2436,19 @@ decodePolicyEvalArgs json = do
   argumentFile <- B.optional object "file"
   argumentPlatform <- B.optional object "platform"
   argumentPrint <- B.optional object "print"
+  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, source: argumentSource, builder: argumentBuilder, debug: argumentDebug, fields: argumentFields, file: argumentFile, platform: argumentPlatform, print: argumentPrint }
+
+decodePolicyEvalChunk1 :: Object.Object Json -> Either String { help :: Maybe (Boolean) }
+decodePolicyEvalChunk1 object = do
   argumentHelp <- B.optional object "help"
-  pure { project: argumentProject, runDir: argumentRunDir, docker: argumentDocker, timeoutMs: argumentTimeoutMs, experimental: argumentExperimental, source: argumentSource, builder: argumentBuilder, debug: argumentDebug, fields: argumentFields, file: argumentFile, platform: argumentPlatform, print: argumentPrint, help: argumentHelp }
+  pure { help: argumentHelp }
+
+decodePolicyEvalArgs :: Json -> Either String PolicyEvalArgs
+decodePolicyEvalArgs json = do
+  object <- B.decodeObject ["project", "runDir", "docker", "timeoutMs", "experimental", "source", "builder", "debug", "fields", "file", "platform", "print", "help"] json
+  chunk0 <- decodePolicyEvalChunk0 object
+  chunk1 <- decodePolicyEvalChunk1 object
+  pure { project: chunk0.project, runDir: chunk0.runDir, docker: chunk0.docker, timeoutMs: chunk0.timeoutMs, experimental: chunk0.experimental, source: chunk0.source, builder: chunk0.builder, debug: chunk0.debug, fields: chunk0.fields, file: chunk0.file, platform: chunk0.platform, print: chunk0.print, help: chunk1.help }
 
 runtimePolicyEval :: PolicyEvalArgs -> B.Runtime
 runtimePolicyEval arguments =

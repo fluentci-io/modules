@@ -1,1 +1,1 @@
-export { run, version, deploy, setup, details, rollback } from "./output/CI.Modules.Kamal/index.js";
+export { run, version, deploy, setup, details, rollback } from "./output/CI.Component/index.js";

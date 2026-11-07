@@ -1,35 +1,40 @@
 {
   "name": "buildkit",
+  "runtime": "component",
   "exports": {
     "run": {
+      "description": "Execute arbitrary literal CLI arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "arguments": {
             "type": "array",
@@ -38,7 +43,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -48,39 +53,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Print the CLI version.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           }
         },
         "required": [
@@ -89,56 +122,84 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "build": {
+      "description": "Build a Dockerfile with named local context and dockerfile directories.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "addr": {
             "type": "string",
             "minLength": 1,
-            "description": "addr"
+            "description": "Addr supplied to the buildkit build operation."
           },
           "context": {
             "type": "string",
             "minLength": 1,
             "default": ".",
-            "description": "context"
+            "description": "Context supplied to the buildkit build operation. Default: \".\"."
           },
           "dockerfileDir": {
             "type": "string",
             "minLength": 1,
             "default": ".",
-            "description": "dockerfileDir"
+            "description": "Dockerfile Dir supplied to the buildkit build operation. Default: \".\"."
           },
           "opt": {
             "type": "array",
@@ -146,7 +207,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "opt"
+            "description": "Opt supplied to the buildkit build operation."
           },
           "output": {
             "type": "array",
@@ -154,7 +215,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "output"
+            "description": "Destination path for generated packages."
           },
           "importCache": {
             "type": "array",
@@ -162,7 +223,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "importCache"
+            "description": "Import Cache supplied to the buildkit build operation."
           },
           "exportCache": {
             "type": "array",
@@ -170,7 +231,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "exportCache"
+            "description": "Export Cache supplied to the buildkit build operation."
           },
           "secret": {
             "type": "array",
@@ -178,7 +239,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "secret"
+            "description": "Secret supplied to the buildkit build operation."
           },
           "ssh": {
             "type": "array",
@@ -186,16 +247,16 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "ssh"
+            "description": "Ssh supplied to the buildkit build operation."
           },
           "noCache": {
             "type": "boolean",
-            "description": "noCache"
+            "description": "No Cache supplied to the buildkit build operation."
           },
           "progress": {
             "type": "string",
             "minLength": 1,
-            "description": "progress"
+            "description": "Progress supplied to the buildkit build operation."
           }
         },
         "required": [
@@ -204,48 +265,76 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "prune": {
+      "description": "Prune the selected BuildKit daemon cache.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "addr": {
             "type": "string",
             "minLength": 1,
-            "description": "addr"
+            "description": "Addr supplied to the buildkit prune operation."
           },
           "all": {
             "type": "boolean",
-            "description": "all"
+            "description": "All supplied to the buildkit prune operation."
           },
           "filter": {
             "type": "array",
@@ -253,7 +342,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "filter"
+            "description": "Filter supplied to the buildkit prune operation."
           }
         },
         "required": [
@@ -262,48 +351,76 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "du": {
+      "description": "Inspect BuildKit cache usage.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "addr": {
             "type": "string",
             "minLength": 1,
-            "description": "addr"
+            "description": "Addr supplied to the buildkit du operation."
           },
           "verbose": {
             "type": "boolean",
-            "description": "verbose"
+            "description": "Verbose supplied to the buildkit du operation."
           },
           "filter": {
             "type": "array",
@@ -311,7 +428,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "filter"
+            "description": "Filter supplied to the buildkit du operation."
           }
         },
         "required": [
@@ -320,8 +437,32 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

@@ -95,6 +95,34 @@ def positional(path, children):
     return None
 
 
+def shallow_decoders(text):
+    # Keep generated Either bind chains shallow enough for component guest engines.
+    import re
+    text = text.replace("import FluentCI.Host.Plan as Plan", "import Foreign.Object as Object\nimport FluentCI.Host.Plan as Plan", 1)
+    types = {}
+    for match in re.finditer(r"type (\w+)Args =\n  \{ (.*?)\n  \}", text, re.S):
+        types[match.group(1)] = dict(re.findall(r"(?:^|\n  , )(\w+) :: ([^\n]+)", match.group(2)))
+    pattern = r"decode(\w+)Args :: Json -> Either String \1Args\ndecode\1Args json = do\n(  object <- [^\n]+)\n((?:  argument[^\n]+\n)+)  pure \{ [^\n]+ \}"
+    def replace(match):
+        title, first, bindings = match.groups()
+        lines = bindings.strip().splitlines()
+        if len(lines) <= 12: return match.group(0)
+        fields = list(types[title].items())
+        assert len(fields) == len(lines)
+        helpers, chunks = [], []
+        for index in range(0,len(fields),12):
+            part = index // 12
+            selected = fields[index:index+12]
+            alias = f"decode{title}Chunk{part}"
+            chunks.append(f"  chunk{part} <- {alias} object")
+            helpers += [alias + " :: Object.Object Json -> Either String { " + ", ".join(k+" :: "+t for k,t in selected) + " }", alias+" object = do"]
+            helpers += ["  "+line.strip() for line in lines[index:index+12]]
+            helpers += ["  pure { " + ", ".join(k+": argument"+k[0].upper()+k[1:] for k,_ in selected) + " }", ""]
+        main = [f"decode{title}Args :: Json -> Either String {title}Args",f"decode{title}Args json = do",first,*chunks,"  pure { "+", ".join(k+f": chunk{i//12}."+k for i,(k,_) in enumerate(fields))+" }"]
+        return "\n".join(helpers+main)
+    return re.sub(pattern, replace, text)
+
+
 def generated():
     snapshot = json.loads(SNAPSHOT.read_text())
     nodes = snapshot["commands"]
@@ -200,11 +228,11 @@ def generated():
         docs += ["| Module argument | Docker option | Type |", "| --- | --- | --- |"]
         docs += [f'| `{key}` | `--{field["flag"]}` | `{field["ps"]}` |' for key, field in fields.items()]
         docs.append("")
-    yield HERE / "src/Buildx/Commands.purs", "\n".join(source)
+    yield HERE / "src/Buildx/Commands.purs", shallow_decoders("\n".join(source))
     yield HERE / "src/Main.purs", "\n".join(main)
-    yield HERE / "entry.mjs", 'export { ' + ', '.join(exports) + ' } from "./output/Main/index.js";\n'
+    yield HERE / "legacy-entry.mjs", 'export { ' + ', '.join(exports) + ' } from "./output/Main/index.js";\n'
     yield HERE / "OPTIONS.md", "\n".join(docs)
-    yield HERE / "schema.json", json.dumps({"name": "buildx", "exports": exports}, indent=2) + "\n"
+    yield HERE / "legacy-schema.json", json.dumps({"name": "buildx", "exports": exports}, indent=2) + "\n"
 
 
 if __name__ == "__main__":

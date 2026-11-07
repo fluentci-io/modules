@@ -1,6 +1,6 @@
 package:
   name: fluentci-ci-gemfury
-  dependencies: [arrays, effect, either, exceptions, fluentci, prelude, strings, foldable-traversable]
+  dependencies: [fluentci-component-contract, arrays, effect, either, exceptions, fluentci, prelude, strings, foldable-traversable]
 workspace:
   packageSet:
     registry: 81.11.0
@@ -8,3 +8,5 @@ workspace:
     fluentci:
       git: https://github.com/fluentci-io/purescript-fluentci.git
       ref: 954d03568935c26f92434119a110635a41a6fa4c
+    fluentci-component-contract:
+      path: ../../lib/component

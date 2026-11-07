@@ -1,1 +1,1 @@
-export { setup } from "./output/CI.Setup.Nexus/index.js";
+export { setup } from "./output/CI.Component/index.js";

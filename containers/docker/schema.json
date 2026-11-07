@@ -1,35 +1,40 @@
 {
   "name": "docker",
+  "runtime": "component",
   "exports": {
     "run": {
+      "description": "Execute arbitrary literal CLI arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "arguments": {
             "type": "array",
@@ -38,7 +43,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -48,39 +53,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Print the CLI version.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           }
         },
         "required": [
@@ -89,39 +122,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "build": {
+      "description": "Build an image from a context.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "tag": {
             "type": "array",
@@ -129,12 +190,12 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "tag"
+            "description": "Tag supplied to the docker build operation."
           },
           "file": {
             "type": "string",
             "minLength": 1,
-            "description": "file"
+            "description": "File supplied to the docker build operation."
           },
           "buildArg": {
             "type": "array",
@@ -142,31 +203,31 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "buildArg"
+            "description": "Build Arg supplied to the docker build operation."
           },
           "target": {
             "type": "string",
             "minLength": 1,
-            "description": "target"
+            "description": "Target selected for this native operation."
           },
           "platform": {
             "type": "string",
             "minLength": 1,
-            "description": "platform"
+            "description": "Platform supplied to the docker build operation."
           },
           "noCache": {
             "type": "boolean",
-            "description": "noCache"
+            "description": "No Cache supplied to the docker build operation."
           },
           "pull": {
             "type": "boolean",
-            "description": "pull"
+            "description": "Pull supplied to the docker build operation."
           },
           "context": {
             "type": "string",
             "minLength": 1,
             "default": ".",
-            "description": "context"
+            "description": "Context supplied to the docker build operation. Default: \".\"."
           }
         },
         "required": [
@@ -175,49 +236,77 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "pull": {
+      "description": "Pull an image.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "platform": {
             "type": "string",
             "minLength": 1,
-            "description": "platform"
+            "description": "Platform supplied to the docker pull operation."
           },
           "image": {
             "type": "string",
             "minLength": 1,
-            "description": "image"
+            "description": "Image supplied to the docker pull operation."
           }
         },
         "required": [
@@ -227,44 +316,72 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "push": {
+      "description": "Push an authenticated image reference.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "image": {
             "type": "string",
             "minLength": 1,
-            "description": "image"
+            "description": "Image supplied to the docker push operation."
           }
         },
         "required": [
@@ -274,49 +391,77 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "tag": {
+      "description": "Create an image tag.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "source": {
             "type": "string",
             "minLength": 1,
-            "description": "source"
+            "description": "Source supplied to the docker tag operation."
           },
           "target": {
             "type": "string",
             "minLength": 1,
-            "description": "target"
+            "description": "Target selected for this native operation."
           }
         },
         "required": [
@@ -327,52 +472,80 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "container_run": {
+      "description": "Run an image with optional command arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "rm": {
             "type": "boolean",
-            "description": "rm"
+            "description": "Rm supplied to the docker container_run operation."
           },
           "detach": {
             "type": "boolean",
-            "description": "detach"
+            "description": "Detach supplied to the docker container_run operation."
           },
           "name": {
             "type": "string",
             "minLength": 1,
-            "description": "name"
+            "description": "Name supplied to the docker container_run operation."
           },
           "publish": {
             "type": "array",
@@ -380,7 +553,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "publish"
+            "description": "Publish supplied to the docker container_run operation."
           },
           "volume": {
             "type": "array",
@@ -388,7 +561,7 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "volume"
+            "description": "Volume supplied to the docker container_run operation."
           },
           "env": {
             "type": "array",
@@ -396,22 +569,22 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "env"
+            "description": "Env supplied to the docker container_run operation."
           },
           "network": {
             "type": "string",
             "minLength": 1,
-            "description": "network"
+            "description": "Network supplied to the docker container_run operation."
           },
           "workdir": {
             "type": "string",
             "minLength": 1,
-            "description": "workdir"
+            "description": "Workdir supplied to the docker container_run operation."
           },
           "image": {
             "type": "string",
             "minLength": 1,
-            "description": "image"
+            "description": "Image supplied to the docker container_run operation."
           },
           "command": {
             "type": "array",
@@ -420,7 +593,7 @@
               "minLength": 1
             },
             "default": [],
-            "description": "command"
+            "description": "Command supplied to the docker container_run operation. Default: []."
           }
         },
         "required": [
@@ -430,39 +603,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "compose": {
+      "description": "Run Compose with its native subcommand arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "file": {
             "type": "array",
@@ -470,12 +671,12 @@
               "type": "string",
               "minLength": 1
             },
-            "description": "file"
+            "description": "File supplied to the docker compose operation."
           },
           "projectName": {
             "type": "string",
             "minLength": 1,
-            "description": "projectName"
+            "description": "Project Name supplied to the docker compose operation."
           },
           "arguments": {
             "type": "array",
@@ -484,7 +685,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -494,8 +695,32 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

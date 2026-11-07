@@ -1,1 +1,1 @@
-export { build, validate } from "./output/CI.Rpmbuild/index.js";
+export { build, validate } from "./output/CI.Component/index.js";

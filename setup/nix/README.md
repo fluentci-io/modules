@@ -1,60 +1,54 @@
 # Nix
 
-Set up Nix from FluentCI using PureScript compiled to WebAssembly.
-
-## Platforms
-
-Linux and macOS only. BSD hosts are rejected before executing commands.
-
-Official upstream Nix installer. Select a Nix release or `latest`. Defaults to daemon mode; `daemon: false` is supported only on Linux. Uses system-managed Nix paths rather than `installDir`.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Function signatures and argument descriptions come from the compiled PureScript
+source and are embedded in the component; no raw JSON plugin input is required.
 
 ## Usage
 
 ```sh
-fluentci run setup-nix setup 2.26.0
+fluentci run setup-nix setup --version 2.26.0
 ```
 
-Omit the version to use the default. The `setup` export also accepts a JSON
-object as plugin input:
-
-```json
-{
-  "version": "2.26.0"
-}
+```sh
+fluentci run setup-nix --help
+fluentci run setup-nix setup --help
 ```
 
-See the [shared setup guide](../README.md) for configuration, prerequisites,
-installation paths, native BSD package selectors, privileges, and output format.
-After installation, setup verifies the runtime version and updates PATH in the
-FluentCI engine for later steps.
+See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
+required flag, and return type. The [schema](./schema.json) describes the same
+contract. Optional values retain the native module defaults. Lists use JSON array
+syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
 
-## Compose in PureScript
+## Requirements and behavior
 
-```purescript
-module Main where
+Installs and verifies `nix`, then returns `tool`, `version`, `bin-dir`, and
+`environment` (a list of `{name, value}` records). Environment updates are visible
+to later tasks in the same host session. Separate shell invocations must add the
+returned installation directory to PATH explicitly.
 
-import Prelude
-import CI.Setup.Nix as Runtime
-import Effect (Effect)
 
-bootstrap :: Effect Unit
-bootstrap = void (Runtime.setupWith (Runtime.defaultConfig { version = "2.26.0" }))
-```
+
+Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
+are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
+Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
+pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
+Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
 
 ## Development
 
-Keep the checked-in `lib/setup` library and `test/setup` fixtures available,
-then run from this directory:
+From this module directory, with Node.js, Bun, PureScript, and Spago installed:
 
 ```sh
+bun install --cwd ../../lib/component --frozen-lockfile
 npm ci
 npm run build
 npm test
 ```
 
-The build produces `dist/plugin.wasm`. See the shared guide for optional live
-upstream smoke tests and the limits of stub-host BSD verification.
+`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
+checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
+private regression tests and are not the published module interface.
 
-## License
-
-[MIT](./LICENSE).
+See the [component migration guide](../../docs/COMPONENTS.md) and
+[MIT License](./LICENSE).

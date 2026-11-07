@@ -1,1 +1,1 @@
-export { setup } from "./output/CI.Setup.Ubicloud/index.js";
+export { setup } from "./output/CI.Component/index.js";

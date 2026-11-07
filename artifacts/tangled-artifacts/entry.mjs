@@ -1,1 +1,1 @@
-export { run, upload } from "./output/CI.Modules.TangledArtifacts/index.js";
+export { run, upload } from "./output/CI.Component/index.js";

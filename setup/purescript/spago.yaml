@@ -1,6 +1,6 @@
 package:
   name: fluentci-setup-purescript
-  dependencies: [argonaut-codecs, argonaut-core, arrays, effect, either, exceptions, fluentci, fluentci-setup-common, foldable-traversable, foreign-object, maybe, prelude, strings]
+  dependencies: [fluentci-component-contract, argonaut-codecs, argonaut-core, arrays, effect, either, exceptions, fluentci, fluentci-setup-common, foldable-traversable, foreign-object, maybe, prelude, strings]
 workspace:
   packageSet:
     registry: 81.11.0
@@ -10,3 +10,5 @@ workspace:
       ref: 954d03568935c26f92434119a110635a41a6fa4c
     fluentci-setup-common:
       path: ../../lib/setup
+    fluentci-component-contract:
+      path: ../../lib/component

@@ -1,6 +1,7 @@
 package:
   name: buildx-example
   dependencies:
+    - fluentci-component-contract
     - argonaut-codecs
     - argonaut-core
     - arrays
@@ -19,3 +20,5 @@ workspace:
     fluentci:
       git: https://github.com/fluentci-io/purescript-fluentci.git
       ref: 82da1d0f551b05ecae0ce2d5ebe26e23d61f4a10
+    fluentci-component-contract:
+      path: ../../lib/component

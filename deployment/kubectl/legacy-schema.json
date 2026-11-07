@@ -1,0 +1,376 @@
+{
+  "name": "kubectl",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "arguments"
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "apply": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "description": "context"
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "namespace"
+          },
+          "kubeconfig": {
+            "type": "string",
+            "minLength": 1,
+            "description": "kubeconfig"
+          },
+          "filename": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "filename"
+          },
+          "recursive": {
+            "type": "boolean",
+            "description": "recursive"
+          }
+        },
+        "required": [
+          "runDir",
+          "filename"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "description": "context"
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "namespace"
+          },
+          "kubeconfig": {
+            "type": "string",
+            "minLength": 1,
+            "description": "kubeconfig"
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "output"
+          },
+          "resource": {
+            "type": "string",
+            "minLength": 1,
+            "description": "resource"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "name"
+          }
+        },
+        "required": [
+          "runDir",
+          "resource"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "delete_resources": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "description": "context"
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "namespace"
+          },
+          "kubeconfig": {
+            "type": "string",
+            "minLength": 1,
+            "description": "kubeconfig"
+          },
+          "filename": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "filename"
+          },
+          "ignoreNotFound": {
+            "type": "boolean",
+            "description": "ignoreNotFound"
+          }
+        },
+        "required": [
+          "runDir",
+          "filename"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "rollout_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "description": "context"
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "namespace"
+          },
+          "kubeconfig": {
+            "type": "string",
+            "minLength": 1,
+            "description": "kubeconfig"
+          },
+          "timeout": {
+            "type": "string",
+            "minLength": 1,
+            "description": "timeout"
+          },
+          "resource": {
+            "type": "string",
+            "minLength": 1,
+            "description": "resource"
+          }
+        },
+        "required": [
+          "runDir",
+          "resource"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

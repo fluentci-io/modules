@@ -1,44 +1,60 @@
 {
   "name": "setup-extism",
+  "runtime": "component",
   "exports": {
     "setup": {
+      "description": "Install and verify extism, select its version, and publish its environment for subsequent tasks.",
       "input": {
         "type": "object",
         "properties": {
           "version": {
             "type": "string",
-            "default": "latest"
+            "description": "Tool release or supported channel to install; omitted values use the documented default."
           },
           "installDir": {
-            "type": "string"
+            "type": "string",
+            "description": "Absolute per-user installation prefix; omit for native package installations."
           },
           "packageName": {
-            "type": "string"
+            "type": "string",
+            "description": "Native package or port selector overriding the default repository package name."
           },
           "sudo": {
             "type": "boolean",
-            "default": false
+            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
           },
           "cliVersion": {
-            "type": "string"
+            "type": "string",
+            "description": "Extism CLI release; takes precedence over version."
           },
           "jsVersion": {
-            "type": "string"
+            "type": "string",
+            "description": "Extism JavaScript PDK compiler release."
           },
           "pythonVersion": {
-            "type": "string"
+            "type": "string",
+            "description": "Extism Python PDK compiler release."
           },
           "xtpVersion": {
-            "type": "string"
+            "type": "string",
+            "description": "Expected XTP version; upstream exposes a latest-only download."
           },
           "binaryenVersion": {
-            "type": "string"
+            "type": "string",
+            "description": "Binaryen release providing wasm-opt and wasm-merge."
           }
         },
+        "required": [],
         "additionalProperties": false
       },
       "output": {
         "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment"
+        ],
         "properties": {
           "tool": {
             "type": "string"
@@ -50,9 +66,26 @@
             "type": "string"
           },
           "environment": {
-            "type": "object"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
           }
-        }
+        },
+        "additionalProperties": false
       }
     }
   }

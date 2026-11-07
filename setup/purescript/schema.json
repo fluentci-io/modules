@@ -1,0 +1,112 @@
+{
+  "name": "setup-purescript",
+  "runtime": "component",
+  "exports": {
+    "setup": {
+      "description": "Install and verify purescript, select its version, and publish its environment for subsequent tasks.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Tool release or supported channel to install; omitted values use the documented default."
+          },
+          "installDir": {
+            "type": "string",
+            "description": "Absolute per-user installation prefix; omit for native package installations."
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Native package or port selector overriding the default repository package name."
+          },
+          "sudo": {
+            "type": "boolean",
+            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          },
+          "nodeVersion": {
+            "type": "string",
+            "description": "Node.js release or channel to install for the PureScript toolchain."
+          },
+          "bunVersion": {
+            "type": "string",
+            "description": "Bun release to install for the PureScript toolchain."
+          },
+          "npmVersion": {
+            "type": "string",
+            "description": "npm release to install for the PureScript toolchain."
+          },
+          "spagoVersion": {
+            "type": "string",
+            "description": "Spago release to install for the PureScript toolchain."
+          },
+          "nodePackageName": {
+            "type": "string",
+            "description": "Native Node.js package selector for BSD toolchain installation."
+          },
+          "bunPackageName": {
+            "type": "string",
+            "description": "Native Bun package selector for BSD toolchain installation."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment",
+          "nodeVersion",
+          "bunVersion",
+          "npmVersion",
+          "spagoVersion"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "nodeVersion": {
+            "type": "string"
+          },
+          "bunVersion": {
+            "type": "string"
+          },
+          "npmVersion": {
+            "type": "string"
+          },
+          "spagoVersion": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

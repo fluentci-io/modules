@@ -1,1 +1,1 @@
-export { run, version, lint, template, upgrade, uninstall } from "./output/CI.Modules.Helm/index.js";
+export { run, version, lint, template, upgrade, uninstall } from "./output/CI.Component/index.js";

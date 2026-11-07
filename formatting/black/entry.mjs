@@ -1,1 +1,1 @@
-export { run, version, format, check } from "./output/CI.Modules.Black/index.js";
+export { run, version, format, check } from "./output/CI.Component/index.js";

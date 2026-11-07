@@ -1,1 +1,1 @@
-export { setup } from "./output/CI.Setup.Aws/index.js";
+export { setup } from "./output/CI.Component/index.js";

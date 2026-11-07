@@ -10,6 +10,7 @@
             "either",
             "fluentci",
             "fluentci-cli-common",
+            "fluentci-component-contract",
             "prelude"
           ]
         },
@@ -688,6 +689,9 @@
       },
       "fluentci-cli-common": {
         "path": "../../lib/cli"
+      },
+      "fluentci-component-contract": {
+        "path": "../../lib/component"
       }
     }
   },
@@ -937,6 +941,23 @@
         "either",
         "exceptions",
         "fluentci",
+        "foldable-traversable",
+        "foreign-object",
+        "maybe",
+        "prelude",
+        "strings"
+      ]
+    },
+    "fluentci-component-contract": {
+      "type": "local",
+      "path": "../../lib/component",
+      "dependencies": [
+        "argonaut-codecs",
+        "argonaut-core",
+        "arrays",
+        "effect",
+        "either",
+        "exceptions",
         "foldable-traversable",
         "foreign-object",
         "maybe",

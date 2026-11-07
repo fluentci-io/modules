@@ -1,89 +1,49 @@
 # Playwright
 
-PureScript module for `playwright`, compiled to WebAssembly.
-
-## Requirements
-
-Install `playwright` on the FluentCI host and make it available on PATH,
-or supply an executable path with `executable`. The module checks the host OS,
-working directory, and executable before running. Linux, macOS, FreeBSD,
-OpenBSD, and NetBSD hosts are accepted where the upstream CLI is available.
-The setup export installs the framework through an existing Bun installation.
-
-Install Node.js and Bun; use setup to add @playwright/test to the test project. Add its node_modules/.bin to the host PATH or set executable to the absolute path of node_modules/.bin/playwright. testProject selects a Playwright test project; project selects the local working directory. Use install to download matching browsers and install_deps for system dependencies. Official browser support is limited to supported Linux, macOS, and Windows versions; the module rejects Windows hosts and does not provide BSD browser builds. Tests default to headless execution. Test reports, traces, and screenshots go to Playwright-configured paths under project, separate from the execution report in runDir.
-
-The `setup` export uses Bun to install the framework in `project`, with
-`version` selecting a release or tag (default `latest`). It checks for Bun
-before installation and does not require the framework to exist yet. For example:
-
-```json
-{"project":"app","runDir":".fluentci/runs/playwright-setup","version":"1.65.0"}
-```
-
-After setup, the `install` export downloads matching browser binaries. Include
-`project/node_modules/.bin` in PATH or select the framework with an absolute
-`executable` path for subsequent commands. `executable` overrides Bun itself
-when calling `setup`.
-
-## Install the test framework
-
-Install dependencies in the application being tested with Bun:
-
-```sh
-bun add --dev @playwright/test
-bunx playwright install chromium
-```
-
-The explicit install command downloads the browser binary even when dependency
-lifecycle scripts are disabled. Node.js is still required by the upstream CLI.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Function signatures and argument descriptions come from the compiled PureScript
+source and are embedded in the component; no raw JSON plugin input is required.
 
 ## Usage
 
-Call `fluentci run playwright test` with this JSON object as plugin input:
-
-```json
-{
-  "project": ".",
-  "runDir": ".fluentci/runs/playwright-001"
-}
+```sh
+fluentci run playwright test --project . --run-dir .fluentci/runs/playwright-001
 ```
 
-Exports: `run`, `version`, `setup`, `test`, `list`, `install`, `install_deps`.
-See [OPTIONS.md](./OPTIONS.md) for each command's typed fields and
-[schema.json](./schema.json) for machine-readable input definitions.
-`run` accepts an `arguments` array for other native CLI operations:
-
-```json
-{"runDir": ".fluentci/runs/playwright-002", "arguments": ["--help"]}
+```sh
+fluentci run playwright --help
+fluentci run playwright test --help
 ```
 
-`project` is the local working directory (default `.`); use a fresh `runDir`
-for each invocation. `timeoutMs` defaults to 900000. Arguments are passed
-literally without shell expansion. A nonzero exit status fails the invocation.
-Commands execute immediately; use the CLI's preview or dry-run options when needed.
+See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
+required flag, and return type. The [schema](./schema.json) describes the same
+contract. Optional values retain the native module defaults. Lists use JSON array
+syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
 
-Authentication uses the native CLI configuration and inherited host environment.
-Keep credentials out of JSON input: execution plans and CLI logs are persisted.
-The output is the JSON execution report from `runDir/result.json`; task stdout
-and stderr are stored in that run directory. See the [shared execution guide](../../lib/cli/README.md).
+## Requirements and behavior
+
+Install Node.js and @playwright/test in your test project. Add its node_modules/.bin to the host PATH or set executable to the absolute path of node_modules/.bin/playwright. testProject selects a Playwright test project; project selects the local working directory. Use install to download matching browsers and install_deps for system dependencies. Official browser support is limited to supported Linux, macOS, and Windows versions; the module rejects Windows hosts and does not provide BSD browser builds. Tests default to headless execution. Test reports, traces, and screenshots go to Playwright-configured paths under project, separate from the execution report in runDir.
+
+The return value is a typed record containing `outcome`, `run-dir`, `report-path`,
+`stdout-path`, and `stderr-path`. Each invocation needs a fresh run directory.
+Native command failures, cancellation, and timeouts fail the component call.
+Use `--artifacts '["package=dist/package.zip"]'` to declare output files for the
+execution report. Authentication stays in native configuration or host environment.
 
 ## Development
 
+From this module directory, with Node.js, Bun, PureScript, and Spago installed:
+
 ```sh
-bun install --frozen-lockfile
-bun run build
-bun run test
+bun install --cwd ../../lib/component --frozen-lockfile
+npm ci
+npm run build
+npm test
 ```
 
-Builds produce `dist/plugin.wasm`. The shared CLI engine is in
-[lib/cli](../../lib/cli); entry points, schemas, and argument references are
-generated by `python3 ../../scripts/generate_cli_modules.py` from its catalog.
-Tests cover the compiled module with a controlled host and a native browser
-smoke test. Set `FLUENTCI_BROWSER_TOOLS` to the absolute prefix containing the
-Bun-installed test framework (`node_modules/`), and set
-`FLUENTCI_REQUIRE_BROWSER_TESTS=1` to require native execution. Install matching
-browsers first; `CYPRESS_CACHE_FOLDER` and `PLAYWRIGHT_BROWSERS_PATH` can select
-their cache locations. Native tests create temporary projects and verify both
-successful browser assertions and failing test exits.
+`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
+checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
+private regression tests and are not the published module interface.
 
-[Upstream CLI documentation](https://playwright.dev/docs/test-cli). Licensed under the [MIT License](./LICENSE).
+See the [component migration guide](../../docs/COMPONENTS.md) and
+[MIT License](./LICENSE).

@@ -1,0 +1,575 @@
+{
+  "name": "railpack",
+  "runtime": "component",
+  "exports": {
+    "run": {
+      "description": "Run a native command with literal arguments.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal native command argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Print the installed tool version.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "prepare": {
+      "description": "Generate a build plan and metadata, failing when the project cannot be prepared.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "envNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Names of host environment variables to forward to Railpack, without embedding their values."
+          },
+          "configFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Railpack project configuration file."
+          },
+          "buildCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Override the project build command; executed by Railpack inside the build."
+          },
+          "startCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Container start command to include in the image."
+          },
+          "previous": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Previously selected package versions as NAME@VERSION entries."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Project source directory to analyze or build. Default: \".\"."
+          },
+          "planOut": {
+            "type": "string",
+            "minLength": 1,
+            "default": "railpack-plan.json",
+            "description": "Destination for the generated JSON build plan. Default: \"railpack-plan.json\"."
+          },
+          "infoOut": {
+            "type": "string",
+            "minLength": 1,
+            "default": "railpack-info.json",
+            "description": "Destination for structured project/build metadata. Default: \"railpack-info.json\"."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "build": {
+      "description": "Build a project into an image through a configured BuildKit daemon.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "envNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Names of host environment variables to forward to Railpack, without embedding their values."
+          },
+          "configFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Railpack project configuration file."
+          },
+          "buildCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Override the project build command; executed by Railpack inside the build."
+          },
+          "startCmd": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Container start command to include in the image."
+          },
+          "previous": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Previously selected package versions as NAME@VERSION entries."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Project source directory to analyze or build. Default: \".\"."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Container image name/tag to produce."
+          },
+          "platform": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target image platform, for example linux/amd64."
+          },
+          "progress": {
+            "type": "string",
+            "minLength": 1,
+            "default": "plain",
+            "description": "BuildKit progress mode: auto, plain, or tty. Default: \"plain\"."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Export the final filesystem to a local directory."
+          },
+          "cacheFrom": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "BuildKit cache import specifications."
+          },
+          "cacheTo": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "BuildKit cache export specifications."
+          },
+          "noCache": {
+            "type": "boolean",
+            "description": "Build without reading cached layers."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "info": {
+      "description": "Inspect detected runtimes, dependencies, and build requirements.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "description": "Project information output format: json or pretty. Default: \"json\"."
+          },
+          "out": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional JSON information output file."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Project source directory. Default: \".\"."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "schema": {
+      "description": "Print the Railpack configuration JSON schema.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

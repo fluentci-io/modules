@@ -1,0 +1,75 @@
+{
+  "name": "rpmbuild",
+  "runtime": "component",
+  "exports": {
+    "build": {
+      "description": "Build packages from a Linux rpmbuild package tree and target architecture.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Input directory containing the package tree to validate and build."
+          },
+          "arch": {
+            "type": "string",
+            "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+          },
+          "output": {
+            "type": "string",
+            "description": "Destination path for generated packages."
+          },
+          "spec": {
+            "type": "string",
+            "description": "RPM spec file inside the package tree."
+          }
+        },
+        "required": [
+          "directory",
+          "arch",
+          "spec"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "validate": {
+      "description": "Validate a Linux rpmbuild package tree and target architecture.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Input directory containing the package tree to validate and build."
+          },
+          "arch": {
+            "type": "string",
+            "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+          },
+          "output": {
+            "type": "string",
+            "description": "Destination path for generated packages."
+          },
+          "spec": {
+            "type": "string",
+            "description": "RPM spec file inside the package tree."
+          }
+        },
+        "required": [
+          "directory",
+          "arch",
+          "spec"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "boolean"
+      }
+    }
+  }
+}

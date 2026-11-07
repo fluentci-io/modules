@@ -33,11 +33,11 @@ setupWith = Setup.install "{name}"
 setup :: Effect Unit
 setup = Setup.setup "{name}"
 '''
-  yield d/'entry.mjs',f'export {{ setup }} from "./output/{mod}/index.js";\n'
+  yield d/'legacy-entry.mjs',f'export {{ setup }} from "./output/{mod}/index.js";\n'
   props={'version':{'type':'string','default':t['defaultVersion']},'installDir':{'type':'string'},'packageName':{'type':'string'},'sudo':{'type':'boolean','default':False}}
   if name=='extism':
    for key in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']:props[key]={'type':'string'}
-  yield d/'schema.json',json.dumps({'name':'setup-'+name,'exports':{'setup':{'input':{'type':'object','properties':props,'additionalProperties':False},'output':{'type':'object','properties':{'tool':{'type':'string'},'version':{'type':'string'},'binDir':{'type':'string'},'environment':{'type':'object'}}}}}},indent=2)+'\n'
+  yield d/'legacy-schema.json',json.dumps({'name':'setup-'+name,'exports':{'setup':{'input':{'type':'object','properties':props,'additionalProperties':False},'output':{'type':'object','properties':{'tool':{'type':'string'},'version':{'type':'string'},'binDir':{'type':'string'},'environment':{'type':'object'}}}}}},indent=2)+'\n'
 if __name__=='__main__':
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
  for p,s in generated():

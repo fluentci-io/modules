@@ -1,0 +1,411 @@
+{
+  "name": "wrangler",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal Wrangler argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the Wrangler configuration file."
+          },
+          "env": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named Wrangler environment to deploy."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          "outdir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for generated Worker bundle files."
+          },
+          "minify": {
+            "type": "boolean",
+            "description": "Minify the generated Worker bundle."
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "dry_run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the Wrangler configuration file."
+          },
+          "env": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named Wrangler environment to deploy."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          "outdir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for generated Worker bundle files."
+          },
+          "minify": {
+            "type": "boolean",
+            "description": "Minify the generated Worker bundle."
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "versions_upload": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the Wrangler configuration file."
+          },
+          "env": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named Wrangler environment to deploy."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          "outdir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for generated Worker bundle files."
+          },
+          "minify": {
+            "type": "boolean",
+            "description": "Minify the generated Worker bundle."
+          },
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "pages_deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Cloudflare Pages project name."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git branch name identifying the production or preview deployment."
+          },
+          "commitHash": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git commit SHA attached to the deployment."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory containing the built static site to upload."
+          }
+        },
+        "required": [
+          "runDir",
+          "projectName",
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "pages_projects": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

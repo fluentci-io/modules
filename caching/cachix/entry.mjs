@@ -1,1 +1,1 @@
-export { setup, push } from "./output/CI.Cachix/index.js";
+export { setup, push } from "./output/CI.Component/index.js";

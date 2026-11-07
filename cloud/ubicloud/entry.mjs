@@ -1,1 +1,1 @@
-export { run, help } from "./output/CI.Modules.Ubicloud/index.js";
+export { run, help } from "./output/CI.Component/index.js";

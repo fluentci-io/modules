@@ -1,16 +1,31 @@
 # Dpkg
 
-Build a Debian package from a prepared filesystem directory using PureScript
-and `dpkg-deb`. Package names, versions, payloads, and dependencies come from
-your project's `DEBIAN/control` file.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Function signatures and argument descriptions come from the compiled PureScript
+source and are embedded in the component; no raw JSON plugin input is required.
 
-## Requirements
+## Usage
 
-Execution is Linux-only. Both `validate` and `build` check the host OS first,
-then verify that `dpkg-deb`, `dpkg`, and GNU `realpath` can run. Standard tools
-`test`, `cat`, `dirname`, and `mkdir` must also be available. On Debian/Ubuntu,
-install `dpkg` and `coreutils`. Missing tools cause a clear failure; the module
-does not install system packages.
+```sh
+fluentci run dpkg build --directory package --arch arm64 --output dist/widget_1.2.0_arm64.deb
+```
+
+```sh
+fluentci run dpkg --help
+fluentci run dpkg build --help
+```
+
+See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
+required flag, and return type. The [schema](./schema.json) describes the same
+contract. Optional values retain the native module defaults. Lists use JSON array
+syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+
+## Requirements and behavior
+
+Linux-only; requires dpkg, dpkg-deb, and GNU coreutils.
+`validate` returns a boolean after validating the tree and CPU architecture.
+`build` returns a native list of generated package paths. Selecting an architecture
+does not cross-compile the payload.
 
 ## Directory layout
 
@@ -44,84 +59,20 @@ scripts belong under `DEBIAN/` and must have the permissions required by dpkg.
 Payload paths and dependencies are your choice; metadata-only packages are
 also supported.
 
-## Usage
-
-The module is registered as `dpkg` in the repository's `fluentci.toml`. Invoke
-its `validate` or `build` WebAssembly export with JSON plugin input:
-
-```json
-{
-  "directory": "package",
-  "arch": "arm64",
-  "output": "dist/widget_1.2.0_arm64.deb"
-}
-```
-
-| Argument | Meaning |
-| --- | --- |
-| `directory` | Required package root directory. |
-| `arch` | Required Debian architecture; `x86_64`, `aarch64`, and `i686` are aliases for `amd64`, `arm64`, and `i386`. |
-| `output` | Destination `.deb` file; defaults to `directory` followed by `.deb`. Parent directories are created during a build. |
-
-Other canonical Debian architectures, such as `riscv64` and `ppc64el`, are
-passed through. Use `all` for an architecture-independent package. The
-`Architecture` field must match the normalized requested architecture. The
-module does not rewrite metadata or cross-compile binaries; supply a payload
-already built for the selected CPU.
-
-`validate` checks tools, directory layout, required metadata, and architecture
-without creating output. `build` performs these checks, runs `dpkg-deb` with
-its own control syntax and permission checks enabled, assigns root ownership
-to archive entries using `--root-owner-group`, and verifies the resulting
-package's architecture. Existing output files are overwritten by dpkg-deb.
-
-The output path must be outside the package root, including through symlinks.
-Paths are literal arguments; shell expansion is not performed. Empty paths,
-NULs, and line breaks are rejected. Unknown JSON fields and wrong types are
-rejected. Build output is a JSON array of absolute artifact paths:
-
-```json
-["/workspace/dist/widget_1.2.0_arm64.deb"]
-```
-
-## Compose in PureScript
-
-```purescript
-module Main where
-
-import CI.Dpkg as Dpkg
-import Effect (Effect)
-
-package :: Effect (Array String)
-package = Dpkg.buildWith
-  { directory: "package"
-  , arch: "arm64"
-  , output: "dist/widget.deb"
-  }
-```
-
-`validateWith` accepts the same configuration and returns `Effect Unit`.
-The artifact paths returned by `buildWith` can be passed to
-`CI.Gemfury.uploadFiles` in a pipeline that includes both source packages.
-
 ## Development
 
-Install Node.js, Spago, the PureScript compiler, and `extism-js`:
+From this module directory, with Node.js, Bun, PureScript, and Spago installed:
 
 ```sh
+bun install --cwd ../../lib/component --frozen-lockfile
 npm ci
 npm run build
 npm test
 ```
 
-The build produces `dist/plugin.wasm`. Tests exercise the compiled module
-against a stub host. On Linux with the required tools, integration tests also
-build and inspect real packages for `amd64`, `arm64`, and `all`. Those tests
-are skipped on other hosts.
+`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
+checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
+private regression tests and are not the published module interface.
 
-See the [official dpkg-deb reference](https://manpages.debian.org/trixie/dpkg/dpkg-deb.1.en.html)
-for package-root conventions and native validation.
-
-## License
-
-[MIT](./LICENSE).
+See the [component migration guide](../../docs/COMPONENTS.md) and
+[MIT License](./LICENSE).

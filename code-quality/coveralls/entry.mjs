@@ -1,1 +1,1 @@
-export { run, version, upload, done } from "./output/CI.Modules.Coveralls/index.js";
+export { run, version, upload, done } from "./output/CI.Component/index.js";

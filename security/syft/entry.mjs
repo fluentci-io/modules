@@ -1,1 +1,1 @@
-export { run, version, scan, convert } from "./output/CI.Modules.Syft/index.js";
+export { run, version, scan, convert } from "./output/CI.Component/index.js";

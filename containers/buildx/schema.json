@@ -1,39 +1,46 @@
 {
   "name": "buildx",
+  "runtime": "component",
   "exports": {
     "buildx": {
+      "description": "Run Docker Buildx buildx and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -43,56 +50,81 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "dap": {
+      "description": "Run Docker Buildx dap and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -102,56 +134,81 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "debug": {
+      "description": "Run Docker Buildx debug and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -169,56 +226,81 @@
           "on": {
             "type": "string",
             "description": "--on: When to launch the monitor ([always, error])"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history": {
+      "description": "Run Docker Buildx history and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -228,56 +310,81 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "imagetools": {
+      "description": "Run Docker Buildx imagetools and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -287,56 +394,81 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "policy": {
+      "description": "Run Docker Buildx policy and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -346,56 +478,81 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "bake": {
+      "description": "Run Docker Buildx bake and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "targets": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Bake targets.",
+            "description": "Bake targets. Default: [].",
             "default": []
           },
           "builder": {
@@ -488,53 +645,78 @@
               "type": "string"
             },
             "description": "--var: Set a variable value (e.g., \"name=value\")"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "build": {
+      "description": "Run Docker Buildx build and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "context": {
             "type": "string",
-            "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest).",
+            "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest). Default: \".\".",
             "default": "."
           },
           "builder": {
@@ -738,49 +920,74 @@
               "type": "string"
             },
             "description": "--ulimit: Ulimit options (default [])"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "create": {
+      "description": "Run Docker Buildx create and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "endpoint": {
             "type": "string",
@@ -847,49 +1054,74 @@
           "use": {
             "type": "boolean",
             "description": "--use: Set the current builder instance"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "dial_stdio": {
+      "description": "Run Docker Buildx dial stdio and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "builder": {
             "type": "string",
@@ -906,49 +1138,74 @@
           "progress": {
             "type": "string",
             "description": "--progress: Set type of progress output (\"auto\", \"plain\","
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "du": {
+      "description": "Run Docker Buildx du and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "builder": {
             "type": "string",
@@ -976,49 +1233,74 @@
           "verbose": {
             "type": "boolean",
             "description": "--verbose: Shorthand for \"--format=pretty\""
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "inspect": {
+      "description": "Run Docker Buildx inspect and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "name": {
             "type": "string",
@@ -1039,49 +1321,74 @@
           "timeout": {
             "type": "string",
             "description": "--timeout: Override the default timeout for loading"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "ls": {
+      "description": "Run Docker Buildx ls and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "builder": {
             "type": "string",
@@ -1102,49 +1409,74 @@
           "timeout": {
             "type": "string",
             "description": "--timeout: Override the default timeout for loading"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "prune": {
+      "description": "Run Docker Buildx prune and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "builder": {
             "type": "string",
@@ -1188,56 +1520,81 @@
           "verbose": {
             "type": "boolean",
             "description": "--verbose: Provide a more verbose output"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "rm": {
+      "description": "Run Docker Buildx rm and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "names": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Builder instance names.",
+            "description": "Builder instance names. Default: [].",
             "default": []
           },
           "builder": {
@@ -1267,49 +1624,74 @@
           "timeout": {
             "type": "string",
             "description": "--timeout: Override the default timeout for loading"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "stop": {
+      "description": "Run Docker Buildx stop and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "name": {
             "type": "string",
@@ -1322,53 +1704,78 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "use": {
+      "description": "Run Docker Buildx use and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "name": {
             "type": "string",
-            "description": "Required builder/image name.",
+            "description": "Required builder/image name. Default: \"\".",
             "default": ""
           },
           "builder": {
@@ -1386,49 +1793,74 @@
           "global": {
             "type": "boolean",
             "description": "--global: Builder persists context changes"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Run Docker Buildx version and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "builder": {
             "type": "string",
@@ -1437,53 +1869,78 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "dap_build": {
+      "description": "Run Docker Buildx dap build and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "context": {
             "type": "string",
-            "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest).",
+            "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest). Default: \".\".",
             "default": "."
           },
           "builder": {
@@ -1687,53 +2144,78 @@
               "type": "string"
             },
             "description": "--ulimit: Ulimit options (default [])"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "debug_build": {
+      "description": "Run Docker Buildx debug build and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "context": {
             "type": "string",
-            "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest).",
+            "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest). Default: \".\".",
             "default": "."
           },
           "builder": {
@@ -1945,56 +2427,81 @@
               "type": "string"
             },
             "description": "--ulimit: Ulimit options (default [])"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_inspect": {
+      "description": "Run Docker Buildx history inspect and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Subcommand positional arguments; prefer the corresponding named export.",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
             "default": []
           },
           "builder": {
@@ -2008,56 +2515,81 @@
           "format": {
             "type": "string",
             "description": "--format: Format the output (default \"pretty\")"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_export": {
+      "description": "Run Docker Buildx history export and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "refs": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Build record references.",
+            "description": "Build record references. Default: [].",
             "default": []
           },
           "builder": {
@@ -2079,56 +2611,81 @@
           "output": {
             "type": "string",
             "description": "--output: Output file path"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_import": {
+      "description": "Run Docker Buildx history import and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Import positional arguments; use the file option instead of interactive stdin.",
+            "description": "Import positional arguments; use the file option instead of interactive stdin. Default: [].",
             "default": []
           },
           "builder": {
@@ -2145,49 +2702,74 @@
               "type": "string"
             },
             "description": "--file: Import from a file path"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_logs": {
+      "description": "Run Docker Buildx history logs and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "ref": {
             "type": "string",
@@ -2204,49 +2786,74 @@
           "progress": {
             "type": "string",
             "description": "--progress: Set type of progress output (plain, rawjson,"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_ls": {
+      "description": "Run Docker Buildx history ls and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "builder": {
             "type": "string",
@@ -2274,49 +2881,74 @@
           "noTrunc": {
             "type": "boolean",
             "description": "--no-trunc: Don't truncate output"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_open": {
+      "description": "Run Docker Buildx history open and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "ref": {
             "type": "string",
@@ -2329,56 +2961,81 @@
           "debug": {
             "type": "boolean",
             "description": "--debug: Enable debug logging"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_rm": {
+      "description": "Run Docker Buildx history rm and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "refs": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Build record references.",
+            "description": "Build record references. Default: [].",
             "default": []
           },
           "builder": {
@@ -2392,49 +3049,74 @@
           "all": {
             "type": "boolean",
             "description": "--all: Remove all build records"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_trace": {
+      "description": "Run Docker Buildx history trace and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "ref": {
             "type": "string",
@@ -2455,56 +3137,81 @@
           "compare": {
             "type": "string",
             "description": "--compare: Compare with another build record"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "imagetools_create": {
+      "description": "Run Docker Buildx imagetools create and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "sources": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Image source references.",
+            "description": "Image source references. Default: [].",
             "default": []
           },
           "builder": {
@@ -2562,53 +3269,78 @@
               "type": "string"
             },
             "description": "--tag: Set reference for new image"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "imagetools_inspect": {
+      "description": "Run Docker Buildx imagetools inspect and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "name": {
             "type": "string",
-            "description": "Required builder/image name.",
+            "description": "Required builder/image name. Default: \"\".",
             "default": ""
           },
           "builder": {
@@ -2626,53 +3358,78 @@
           "raw": {
             "type": "boolean",
             "description": "--raw: Show original, unformatted JSON manifest"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "policy_eval": {
+      "description": "Run Docker Buildx policy eval and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "source": {
             "type": "string",
-            "description": "Required policy evaluation source.",
+            "description": "Required policy evaluation source. Default: \"\".",
             "default": ""
           },
           "builder": {
@@ -2701,53 +3458,78 @@
           "print": {
             "type": "boolean",
             "description": "--print: Print policy output"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "policy_test": {
+      "description": "Run Docker Buildx policy test and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "path": {
             "type": "string",
-            "description": "Policy test directory.",
+            "description": "Policy test directory. Default: \".\".",
             "default": "."
           },
           "builder": {
@@ -2765,56 +3547,81 @@
           "run": {
             "type": "string",
             "description": "--run: Run only tests with name containing this substring"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "history_inspect_attachment": {
+      "description": "Run Docker Buildx history inspect attachment and return execution report paths.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
-            "default": "."
+            "default": ".",
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "docker": {
             "type": "string",
-            "default": "docker"
+            "default": "docker",
+            "description": "Docker executable name or absolute path. Default: \"docker\"."
           },
           "timeoutMs": {
             "type": "integer",
             "format": "int32",
             "minimum": 1,
             "maximum": 2147483647,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "experimental": {
             "type": "boolean",
-            "default": false
+            "default": false,
+            "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "references": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "Optional REF and DIGEST positional arguments.",
+            "description": "Optional REF and DIGEST positional arguments. Default: [].",
             "default": []
           },
           "builder": {
@@ -2833,24 +3640,43 @@
             "type": "string",
             "description": "--platform: Platform of attachment"
           },
-          "type_": {
+          "type": {
             "type": "string",
             "description": "--type: Type of attachment"
-          },
-          "help": {
-            "type": "boolean",
-            "description": "--help: Show this command's help."
           }
         },
         "required": [
           "runDir"
         ],
-        "additionalProperties": false,
-        "contentType": "application/json"
+        "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "text/plain; charset=utf-8"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

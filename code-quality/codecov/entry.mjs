@@ -1,1 +1,1 @@
-export { run, version, upload } from "./output/CI.Modules.Codecov/index.js";
+export { run, version, upload } from "./output/CI.Component/index.js";

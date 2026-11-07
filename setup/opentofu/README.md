@@ -1,58 +1,54 @@
 # Setup OpenTofu
 
-Install `tofu` for a FluentCI pipeline using the shared PureScript setup library.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Function signatures and argument descriptions come from the compiled PureScript
+source and are embedded in the component; no raw JSON plugin input is required.
+
+## Usage
 
 ```sh
-fluentci run setup-opentofu setup
+fluentci run setup-opentofu setup --version latest
 ```
 
-Pass a release version/tag as plain input, or use JSON:
-
-```json
-{"version":"latest"}
+```sh
+fluentci run setup-opentofu --help
+fluentci run setup-opentofu setup --help
 ```
 
-The `setup` export installs and verifies the executable, returns `tool`, `version`,
-`binDir`, and `environment`, and publishes PATH for later FluentCI tasks. The
-PureScript `setupWith` helper accepts the same shared configuration. This module
-installs a tool; it does not authenticate accounts, start remote services, or run
-builds/deployments.
+See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
+required flag, and return type. The [schema](./schema.json) describes the same
+contract. Optional values retain the native module defaults. Lists use JSON array
+syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
 
-## Installation
+## Requirements and behavior
 
-Backend: `github`.
+Installs and verifies `tofu`, then returns `tool`, `version`, `bin-dir`, and
+`environment` (a list of `{name, value}` records). Environment updates are visible
+to later tasks in the same host session. Separate shell invocations must add the
+returned installation directory to PATH explicitly.
 
-Linux/macOS use official releases or the native language ecosystem where available.
-JavaScript tools use Bun; missing Node.js/Bun are bootstrapped through their setup
-installers. Python tools require Python 3 with venv/pip support. Ruby tools require
-Ruby/gem, and Go tools require Go. Native repository installers require the package
-manager, a configured vendor repository when needed, and installation privileges.
-Use `sudo: true` for noninteractive native package installation when appropriate.
 
-FreeBSD uses pkg, OpenBSD pkg_add, and NetBSD pkgin. Package availability and exact
-versions depend on the selected native repository; unavailable packages fail
-clearly. dpkg and rpmbuild are Linux-only. Pinned native package versions must exist
-in the repository; `packageName` can select a versioned port or package identifier.
 
-`version` defaults to `latest`. `installDir` selects an absolute
-per-user prefix for release/ecosystem installs; omit it for native packages.
-Downloaded versioned prefixes are verified before reuse. Failed new installs are
-removed. Run concurrent installs with separate prefixes. Credentials remain in
-native configuration and environment variables; they are not setup arguments.
-
-See the [shared setup guide](../README.md), [installer catalog](../../lib/setup/tools.json),
-and [schema](./schema.json). Official project reference: opentofu/opentofu.
+Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
+are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
+Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
+pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
+Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
 
 ## Development
 
+From this module directory, with Node.js, Bun, PureScript, and Spago installed:
+
 ```sh
+bun install --cwd ../../lib/component --frozen-lockfile
 npm ci
 npm run build
 npm test
 ```
 
-Sources and schema are generated with `python3 ../../scripts/generate_setup_tools.py`.
-Tests exercise compiled PureScript against controlled package-manager/release hosts.
-They do not install system packages or contact authenticated services.
+`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
+checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
+private regression tests and are not the published module interface.
 
+See the [component migration guide](../../docs/COMPONENTS.md) and
 [MIT License](./LICENSE).

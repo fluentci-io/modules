@@ -1,0 +1,265 @@
+{
+  "name": "sqruff",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal native command argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "lint": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional Sqruff configuration file overriding discovered configuration."
+          },
+          "dialect": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQL dialect override, for example postgres, ansi, or bigquery."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Report format: human, github-annotation-native, gitlab, json, sarif, or none."
+          },
+          "ignoreLocalConfig": {
+            "type": "boolean",
+            "description": "Ignore discovered global and project configuration; explicit config is still loaded."
+          },
+          "parsingErrors": {
+            "type": "boolean",
+            "description": "Include SQL parsing errors in diagnostics."
+          },
+          "disableNoqa": {
+            "type": "boolean",
+            "description": "Ignore inline noqa suppression comments."
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "default": [
+              "."
+            ],
+            "description": "SQL files or directories to check or fix."
+          },
+          "writeOutput": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for a GitLab Code Quality report when using the gitlab format."
+          },
+          "annotationLevel": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Severity for GitLab findings: notice, warning, failure, or error."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "fix": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional Sqruff configuration file overriding discovered configuration."
+          },
+          "dialect": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SQL dialect override, for example postgres, ansi, or bigquery."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Report format: human, github-annotation-native, gitlab, json, sarif, or none."
+          },
+          "ignoreLocalConfig": {
+            "type": "boolean",
+            "description": "Ignore discovered global and project configuration; explicit config is still loaded."
+          },
+          "parsingErrors": {
+            "type": "boolean",
+            "description": "Include SQL parsing errors in diagnostics."
+          },
+          "disableNoqa": {
+            "type": "boolean",
+            "description": "Ignore inline noqa suppression comments."
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "default": [
+              "."
+            ],
+            "description": "SQL files or directories to check or fix."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

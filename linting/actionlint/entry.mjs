@@ -1,1 +1,1 @@
-export { run, version, lint } from "./output/CI.Modules.Actionlint/index.js";
+export { run, version, lint } from "./output/CI.Component/index.js";

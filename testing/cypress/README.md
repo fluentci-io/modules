@@ -1,89 +1,49 @@
 # Cypress
 
-PureScript module for `cypress`, compiled to WebAssembly.
-
-## Requirements
-
-Install `cypress` on the FluentCI host and make it available on PATH,
-or supply an executable path with `executable`. The module checks the host OS,
-working directory, and executable before running. Linux, macOS, FreeBSD,
-OpenBSD, and NetBSD hosts are accepted where the upstream CLI is available.
-The setup export installs the framework through an existing Bun installation.
-
-Install a supported Node.js version and Bun; use setup to add Cypress 15.5 or newer to the test project. Add its node_modules/.bin to PATH or set executable to the absolute path of node_modules/.bin/cypress. Tests use --posix-exit-codes so even multiples of 256 failures return a failure. The project field selects the local working directory containing cypress.config.*. test runs end-to-end specs by default; component=true selects component testing. Install the Cypress binary and required system libraries before testing; Linux also needs Xvfb even for headless Electron. Upstream Cypress supports selected Linux, macOS, and Windows versions; Windows hosts are rejected here, and BSD browser builds are not provided. Cypress Cloud recording is opt-in with record=true; supply CYPRESS_RECORD_KEY through the host environment. Screenshots, videos, and reporter artifacts follow the project configuration.
-
-The `setup` export uses Bun to install the framework in `project`, with
-`version` selecting a release or tag (default `latest`). It checks for Bun
-before installation and does not require the framework to exist yet. For example:
-
-```json
-{"project":"app","runDir":".fluentci/runs/cypress-setup","version":"16.2.1"}
-```
-
-After setup, the `install` export downloads matching browser binaries. Include
-`project/node_modules/.bin` in PATH or select the framework with an absolute
-`executable` path for subsequent commands. `executable` overrides Bun itself
-when calling `setup`.
-
-## Install the test framework
-
-Install dependencies in the application being tested with Bun:
-
-```sh
-bun add --dev cypress
-bunx cypress install
-```
-
-The explicit install command downloads the browser binary even when dependency
-lifecycle scripts are disabled. Node.js is still required by the upstream CLI.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Function signatures and argument descriptions come from the compiled PureScript
+source and are embedded in the component; no raw JSON plugin input is required.
 
 ## Usage
 
-Call `fluentci run cypress test` with this JSON object as plugin input:
-
-```json
-{
-  "project": ".",
-  "runDir": ".fluentci/runs/cypress-001"
-}
+```sh
+fluentci run cypress test --project . --run-dir .fluentci/runs/cypress-001
 ```
 
-Exports: `run`, `version`, `setup`, `test`, `install`, `verify`, `cache_list`.
-See [OPTIONS.md](./OPTIONS.md) for each command's typed fields and
-[schema.json](./schema.json) for machine-readable input definitions.
-`run` accepts an `arguments` array for other native CLI operations:
-
-```json
-{"runDir": ".fluentci/runs/cypress-002", "arguments": ["--help"]}
+```sh
+fluentci run cypress --help
+fluentci run cypress test --help
 ```
 
-`project` is the local working directory (default `.`); use a fresh `runDir`
-for each invocation. `timeoutMs` defaults to 900000. Arguments are passed
-literally without shell expansion. A nonzero exit status fails the invocation.
-Commands execute immediately; use the CLI's preview or dry-run options when needed.
+See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
+required flag, and return type. The [schema](./schema.json) describes the same
+contract. Optional values retain the native module defaults. Lists use JSON array
+syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
 
-Authentication uses the native CLI configuration and inherited host environment.
-Keep credentials out of JSON input: execution plans and CLI logs are persisted.
-The output is the JSON execution report from `runDir/result.json`; task stdout
-and stderr are stored in that run directory. See the [shared execution guide](../../lib/cli/README.md).
+## Requirements and behavior
+
+Install Node.js and Cypress in your test project. Add its node_modules/.bin to PATH or set executable to the absolute path of node_modules/.bin/cypress. The project field selects the local working directory containing cypress.config.*. test runs end-to-end specs by default; component=true selects component testing. Install the Cypress binary and required system libraries before testing; Linux also needs Xvfb even for headless Electron. Upstream Cypress supports selected Linux, macOS, and Windows versions; Windows hosts are rejected here, and BSD browser builds are not provided. Cypress Cloud recording is opt-in with record=true; supply CYPRESS_RECORD_KEY through the host environment. Screenshots, videos, and reporter artifacts follow the project configuration.
+
+The return value is a typed record containing `outcome`, `run-dir`, `report-path`,
+`stdout-path`, and `stderr-path`. Each invocation needs a fresh run directory.
+Native command failures, cancellation, and timeouts fail the component call.
+Use `--artifacts '["package=dist/package.zip"]'` to declare output files for the
+execution report. Authentication stays in native configuration or host environment.
 
 ## Development
 
+From this module directory, with Node.js, Bun, PureScript, and Spago installed:
+
 ```sh
-bun install --frozen-lockfile
-bun run build
-bun run test
+bun install --cwd ../../lib/component --frozen-lockfile
+npm ci
+npm run build
+npm test
 ```
 
-Builds produce `dist/plugin.wasm`. The shared CLI engine is in
-[lib/cli](../../lib/cli); entry points, schemas, and argument references are
-generated by `python3 ../../scripts/generate_cli_modules.py` from its catalog.
-Tests cover the compiled module with a controlled host and a native browser
-smoke test. Set `FLUENTCI_BROWSER_TOOLS` to the absolute prefix containing the
-Bun-installed test framework (`node_modules/`), and set
-`FLUENTCI_REQUIRE_BROWSER_TESTS=1` to require native execution. Install matching
-browsers first; `CYPRESS_CACHE_FOLDER` and `PLAYWRIGHT_BROWSERS_PATH` can select
-their cache locations. Native tests create temporary projects and verify both
-successful browser assertions and failing test exits.
+`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
+checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
+private regression tests and are not the published module interface.
 
-[Upstream CLI documentation](https://docs.cypress.io/app/references/command-line). Licensed under the [MIT License](./LICENSE).
+See the [component migration guide](../../docs/COMPONENTS.md) and
+[MIT License](./LICENSE).

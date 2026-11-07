@@ -1,1 +1,1 @@
-export { run, version, build, prune, du } from "./output/CI.Modules.Buildkit/index.js";
+export { run, version, build, prune, du } from "./output/CI.Component/index.js";

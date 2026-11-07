@@ -1,0 +1,277 @@
+{
+  "name": "apko",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Literal native command argument tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "build": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arch": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Image CPU architectures such as x86_64 or aarch64; omit to use the configuration."
+          },
+          "lockfile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "APK dependency lockfile constraining package versions."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for cached APK packages and indexes."
+          },
+          "offline": {
+            "type": "boolean",
+            "description": "Use the pre-populated package cache without network access."
+          },
+          "sbomPath": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory receiving generated SBOM files."
+          },
+          "buildDate": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Reproducible image timestamp in RFC3339 format."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "apko YAML configuration file defining packages, repositories, and image metadata."
+          },
+          "tag": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Image name/tag attached to the built image."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination image tarball or OCI layout directory."
+          }
+        },
+        "required": [
+          "runDir",
+          "config",
+          "tag",
+          "output"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "publish": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arch": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Image CPU architectures such as x86_64 or aarch64; omit to use the configuration."
+          },
+          "lockfile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "APK dependency lockfile constraining package versions."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for cached APK packages and indexes."
+          },
+          "offline": {
+            "type": "boolean",
+            "description": "Use the pre-populated package cache without network access."
+          },
+          "sbomPath": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory receiving generated SBOM files."
+          },
+          "buildDate": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Reproducible image timestamp in RFC3339 format."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "apko YAML configuration file defining packages, repositories, and image metadata."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "description": "Registry image references to publish."
+          }
+        },
+        "required": [
+          "runDir",
+          "config",
+          "tags"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

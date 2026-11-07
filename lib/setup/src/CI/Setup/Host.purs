@@ -65,7 +65,12 @@ requireTools = traverse_ (\tool -> catchException
   (run [ "which", tool ]))
 
 exists :: String -> Effect Boolean
-exists path = isRight <$> try (run [ "test", "-e", path ])
+exists path = (_ == "yes") <$> capture
+  [ "sh", "-c", "if test -e \"$1\"; then printf yes; fi", "fluentci-probe-exists", path ]
+
+findExecutable :: String -> Effect String
+findExecutable program = trim <$> capture
+  [ "sh", "-c", "command -v \"$1\" 2>/dev/null || :", "fluentci-probe-tool", program ]
 
 json :: String -> Effect Json
 json = either throw pure <<< jsonParser

@@ -1,1 +1,1 @@
-export { run, version, copy, copyto, check, lsjson } from "./output/CI.Modules.Rclone/index.js";
+export { run, version, copy, copyto, check, lsjson } from "./output/CI.Component/index.js";

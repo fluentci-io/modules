@@ -1,0 +1,65 @@
+{
+  "name": "dpkg",
+  "runtime": "component",
+  "exports": {
+    "build": {
+      "description": "Build packages from a Linux dpkg package tree and target architecture.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Input directory containing the package tree to validate and build."
+          },
+          "arch": {
+            "type": "string",
+            "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+          },
+          "output": {
+            "type": "string",
+            "description": "Destination path for generated packages."
+          }
+        },
+        "required": [
+          "directory",
+          "arch"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "validate": {
+      "description": "Validate a Linux dpkg package tree and target architecture.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Input directory containing the package tree to validate and build."
+          },
+          "arch": {
+            "type": "string",
+            "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+          },
+          "output": {
+            "type": "string",
+            "description": "Destination path for generated packages."
+          }
+        },
+        "required": [
+          "directory",
+          "arch"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "boolean"
+      }
+    }
+  }
+}

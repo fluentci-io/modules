@@ -1,0 +1,70 @@
+{
+  "name": "cachix",
+  "runtime": "component",
+  "exports": {
+    "setup": {
+      "description": "Configure a Cachix cache using host credentials.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "cache": {
+            "type": "string",
+            "description": "Cachix cache name; credentials come from CACHIX_AUTH_TOKEN."
+          }
+        },
+        "required": [
+          "cache"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "cache": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "cache"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "push": {
+      "description": "Push the result closure to a Cachix cache using host credentials.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "cache": {
+            "type": "string",
+            "description": "Cachix cache name; credentials come from CACHIX_AUTH_TOKEN."
+          }
+        },
+        "required": [
+          "cache"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "cache": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "cache"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -130,6 +130,262 @@
     ]
   },
   {
+    "name": "apko",
+    "path": "containers/apko",
+    "program": "apko",
+    "title": "apko",
+    "docs": "https://github.com/chainguard-dev/apko",
+    "notes": "Use setup-apko or provide apko on PATH. apko builds images from APK packages using a trusted YAML configuration and its configured repositories; it does not execute Dockerfile RUN instructions. Supply a lockfile and build date for repeatability, and collect generated image/SBOM files as pipeline artifacts. publish uses the native container credential store. Actual platform/build privileges depend on apko and its selected image format; setup only installs the CLI.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Literal native command argument tokens."
+          }
+        ],
+        "description": "Run a native command with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the installed tool version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [
+          "build"
+        ],
+        "fields": [
+          {
+            "key": "arch",
+            "kind": "strings",
+            "flag": "--arch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Image CPU architectures such as x86_64 or aarch64; omit to use the configuration."
+          },
+          {
+            "key": "lockfile",
+            "kind": "string",
+            "flag": "--lockfile",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "APK dependency lockfile constraining package versions."
+          },
+          {
+            "key": "cacheDir",
+            "kind": "string",
+            "flag": "--cache-dir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory for cached APK packages and indexes."
+          },
+          {
+            "key": "offline",
+            "kind": "boolean",
+            "flag": "--offline",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Use the pre-populated package cache without network access."
+          },
+          {
+            "key": "sbomPath",
+            "kind": "string",
+            "flag": "--sbom-path",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory receiving generated SBOM files."
+          },
+          {
+            "key": "buildDate",
+            "kind": "string",
+            "flag": "--build-date",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Reproducible image timestamp in RFC3339 format."
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "apko YAML configuration file defining packages, repositories, and image metadata."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Image name/tag attached to the built image."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Destination image tarball or OCI layout directory."
+          }
+        ],
+        "description": "Build an OCI image and SBOM from an APK package configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "publish",
+        "args": [
+          "publish"
+        ],
+        "fields": [
+          {
+            "key": "arch",
+            "kind": "strings",
+            "flag": "--arch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Image CPU architectures such as x86_64 or aarch64; omit to use the configuration."
+          },
+          {
+            "key": "lockfile",
+            "kind": "string",
+            "flag": "--lockfile",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "APK dependency lockfile constraining package versions."
+          },
+          {
+            "key": "cacheDir",
+            "kind": "string",
+            "flag": "--cache-dir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory for cached APK packages and indexes."
+          },
+          {
+            "key": "offline",
+            "kind": "boolean",
+            "flag": "--offline",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Use the pre-populated package cache without network access."
+          },
+          {
+            "key": "sbomPath",
+            "kind": "string",
+            "flag": "--sbom-path",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory receiving generated SBOM files."
+          },
+          {
+            "key": "buildDate",
+            "kind": "string",
+            "flag": "--build-date",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Reproducible image timestamp in RFC3339 format."
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "apko YAML configuration file defining packages, repositories, and image metadata."
+          },
+          {
+            "key": "tags",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Registry image references to publish."
+          }
+        ],
+        "description": "Build and publish an OCI image using native registry credentials.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "argocd",
     "path": "deployment/argocd",
     "program": "argocd",
@@ -10830,6 +11086,166 @@
     ]
   },
   {
+    "name": "protolint",
+    "path": "linting/protolint",
+    "program": "protolint",
+    "title": "Protolint",
+    "docs": "https://github.com/yoheimuta/protolint",
+    "notes": "Use setup-protolint or supply protolint on PATH. lint is read-only: both findings (exit 1) and parser/runtime errors (exit 2) fail the module call. fix explicitly modifies files. The selected reporter writes to native logs; stdoutPath/stderrPath identify those files for CI collection. No protoc compiler is required.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Literal native command argument tokens."
+          }
+        ],
+        "description": "Run a native command with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the installed tool version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "lint",
+        "args": [
+          "lint"
+        ],
+        "fields": [
+          {
+            "key": "configPath",
+            "kind": "string",
+            "flag": "-config_path",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicit protolint YAML configuration file."
+          },
+          {
+            "key": "configDirPath",
+            "kind": "string",
+            "flag": "-config_dir_path",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory to search for protolint configuration."
+          },
+          {
+            "key": "reporter",
+            "kind": "string",
+            "flag": "-reporter",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Diagnostic reporter: plain, json, junit, sarif, sonar, unix, or tsc."
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Protocol Buffer files or directories to lint."
+          }
+        ],
+        "description": "Lint Protocol Buffer style and fail on findings or parser errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "fix",
+        "args": [
+          "lint",
+          "-fix"
+        ],
+        "fields": [
+          {
+            "key": "configPath",
+            "kind": "string",
+            "flag": "-config_path",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicit protolint YAML configuration file."
+          },
+          {
+            "key": "configDirPath",
+            "kind": "string",
+            "flag": "-config_dir_path",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory to search for protolint configuration."
+          },
+          {
+            "key": "reporter",
+            "kind": "string",
+            "flag": "-reporter",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Diagnostic reporter: plain, json, junit, sarif, sonar, unix, or tsc."
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Protocol Buffer files or directories to lint."
+          }
+        ],
+        "description": "Apply supported Protocol Buffer style fixes to the selected files.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "pulumi",
     "path": "infrastructure/pulumi",
     "program": "pulumi",
@@ -11136,6 +11552,362 @@
           }
         ],
         "description": "Select a backend; cloud credentials are read from the host environment.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "railpack",
+    "path": "containers/railpack",
+    "program": "railpack",
+    "title": "Railpack",
+    "docs": "https://railpack.com/reference/cli",
+    "notes": "Use setup-railpack or provide railpack on PATH. prepare is the CI-oriented planning command; it creates plan/info JSON files and propagates planning errors. build requires a reachable BuildKit daemon (BUILDKIT_HOST) and uses native Docker registry credentials. Use envNames to forward selected host environment variables by name; values remain outside the generated command arguments. Build commands in configuration are trusted project code.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Literal native command argument tokens."
+          }
+        ],
+        "description": "Run a native command with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the installed tool version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "prepare",
+        "args": [
+          "prepare"
+        ],
+        "fields": [
+          {
+            "key": "envNames",
+            "kind": "strings",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Names of host environment variables to forward to Railpack, without embedding their values."
+          },
+          {
+            "key": "configFile",
+            "kind": "string",
+            "flag": "--config-file",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Railpack project configuration file."
+          },
+          {
+            "key": "buildCmd",
+            "kind": "string",
+            "flag": "--build-cmd",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Override the project build command; executed by Railpack inside the build."
+          },
+          {
+            "key": "startCmd",
+            "kind": "string",
+            "flag": "--start-cmd",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Container start command to include in the image."
+          },
+          {
+            "key": "previous",
+            "kind": "strings",
+            "flag": "--previous",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Previously selected package versions as NAME@VERSION entries."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Project source directory to analyze or build."
+          },
+          {
+            "key": "planOut",
+            "kind": "string",
+            "flag": "--plan-out",
+            "default": "railpack-plan.json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination for the generated JSON build plan."
+          },
+          {
+            "key": "infoOut",
+            "kind": "string",
+            "flag": "--info-out",
+            "default": "railpack-info.json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination for structured project/build metadata."
+          }
+        ],
+        "description": "Generate a build plan and metadata, failing when the project cannot be prepared.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [
+          "build"
+        ],
+        "fields": [
+          {
+            "key": "envNames",
+            "kind": "strings",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Names of host environment variables to forward to Railpack, without embedding their values."
+          },
+          {
+            "key": "configFile",
+            "kind": "string",
+            "flag": "--config-file",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Railpack project configuration file."
+          },
+          {
+            "key": "buildCmd",
+            "kind": "string",
+            "flag": "--build-cmd",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Override the project build command; executed by Railpack inside the build."
+          },
+          {
+            "key": "startCmd",
+            "kind": "string",
+            "flag": "--start-cmd",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Container start command to include in the image."
+          },
+          {
+            "key": "previous",
+            "kind": "strings",
+            "flag": "--previous",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Previously selected package versions as NAME@VERSION entries."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Project source directory to analyze or build."
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Container image name/tag to produce."
+          },
+          {
+            "key": "platform",
+            "kind": "string",
+            "flag": "--platform",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target image platform, for example linux/amd64."
+          },
+          {
+            "key": "progress",
+            "kind": "string",
+            "flag": "--progress",
+            "default": "plain",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "BuildKit progress mode: auto, plain, or tty."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Export the final filesystem to a local directory."
+          },
+          {
+            "key": "cacheFrom",
+            "kind": "strings",
+            "flag": "--cache-from",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "BuildKit cache import specifications."
+          },
+          {
+            "key": "cacheTo",
+            "kind": "strings",
+            "flag": "--cache-to",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "BuildKit cache export specifications."
+          },
+          {
+            "key": "noCache",
+            "kind": "boolean",
+            "flag": "--no-cache",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Build without reading cached layers."
+          }
+        ],
+        "description": "Build a project into an image through a configured BuildKit daemon.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "info",
+        "args": [
+          "info"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Project information output format: json or pretty."
+          },
+          {
+            "key": "out",
+            "kind": "string",
+            "flag": "--out",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Optional JSON information output file."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Project source directory."
+          }
+        ],
+        "description": "Inspect detected runtimes, dependencies, and build requirements.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "schema",
+        "args": [
+          "schema"
+        ],
+        "fields": [],
+        "description": "Print the Railpack configuration JSON schema.",
         "program": "",
         "environment": {},
         "example": {}
@@ -13317,6 +14089,600 @@
           }
         ],
         "description": "Analyze the configured project and submit results to SonarQube.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "sqlfluff",
+    "path": "linting/sqlfluff",
+    "program": "sqlfluff",
+    "title": "SQLFluff",
+    "docs": "https://docs.sqlfluff.com/en/stable/reference/cli/",
+    "notes": "Use setup-sqlfluff or supply sqlfluff on PATH. lint is read-only and preserves the native failing exit status; fix writes project files explicitly. Select the project dialect in configuration or arguments. dbt and other optional templater dependencies must be installed in the same Python environment; the default installer provides core SQLFluff. Reports can be retained through writeOutput and artifacts.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Literal native command argument tokens."
+          }
+        ],
+        "description": "Run a native command with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the installed tool version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "lint",
+        "args": [
+          "lint"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQLFluff configuration file; repository configuration remains available when omitted."
+          },
+          {
+            "key": "dialect",
+            "kind": "string",
+            "flag": "--dialect",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQL dialect, such as postgres, ansi, bigquery, or snowflake."
+          },
+          {
+            "key": "templater",
+            "kind": "string",
+            "flag": "--templater",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Template engine; requires its Python dependencies in the SQLFluff environment."
+          },
+          {
+            "key": "rules",
+            "kind": "string",
+            "flag": "--rules",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated rule codes to enable."
+          },
+          {
+            "key": "excludeRules",
+            "kind": "string",
+            "flag": "--exclude-rules",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated rule codes to exclude."
+          },
+          {
+            "key": "processes",
+            "kind": "integer",
+            "flag": "--processes",
+            "default": null,
+            "required": false,
+            "style": "signed",
+            "scope": "option",
+            "choices": [],
+            "description": "Worker count; zero uses all CPUs and negative values reserve CPUs."
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Report format, for example human, json, github-annotation, or sarif."
+          },
+          {
+            "key": "writeOutput",
+            "kind": "string",
+            "flag": "--write-output",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Report output file to retain as an artifact."
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "SQL files or directories to process."
+          }
+        ],
+        "description": "Lint SQL and fail the pipeline on violations or parsing errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "fix",
+        "args": [
+          "fix"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQLFluff configuration file; repository configuration remains available when omitted."
+          },
+          {
+            "key": "dialect",
+            "kind": "string",
+            "flag": "--dialect",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQL dialect, such as postgres, ansi, bigquery, or snowflake."
+          },
+          {
+            "key": "templater",
+            "kind": "string",
+            "flag": "--templater",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Template engine; requires its Python dependencies in the SQLFluff environment."
+          },
+          {
+            "key": "rules",
+            "kind": "string",
+            "flag": "--rules",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated rule codes to enable."
+          },
+          {
+            "key": "excludeRules",
+            "kind": "string",
+            "flag": "--exclude-rules",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated rule codes to exclude."
+          },
+          {
+            "key": "processes",
+            "kind": "integer",
+            "flag": "--processes",
+            "default": null,
+            "required": false,
+            "style": "signed",
+            "scope": "option",
+            "choices": [],
+            "description": "Worker count; zero uses all CPUs and negative values reserve CPUs."
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "SQL files or directories to process."
+          }
+        ],
+        "description": "Apply fixable SQL rules to the selected project files.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "parse",
+        "args": [
+          "parse"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQLFluff configuration file; repository configuration remains available when omitted."
+          },
+          {
+            "key": "dialect",
+            "kind": "string",
+            "flag": "--dialect",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQL dialect, such as postgres, ansi, bigquery, or snowflake."
+          },
+          {
+            "key": "templater",
+            "kind": "string",
+            "flag": "--templater",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Template engine; requires its Python dependencies in the SQLFluff environment."
+          },
+          {
+            "key": "rules",
+            "kind": "string",
+            "flag": "--rules",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated rule codes to enable."
+          },
+          {
+            "key": "excludeRules",
+            "kind": "string",
+            "flag": "--exclude-rules",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated rule codes to exclude."
+          },
+          {
+            "key": "processes",
+            "kind": "integer",
+            "flag": "--processes",
+            "default": null,
+            "required": false,
+            "style": "signed",
+            "scope": "option",
+            "choices": [],
+            "description": "Worker count; zero uses all CPUs and negative values reserve CPUs."
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Parse output format, such as yaml or json."
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "SQL file or directory to parse."
+          }
+        ],
+        "description": "Parse SQL to detect syntax and templating errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "sqruff",
+    "path": "linting/sqruff",
+    "program": "sqruff",
+    "title": "Sqruff",
+    "docs": "https://github.com/quarylabs/sqruff",
+    "notes": "Use setup-sqruff or supply sqruff on PATH. lint preserves native failures and does not change SQL files; fix explicitly writes changes. Select a dialect in arguments or .sqruff configuration. JSON/SARIF diagnostics are available in execution logs; GitLab Code Quality output can be written with writeOutput. Configuration and templater libraries are trusted project inputs.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Literal native command argument tokens."
+          }
+        ],
+        "description": "Run a native command with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the installed tool version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "lint",
+        "args": [
+          "lint"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Additional Sqruff configuration file overriding discovered configuration."
+          },
+          {
+            "key": "dialect",
+            "kind": "string",
+            "flag": "--dialect",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQL dialect override, for example postgres, ansi, or bigquery."
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Report format: human, github-annotation-native, gitlab, json, sarif, or none."
+          },
+          {
+            "key": "ignoreLocalConfig",
+            "kind": "boolean",
+            "flag": "--ignore-local-config",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Ignore discovered global and project configuration; explicit config is still loaded."
+          },
+          {
+            "key": "parsingErrors",
+            "kind": "boolean",
+            "flag": "--parsing-errors",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Include SQL parsing errors in diagnostics."
+          },
+          {
+            "key": "disableNoqa",
+            "kind": "boolean",
+            "flag": "--disable-noqa",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Ignore inline noqa suppression comments."
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "SQL files or directories to check or fix."
+          },
+          {
+            "key": "writeOutput",
+            "kind": "string",
+            "flag": "--write-output",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination for a GitLab Code Quality report when using the gitlab format."
+          },
+          {
+            "key": "annotationLevel",
+            "kind": "string",
+            "flag": "--annotation-level",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Severity for GitLab findings: notice, warning, failure, or error."
+          }
+        ],
+        "description": "Lint SQL without modifying files and fail the pipeline on violations.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "fix",
+        "args": [
+          "fix"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Additional Sqruff configuration file overriding discovered configuration."
+          },
+          {
+            "key": "dialect",
+            "kind": "string",
+            "flag": "--dialect",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "SQL dialect override, for example postgres, ansi, or bigquery."
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Report format: human, github-annotation-native, gitlab, json, sarif, or none."
+          },
+          {
+            "key": "ignoreLocalConfig",
+            "kind": "boolean",
+            "flag": "--ignore-local-config",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Ignore discovered global and project configuration; explicit config is still loaded."
+          },
+          {
+            "key": "parsingErrors",
+            "kind": "boolean",
+            "flag": "--parsing-errors",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Include SQL parsing errors in diagnostics."
+          },
+          {
+            "key": "disableNoqa",
+            "kind": "boolean",
+            "flag": "--disable-noqa",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Ignore inline noqa suppression comments."
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "SQL files or directories to check or fix."
+          }
+        ],
+        "description": "Apply SQL formatting and fixable lint rules to the selected project files.",
         "program": "",
         "environment": {},
         "example": {}
@@ -15695,6 +17061,359 @@
           }
         ],
         "description": "pull",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "wrangler",
+    "path": "deployment/wrangler",
+    "program": "wrangler",
+    "title": "Cloudflare Wrangler",
+    "docs": "https://developers.cloudflare.com/workers/wrangler/commands/",
+    "notes": "Install setup-wrangler or provide Wrangler on PATH. Supply CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID through the CI environment. dry_run bundles locally; deploy and pages_deploy publish immediately. versions_upload creates a version without switching traffic. Pages deployment requires an existing Pages project. Use Wrangler 3.73+ for the stable Workers versions commands.",
+    "environment": {
+      "CI": "true",
+      "WRANGLER_SEND_METRICS": "false"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Literal Wrangler argument tokens."
+          }
+        ],
+        "description": "Run a Wrangler operation with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Report the installed Wrangler version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy",
+        "args": [
+          "deploy"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Path to the Wrangler configuration file."
+          },
+          {
+            "key": "env",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Named Wrangler environment to deploy."
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          {
+            "key": "outdir",
+            "kind": "string",
+            "flag": "--outdir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory for generated Worker bundle files."
+          },
+          {
+            "key": "minify",
+            "kind": "boolean",
+            "flag": "--minify",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Minify the generated Worker bundle."
+          },
+          {
+            "key": "script",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        ],
+        "description": "Deploy a Worker using existing Cloudflare credentials.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "dry_run",
+        "args": [
+          "deploy",
+          "--dry-run"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Path to the Wrangler configuration file."
+          },
+          {
+            "key": "env",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Named Wrangler environment to deploy."
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          {
+            "key": "outdir",
+            "kind": "string",
+            "flag": "--outdir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory for generated Worker bundle files."
+          },
+          {
+            "key": "minify",
+            "kind": "boolean",
+            "flag": "--minify",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Minify the generated Worker bundle."
+          },
+          {
+            "key": "script",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        ],
+        "description": "Bundle a Worker locally without deploying it.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "versions_upload",
+        "args": [
+          "versions",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Path to the Wrangler configuration file."
+          },
+          {
+            "key": "env",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Named Wrangler environment to deploy."
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Cloudflare Worker name overriding project configuration."
+          },
+          {
+            "key": "outdir",
+            "kind": "string",
+            "flag": "--outdir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Directory for generated Worker bundle files."
+          },
+          {
+            "key": "minify",
+            "kind": "boolean",
+            "flag": "--minify",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Minify the generated Worker bundle."
+          },
+          {
+            "key": "script",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional Worker entrypoint; omitted values use project configuration."
+          }
+        ],
+        "description": "Upload a Worker version without deploying it to traffic.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pages_deploy",
+        "args": [
+          "pages",
+          "deploy"
+        ],
+        "fields": [
+          {
+            "key": "projectName",
+            "kind": "string",
+            "flag": "--project-name",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing Cloudflare Pages project name."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Git branch name identifying the production or preview deployment."
+          },
+          {
+            "key": "commitHash",
+            "kind": "string",
+            "flag": "--commit-hash",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Git commit SHA attached to the deployment."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Directory containing the built static site to upload."
+          }
+        ],
+        "description": "Deploy a built site to an existing Cloudflare Pages project.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pages_projects",
+        "args": [
+          "pages",
+          "project",
+          "list",
+          "--json"
+        ],
+        "fields": [],
+        "description": "List Cloudflare Pages projects available to the authenticated account.",
         "program": "",
         "environment": {},
         "example": {}

@@ -1,1 +1,1 @@
-export { run, version, scan, db_update } from "./output/CI.Modules.Grype/index.js";
+export { run, version, scan, db_update } from "./output/CI.Component/index.js";

@@ -43,6 +43,9 @@ export function nativeSuite(tool, plugin) {
     rustfmt: ['source.rs','fn main(){println!("hello");}\n','format','check'],
   };
   const linters = {
+    sqruff: ["source.sql", "SELECT 1;\n", "SELECT  1;\n"],
+    sqlfluff: ["source.sql", "SELECT 1;\n", "SELECT  1;\n"],
+    protolint: ["example.proto", 'syntax = "proto3";\n\npackage example;\n\nmessage Example {\n  string name = 1;\n}\n', 'syntax = "proto3";\npackage example;\nmessage bad_message { string BadField=1; }\n'],
     shellcheck: ['source.sh',"#!/bin/sh\nprintf '%s\\n' hello\n",'#!/bin/sh\necho $value\n'],
     yamllint: ['source.yaml','---\nname: example\n','name:\n   nested: 1\n  broken: 2\n'],
   };
@@ -70,9 +73,10 @@ export function nativeSuite(tool, plugin) {
         assert.notEqual(readFileSync(path,'utf8'),source[1]);
         invoke(check,fields);
       } else {
-        invoke('lint',{files:[source[0]]});
+        const fields={files:[source[0]],...(['sqlfluff','sqruff'].includes(tool.name)?{dialect:'ansi'}:{})};
+        invoke('lint',fields);
         writeFileSync(path,source[2]);
-        assert.throws(()=>invoke('lint',{files:[source[0]]}),/failed/);
+        assert.throws(()=>invoke('lint',fields),/failed/);
       }
     } finally {rmSync(project,{recursive:true,force:true});}
   });

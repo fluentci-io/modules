@@ -10,6 +10,7 @@
             "either",
             "exceptions",
             "fluentci",
+            "fluentci-component-contract",
             "foldable-traversable",
             "prelude",
             "strings"
@@ -687,6 +688,9 @@
       "fluentci": {
         "git": "https://github.com/fluentci-io/purescript-fluentci.git",
         "ref": "954d03568935c26f92434119a110635a41a6fa4c"
+      },
+      "fluentci-component-contract": {
+        "path": "../../lib/component"
       }
     }
   },
@@ -923,6 +927,23 @@
         "maybe",
         "prelude",
         "tuples"
+      ]
+    },
+    "fluentci-component-contract": {
+      "type": "local",
+      "path": "../../lib/component",
+      "dependencies": [
+        "argonaut-codecs",
+        "argonaut-core",
+        "arrays",
+        "effect",
+        "either",
+        "exceptions",
+        "foldable-traversable",
+        "foreign-object",
+        "maybe",
+        "prelude",
+        "strings"
       ]
     },
     "foldable-traversable": {

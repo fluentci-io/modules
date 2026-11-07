@@ -1,1 +1,1 @@
-export { run, version, filesystem, git } from "./output/CI.Modules.Trufflehog/index.js";
+export { run, version, filesystem, git } from "./output/CI.Component/index.js";

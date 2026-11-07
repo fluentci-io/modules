@@ -1,1 +1,1 @@
-export { upload } from "./output/CI.Gemfury/index.js";
+export { upload } from "./output/CI.Component/index.js";

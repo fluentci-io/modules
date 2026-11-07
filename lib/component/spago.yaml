@@ -1,0 +1,3 @@
+package:
+  name: fluentci-component-contract
+  dependencies: [argonaut-codecs, argonaut-core, arrays, effect, either, exceptions, foldable-traversable, foreign-object, maybe, prelude, strings]

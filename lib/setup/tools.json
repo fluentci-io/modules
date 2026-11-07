@@ -23,6 +23,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "apko",
+    "title": "Apko",
+    "program": "apko",
+    "backend": "github",
+    "package": "",
+    "repository": "chainguard-dev/apko",
+    "asset": "apko_{version}_{os}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "apko",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "apko",
+    "macPackage": "apko",
+    "freebsdPackage": "apko",
+    "openbsdPackage": "apko",
+    "netbsdPackage": "apko",
+    "notes": "Installs the CLI; APK repositories, build privileges, image config, and registry credentials belong to the pipeline.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "argocd",
     "title": "Argo CD",
     "program": "argocd",
@@ -251,6 +274,29 @@
     "openbsdPackage": "black",
     "netbsdPackage": "black",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "buf",
+    "title": "buf",
+    "program": "buf",
+    "backend": "github",
+    "package": "",
+    "repository": "bufbuild/buf",
+    "asset": "buf-{flyos}-{binaryenarch}",
+    "format": "raw",
+    "member": "buf",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "buf",
+    "macPackage": "buf",
+    "freebsdPackage": "buf",
+    "openbsdPackage": "buf",
+    "netbsdPackage": "buf",
+    "notes": "Installs the official versioned CLI release for the current host OS and CPU.",
     "tagPrefix": "v"
   },
   {
@@ -484,6 +530,52 @@
     "tagPrefix": "v"
   },
   {
+    "name": "devbox",
+    "title": "Devbox",
+    "program": "devbox",
+    "backend": "github",
+    "package": "",
+    "repository": "jetify-com/devbox",
+    "asset": "devbox_{version}_{os}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "devbox",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "devbox",
+    "macPackage": "devbox",
+    "freebsdPackage": "devbox",
+    "openbsdPackage": "devbox",
+    "netbsdPackage": "devbox",
+    "notes": "Devbox requires Nix for creating development environments; use setup-nix first. Setup installs only the versioned Devbox CLI.",
+    "tagPrefix": ""
+  },
+  {
+    "name": "devenv",
+    "title": "Devenv",
+    "program": "devenv",
+    "backend": "cachix",
+    "package": "",
+    "repository": "cachix/devenv",
+    "asset": "",
+    "format": "tar",
+    "member": "devenv",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "devenv",
+    "macPackage": "devenv",
+    "freebsdPackage": "devenv",
+    "openbsdPackage": "devenv",
+    "netbsdPackage": "devenv",
+    "notes": "Requires an existing Nix installation with flakes support. Installs the pinned upstream flake into a private profile; configure trusted caches separately.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "digitalocean",
     "title": "DigitalOcean",
     "program": "doctl",
@@ -688,6 +780,29 @@
     "openbsdPackage": "extism-py",
     "netbsdPackage": "extism-py",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "flox",
+    "title": "Flox",
+    "program": "flox",
+    "backend": "native",
+    "package": "",
+    "repository": "flox/flox",
+    "asset": "",
+    "format": "tar",
+    "member": "flox",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "flox",
+    "macPackage": "flox",
+    "freebsdPackage": "flox",
+    "openbsdPackage": "flox",
+    "netbsdPackage": "flox",
+    "notes": "macOS uses the official Homebrew flox formula. Linux requires a configured package source providing Flox, or installation of the official Flox .deb/.rpm first. Pinned releases must exist in that package source. Native package installs require appropriate privileges; setup does not configure vendor repositories.",
     "tagPrefix": "v"
   },
   {
@@ -1176,6 +1291,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "pkgx",
+    "title": "Pkgx",
+    "program": "pkgx",
+    "backend": "github",
+    "package": "",
+    "repository": "pkgxdev/pkgx",
+    "asset": "pkgx-{version}+{os}+{pkgxarch}.tar.gz",
+    "format": "tar",
+    "member": "pkgx",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "pkgx",
+    "macPackage": "pkgx",
+    "freebsdPackage": "pkgx",
+    "openbsdPackage": "pkgx",
+    "netbsdPackage": "pkgx",
+    "notes": "Installs the pkgx launcher. Packages requested later by pkgx have their own platform availability and network requirements.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "playwright",
     "title": "Playwright",
     "program": "playwright",
@@ -1268,6 +1406,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "protolint",
+    "title": "protolint",
+    "program": "protolint",
+    "backend": "github",
+    "package": "",
+    "repository": "yoheimuta/protolint",
+    "asset": "protolint_{version}_{os}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "protolint",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "protolint",
+    "macPackage": "protolint",
+    "freebsdPackage": "protolint",
+    "openbsdPackage": "protolint",
+    "netbsdPackage": "protolint",
+    "notes": "Installs the official versioned CLI release for the current host OS and CPU.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "pulumi",
     "title": "Pulumi",
     "program": "pulumi",
@@ -1288,6 +1449,29 @@
     "openbsdPackage": "pulumi",
     "netbsdPackage": "pulumi",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "railpack",
+    "title": "Railpack",
+    "program": "railpack",
+    "backend": "github",
+    "package": "",
+    "repository": "railwayapp/railpack",
+    "asset": "railpack-v{version}-{bazelarch}-{rustos}.tar.gz",
+    "format": "tar",
+    "member": "railpack",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "railpack",
+    "macPackage": "railpack",
+    "freebsdPackage": "railpack",
+    "openbsdPackage": "railpack",
+    "netbsdPackage": "railpack",
+    "notes": "BuildKit is required for railpack build; planning and metadata commands do not need a daemon.",
     "tagPrefix": "v"
   },
   {
@@ -1567,6 +1751,52 @@
     "tagPrefix": "v"
   },
   {
+    "name": "sqlfluff",
+    "title": "sqlfluff",
+    "program": "sqlfluff",
+    "backend": "python",
+    "package": "sqlfluff",
+    "repository": "sqlfluff/sqlfluff",
+    "asset": "",
+    "format": "tar",
+    "member": "sqlfluff",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "sqlfluff",
+    "macPackage": "sqlfluff",
+    "freebsdPackage": "sqlfluff",
+    "openbsdPackage": "sqlfluff",
+    "netbsdPackage": "sqlfluff",
+    "notes": "Requires Python 3 with venv support; installs core SQLFluff into an isolated environment. Optional templater adapters require additional dependencies.",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "sqruff",
+    "title": "Sqruff",
+    "program": "sqruff",
+    "backend": "github",
+    "package": "",
+    "repository": "quarylabs/sqruff",
+    "asset": "sqruff-{sqruffplatform}.tar.gz",
+    "format": "zip",
+    "member": "sqruff",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "sqruff",
+    "macPackage": "sqruff",
+    "freebsdPackage": "sqruff",
+    "openbsdPackage": "sqruff",
+    "netbsdPackage": "sqruff",
+    "notes": "Installs the official versioned Sqruff binary. Linux uses the upstream musl archive for x86_64 or aarch64; macOS uses the matching Darwin archive.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "syft",
     "title": "Syft",
     "program": "syft",
@@ -1840,6 +2070,29 @@
     "openbsdPackage": "vercel",
     "netbsdPackage": "vercel",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "wrangler",
+    "title": "Cloudflare Wrangler",
+    "program": "wrangler",
+    "backend": "bun",
+    "package": "wrangler",
+    "repository": "",
+    "asset": "",
+    "format": "",
+    "member": "wrangler",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "wrangler",
+    "macPackage": "wrangler",
+    "freebsdPackage": "wrangler",
+    "openbsdPackage": "wrangler",
+    "netbsdPackage": "wrangler",
+    "notes": "Installs the Wrangler npm package through Bun. Requires a Node.js release supported by the selected Wrangler version; missing Node.js and Bun are bootstrapped. Cloudflare credentials remain in the CI environment.",
     "tagPrefix": "v"
   },
   {

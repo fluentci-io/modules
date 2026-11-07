@@ -1,35 +1,40 @@
 {
   "name": "trivy",
+  "runtime": "component",
   "exports": {
     "run": {
+      "description": "Execute arbitrary literal CLI arguments.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "arguments": {
             "type": "array",
@@ -38,7 +43,7 @@
               "minLength": 1
             },
             "minItems": 1,
-            "description": "arguments"
+            "description": "Literal native CLI argument tokens, passed without shell expansion."
           }
         },
         "required": [
@@ -48,39 +53,67 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "version": {
+      "description": "Print the CLI version.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           }
         },
         "required": [
@@ -89,79 +122,107 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "filesystem": {
+      "description": "Scan a filesystem and fail when selected findings are present.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "severity": {
             "type": "string",
             "minLength": 1,
             "default": "HIGH,CRITICAL",
-            "description": "severity"
+            "description": "Severity supplied to the trivy filesystem operation. Default: \"HIGH,CRITICAL\"."
           },
           "format": {
             "type": "string",
             "minLength": 1,
             "default": "json",
-            "description": "format"
+            "description": "Format supplied to the trivy filesystem operation. Default: \"json\"."
           },
           "output": {
             "type": "string",
             "minLength": 1,
-            "description": "output"
+            "description": "Destination path for generated packages."
           },
           "scanners": {
             "type": "string",
             "minLength": 1,
-            "description": "scanners"
+            "description": "Scanners supplied to the trivy filesystem operation."
           },
           "ignoreUnfixed": {
             "type": "boolean",
-            "description": "ignoreUnfixed"
+            "description": "Ignore Unfixed supplied to the trivy filesystem operation."
           },
           "skipDbUpdate": {
             "type": "boolean",
-            "description": "skipDbUpdate"
+            "description": "Skip Db Update supplied to the trivy filesystem operation."
           },
           "offlineScan": {
             "type": "boolean",
-            "description": "offlineScan"
+            "description": "Offline Scan supplied to the trivy filesystem operation."
           },
           "directory": {
             "type": "string",
             "minLength": 1,
             "default": ".",
-            "description": "directory"
+            "description": "Input directory containing the package tree to validate and build. Default: \".\"."
           }
         },
         "required": [
@@ -170,78 +231,106 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "image": {
+      "description": "Scan a container image and fail at the selected severity.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "severity": {
             "type": "string",
             "minLength": 1,
             "default": "HIGH,CRITICAL",
-            "description": "severity"
+            "description": "Severity supplied to the trivy image operation. Default: \"HIGH,CRITICAL\"."
           },
           "format": {
             "type": "string",
             "minLength": 1,
             "default": "json",
-            "description": "format"
+            "description": "Format supplied to the trivy image operation. Default: \"json\"."
           },
           "output": {
             "type": "string",
             "minLength": 1,
-            "description": "output"
+            "description": "Destination path for generated packages."
           },
           "scanners": {
             "type": "string",
             "minLength": 1,
-            "description": "scanners"
+            "description": "Scanners supplied to the trivy image operation."
           },
           "ignoreUnfixed": {
             "type": "boolean",
-            "description": "ignoreUnfixed"
+            "description": "Ignore Unfixed supplied to the trivy image operation."
           },
           "skipDbUpdate": {
             "type": "boolean",
-            "description": "skipDbUpdate"
+            "description": "Skip Db Update supplied to the trivy image operation."
           },
           "offlineScan": {
             "type": "boolean",
-            "description": "offlineScan"
+            "description": "Offline Scan supplied to the trivy image operation."
           },
           "image": {
             "type": "string",
             "minLength": 1,
-            "description": "image"
+            "description": "Image supplied to the trivy image operation."
           }
         },
         "required": [
@@ -251,66 +340,94 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "config": {
+      "description": "Scan infrastructure configuration for misconfigurations.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "severity": {
             "type": "string",
             "minLength": 1,
             "default": "HIGH,CRITICAL",
-            "description": "severity"
+            "description": "Severity supplied to the trivy config operation. Default: \"HIGH,CRITICAL\"."
           },
           "format": {
             "type": "string",
             "minLength": 1,
             "default": "json",
-            "description": "format"
+            "description": "Format supplied to the trivy config operation. Default: \"json\"."
           },
           "output": {
             "type": "string",
             "minLength": 1,
-            "description": "output"
+            "description": "Destination path for generated packages."
           },
           "skipCheckUpdate": {
             "type": "boolean",
-            "description": "skipCheckUpdate"
+            "description": "Skip Check Update supplied to the trivy config operation."
           },
           "directory": {
             "type": "string",
             "minLength": 1,
             "default": ".",
-            "description": "directory"
+            "description": "Input directory containing the package tree to validate and build. Default: \".\"."
           }
         },
         "required": [
@@ -319,65 +436,93 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     },
     "sbom": {
+      "description": "Scan an existing SBOM for vulnerabilities.",
       "input": {
         "type": "object",
         "properties": {
           "project": {
             "type": "string",
             "default": ".",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
           },
           "runDir": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
           },
           "timeoutMs": {
             "type": "integer",
             "minimum": 1,
-            "default": 900000
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "minLength": 1
+            "type": "array",
+            "items": {
+              "type": "string"
             },
-            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
           },
           "severity": {
             "type": "string",
             "minLength": 1,
             "default": "HIGH,CRITICAL",
-            "description": "severity"
+            "description": "Severity supplied to the trivy sbom operation. Default: \"HIGH,CRITICAL\"."
           },
           "format": {
             "type": "string",
             "minLength": 1,
             "default": "json",
-            "description": "format"
+            "description": "Format supplied to the trivy sbom operation. Default: \"json\"."
           },
           "output": {
             "type": "string",
             "minLength": 1,
-            "description": "output"
+            "description": "Destination path for generated packages."
           },
           "skipDbUpdate": {
             "type": "boolean",
-            "description": "skipDbUpdate"
+            "description": "Skip Db Update supplied to the trivy sbom operation."
           },
           "file": {
             "type": "string",
             "minLength": 1,
-            "description": "file"
+            "description": "File supplied to the trivy sbom operation."
           }
         },
         "required": [
@@ -387,8 +532,32 @@
         "additionalProperties": false
       },
       "output": {
-        "type": "string",
-        "contentType": "application/json"
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       }
     }
   }

@@ -1,1 +1,1 @@
-export { build, validate } from "./output/CI.Dpkg/index.js";
+export { build, validate } from "./output/CI.Component/index.js";
