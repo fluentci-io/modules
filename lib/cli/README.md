@@ -58,7 +58,10 @@ typed fields against compiled PureScript, check host failures, and execute a
 local fixture program through the plan interface. Cloud operations use controlled
 host responses, with no real deployments or account changes. Optional native
 CLI tests exercise installed formatters and linters against temporary files,
-and uv against an offline Python project. Secrets modules use native token
+uv against an offline Python project, and Cypress/Playwright against temporary
+browser fixtures. The browser modules use Bun to install test dependencies.
+Betterleaks, Gitleaks, and Syft native tests use synthetic markers and temporary package
+metadata; they never scan this repository or verify credentials remotely. Secrets modules use native token
 configuration, environment injection into child processes, or JSON file paths;
 the module never reads or serializes credential values.
 

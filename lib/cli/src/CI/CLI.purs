@@ -73,7 +73,8 @@ valueTokens field value = do
         else [ if enabled then "true" else "false" ]
     "integer" -> do
       number <- jsonValue value :: Either String Int
-      unless (number > 0) $ Left (field.key <> " must be positive")
+      unless (number >= if field.style == "nonnegative" then 0 else 1) $
+        Left (field.key <> if field.style == "nonnegative" then " must be nonnegative" else " must be positive")
       pure [ show number ]
     _ -> Left ("Unknown CLI field type: " <> field.kind)
   when (field.scope == "positional" && Array.any (\text -> text == "-" || String.startsWith (Pattern "-") text) tokens) $
@@ -83,6 +84,7 @@ valueTokens field value = do
       Nothing -> tokens
     else if field.style == "switch" then if Array.null tokens then [] else [ field.flag ]
     else if field.style == "space-list" then if Array.null tokens then [] else [ field.flag ] <> tokens
+    else if field.style == "separate" then Array.concatMap (\token -> [ field.flag, token ]) tokens
     else case String.stripPrefix (Pattern "prefix:") field.style of
       Just prefix -> map (\token -> field.flag <> "=" <> prefix <> token) tokens
       Nothing -> map (\token -> field.flag <> "=" <> token) tokens

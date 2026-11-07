@@ -39,7 +39,7 @@ def generated():
                 kind = field['kind']
                 prop = {'type':'array','items':{'type':'string','minLength':1}} if kind == 'strings' else {'type':kind}
                 if kind == 'string': prop['minLength'] = 1
-                if kind == 'integer': prop['minimum'] = 1
+                if kind == 'integer': prop['minimum'] = 0 if field['style'] == 'nonnegative' else 1
                 if kind == 'strings' and field['required']: prop['minItems'] = 1
                 if field['default'] is not None: prop['default'] = field['default']
                 elif field['required']: required.append(field['key'])
@@ -58,6 +58,8 @@ def generated():
                 argument = field['flag'] or '<' + field['key'] + '>'
                 if field['style'].startswith('prefix:'):
                     argument = (field['flag'] + '=' if field['flag'] else '') + field['style'][7:] + '<value>'
+                elif field['style'] == 'separate':
+                    argument = field['flag'] + ' <value>'
                 elif field['style'] == 'space-list':
                     argument = field['flag'] + ' <values...>'
                 elif field['flag'] and field['style'] != 'switch':

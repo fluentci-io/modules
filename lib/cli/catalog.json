@@ -1036,6 +1036,292 @@
     ]
   },
   {
+    "name": "betterleaks",
+    "path": "security/betterleaks",
+    "program": "betterleaks",
+    "title": "Betterleaks",
+    "docs": "https://github.com/betterleaks/betterleaks/tree/v1.10.0",
+    "notes": "Install Betterleaks 1.10.x; the named commands target its stable v1 CLI, not the incompatible v2 development CLI. Homebrew's versioned cask uses betterleaks-v1, which can be selected with executable. Named scans force redaction, a nonzero findings exit code, and validation=false, so detected credentials are not checked against provider APIs. Automatic loading of target-local configs is disabled; provide an explicit config when needed. Use run.arguments for other native operations, and protect run reports.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan_dir",
+        "args": [
+          "dir",
+          "--redact=100",
+          "--exit-code=1",
+          "--no-banner",
+          "--validation=false",
+          "--unsafe-auto-load-config=false"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "reportFormat",
+            "kind": "string",
+            "flag": "--report-format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "reportFormat",
+            "choices": [
+              "json",
+              "csv",
+              "junit",
+              "sarif"
+            ]
+          },
+          {
+            "key": "reportPath",
+            "kind": "string",
+            "flag": "--report-path",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reportPath",
+            "choices": []
+          },
+          {
+            "key": "confidence",
+            "kind": "string",
+            "flag": "--confidence",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "confidence",
+            "choices": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          {
+            "key": "enableRule",
+            "kind": "strings",
+            "flag": "--enable-rule",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "enableRule",
+            "choices": []
+          },
+          {
+            "key": "disableRule",
+            "kind": "strings",
+            "flag": "--disable-rule",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "disableRule",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "directory",
+            "choices": []
+          }
+        ],
+        "description": "Scan files using Betterleaks 1.x with redaction and credential validation disabled.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan_git",
+        "args": [
+          "git",
+          "--redact=100",
+          "--exit-code=1",
+          "--no-banner",
+          "--validation=false",
+          "--unsafe-auto-load-config=false"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "reportFormat",
+            "kind": "string",
+            "flag": "--report-format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "reportFormat",
+            "choices": [
+              "json",
+              "csv",
+              "junit",
+              "sarif"
+            ]
+          },
+          {
+            "key": "reportPath",
+            "kind": "string",
+            "flag": "--report-path",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reportPath",
+            "choices": []
+          },
+          {
+            "key": "confidence",
+            "kind": "string",
+            "flag": "--confidence",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "confidence",
+            "choices": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          {
+            "key": "enableRule",
+            "kind": "strings",
+            "flag": "--enable-rule",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "enableRule",
+            "choices": []
+          },
+          {
+            "key": "disableRule",
+            "kind": "strings",
+            "flag": "--disable-rule",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "disableRule",
+            "choices": []
+          },
+          {
+            "key": "logOpts",
+            "kind": "string",
+            "flag": "--log-opts",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "logOpts",
+            "choices": []
+          },
+          {
+            "key": "repository",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "repository",
+            "choices": []
+          }
+        ],
+        "description": "Scan Git history with Betterleaks 1.x, failing on detected secrets.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "biome",
     "path": "linting/biome",
     "program": "biome",
@@ -1751,6 +2037,881 @@
           }
         ],
         "description": "Inspect BuildKit cache usage.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "checkov",
+    "path": "security/checkov",
+    "program": "checkov",
+    "title": "Checkov",
+    "docs": "https://www.checkov.io/2.Basics/CLI%20Command%20Reference.html",
+    "notes": "Install the Checkov Python CLI. scan uses --skip-download to avoid downloading platform policy guidance; it does not opt into soft-fail. Select framework when you need to restrict scope. Rules, integrations, and package checks may require additional tools or network access. Reports can include source fragments; protect the run directory.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan",
+        "args": [
+          "--compact",
+          "--skip-download"
+        ],
+        "fields": [
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "--directory",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "option",
+            "description": "directory",
+            "choices": []
+          },
+          {
+            "key": "framework",
+            "kind": "strings",
+            "flag": "--framework",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "space-list",
+            "scope": "option",
+            "description": "framework",
+            "choices": []
+          },
+          {
+            "key": "configFile",
+            "kind": "string",
+            "flag": "--config-file",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "configFile",
+            "choices": []
+          },
+          {
+            "key": "check",
+            "kind": "string",
+            "flag": "--check",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "check",
+            "choices": []
+          },
+          {
+            "key": "skipCheck",
+            "kind": "string",
+            "flag": "--skip-check",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "skipCheck",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "outputFilePath",
+            "kind": "string",
+            "flag": "--output-file-path",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "outputFilePath",
+            "choices": []
+          }
+        ],
+        "description": "Scan infrastructure code, failing when policy checks fail.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "codacy",
+    "path": "code-quality/codacy",
+    "program": "codacy-coverage-reporter",
+    "title": "Codacy",
+    "docs": "https://coverage.codacy.com/",
+    "notes": "Install the Codacy Coverage Reporter binary as codacy-coverage-reporter (or override executable). Supply CODACY_PROJECT_TOKEN or CODACY_API_TOKEN through the host environment. This module uploads existing coverage reports; it does not run tests or analyze source code. coverageFile supports the reporter's native glob matching. Uploads contact the configured Codacy service.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "help",
+        "args": [
+          "--help"
+        ],
+        "fields": [],
+        "description": "help",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "report"
+        ],
+        "fields": [
+          {
+            "key": "coverageFile",
+            "kind": "string",
+            "flag": "--coverage-reports",
+            "default": null,
+            "required": true,
+            "sample": "coverage/lcov.info",
+            "style": "separate",
+            "scope": "option",
+            "description": "coverageFile",
+            "choices": []
+          },
+          {
+            "key": "language",
+            "kind": "string",
+            "flag": "--language",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "language",
+            "choices": []
+          },
+          {
+            "key": "commitUuid",
+            "kind": "string",
+            "flag": "--commit-uuid",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "commitUuid",
+            "choices": []
+          },
+          {
+            "key": "prefix",
+            "kind": "string",
+            "flag": "--prefix",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "prefix",
+            "choices": []
+          },
+          {
+            "key": "forceCoverageParser",
+            "kind": "string",
+            "flag": "--force-coverage-parser",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "forceCoverageParser",
+            "choices": [
+              "opencover",
+              "clover",
+              "lcov",
+              "phpunit",
+              "jacoco",
+              "dotcover",
+              "cobertura",
+              "go"
+            ]
+          }
+        ],
+        "description": "Upload an existing coverage report to Codacy.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "codecov",
+    "path": "code-quality/codecov",
+    "program": "codecovcli",
+    "title": "Codecov",
+    "docs": "https://docs.codecov.com/docs/the-codecov-cli",
+    "notes": "Install the official codecov-cli Python package and provide CODECOV_TOKEN through the host environment. Source control metadata must be available in project, or provide the commit explicitly. files are repeated -f arguments, and flags label the upload. disableSearch=true restricts discovery to explicit files. This module does not generate coverage.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "upload-process",
+          "--fail-on-error"
+        ],
+        "fields": [
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "-f",
+            "default": null,
+            "required": true,
+            "sample": [
+              "example=value"
+            ],
+            "style": "separate",
+            "scope": "option",
+            "description": "files",
+            "choices": []
+          },
+          {
+            "key": "flags",
+            "kind": "strings",
+            "flag": "-F",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "separate",
+            "scope": "option",
+            "description": "flags",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "-n",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "name",
+            "choices": []
+          },
+          {
+            "key": "commit",
+            "kind": "string",
+            "flag": "-C",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "separate",
+            "scope": "option",
+            "description": "commit",
+            "choices": []
+          },
+          {
+            "key": "disableSearch",
+            "kind": "boolean",
+            "flag": "--disable-search",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "disableSearch",
+            "choices": []
+          }
+        ],
+        "description": "Create a Codecov report and upload existing coverage files, failing on upload errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "coveralls",
+    "path": "code-quality/coveralls",
+    "program": "coveralls",
+    "title": "Coveralls",
+    "docs": "https://github.com/coverallsapp/coverage-reporter",
+    "notes": "Install the Coveralls universal coverage-reporter binary (not the unrelated language-specific coveralls tools). Set COVERALLS_REPO_TOKEN through the environment. parallel=true requires a later done call with the same buildNumber. dryRun prevents reporting; payloads and logs can contain source and repository metadata.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upload",
+        "args": [
+          "report"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": [
+              "lcov",
+              "simplecov",
+              "cobertura",
+              "jacoco",
+              "gcov",
+              "luacov",
+              "golang",
+              "python"
+            ]
+          },
+          {
+            "key": "basePath",
+            "kind": "string",
+            "flag": "--base-path",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "basePath",
+            "choices": []
+          },
+          {
+            "key": "jobFlag",
+            "kind": "string",
+            "flag": "--job-flag",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "jobFlag",
+            "choices": []
+          },
+          {
+            "key": "buildNumber",
+            "kind": "string",
+            "flag": "--build-number",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "buildNumber",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "boolean",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "parallel",
+            "choices": []
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "--dry-run",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "dryRun",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "coverage/lcov.info"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "files",
+            "choices": []
+          }
+        ],
+        "description": "Upload coverage reports using the universal Coveralls reporter.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "done",
+        "args": [
+          "done"
+        ],
+        "fields": [
+          {
+            "key": "buildNumber",
+            "kind": "string",
+            "flag": "--build-number",
+            "default": null,
+            "required": true,
+            "sample": "123",
+            "style": "value",
+            "scope": "option",
+            "description": "buildNumber",
+            "choices": []
+          },
+          {
+            "key": "carryforward",
+            "kind": "string",
+            "flag": "--carryforward",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "carryforward",
+            "choices": []
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "--dry-run",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "dryRun",
+            "choices": []
+          }
+        ],
+        "description": "Close a parallel coverage build.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "cypress",
+    "path": "testing/cypress",
+    "program": "cypress",
+    "title": "Cypress",
+    "docs": "https://docs.cypress.io/app/references/command-line",
+    "notes": "Install Node.js and Cypress in your test project. Add its node_modules/.bin to PATH or set executable to the absolute path of node_modules/.bin/cypress. The project field selects the local working directory containing cypress.config.*. test runs end-to-end specs by default; component=true selects component testing. Install the Cypress binary and required system libraries before testing; Linux also needs Xvfb even for headless Electron. Upstream Cypress supports selected Linux, macOS, and Windows versions; Windows hosts are rejected here, and BSD browser builds are not provided. Cypress Cloud recording is opt-in with record=true; supply CYPRESS_RECORD_KEY through the host environment. Screenshots, videos, and reporter artifacts follow the project configuration.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "setup",
+        "args": [
+          "add",
+          "--dev",
+          "--exact"
+        ],
+        "fields": [
+          {
+            "key": "version",
+            "kind": "string",
+            "flag": "",
+            "default": "latest",
+            "required": false,
+            "sample": "16.2.1",
+            "style": "prefix:cypress@",
+            "scope": "positional",
+            "description": "Framework version or release tag to install with Bun.",
+            "choices": []
+          }
+        ],
+        "description": "Install the test framework in project using Bun. Browser binaries are installed separately with install.",
+        "program": "bun",
+        "environment": {
+          "CYPRESS_INSTALL_BINARY": "0"
+        },
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [
+          "run",
+          "--headless",
+          "--posix-exit-codes"
+        ],
+        "fields": [
+          {
+            "key": "browser",
+            "kind": "string",
+            "flag": "--browser",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "browser",
+            "choices": []
+          },
+          {
+            "key": "configFile",
+            "kind": "string",
+            "flag": "--config-file",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "configFile",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "spec",
+            "kind": "string",
+            "flag": "--spec",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "spec",
+            "choices": []
+          },
+          {
+            "key": "reporter",
+            "kind": "string",
+            "flag": "--reporter",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reporter",
+            "choices": []
+          },
+          {
+            "key": "reporterOptions",
+            "kind": "string",
+            "flag": "--reporter-options",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reporterOptions",
+            "choices": []
+          },
+          {
+            "key": "component",
+            "kind": "boolean",
+            "flag": "--component",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "component",
+            "choices": []
+          },
+          {
+            "key": "record",
+            "kind": "boolean",
+            "flag": "--record",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "record",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "boolean",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "parallel",
+            "choices": []
+          },
+          {
+            "key": "group",
+            "kind": "string",
+            "flag": "--group",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "group",
+            "choices": []
+          },
+          {
+            "key": "ciBuildId",
+            "kind": "string",
+            "flag": "--ci-build-id",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "ciBuildId",
+            "choices": []
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "--tag",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "tag",
+            "choices": []
+          }
+        ],
+        "description": "Run Cypress specs headlessly, returning a failure if any tests fail.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "install",
+        "args": [
+          "install"
+        ],
+        "fields": [
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "force",
+            "choices": []
+          }
+        ],
+        "description": "Download the Cypress binary matching the installed npm package.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "verify",
+        "args": [
+          "verify"
+        ],
+        "fields": [],
+        "description": "Verify that the installed Cypress binary can start.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "cache_list",
+        "args": [
+          "cache",
+          "list"
+        ],
+        "fields": [],
+        "description": "List installed Cypress binaries.",
         "program": "",
         "environment": {},
         "example": {}
@@ -3015,6 +4176,346 @@
           }
         ],
         "description": "instances list",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "gitleaks",
+    "path": "security/gitleaks",
+    "program": "gitleaks",
+    "title": "Gitleaks",
+    "docs": "https://github.com/gitleaks/gitleaks",
+    "notes": "Install Gitleaks 8.19 or newer, with the git and dir subcommands. scan_dir and scan_git enforce full redaction and nonzero exits on findings. Scan Git history only when it is available in project. No credential verification or reporting service is invoked by these wrappers. The raw run export can override these defaults.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan_dir",
+        "args": [
+          "dir",
+          "--redact=100",
+          "--exit-code=1",
+          "--no-banner"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "reportFormat",
+            "kind": "string",
+            "flag": "--report-format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "reportFormat",
+            "choices": [
+              "json",
+              "csv",
+              "junit",
+              "sarif"
+            ]
+          },
+          {
+            "key": "reportPath",
+            "kind": "string",
+            "flag": "--report-path",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reportPath",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "directory",
+            "choices": []
+          }
+        ],
+        "description": "Scan directory contents with findings redacted and a failing exit status on leaks.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan_git",
+        "args": [
+          "git",
+          "--redact=100",
+          "--exit-code=1",
+          "--no-banner"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "reportFormat",
+            "kind": "string",
+            "flag": "--report-format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "reportFormat",
+            "choices": [
+              "json",
+              "csv",
+              "junit",
+              "sarif"
+            ]
+          },
+          {
+            "key": "reportPath",
+            "kind": "string",
+            "flag": "--report-path",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reportPath",
+            "choices": []
+          },
+          {
+            "key": "logOpts",
+            "kind": "string",
+            "flag": "--log-opts",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "logOpts",
+            "choices": []
+          },
+          {
+            "key": "repository",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "repository",
+            "choices": []
+          }
+        ],
+        "description": "Scan Git history, failing on detected leaks.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "grype",
+    "path": "security/grype",
+    "program": "grype",
+    "title": "Grype",
+    "docs": "https://oss.anchore.com/docs/reference/grype/cli/",
+    "notes": "Install Grype. scan defaults to failOn=high, unlike the upstream reporting-only default. Source prefixes such as dir:, sbom:, registry:, and docker: select the target type. Vulnerability scans need a compatible local database or permission to download one. Container registry credentials use the native Docker/registry configuration. Reports and file outputs follow native Grype behavior.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan",
+        "args": [],
+        "fields": [
+          {
+            "key": "failOn",
+            "kind": "string",
+            "flag": "--fail-on",
+            "default": "high",
+            "required": false,
+            "sample": "high",
+            "style": "value",
+            "scope": "option",
+            "description": "failOn",
+            "choices": [
+              "negligible",
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "onlyFixed",
+            "kind": "boolean",
+            "flag": "--only-fixed",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "onlyFixed",
+            "choices": []
+          },
+          {
+            "key": "source",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "sbom:sbom.json",
+            "style": "value",
+            "scope": "positional",
+            "description": "source",
+            "choices": []
+          }
+        ],
+        "description": "Scan an image, directory, or SBOM and fail on the configured severity threshold.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "db_update",
+        "args": [
+          "db",
+          "update"
+        ],
+        "fields": [],
+        "description": "Download the current vulnerability database.",
         "program": "",
         "environment": {},
         "example": {}
@@ -5208,6 +6709,415 @@
     ]
   },
   {
+    "name": "playwright",
+    "path": "testing/playwright",
+    "program": "playwright",
+    "title": "Playwright",
+    "docs": "https://playwright.dev/docs/test-cli",
+    "notes": "Install Node.js and @playwright/test in your test project. Add its node_modules/.bin to the host PATH or set executable to the absolute path of node_modules/.bin/playwright. testProject selects a Playwright test project; project selects the local working directory. Use install to download matching browsers and install_deps for system dependencies. Official browser support is limited to supported Linux, macOS, and Windows versions; the module rejects Windows hosts and does not provide BSD browser builds. Tests default to headless execution. Test reports, traces, and screenshots go to Playwright-configured paths under project, separate from the execution report in runDir.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "setup",
+        "args": [
+          "add",
+          "--dev",
+          "--exact"
+        ],
+        "fields": [
+          {
+            "key": "version",
+            "kind": "string",
+            "flag": "",
+            "default": "latest",
+            "required": false,
+            "sample": "1.65.0",
+            "style": "prefix:@playwright/test@",
+            "scope": "positional",
+            "description": "Framework version or release tag to install with Bun.",
+            "choices": []
+          }
+        ],
+        "description": "Install the test framework in project using Bun. Browser binaries are installed separately with install.",
+        "program": "bun",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [
+          "test"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "testProject",
+            "kind": "strings",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "testProject",
+            "choices": []
+          },
+          {
+            "key": "grep",
+            "kind": "string",
+            "flag": "--grep",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "grep",
+            "choices": []
+          },
+          {
+            "key": "grepInvert",
+            "kind": "string",
+            "flag": "--grep-invert",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "grepInvert",
+            "choices": []
+          },
+          {
+            "key": "workers",
+            "kind": "integer",
+            "flag": "--workers",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "workers",
+            "choices": []
+          },
+          {
+            "key": "reporter",
+            "kind": "string",
+            "flag": "--reporter",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "reporter",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "retries",
+            "kind": "integer",
+            "flag": "--retries",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "retries",
+            "choices": []
+          },
+          {
+            "key": "shard",
+            "kind": "string",
+            "flag": "--shard",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "shard",
+            "choices": []
+          },
+          {
+            "key": "forbidOnly",
+            "kind": "boolean",
+            "flag": "--forbid-only",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "forbidOnly",
+            "choices": []
+          },
+          {
+            "key": "failOnFlakyTests",
+            "kind": "boolean",
+            "flag": "--fail-on-flaky-tests",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "failOnFlakyTests",
+            "choices": []
+          },
+          {
+            "key": "updateSnapshots",
+            "kind": "boolean",
+            "flag": "--update-snapshots",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "updateSnapshots",
+            "choices": []
+          },
+          {
+            "key": "tests",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [
+              "tests/example.spec.ts"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "tests",
+            "choices": []
+          }
+        ],
+        "description": "Run Playwright Test headlessly, optionally filtering projects and tests.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "list",
+        "args": [
+          "test",
+          "--list"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "testProject",
+            "kind": "strings",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "testProject",
+            "choices": []
+          },
+          {
+            "key": "grep",
+            "kind": "string",
+            "flag": "--grep",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "grep",
+            "choices": []
+          },
+          {
+            "key": "grepInvert",
+            "kind": "string",
+            "flag": "--grep-invert",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "grepInvert",
+            "choices": []
+          },
+          {
+            "key": "workers",
+            "kind": "integer",
+            "flag": "--workers",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "workers",
+            "choices": []
+          },
+          {
+            "key": "tests",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [
+              "tests/example.spec.ts"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "tests",
+            "choices": []
+          }
+        ],
+        "description": "List matching tests without launching browsers.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "install",
+        "args": [
+          "install"
+        ],
+        "fields": [
+          {
+            "key": "withDeps",
+            "kind": "boolean",
+            "flag": "--with-deps",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "withDeps",
+            "choices": []
+          },
+          {
+            "key": "onlyShell",
+            "kind": "boolean",
+            "flag": "--only-shell",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "onlyShell",
+            "choices": []
+          },
+          {
+            "key": "browsers",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [
+              "chromium"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "browsers",
+            "choices": []
+          }
+        ],
+        "description": "Install browser binaries matching the installed Playwright package.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "install_deps",
+        "args": [
+          "install-deps"
+        ],
+        "fields": [
+          {
+            "key": "browsers",
+            "kind": "strings",
+            "flag": "",
+            "default": [],
+            "required": false,
+            "sample": [
+              "chromium"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "browsers",
+            "choices": []
+          }
+        ],
+        "description": "Install operating-system browser dependencies; may require elevated privileges.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "podman",
     "path": "containers/podman",
     "program": "podman",
@@ -6839,6 +8749,365 @@
     ]
   },
   {
+    "name": "scorecard",
+    "path": "security/scorecard",
+    "program": "scorecard",
+    "title": "OpenSSF Scorecard",
+    "docs": "https://github.com/ossf/scorecard",
+    "notes": "Install the OpenSSF Scorecard CLI. Remote repository checks contact GitHub and other project services; use GITHUB_AUTH_TOKEN when required by the upstream CLI. Local mode supports a limited check set. Scorecard exits successfully when it produces scores; low scores do not automatically fail CI. Apply a score policy separately or use the generic run export for supported policy integrations.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan",
+        "args": [],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": [
+              "json",
+              "sarif",
+              "default"
+            ]
+          },
+          {
+            "key": "checks",
+            "kind": "string",
+            "flag": "--checks",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "checks",
+            "choices": []
+          },
+          {
+            "key": "showDetails",
+            "kind": "boolean",
+            "flag": "--show-details",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "showDetails",
+            "choices": []
+          },
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": true,
+            "sample": "github.com/ossf/scorecard",
+            "style": "value",
+            "scope": "option",
+            "description": "repo",
+            "choices": []
+          }
+        ],
+        "description": "Evaluate an upstream repository against OpenSSF Scorecard checks.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan_local",
+        "args": [],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": [
+              "json",
+              "sarif",
+              "default"
+            ]
+          },
+          {
+            "key": "checks",
+            "kind": "string",
+            "flag": "--checks",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "checks",
+            "choices": []
+          },
+          {
+            "key": "showDetails",
+            "kind": "boolean",
+            "flag": "--show-details",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "showDetails",
+            "choices": []
+          },
+          {
+            "key": "local",
+            "kind": "string",
+            "flag": "--local",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "option",
+            "description": "local",
+            "choices": []
+          }
+        ],
+        "description": "Run supported checks against a local repository.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "semgrep",
+    "path": "security/semgrep",
+    "program": "semgrep",
+    "title": "Semgrep",
+    "docs": "https://semgrep.dev/docs/cli-reference",
+    "notes": "Install the Semgrep CLI. scan requires config entries: use local rule files for offline scans or registry identifiers for remote rules. It adds --error so findings fail the invocation and disables metrics. ci uses SEMGREP_APP_TOKEN and the configured platform policy; blocking rules determine failure. Do not enable both json and sarif. Reports can contain source snippets and findings.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan",
+        "args": [
+          "scan",
+          "--error",
+          "--metrics=off"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "strings",
+            "flag": "--config",
+            "default": null,
+            "required": true,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "json",
+            "choices": []
+          },
+          {
+            "key": "sarif",
+            "kind": "boolean",
+            "flag": "--sarif",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "sarif",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "strings",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "exclude",
+            "choices": []
+          },
+          {
+            "key": "jobs",
+            "kind": "integer",
+            "flag": "--jobs",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "jobs",
+            "choices": []
+          },
+          {
+            "key": "paths",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "sample": [
+              "src"
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "paths",
+            "choices": []
+          }
+        ],
+        "description": "Scan with explicit rule configurations and fail when findings are present.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci",
+        "args": [
+          "ci",
+          "--metrics=off"
+        ],
+        "fields": [
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "json",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          }
+        ],
+        "description": "Run Semgrep platform CI using the configured project policy.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "shellcheck",
     "path": "linting/shellcheck",
     "program": "shellcheck",
@@ -6972,6 +9241,688 @@
           }
         ],
         "description": "Check explicit shell scripts.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "snyk",
+    "path": "security/snyk",
+    "program": "snyk",
+    "title": "Snyk",
+    "docs": "https://docs.snyk.io/snyk-cli/cli-commands-and-options-summary",
+    "notes": "Install the Snyk CLI or use setup with an existing Bun installation. Add project/node_modules/.bin to PATH or override executable for later commands. setup uses Bun as its executable. Authenticate using SNYK_TOKEN or a native login; account/organization entitlements determine available products. Snyk scans contact its service; Code analysis can transmit source, and monitor publishes project metadata. Native finding and operational error statuses are preserved.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "setup",
+        "args": [
+          "add",
+          "--dev",
+          "--exact"
+        ],
+        "fields": [
+          {
+            "key": "version",
+            "kind": "string",
+            "flag": "",
+            "default": "latest",
+            "required": false,
+            "sample": "1.1300.0",
+            "style": "prefix:snyk@",
+            "scope": "positional",
+            "description": "version",
+            "choices": []
+          }
+        ],
+        "description": "Install a selected Snyk CLI release in project using Bun.",
+        "program": "bun",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [
+          "test",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "org",
+            "choices": []
+          },
+          {
+            "key": "severityThreshold",
+            "kind": "string",
+            "flag": "--severity-threshold",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "severityThreshold",
+            "choices": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "allProjects",
+            "kind": "boolean",
+            "flag": "--all-projects",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "allProjects",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "string",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "exclude",
+            "choices": []
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "path",
+            "choices": []
+          }
+        ],
+        "description": "Test application dependencies and fail on vulnerabilities selected by policy.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "code_test",
+        "args": [
+          "code",
+          "test",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "org",
+            "choices": []
+          },
+          {
+            "key": "severityThreshold",
+            "kind": "string",
+            "flag": "--severity-threshold",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "severityThreshold",
+            "choices": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "path",
+            "choices": []
+          }
+        ],
+        "description": "Run Snyk Code analysis using the configured Snyk service.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "iac_test",
+        "args": [
+          "iac",
+          "test",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "org",
+            "choices": []
+          },
+          {
+            "key": "severityThreshold",
+            "kind": "string",
+            "flag": "--severity-threshold",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "severityThreshold",
+            "choices": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "path",
+            "choices": []
+          }
+        ],
+        "description": "Scan infrastructure-as-code configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "container_test",
+        "args": [
+          "container",
+          "test",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "org",
+            "choices": []
+          },
+          {
+            "key": "severityThreshold",
+            "kind": "string",
+            "flag": "--severity-threshold",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "severityThreshold",
+            "choices": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "image",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example/app:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "image",
+            "choices": []
+          }
+        ],
+        "description": "Test a container image for vulnerabilities.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "monitor",
+        "args": [
+          "monitor",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "org",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "file",
+            "choices": []
+          },
+          {
+            "key": "allProjects",
+            "kind": "boolean",
+            "flag": "--all-projects",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "allProjects",
+            "choices": []
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "path",
+            "choices": []
+          }
+        ],
+        "description": "Publish a dependency snapshot for ongoing monitoring.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "sonarqube",
+    "path": "code-quality/sonarqube",
+    "program": "sonar-scanner",
+    "title": "SonarQube",
+    "docs": "https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/scanners/sonarscanner",
+    "notes": "Install SonarScanner CLI and the Java runtime required by that release, or use its bundled runtime. Supply SONAR_TOKEN and optionally SONAR_HOST_URL through the environment. Configure sonar-project.properties or typed fields. properties contains nonsecret property=value entries; values become literal -Dproperty=value arguments. qualityGateWait=true waits for the server quality gate and fails when it fails. Analysis sends project information to the configured SonarQube service.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan",
+        "args": [],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "prefix:-Dsonar.projectKey=",
+            "scope": "positional",
+            "description": "projectKey",
+            "choices": []
+          },
+          {
+            "key": "sources",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "src",
+            "style": "prefix:-Dsonar.sources=",
+            "scope": "positional",
+            "description": "sources",
+            "choices": []
+          },
+          {
+            "key": "hostUrl",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "https://sonarqube.example",
+            "style": "prefix:-Dsonar.host.url=",
+            "scope": "positional",
+            "description": "hostUrl",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "prefix:-Dsonar.organization=",
+            "scope": "positional",
+            "description": "organization",
+            "choices": []
+          },
+          {
+            "key": "qualityGateWait",
+            "kind": "boolean",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "prefix:-Dsonar.qualitygate.wait=",
+            "scope": "positional",
+            "description": "qualityGateWait",
+            "choices": []
+          },
+          {
+            "key": "properties",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": [
+              "sonar.sourceEncoding=UTF-8"
+            ],
+            "style": "prefix:-D",
+            "scope": "positional",
+            "description": "properties",
+            "choices": []
+          }
+        ],
+        "description": "Analyze the configured project and submit results to SonarQube.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "syft",
+    "path": "security/syft",
+    "program": "syft",
+    "title": "Syft",
+    "docs": "https://oss.anchore.com/docs/reference/syft/cli/",
+    "notes": "Install Syft. Directory sources can use dir:.; image sources may require a container daemon or registry access. output accepts repeated format or format=path values, such as cyclonedx-json=sbom.json. SBOM generation inventories packages; it does not apply a vulnerability policy. Use Grype or Trivy to check the resulting SBOM.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scan",
+        "args": [
+          "scan"
+        ],
+        "fields": [
+          {
+            "key": "output",
+            "kind": "strings",
+            "flag": "--output",
+            "default": [
+              "syft-json"
+            ],
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "config",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "strings",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "exclude",
+            "choices": []
+          },
+          {
+            "key": "source",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dir:.",
+            "style": "value",
+            "scope": "positional",
+            "description": "source",
+            "choices": []
+          }
+        ],
+        "description": "Generate an SBOM for a directory, image, or archive.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "convert",
+        "args": [
+          "convert"
+        ],
+        "fields": [
+          {
+            "key": "output",
+            "kind": "strings",
+            "flag": "--output",
+            "default": [
+              "cyclonedx-json"
+            ],
+            "required": false,
+            "sample": [
+              "example=value"
+            ],
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "sbom.json",
+            "style": "value",
+            "scope": "positional",
+            "description": "file",
+            "choices": []
+          }
+        ],
+        "description": "Convert an existing SBOM to a supported output format.",
         "program": "",
         "environment": {},
         "example": {}
@@ -7611,6 +10562,596 @@
         ],
         "fields": [],
         "description": "validate",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "trivy",
+    "path": "security/trivy",
+    "program": "trivy",
+    "title": "Trivy",
+    "docs": "https://trivy.dev/latest/docs/references/configuration/cli/",
+    "notes": "Install Trivy. Named scans enforce --exit-code=1 and default to HIGH,CRITICAL severity. Native database/check downloads occur unless disabled with the corresponding flags; offlineScan alone does not supply a vulnerability database. Image scans use native registry credentials. Choose scanners explicitly to control filesystem/image coverage. Findings, including secret scan output, may contain sensitive data.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "filesystem",
+        "args": [
+          "fs",
+          "--exit-code=1"
+        ],
+        "fields": [
+          {
+            "key": "severity",
+            "kind": "string",
+            "flag": "--severity",
+            "default": "HIGH,CRITICAL",
+            "required": false,
+            "sample": "HIGH,CRITICAL",
+            "style": "value",
+            "scope": "option",
+            "description": "severity",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "scanners",
+            "kind": "string",
+            "flag": "--scanners",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "scanners",
+            "choices": []
+          },
+          {
+            "key": "ignoreUnfixed",
+            "kind": "boolean",
+            "flag": "--ignore-unfixed",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "ignoreUnfixed",
+            "choices": []
+          },
+          {
+            "key": "skipDbUpdate",
+            "kind": "boolean",
+            "flag": "--skip-db-update",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "skipDbUpdate",
+            "choices": []
+          },
+          {
+            "key": "offlineScan",
+            "kind": "boolean",
+            "flag": "--offline-scan",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "offlineScan",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "directory",
+            "choices": []
+          }
+        ],
+        "description": "Scan a filesystem and fail when selected findings are present.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "image",
+        "args": [
+          "image",
+          "--exit-code=1"
+        ],
+        "fields": [
+          {
+            "key": "severity",
+            "kind": "string",
+            "flag": "--severity",
+            "default": "HIGH,CRITICAL",
+            "required": false,
+            "sample": "HIGH,CRITICAL",
+            "style": "value",
+            "scope": "option",
+            "description": "severity",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "scanners",
+            "kind": "string",
+            "flag": "--scanners",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "scanners",
+            "choices": []
+          },
+          {
+            "key": "ignoreUnfixed",
+            "kind": "boolean",
+            "flag": "--ignore-unfixed",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "ignoreUnfixed",
+            "choices": []
+          },
+          {
+            "key": "skipDbUpdate",
+            "kind": "boolean",
+            "flag": "--skip-db-update",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "skipDbUpdate",
+            "choices": []
+          },
+          {
+            "key": "offlineScan",
+            "kind": "boolean",
+            "flag": "--offline-scan",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "offlineScan",
+            "choices": []
+          },
+          {
+            "key": "image",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example/app:v1",
+            "style": "value",
+            "scope": "positional",
+            "description": "image",
+            "choices": []
+          }
+        ],
+        "description": "Scan a container image and fail at the selected severity.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config",
+        "args": [
+          "config",
+          "--exit-code=1"
+        ],
+        "fields": [
+          {
+            "key": "severity",
+            "kind": "string",
+            "flag": "--severity",
+            "default": "HIGH,CRITICAL",
+            "required": false,
+            "sample": "HIGH,CRITICAL",
+            "style": "value",
+            "scope": "option",
+            "description": "severity",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "skipCheckUpdate",
+            "kind": "boolean",
+            "flag": "--skip-check-update",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "skipCheckUpdate",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "sample": ".",
+            "style": "value",
+            "scope": "positional",
+            "description": "directory",
+            "choices": []
+          }
+        ],
+        "description": "Scan infrastructure configuration for misconfigurations.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "sbom",
+        "args": [
+          "sbom",
+          "--exit-code=1"
+        ],
+        "fields": [
+          {
+            "key": "severity",
+            "kind": "string",
+            "flag": "--severity",
+            "default": "HIGH,CRITICAL",
+            "required": false,
+            "sample": "HIGH,CRITICAL",
+            "style": "value",
+            "scope": "option",
+            "description": "severity",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "format",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "output",
+            "choices": []
+          },
+          {
+            "key": "skipDbUpdate",
+            "kind": "boolean",
+            "flag": "--skip-db-update",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "skipDbUpdate",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "sbom.json",
+            "style": "value",
+            "scope": "positional",
+            "description": "file",
+            "choices": []
+          }
+        ],
+        "description": "Scan an existing SBOM for vulnerabilities.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
+    "name": "trufflehog",
+    "path": "security/trufflehog",
+    "program": "trufflehog",
+    "title": "TruffleHog",
+    "docs": "https://github.com/trufflesecurity/trufflehog",
+    "notes": "Install a current TruffleHog 3 CLI supporting --fail-on-scan-errors. Named scans disable updates and credential verification, and fail on results or scan errors. Remote Git repositories still require network access and authentication. TruffleHog JSON output may contain raw detected values; protect task logs and reports. The generic run export permits other native modes, including verification if explicitly requested in arguments.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "arguments",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary literal CLI arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "filesystem",
+        "args": [
+          "filesystem",
+          "--no-verification",
+          "--no-update",
+          "--fail",
+          "--fail-on-scan-errors",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "includeDetectors",
+            "kind": "string",
+            "flag": "--include-detectors",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "includeDetectors",
+            "choices": []
+          },
+          {
+            "key": "excludeDetectors",
+            "kind": "string",
+            "flag": "--exclude-detectors",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "excludeDetectors",
+            "choices": []
+          },
+          {
+            "key": "concurrency",
+            "kind": "integer",
+            "flag": "--concurrency",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "concurrency",
+            "choices": []
+          },
+          {
+            "key": "paths",
+            "kind": "strings",
+            "flag": "",
+            "default": [
+              "."
+            ],
+            "required": false,
+            "sample": [
+              "."
+            ],
+            "style": "value",
+            "scope": "positional",
+            "description": "paths",
+            "choices": []
+          }
+        ],
+        "description": "Scan local files for secrets without verifying credentials against remote services.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "git",
+        "args": [
+          "git",
+          "--no-verification",
+          "--no-update",
+          "--fail",
+          "--fail-on-scan-errors",
+          "--json"
+        ],
+        "fields": [
+          {
+            "key": "sinceCommit",
+            "kind": "string",
+            "flag": "--since-commit",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "sinceCommit",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "branch",
+            "choices": []
+          },
+          {
+            "key": "maxDepth",
+            "kind": "integer",
+            "flag": "--max-depth",
+            "default": null,
+            "required": false,
+            "sample": 100,
+            "style": "value",
+            "scope": "option",
+            "description": "maxDepth",
+            "choices": []
+          },
+          {
+            "key": "repository",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "file://.",
+            "style": "value",
+            "scope": "positional",
+            "description": "repository",
+            "choices": []
+          }
+        ],
+        "description": "Scan a Git repository without credential verification.",
         "program": "",
         "environment": {},
         "example": {}

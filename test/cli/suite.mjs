@@ -54,11 +54,11 @@ export async function suite(directory) {
         }
         const values = Array.isArray(value) ? value : [String(value)];
         for (const token of values) {
-          const expected = !field.flag ? (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token : field.style === 'space-list' ? token : field.flag + '=' + (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token;
+          const expected = !field.flag ? (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token : ['space-list','separate'].includes(field.style) ? token : field.flag + '=' + (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token;
           assert.ok(task.args.includes(expected), command.name + ': missing ' + expected);
           if (field.scope === 'global' && command.args.length) assert.ok(task.args.indexOf(expected) < task.args.indexOf(command.args[0]));
         }
-        if (field.kind === 'boolean') assert.ok(plan(command.name,{...input,[field.key]:false}).tasks[0].args.includes(field.flag+'=false'));
+        if (field.kind === 'boolean') assert.ok(plan(command.name,{...input,[field.key]:false}).tasks[0].args.includes(!field.flag && field.style.startsWith('prefix:') ? field.style.slice(7)+'false' : field.flag+'=false'));
       }
       const f = fixture({ input }); plugin[command.name]();
       assert.deepEqual(f.calls.slice(0,2),[['test','-d',input.project],['test','-x',input.executable]]);
@@ -71,7 +71,10 @@ export async function suite(directory) {
         invalid.push({...base,[field.key]:null},{...base,[field.key]:{} });
         if (field.required && field.default === null) { const missing={...base}; delete missing[field.key]; invalid.push(missing); }
         if (field.kind === 'strings') invalid.push({...base,[field.key]:[42]}, {...base,[field.key]:['']});
-        if (field.kind === 'integer') invalid.push({...base,[field.key]:0});
+        if (field.kind === 'integer') {
+          invalid.push({...base,[field.key]:field.style === 'nonnegative' ? -1 : 0});
+          if (field.style === 'nonnegative') assert.ok(plan(command.name,{...base,[field.key]:0}).tasks[0].args.includes(field.flag+'=0'));
+        }
         if (field.kind === 'string') invalid.push({...base,[field.key]:''},{...base,[field.key]:'bad\0value'});
         if (field.choices.length) invalid.push({...base,[field.key]:'invalid-choice'});
         if (field.scope === 'positional') invalid.push({...base,[field.key]:field.kind === 'strings'?['--flag']:'--flag'});

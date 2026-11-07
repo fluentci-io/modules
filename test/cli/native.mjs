@@ -5,8 +5,12 @@ import { mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from '
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fixture } from './host.mjs';
+import { browserSuite } from './browser.mjs';
+import { securitySuite } from './security.mjs';
 
 export function nativeSuite(tool, plugin) {
+  browserSuite(tool, plugin);
+  securitySuite(tool, plugin);
   if (tool.name === 'uv') {
     const available=spawnSync('which',['uv'],{encoding:'utf8'}).status===0;
     test('native uv locks, syncs, and runs an offline Python project', {skip:!available&&process.env.FLUENTCI_REQUIRE_CLI_NATIVE_TESTS!=='1'},()=>{
