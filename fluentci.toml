@@ -11,6 +11,12 @@ path = "deployment/argocd"
 sdk = "purescript"
 
 [[modules]]
+name = "artifactory"
+version = "0.1.0"
+path = "artifacts/artifactory"
+sdk = "purescript"
+
+[[modules]]
 name = "aws"
 version = "0.1.0"
 path = "cloud/aws"
@@ -20,6 +26,12 @@ sdk = "purescript"
 name = "azure"
 version = "0.1.0"
 path = "cloud/azure"
+sdk = "purescript"
+
+[[modules]]
+name = "bazel"
+version = "0.1.0"
+path = "build/bazel"
 sdk = "purescript"
 
 [[modules]]
@@ -53,12 +65,6 @@ path = "containers/buildx"
 sdk = "purescript"
 
 [[modules]]
-name = "bun"
-version = "0.1.0"
-path = "setup/bun"
-sdk = "purescript"
-
-[[modules]]
 name = "cachix"
 version = "0.1.0"
 path = "caching/cachix"
@@ -68,6 +74,12 @@ sdk = "purescript"
 name = "checkov"
 version = "0.1.0"
 path = "security/checkov"
+sdk = "purescript"
+
+[[modules]]
+name = "cmake"
+version = "0.1.0"
+path = "build/cmake"
 sdk = "purescript"
 
 [[modules]]
@@ -95,18 +107,6 @@ path = "testing/cypress"
 sdk = "purescript"
 
 [[modules]]
-name = "deno"
-version = "0.1.0"
-path = "setup/deno"
-sdk = "purescript"
-
-[[modules]]
-name = "determinate-nix"
-version = "0.1.0"
-path = "setup/determinate-nix"
-sdk = "purescript"
-
-[[modules]]
 name = "digitalocean"
 version = "0.1.0"
 path = "cloud/digitalocean"
@@ -131,12 +131,6 @@ path = "packaging/dpkg"
 sdk = "purescript"
 
 [[modules]]
-name = "elixir"
-version = "0.1.0"
-path = "setup/elixir"
-sdk = "purescript"
-
-[[modules]]
 name = "flyctl"
 version = "0.1.0"
 path = "deployment/flyctl"
@@ -155,21 +149,21 @@ path = "publishing/gemfury"
 sdk = "purescript"
 
 [[modules]]
+name = "gh-artifact"
+version = "0.1.0"
+path = "artifacts/gh-artifact"
+sdk = "purescript"
+
+[[modules]]
+name = "gitlab-artifacts"
+version = "0.1.0"
+path = "artifacts/gitlab-artifacts"
+sdk = "purescript"
+
+[[modules]]
 name = "gitleaks"
 version = "0.1.0"
 path = "security/gitleaks"
-sdk = "purescript"
-
-[[modules]]
-name = "gleam"
-version = "0.1.0"
-path = "setup/gleam"
-sdk = "purescript"
-
-[[modules]]
-name = "go"
-version = "0.1.0"
-path = "setup/go"
 sdk = "purescript"
 
 [[modules]]
@@ -191,9 +185,9 @@ path = "secrets/infisical"
 sdk = "purescript"
 
 [[modules]]
-name = "java"
+name = "jfrog-cli"
 version = "0.1.0"
-path = "setup/java"
+path = "artifacts/jfrog-cli"
 sdk = "purescript"
 
 [[modules]]
@@ -209,27 +203,33 @@ path = "deployment/kubectl"
 sdk = "purescript"
 
 [[modules]]
+name = "meson"
+version = "0.1.0"
+path = "build/meson"
+sdk = "purescript"
+
+[[modules]]
 name = "netlify"
 version = "0.1.0"
 path = "deployment/netlify"
 sdk = "purescript"
 
 [[modules]]
-name = "nix"
+name = "nexus"
 version = "0.1.0"
-path = "setup/nix"
+path = "artifacts/nexus"
+sdk = "purescript"
+
+[[modules]]
+name = "ninja"
+version = "0.1.0"
+path = "build/ninja"
 sdk = "purescript"
 
 [[modules]]
 name = "nix-package"
 version = "0.1.0"
 path = "package-management/nix"
-sdk = "purescript"
-
-[[modules]]
-name = "node"
-version = "0.1.0"
-path = "setup/node"
 sdk = "purescript"
 
 [[modules]]
@@ -245,15 +245,21 @@ path = "infrastructure/opentofu"
 sdk = "purescript"
 
 [[modules]]
-name = "pkl"
+name = "oras"
 version = "0.1.0"
-path = "setup/pkl"
+path = "artifacts/oras"
 sdk = "purescript"
 
 [[modules]]
 name = "playwright"
 version = "0.1.0"
 path = "testing/playwright"
+sdk = "purescript"
+
+[[modules]]
+name = "plumber"
+version = "0.1.0"
+path = "security/plumber"
 sdk = "purescript"
 
 [[modules]]
@@ -275,15 +281,15 @@ path = "infrastructure/pulumi"
 sdk = "purescript"
 
 [[modules]]
-name = "purescript"
-version = "0.1.0"
-path = "setup/purescript"
-sdk = "purescript"
-
-[[modules]]
 name = "railway"
 version = "0.1.0"
 path = "deployment/railway"
+sdk = "purescript"
+
+[[modules]]
+name = "rclone"
+version = "0.1.0"
+path = "artifacts/rclone"
 sdk = "purescript"
 
 [[modules]]
@@ -305,15 +311,15 @@ path = "linting/ruff"
 sdk = "purescript"
 
 [[modules]]
-name = "rust"
-version = "0.1.0"
-path = "setup/rust"
-sdk = "purescript"
-
-[[modules]]
 name = "rustfmt"
 version = "0.1.0"
 path = "formatting/rustfmt"
+sdk = "purescript"
+
+[[modules]]
+name = "sccache"
+version = "0.1.0"
+path = "caching/sccache"
 sdk = "purescript"
 
 [[modules]]
@@ -326,6 +332,576 @@ sdk = "purescript"
 name = "semgrep"
 version = "0.1.0"
 path = "security/semgrep"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-actionlint"
+version = "0.1.0"
+path = "setup/actionlint"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-argocd"
+version = "0.1.0"
+path = "setup/argocd"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-artifactory"
+version = "0.1.0"
+path = "setup/artifactory"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-aws"
+version = "0.1.0"
+path = "setup/aws"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-azure"
+version = "0.1.0"
+path = "setup/azure"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-babashka"
+version = "0.1.0"
+path = "setup/babashka"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-bazel"
+version = "0.1.0"
+path = "setup/bazel"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-betterleaks"
+version = "0.1.0"
+path = "setup/betterleaks"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-binaryen"
+version = "0.1.0"
+path = "setup/binaryen"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-biome"
+version = "0.1.0"
+path = "setup/biome"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-black"
+version = "0.1.0"
+path = "setup/black"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-buildkit"
+version = "0.1.0"
+path = "setup/buildkit"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-buildx"
+version = "0.1.0"
+path = "setup/buildx"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-bun"
+version = "0.1.0"
+path = "setup/bun"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-cachix"
+version = "0.1.0"
+path = "setup/cachix"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-checkov"
+version = "0.1.0"
+path = "setup/checkov"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-clojure"
+version = "0.1.0"
+path = "setup/clojure"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-cmake"
+version = "0.1.0"
+path = "setup/cmake"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-codacy"
+version = "0.1.0"
+path = "setup/codacy"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-codecov"
+version = "0.1.0"
+path = "setup/codecov"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-coveralls"
+version = "0.1.0"
+path = "setup/coveralls"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-cypress"
+version = "0.1.0"
+path = "setup/cypress"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-deno"
+version = "0.1.0"
+path = "setup/deno"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-determinate-nix"
+version = "0.1.0"
+path = "setup/determinate-nix"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-digitalocean"
+version = "0.1.0"
+path = "setup/digitalocean"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-docker"
+version = "0.1.0"
+path = "setup/docker"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-doppler"
+version = "0.1.0"
+path = "setup/doppler"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-dpkg"
+version = "0.1.0"
+path = "setup/dpkg"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-elixir"
+version = "0.1.0"
+path = "setup/elixir"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-expo"
+version = "0.1.0"
+path = "setup/expo"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-extism"
+version = "0.1.0"
+path = "setup/extism"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-extism-cli"
+version = "0.1.0"
+path = "setup/extism-cli"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-extism-js"
+version = "0.1.0"
+path = "setup/extism-js"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-extism-py"
+version = "0.1.0"
+path = "setup/extism-py"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-flyctl"
+version = "0.1.0"
+path = "setup/flyctl"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-gcloud"
+version = "0.1.0"
+path = "setup/gcloud"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-gemfury"
+version = "0.1.0"
+path = "setup/gemfury"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-gh-artifact"
+version = "0.1.0"
+path = "setup/gh-artifact"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-gitlab-artifacts"
+version = "0.1.0"
+path = "setup/gitlab-artifacts"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-gitleaks"
+version = "0.1.0"
+path = "setup/gitleaks"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-gleam"
+version = "0.1.0"
+path = "setup/gleam"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-go"
+version = "0.1.0"
+path = "setup/go"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-grype"
+version = "0.1.0"
+path = "setup/grype"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-helm"
+version = "0.1.0"
+path = "setup/helm"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-infisical"
+version = "0.1.0"
+path = "setup/infisical"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-java"
+version = "0.1.0"
+path = "setup/java"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-jfrog-cli"
+version = "0.1.0"
+path = "setup/jfrog-cli"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-kamal"
+version = "0.1.0"
+path = "setup/kamal"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-kubectl"
+version = "0.1.0"
+path = "setup/kubectl"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-meson"
+version = "0.1.0"
+path = "setup/meson"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-mise"
+version = "0.1.0"
+path = "setup/mise"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-netlify"
+version = "0.1.0"
+path = "setup/netlify"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-nexus"
+version = "0.1.0"
+path = "setup/nexus"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-ninja"
+version = "0.1.0"
+path = "setup/ninja"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-nix"
+version = "0.1.0"
+path = "setup/nix"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-nix-package"
+version = "0.1.0"
+path = "setup/nix-package"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-node"
+version = "0.1.0"
+path = "setup/node"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-openbao"
+version = "0.1.0"
+path = "setup/openbao"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-opentofu"
+version = "0.1.0"
+path = "setup/opentofu"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-oras"
+version = "0.1.0"
+path = "setup/oras"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-pkl"
+version = "0.1.0"
+path = "setup/pkl"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-playwright"
+version = "0.1.0"
+path = "setup/playwright"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-plumber"
+version = "0.1.0"
+path = "setup/plumber"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-podman"
+version = "0.1.0"
+path = "setup/podman"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-prettier"
+version = "0.1.0"
+path = "setup/prettier"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-pulumi"
+version = "0.1.0"
+path = "setup/pulumi"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-purescript"
+version = "0.1.0"
+path = "setup/purescript"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-railway"
+version = "0.1.0"
+path = "setup/railway"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-rclone"
+version = "0.1.0"
+path = "setup/rclone"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-render"
+version = "0.1.0"
+path = "setup/render"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-rpmbuild"
+version = "0.1.0"
+path = "setup/rpmbuild"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-ruff"
+version = "0.1.0"
+path = "setup/ruff"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-rust"
+version = "0.1.0"
+path = "setup/rust"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-rustfmt"
+version = "0.1.0"
+path = "setup/rustfmt"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-sccache"
+version = "0.1.0"
+path = "setup/sccache"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-scorecard"
+version = "0.1.0"
+path = "setup/scorecard"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-semgrep"
+version = "0.1.0"
+path = "setup/semgrep"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-shellcheck"
+version = "0.1.0"
+path = "setup/shellcheck"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-snyk"
+version = "0.1.0"
+path = "setup/snyk"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-sonarqube"
+version = "0.1.0"
+path = "setup/sonarqube"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-syft"
+version = "0.1.0"
+path = "setup/syft"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-tangled-artifacts"
+version = "0.1.0"
+path = "setup/tangled-artifacts"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-terraform"
+version = "0.1.0"
+path = "setup/terraform"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-terragrunt"
+version = "0.1.0"
+path = "setup/terragrunt"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-tg"
+version = "0.1.0"
+path = "setup/tg"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-trivy"
+version = "0.1.0"
+path = "setup/trivy"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-trufflehog"
+version = "0.1.0"
+path = "setup/trufflehog"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-turborepo"
+version = "0.1.0"
+path = "setup/turborepo"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-ubicloud"
+version = "0.1.0"
+path = "setup/ubicloud"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-uv"
+version = "0.1.0"
+path = "setup/uv"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-vault"
+version = "0.1.0"
+path = "setup/vault"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-vercel"
+version = "0.1.0"
+path = "setup/vercel"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-xtp"
+version = "0.1.0"
+path = "setup/xtp"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-yamllint"
+version = "0.1.0"
+path = "setup/yamllint"
+sdk = "purescript"
+
+[[modules]]
+name = "setup-zig"
+version = "0.1.0"
+path = "setup/zig"
 sdk = "purescript"
 
 [[modules]]
@@ -350,6 +926,12 @@ sdk = "purescript"
 name = "syft"
 version = "0.1.0"
 path = "security/syft"
+sdk = "purescript"
+
+[[modules]]
+name = "tangled-artifacts"
+version = "0.1.0"
+path = "artifacts/tangled-artifacts"
 sdk = "purescript"
 
 [[modules]]
@@ -404,10 +986,4 @@ sdk = "purescript"
 name = "yamllint"
 version = "0.1.0"
 path = "linting/yamllint"
-sdk = "purescript"
-
-[[modules]]
-name = "zig"
-version = "0.1.0"
-path = "setup/zig"
 sdk = "purescript"

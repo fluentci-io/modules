@@ -7,79 +7,176 @@ deploy applications using independently configured modules.
 
 ## Modules
 
-All modules are registered in [fluentci.toml](./fluentci.toml).
+All modules are registered alphabetically in [fluentci.toml](./fluentci.toml).
+See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./docs/PIPELINES.md) for failure, credential, and artifact contracts.
 
 | Module | Purpose | WebAssembly functions |
 | --- | --- | --- |
-| [actionlint](./linting/actionlint/README.md) | Run Actionlint commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/actionlint/OPTIONS.md) |
-| [argocd](./deployment/argocd/README.md) | Run Argo CD commands with validated JSON inputs. | `run`, `version`, `app_get`, `app_sync`, [all commands](./deployment/argocd/OPTIONS.md) |
-| [aws](./cloud/aws/README.md) | Run AWS commands with validated JSON inputs. | `run`, `version`, `identity`, `s3_cp`, [all commands](./cloud/aws/OPTIONS.md) |
-| [azure](./cloud/azure/README.md) | Run Azure commands with validated JSON inputs. | `run`, `version`, `account_show`, `group_deploy`, [all commands](./cloud/azure/OPTIONS.md) |
-| [betterleaks](./security/betterleaks/README.md) | Scan secrets with Betterleaks 1.x and redacted reports. | `scan_dir`, `scan_git`, `version`, [all commands](./security/betterleaks/OPTIONS.md) |
-| [biome](./linting/biome/README.md) | Run Biome commands with validated JSON inputs. | `run`, `version`, `check`, `lint`, [all commands](./linting/biome/OPTIONS.md) |
-| [black](./formatting/black/README.md) | Run Black commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/black/OPTIONS.md) |
-| [buildkit](./containers/buildkit/README.md) | Run BuildKit commands with validated JSON inputs. | `run`, `version`, `build`, `prune`, [all commands](./containers/buildkit/OPTIONS.md) |
-| [buildx](./containers/buildx/README.md) | Run Docker Buildx with typed command arguments. | `build`, `bake`, `create`, and [other commands](./containers/buildx/OPTIONS.md) |
-| [bun](./setup/bun/README.md) | Install Bun and select a version. | `setup` |
-| [cachix](./caching/cachix/README.md) | Configure a Cachix cache and upload Nix outputs. | `setup`, `push` |
-| [checkov](./security/checkov/README.md) | Run Checkov through validated native CLI commands. | `run`, `version`, `scan`, [all commands](./security/checkov/OPTIONS.md) |
-| [codacy](./code-quality/codacy/README.md) | Run Codacy through validated native CLI commands. | `run`, `help`, `upload`, [all commands](./code-quality/codacy/OPTIONS.md) |
-| [codecov](./code-quality/codecov/README.md) | Run Codecov through validated native CLI commands. | `run`, `version`, `upload`, [all commands](./code-quality/codecov/OPTIONS.md) |
-| [coveralls](./code-quality/coveralls/README.md) | Run Coveralls through validated native CLI commands. | `run`, `version`, `upload`, `done`, [all commands](./code-quality/coveralls/OPTIONS.md) |
-| [cypress](./testing/cypress/README.md) | Run Cypress tests and install browser binaries. | `run`, `version`, `test`, `install`, [all commands](./testing/cypress/OPTIONS.md) |
-| [deno](./setup/deno/README.md) | Install Deno and select a version. | `setup` |
-| [determinate-nix](./setup/determinate-nix/README.md) | Install Determinate Nix and select a version. | `setup` |
-| [digitalocean](./cloud/digitalocean/README.md) | Run DigitalOcean commands with validated JSON inputs. | `run`, `version`, `account_get`, `droplets_list`, [all commands](./cloud/digitalocean/OPTIONS.md) |
-| [docker](./containers/docker/README.md) | Run Docker commands with validated JSON inputs. | `run`, `version`, `build`, `pull`, [all commands](./containers/docker/OPTIONS.md) |
-| [doppler](./secrets/doppler/README.md) | Manage Doppler secrets through the native CLI. | `run`, `version`, `run_command`, `names`, [all commands](./secrets/doppler/OPTIONS.md) |
-| [dpkg](./packaging/dpkg/README.md) | Build `.deb` packages from a validated package root. | `validate`, `build` |
-| [elixir](./setup/elixir/README.md) | Install Elixir and select a version. | `setup` |
-| [flyctl](./deployment/flyctl/README.md) | Run Fly.io commands with validated JSON inputs. | `run`, `version`, `deploy`, `status`, [all commands](./deployment/flyctl/OPTIONS.md) |
-| [gcloud](./cloud/gcloud/README.md) | Run Google Cloud commands with validated JSON inputs. | `run`, `version`, `config_list`, `run_deploy`, [all commands](./cloud/gcloud/OPTIONS.md) |
-| [gemfury](./publishing/gemfury/README.md) | Upload existing packages to a Gemfury account. | `upload` |
-| [gitleaks](./security/gitleaks/README.md) | Run Gitleaks through validated native CLI commands. | `run`, `version`, `scan_dir`, `scan_git`, [all commands](./security/gitleaks/OPTIONS.md) |
-| [gleam](./setup/gleam/README.md) | Install Gleam and select a version. | `setup` |
-| [go](./setup/go/README.md) | Install Go and select a version. | `setup` |
-| [grype](./security/grype/README.md) | Run Grype through validated native CLI commands. | `run`, `version`, `scan`, `db_update`, [all commands](./security/grype/OPTIONS.md) |
-| [helm](./deployment/helm/README.md) | Run Helm commands with validated JSON inputs. | `run`, `version`, `lint`, `template`, [all commands](./deployment/helm/OPTIONS.md) |
-| [infisical](./secrets/infisical/README.md) | Manage Infisical secrets through the native CLI. | `run`, `version`, `run_command`, [all commands](./secrets/infisical/OPTIONS.md) |
-| [java](./setup/java/README.md) | Install Java and select a version. | `setup` |
-| [kamal](./deployment/kamal/README.md) | Run Kamal commands with validated JSON inputs. | `run`, `version`, `deploy`, `setup`, [all commands](./deployment/kamal/OPTIONS.md) |
-| [kubectl](./deployment/kubectl/README.md) | Run Kubectl commands with validated JSON inputs. | `run`, `version`, `apply`, `get`, [all commands](./deployment/kubectl/OPTIONS.md) |
-| [netlify](./deployment/netlify/README.md) | Run Netlify commands with validated JSON inputs. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/netlify/OPTIONS.md) |
-| [nix](./setup/nix/README.md) | Install Nix and select a version. | `setup` |
-| [nix-package](./package-management/nix/README.md) | Run Nix packages commands with validated JSON inputs. | `run`, `version`, `build`, `eval`, [all commands](./package-management/nix/OPTIONS.md) |
-| [node](./setup/node/README.md) | Install Node.js and select a version. | `setup` |
-| [openbao](./secrets/openbao/README.md) | Manage OpenBao secrets through the native CLI. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/openbao/OPTIONS.md) |
-| [opentofu](./infrastructure/opentofu/README.md) | Run OpenTofu commands with validated JSON inputs. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/opentofu/OPTIONS.md) |
-| [pkl](./setup/pkl/README.md) | Install Pkl and select a version. | `setup` |
-| [playwright](./testing/playwright/README.md) | Run Playwright tests and install browser binaries. | `run`, `version`, `test`, `list`, [all commands](./testing/playwright/OPTIONS.md) |
-| [podman](./containers/podman/README.md) | Run Podman commands with validated JSON inputs. | `run`, `version`, `build`, `pull`, [all commands](./containers/podman/OPTIONS.md) |
-| [prettier](./formatting/prettier/README.md) | Run Prettier commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/prettier/OPTIONS.md) |
-| [pulumi](./infrastructure/pulumi/README.md) | Run Pulumi commands with validated JSON inputs. | `run`, `version`, `preview`, `up`, [all commands](./infrastructure/pulumi/OPTIONS.md) |
-| [purescript](./setup/purescript/README.md) | Install Node, Bun, npm, PureScript, and Spago. | `setup` |
-| [railway](./deployment/railway/README.md) | Run Railway commands with validated JSON inputs. | `run`, `version`, `up`, `status`, [all commands](./deployment/railway/OPTIONS.md) |
-| [render](./deployment/render/README.md) | Run Render commands with validated JSON inputs. | `run`, `version`, `services`, `deploy`, [all commands](./deployment/render/OPTIONS.md) |
-| [rpmbuild](./packaging/rpmbuild/README.md) | Build `.rpm` packages from a validated RPM tree. | `validate`, `build` |
-| [ruff](./linting/ruff/README.md) | Run Ruff commands with validated JSON inputs. | `run`, `version`, `check`, `format`, [all commands](./linting/ruff/OPTIONS.md) |
-| [rust](./setup/rust/README.md) | Install Rust and select a version. | `setup` |
-| [rustfmt](./formatting/rustfmt/README.md) | Run Rustfmt commands with validated JSON inputs. | `run`, `version`, `format`, `check`, [all commands](./formatting/rustfmt/OPTIONS.md) |
-| [scorecard](./security/scorecard/README.md) | Run OpenSSF Scorecard through validated native CLI commands. | `run`, `version`, `scan`, `scan_local`, [all commands](./security/scorecard/OPTIONS.md) |
-| [semgrep](./security/semgrep/README.md) | Run Semgrep through validated native CLI commands. | `run`, `version`, `scan`, `ci`, [all commands](./security/semgrep/OPTIONS.md) |
-| [shellcheck](./linting/shellcheck/README.md) | Run ShellCheck commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/shellcheck/OPTIONS.md) |
-| [snyk](./security/snyk/README.md) | Run Snyk through validated native CLI commands. | `run`, `version`, `setup`, `test`, [all commands](./security/snyk/OPTIONS.md) |
-| [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube through validated native CLI commands. | `run`, `version`, `scan`, [all commands](./code-quality/sonarqube/OPTIONS.md) |
-| [syft](./security/syft/README.md) | Run Syft through validated native CLI commands. | `run`, `version`, `scan`, `convert`, [all commands](./security/syft/OPTIONS.md) |
-| [terraform](./infrastructure/terraform/README.md) | Run Terraform commands with validated JSON inputs. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/terraform/OPTIONS.md) |
-| [terragrunt](./infrastructure/terragrunt/README.md) | Run Terragrunt commands with validated JSON inputs. | `run`, `version`, `hcl_fmt`, `init`, [all commands](./infrastructure/terragrunt/OPTIONS.md) |
-| [trivy](./security/trivy/README.md) | Run Trivy through validated native CLI commands. | `run`, `version`, `filesystem`, `image`, [all commands](./security/trivy/OPTIONS.md) |
-| [trufflehog](./security/trufflehog/README.md) | Run TruffleHog through validated native CLI commands. | `run`, `version`, `filesystem`, `git`, [all commands](./security/trufflehog/OPTIONS.md) |
-| [ubicloud](./cloud/ubicloud/README.md) | Run Ubicloud commands with validated JSON inputs. | `run`, `help`, [all commands](./cloud/ubicloud/OPTIONS.md) |
-| [uv](./package-management/uv/README.md) | Manage Python dependencies and build or publish distributions. | `sync`, `lock`, `run_command`, [all commands](./package-management/uv/OPTIONS.md) |
-| [vault](./secrets/vault/README.md) | Manage Vault secrets through the native CLI. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/vault/OPTIONS.md) |
-| [vercel](./deployment/vercel/README.md) | Run Vercel commands with validated JSON inputs. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/vercel/OPTIONS.md) |
-| [yamllint](./linting/yamllint/README.md) | Run Yamllint commands with validated JSON inputs. | `run`, `version`, `lint`, [all commands](./linting/yamllint/OPTIONS.md) |
-| [zig](./setup/zig/README.md) | Install Zig and select a version. | `setup` |
+| [actionlint](./linting/actionlint/README.md) | Run Actionlint pipeline operations. | `run`, `version`, `lint` |
+| [argocd](./deployment/argocd/README.md) | Run Argo CD pipeline operations. | `run`, `version`, `app_get`, `app_sync`, [all commands](./deployment/argocd/OPTIONS.md) |
+| [artifactory](./artifacts/artifactory/README.md) | Run JFrog Artifactory pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/artifactory/OPTIONS.md) |
+| [aws](./cloud/aws/README.md) | Run AWS pipeline operations. | `run`, `version`, `identity`, `s3_cp`, [all commands](./cloud/aws/OPTIONS.md) |
+| [azure](./cloud/azure/README.md) | Run Azure pipeline operations. | `run`, `version`, `account_show`, `group_deploy`, [all commands](./cloud/azure/OPTIONS.md) |
+| [bazel](./build/bazel/README.md) | Run Bazel pipeline operations. | `run`, `version`, `build`, `test`, [all commands](./build/bazel/OPTIONS.md) |
+| [betterleaks](./security/betterleaks/README.md) | Run Betterleaks pipeline operations. | `run`, `version`, `scan_dir`, `scan_git` |
+| [biome](./linting/biome/README.md) | Run Biome pipeline operations. | `run`, `version`, `check`, `lint`, [all commands](./linting/biome/OPTIONS.md) |
+| [black](./formatting/black/README.md) | Run Black pipeline operations. | `run`, `version`, `format`, `check` |
+| [buildkit](./containers/buildkit/README.md) | Run BuildKit pipeline operations. | `run`, `version`, `build`, `prune`, [all commands](./containers/buildkit/OPTIONS.md) |
+| [buildx](./containers/buildx/README.md) | Build and publish container images. | `buildx`, `dap`, `debug`, `history`, [all commands](./containers/buildx/OPTIONS.md) |
+| [cachix](./caching/cachix/README.md) | Configure and publish Nix cache outputs. | `setup`, `push` |
+| [checkov](./security/checkov/README.md) | Run Checkov pipeline operations. | `run`, `version`, `scan` |
+| [cmake](./build/cmake/README.md) | Run CMake pipeline operations. | `run`, `version`, `configure`, `build`, [all commands](./build/cmake/OPTIONS.md) |
+| [codacy](./code-quality/codacy/README.md) | Run Codacy pipeline operations. | `run`, `help`, `upload` |
+| [codecov](./code-quality/codecov/README.md) | Run Codecov pipeline operations. | `run`, `version`, `upload` |
+| [coveralls](./code-quality/coveralls/README.md) | Run Coveralls pipeline operations. | `run`, `version`, `upload`, `done` |
+| [cypress](./testing/cypress/README.md) | Run Cypress pipeline operations. | `run`, `version`, `setup`, `test`, [all commands](./testing/cypress/OPTIONS.md) |
+| [digitalocean](./cloud/digitalocean/README.md) | Run DigitalOcean pipeline operations. | `run`, `version`, `account_get`, `droplets_list`, [all commands](./cloud/digitalocean/OPTIONS.md) |
+| [docker](./containers/docker/README.md) | Run Docker pipeline operations. | `run`, `version`, `build`, `pull`, [all commands](./containers/docker/OPTIONS.md) |
+| [doppler](./secrets/doppler/README.md) | Run Doppler pipeline operations. | `run`, `version`, `run_command`, `names`, [all commands](./secrets/doppler/OPTIONS.md) |
+| [dpkg](./packaging/dpkg/README.md) | Validate and build architecture-specific .deb packages. | `build`, `validate` |
+| [flyctl](./deployment/flyctl/README.md) | Run Fly.io pipeline operations. | `run`, `version`, `deploy`, `status`, [all commands](./deployment/flyctl/OPTIONS.md) |
+| [gcloud](./cloud/gcloud/README.md) | Run Google Cloud pipeline operations. | `run`, `version`, `config_list`, `run_deploy`, [all commands](./cloud/gcloud/OPTIONS.md) |
+| [gemfury](./publishing/gemfury/README.md) | Upload Linux packages to Gemfury. | `upload` |
+| [gh-artifact](./artifacts/gh-artifact/README.md) | Run GitHub artifacts pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/gh-artifact/OPTIONS.md) |
+| [gitlab-artifacts](./artifacts/gitlab-artifacts/README.md) | Run GitLab artifacts pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/gitlab-artifacts/OPTIONS.md) |
+| [gitleaks](./security/gitleaks/README.md) | Run Gitleaks pipeline operations. | `run`, `version`, `scan_dir`, `scan_git` |
+| [grype](./security/grype/README.md) | Run Grype pipeline operations. | `run`, `version`, `scan`, `db_update` |
+| [helm](./deployment/helm/README.md) | Run Helm pipeline operations. | `run`, `version`, `lint`, `template`, [all commands](./deployment/helm/OPTIONS.md) |
+| [infisical](./secrets/infisical/README.md) | Run Infisical pipeline operations. | `run`, `version`, `run_command` |
+| [jfrog-cli](./artifacts/jfrog-cli/README.md) | Run JFrog CLI pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/jfrog-cli/OPTIONS.md) |
+| [kamal](./deployment/kamal/README.md) | Run Kamal pipeline operations. | `run`, `version`, `deploy`, `setup`, [all commands](./deployment/kamal/OPTIONS.md) |
+| [kubectl](./deployment/kubectl/README.md) | Run Kubectl pipeline operations. | `run`, `version`, `apply`, `get`, [all commands](./deployment/kubectl/OPTIONS.md) |
+| [meson](./build/meson/README.md) | Run Meson pipeline operations. | `run`, `version`, `configure`, `compile`, [all commands](./build/meson/OPTIONS.md) |
+| [netlify](./deployment/netlify/README.md) | Run Netlify pipeline operations. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/netlify/OPTIONS.md) |
+| [nexus](./artifacts/nexus/README.md) | Run Nexus Repository pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/nexus/OPTIONS.md) |
+| [ninja](./build/ninja/README.md) | Run Ninja pipeline operations. | `run`, `version`, `build`, `clean`, [all commands](./build/ninja/OPTIONS.md) |
+| [nix-package](./package-management/nix/README.md) | Run Nix packages pipeline operations. | `run`, `version`, `build`, `eval`, [all commands](./package-management/nix/OPTIONS.md) |
+| [openbao](./secrets/openbao/README.md) | Run OpenBao pipeline operations. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/openbao/OPTIONS.md) |
+| [opentofu](./infrastructure/opentofu/README.md) | Run OpenTofu pipeline operations. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/opentofu/OPTIONS.md) |
+| [oras](./artifacts/oras/README.md) | Run ORAS pipeline operations. | `run`, `version`, `push`, `pull`, [all commands](./artifacts/oras/OPTIONS.md) |
+| [playwright](./testing/playwright/README.md) | Run Playwright pipeline operations. | `run`, `version`, `setup`, `test`, [all commands](./testing/playwright/OPTIONS.md) |
+| [plumber](./security/plumber/README.md) | Run Plumber pipeline operations. | `run`, `version`, `analyze`, `validate_config` |
+| [podman](./containers/podman/README.md) | Run Podman pipeline operations. | `run`, `version`, `build`, `pull`, [all commands](./containers/podman/OPTIONS.md) |
+| [prettier](./formatting/prettier/README.md) | Run Prettier pipeline operations. | `run`, `version`, `format`, `check` |
+| [pulumi](./infrastructure/pulumi/README.md) | Run Pulumi pipeline operations. | `run`, `version`, `preview`, `up`, [all commands](./infrastructure/pulumi/OPTIONS.md) |
+| [railway](./deployment/railway/README.md) | Run Railway pipeline operations. | `run`, `version`, `up`, `status`, [all commands](./deployment/railway/OPTIONS.md) |
+| [rclone](./artifacts/rclone/README.md) | Run rclone pipeline operations. | `run`, `version`, `copy`, `copyto`, [all commands](./artifacts/rclone/OPTIONS.md) |
+| [render](./deployment/render/README.md) | Run Render pipeline operations. | `run`, `version`, `services`, `deploy`, [all commands](./deployment/render/OPTIONS.md) |
+| [rpmbuild](./packaging/rpmbuild/README.md) | Validate and build architecture-specific .rpm packages. | `build`, `validate` |
+| [ruff](./linting/ruff/README.md) | Run Ruff pipeline operations. | `run`, `version`, `check`, `format`, [all commands](./linting/ruff/OPTIONS.md) |
+| [rustfmt](./formatting/rustfmt/README.md) | Run Rustfmt pipeline operations. | `run`, `version`, `format`, `check`, [all commands](./formatting/rustfmt/OPTIONS.md) |
+| [sccache](./caching/sccache/README.md) | Run sccache pipeline operations. | `run`, `version`, `start_server`, `stop_server`, [all commands](./caching/sccache/OPTIONS.md) |
+| [scorecard](./security/scorecard/README.md) | Run OpenSSF Scorecard pipeline operations. | `run`, `version`, `scan`, `scan_local`, [all commands](./security/scorecard/OPTIONS.md) |
+| [semgrep](./security/semgrep/README.md) | Run Semgrep pipeline operations. | `run`, `version`, `scan`, `ci` |
+| [setup-actionlint](./setup/actionlint/README.md) | Install Actionlint and select a version. | `setup` |
+| [setup-argocd](./setup/argocd/README.md) | Install Argo CD and select a version. | `setup` |
+| [setup-artifactory](./setup/artifactory/README.md) | Install Artifactory and select a version. | `setup` |
+| [setup-aws](./setup/aws/README.md) | Install AWS and select a version. | `setup` |
+| [setup-azure](./setup/azure/README.md) | Install Azure and select a version. | `setup` |
+| [setup-babashka](./setup/babashka/README.md) | Install Babashka and select a version. | `setup` |
+| [setup-bazel](./setup/bazel/README.md) | Install Bazel and select a version. | `setup` |
+| [setup-betterleaks](./setup/betterleaks/README.md) | Install Betterleaks and select a version. | `setup` |
+| [setup-binaryen](./setup/binaryen/README.md) | Install Binaryen and select a version. | `setup` |
+| [setup-biome](./setup/biome/README.md) | Install Biome and select a version. | `setup` |
+| [setup-black](./setup/black/README.md) | Install Black and select a version. | `setup` |
+| [setup-buildkit](./setup/buildkit/README.md) | Install BuildKit and select a version. | `setup` |
+| [setup-buildx](./setup/buildx/README.md) | Install Buildx and select a version. | `setup` |
+| [setup-bun](./setup/bun/README.md) | Install bun and select a version. | `setup` |
+| [setup-cachix](./setup/cachix/README.md) | Install Cachix and select a version. | `setup` |
+| [setup-checkov](./setup/checkov/README.md) | Install Checkov and select a version. | `setup` |
+| [setup-clojure](./setup/clojure/README.md) | Install Clojure and select a version. | `setup` |
+| [setup-cmake](./setup/cmake/README.md) | Install CMake and select a version. | `setup` |
+| [setup-codacy](./setup/codacy/README.md) | Install Codacy and select a version. | `setup` |
+| [setup-codecov](./setup/codecov/README.md) | Install Codecov and select a version. | `setup` |
+| [setup-coveralls](./setup/coveralls/README.md) | Install Coveralls and select a version. | `setup` |
+| [setup-cypress](./setup/cypress/README.md) | Install Cypress and select a version. | `setup` |
+| [setup-deno](./setup/deno/README.md) | Install deno and select a version. | `setup` |
+| [setup-determinate-nix](./setup/determinate-nix/README.md) | Install determinate-nix and select a version. | `setup` |
+| [setup-digitalocean](./setup/digitalocean/README.md) | Install DigitalOcean and select a version. | `setup` |
+| [setup-docker](./setup/docker/README.md) | Install Docker and select a version. | `setup` |
+| [setup-doppler](./setup/doppler/README.md) | Install Doppler and select a version. | `setup` |
+| [setup-dpkg](./setup/dpkg/README.md) | Install Dpkg and select a version. | `setup` |
+| [setup-elixir](./setup/elixir/README.md) | Install elixir and select a version. | `setup` |
+| [setup-expo](./setup/expo/README.md) | Install Expo CLI and select a version. | `setup` |
+| [setup-extism](./setup/extism/README.md) | Install Extism and select a version. | `setup` |
+| [setup-extism-cli](./setup/extism-cli/README.md) | Install Extism-Cli and select a version. | `setup` |
+| [setup-extism-js](./setup/extism-js/README.md) | Install Extism-Js and select a version. | `setup` |
+| [setup-extism-py](./setup/extism-py/README.md) | Install Extism-Py and select a version. | `setup` |
+| [setup-flyctl](./setup/flyctl/README.md) | Install Fly.io and select a version. | `setup` |
+| [setup-gcloud](./setup/gcloud/README.md) | Install Google Cloud and select a version. | `setup` |
+| [setup-gemfury](./setup/gemfury/README.md) | Install Gemfury and select a version. | `setup` |
+| [setup-gh-artifact](./setup/gh-artifact/README.md) | Install Gh-Artifact and select a version. | `setup` |
+| [setup-gitlab-artifacts](./setup/gitlab-artifacts/README.md) | Install Gitlab-Artifacts and select a version. | `setup` |
+| [setup-gitleaks](./setup/gitleaks/README.md) | Install Gitleaks and select a version. | `setup` |
+| [setup-gleam](./setup/gleam/README.md) | Install gleam and select a version. | `setup` |
+| [setup-go](./setup/go/README.md) | Install go and select a version. | `setup` |
+| [setup-grype](./setup/grype/README.md) | Install Grype and select a version. | `setup` |
+| [setup-helm](./setup/helm/README.md) | Install Helm and select a version. | `setup` |
+| [setup-infisical](./setup/infisical/README.md) | Install Infisical and select a version. | `setup` |
+| [setup-java](./setup/java/README.md) | Install java and select a version. | `setup` |
+| [setup-jfrog-cli](./setup/jfrog-cli/README.md) | Install Jfrog-Cli and select a version. | `setup` |
+| [setup-kamal](./setup/kamal/README.md) | Install Kamal and select a version. | `setup` |
+| [setup-kubectl](./setup/kubectl/README.md) | Install Kubectl and select a version. | `setup` |
+| [setup-meson](./setup/meson/README.md) | Install Meson and select a version. | `setup` |
+| [setup-mise](./setup/mise/README.md) | Install Mise and select a version. | `setup` |
+| [setup-netlify](./setup/netlify/README.md) | Install Netlify and select a version. | `setup` |
+| [setup-nexus](./setup/nexus/README.md) | Install Nexus and select a version. | `setup` |
+| [setup-ninja](./setup/ninja/README.md) | Install Ninja and select a version. | `setup` |
+| [setup-nix](./setup/nix/README.md) | Install nix and select a version. | `setup` |
+| [setup-nix-package](./setup/nix-package/README.md) | Install Nix packages and select a version. | `setup` |
+| [setup-node](./setup/node/README.md) | Install node and select a version. | `setup` |
+| [setup-openbao](./setup/openbao/README.md) | Install OpenBao and select a version. | `setup` |
+| [setup-opentofu](./setup/opentofu/README.md) | Install OpenTofu and select a version. | `setup` |
+| [setup-oras](./setup/oras/README.md) | Install Oras and select a version. | `setup` |
+| [setup-pkl](./setup/pkl/README.md) | Install pkl and select a version. | `setup` |
+| [setup-playwright](./setup/playwright/README.md) | Install Playwright and select a version. | `setup` |
+| [setup-plumber](./setup/plumber/README.md) | Install Plumber and select a version. | `setup` |
+| [setup-podman](./setup/podman/README.md) | Install Podman and select a version. | `setup` |
+| [setup-prettier](./setup/prettier/README.md) | Install Prettier and select a version. | `setup` |
+| [setup-pulumi](./setup/pulumi/README.md) | Install Pulumi and select a version. | `setup` |
+| [setup-purescript](./setup/purescript/README.md) | Install purescript and select a version. | `setup` |
+| [setup-railway](./setup/railway/README.md) | Install Railway and select a version. | `setup` |
+| [setup-rclone](./setup/rclone/README.md) | Install Rclone and select a version. | `setup` |
+| [setup-render](./setup/render/README.md) | Install Render and select a version. | `setup` |
+| [setup-rpmbuild](./setup/rpmbuild/README.md) | Install Rpmbuild and select a version. | `setup` |
+| [setup-ruff](./setup/ruff/README.md) | Install Ruff and select a version. | `setup` |
+| [setup-rust](./setup/rust/README.md) | Install rust and select a version. | `setup` |
+| [setup-rustfmt](./setup/rustfmt/README.md) | Install Rustfmt and select a version. | `setup` |
+| [setup-sccache](./setup/sccache/README.md) | Install sccache and select a version. | `setup` |
+| [setup-scorecard](./setup/scorecard/README.md) | Install OpenSSF Scorecard and select a version. | `setup` |
+| [setup-semgrep](./setup/semgrep/README.md) | Install Semgrep and select a version. | `setup` |
+| [setup-shellcheck](./setup/shellcheck/README.md) | Install ShellCheck and select a version. | `setup` |
+| [setup-snyk](./setup/snyk/README.md) | Install Snyk and select a version. | `setup` |
+| [setup-sonarqube](./setup/sonarqube/README.md) | Install SonarQube and select a version. | `setup` |
+| [setup-syft](./setup/syft/README.md) | Install Syft and select a version. | `setup` |
+| [setup-tangled-artifacts](./setup/tangled-artifacts/README.md) | Install Tangled-Artifacts and select a version. | `setup` |
+| [setup-terraform](./setup/terraform/README.md) | Install Terraform and select a version. | `setup` |
+| [setup-terragrunt](./setup/terragrunt/README.md) | Install Terragrunt and select a version. | `setup` |
+| [setup-tg](./setup/tg/README.md) | Install Tg and select a version. | `setup` |
+| [setup-trivy](./setup/trivy/README.md) | Install Trivy and select a version. | `setup` |
+| [setup-trufflehog](./setup/trufflehog/README.md) | Install TruffleHog and select a version. | `setup` |
+| [setup-turborepo](./setup/turborepo/README.md) | Install Turborepo and select a version. | `setup` |
+| [setup-ubicloud](./setup/ubicloud/README.md) | Install Ubicloud and select a version. | `setup` |
+| [setup-uv](./setup/uv/README.md) | Install uv and select a version. | `setup` |
+| [setup-vault](./setup/vault/README.md) | Install Vault and select a version. | `setup` |
+| [setup-vercel](./setup/vercel/README.md) | Install Vercel and select a version. | `setup` |
+| [setup-xtp](./setup/xtp/README.md) | Install Xtp and select a version. | `setup` |
+| [setup-yamllint](./setup/yamllint/README.md) | Install Yamllint and select a version. | `setup` |
+| [setup-zig](./setup/zig/README.md) | Install zig and select a version. | `setup` |
+| [shellcheck](./linting/shellcheck/README.md) | Run ShellCheck pipeline operations. | `run`, `version`, `lint` |
+| [snyk](./security/snyk/README.md) | Run Snyk pipeline operations. | `run`, `version`, `setup`, `test`, [all commands](./security/snyk/OPTIONS.md) |
+| [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube pipeline operations. | `run`, `version`, `scan` |
+| [syft](./security/syft/README.md) | Run Syft pipeline operations. | `run`, `version`, `scan`, `convert` |
+| [tangled-artifacts](./artifacts/tangled-artifacts/README.md) | Run Tangled release artifacts pipeline operations. | `run`, `upload` |
+| [terraform](./infrastructure/terraform/README.md) | Run Terraform pipeline operations. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/terraform/OPTIONS.md) |
+| [terragrunt](./infrastructure/terragrunt/README.md) | Run Terragrunt pipeline operations. | `run`, `version`, `hcl_fmt`, `init`, [all commands](./infrastructure/terragrunt/OPTIONS.md) |
+| [trivy](./security/trivy/README.md) | Run Trivy pipeline operations. | `run`, `version`, `filesystem`, `image`, [all commands](./security/trivy/OPTIONS.md) |
+| [trufflehog](./security/trufflehog/README.md) | Run TruffleHog pipeline operations. | `run`, `version`, `filesystem`, `git` |
+| [ubicloud](./cloud/ubicloud/README.md) | Run Ubicloud pipeline operations. | `run`, `help` |
+| [uv](./package-management/uv/README.md) | Run uv pipeline operations. | `run`, `version`, `sync`, `lock`, [all commands](./package-management/uv/OPTIONS.md) |
+| [vault](./secrets/vault/README.md) | Run Vault pipeline operations. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/vault/OPTIONS.md) |
+| [vercel](./deployment/vercel/README.md) | Run Vercel pipeline operations. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/vercel/OPTIONS.md) |
+| [yamllint](./linting/yamllint/README.md) | Run Yamllint pipeline operations. | `run`, `version`, `lint` |
 
 Each module has its own dependencies, build scripts, tests, and documentation.
 Source APIs also expose helpers for composition in PureScript pipelines.
