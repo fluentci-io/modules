@@ -5,6 +5,7 @@ import CI.Setup.Archive as Archive
 import CI.Setup.BSD as BSD
 import CI.Setup.Host as H
 import CI.Setup.Installer as Installer
+import CI.Setup.Tools as Tools
 import CI.Setup.Types (Config, Result, decodeConfig, defaults, hostSupported, isBSD, isNix, validateConfig, cleanDirectory)
 import Data.Argonaut.Core (stringify)
 import Data.Argonaut.Encode (encodeJson)
@@ -25,7 +26,8 @@ install tool config = do
   when (isBSD host.os && (config.baseline || config.libc /= "auto" || config.otpVersion /= "")) $
     throw "baseline, libc, and otpVersion apply to upstream installs, not native BSD packages"
   let configured = config { installDir = cleanDirectory config.installDir }
-  result <- if isBSD host.os then BSD.install tool host configured
+  result <- if Tools.supports tool then Tools.install tool host configured
+    else if isBSD host.os then BSD.install tool host configured
     else if isNix tool || tool == "rust" then Installer.install tool host configured
     else Archive.install tool host configured
   H.activate result

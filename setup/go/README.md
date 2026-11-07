@@ -11,7 +11,7 @@ Official Go archives. Publishes `GOROOT` and retains the complete toolchain.
 ## Usage
 
 ```sh
-fluentci run go setup 1.24.0
+fluentci run setup-go setup 1.24.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

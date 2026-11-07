@@ -11,7 +11,7 @@ Official Node.js archives, including npm and npx. Select an exact release, `late
 ## Usage
 
 ```sh
-fluentci run node setup 22.14.0
+fluentci run setup-node setup 22.14.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

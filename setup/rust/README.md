@@ -11,7 +11,7 @@ Official rustup bootstrap, using isolated Cargo and rustup directories and the m
 ## Usage
 
 ```sh
-fluentci run rust setup 1.85.0
+fluentci run setup-rust setup 1.85.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

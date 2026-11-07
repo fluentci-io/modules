@@ -1,4 +1,4 @@
-# Runtime setup modules
+# Setup modules
 
 Install Bun, Deno, Elixir, Gleam, Go, Java, Node.js, Pkl, Rust, Zig, Nix, or
 Determinate Nix from FluentCI. Every module exports `setup` and has a
@@ -30,9 +30,9 @@ a different machine. Other operating systems are rejected.
 The modules are registered by name in the repository's `fluentci.toml`:
 
 ```sh
-fluentci run node setup 22.14.0
-fluentci run go setup 1.24.0
-fluentci run rust setup stable
+fluentci run setup-node setup 22.14.0
+fluentci run setup-go setup 1.24.0
+fluentci run setup-rust setup stable
 ```
 
 Omit input to use the module's default version. For more options, provide a
@@ -196,3 +196,36 @@ docker run --rm --network none -v "$PWD:/repo:ro" fluentci-setup-tests \
 ## License
 
 All setup modules and their shared library use the [MIT License](../LICENSE).
+
+## Tool installers
+
+Every operational tool has a `setup-<tool>` companion in the alphabetical root
+registry. Additional installers cover Babashka, Clojure, tg, mise, Turborepo,
+Expo CLI, Binaryen, and the Extism toolchain. The
+[installer catalog](../lib/setup/tools.json) records the executable, package,
+release backend, native package selectors, and version probe for each tool.
+
+Linux/macOS installers use official binary archives, isolated Python virtual
+environments, Bun packages, Go installs, Ruby gems, or native package repositories.
+Bun-based installers bootstrap Node.js and Bun when absent. Other runtime
+prerequisites are explicit in each installer README. Versioned GitHub archives
+resolve their actual release before choosing a cache prefix. Ecosystem installs
+using `latest` reuse that prefix; pin a version or choose a fresh installDir to
+upgrade. Failed owned installations are removed; existing prefixes are verified
+before reuse. Native installers reuse an already available matching executable.
+
+`setup-sccache` also publishes `RUSTC_WRAPPER`. `setup-buildx` registers the Docker
+CLI plugin and requires Docker. `setup-gh-artifact` installs the Actions artifact
+client with Bun; job uploads need the Actions runtime. `setup-extism` installs
+Extism CLI, JS/Python PDK compilers, XTP, and Binaryen with separate version fields.
+The Python compiler publishes its private WASI dependency directory. XTP historical
+versions and Python PDK Linux ARM64 builds are unavailable upstream and fail clearly.
+
+Tool installation does not configure accounts, start daemons, install native mobile
+SDKs, or authenticate remote caches. Use your CI runner's secret store and native
+credential/configuration mechanisms for subsequent commands.
+
+Tools without a version subcommand verify their help command. Go installs also
+read Go module build metadata; native packages can only report the requested
+selector for those tools. Select a trusted package identity explicitly when a
+repository uses a different name.

@@ -1,0 +1,44 @@
+{
+  "name": "setup-rustfmt",
+  "exports": {
+    "setup": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "default": "stable"
+          },
+          "installDir": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "sudo": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

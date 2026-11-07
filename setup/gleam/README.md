@@ -11,7 +11,7 @@ Official Gleam compiler archives. Erlang or a JavaScript runtime is a separate d
 ## Usage
 
 ```sh
-fluentci run gleam setup 1.9.1
+fluentci run setup-gleam setup 1.9.1
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

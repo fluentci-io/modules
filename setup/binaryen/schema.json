@@ -1,0 +1,44 @@
+{
+  "name": "setup-binaryen",
+  "exports": {
+    "setup": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "default": "latest"
+          },
+          "installDir": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "sudo": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

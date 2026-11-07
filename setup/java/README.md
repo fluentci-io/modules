@@ -11,7 +11,7 @@ Eclipse Temurin JDK archives from Adoptium. Select a major such as `21`, an exac
 ## Usage
 
 ```sh
-fluentci run java setup 21
+fluentci run setup-java setup 21
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

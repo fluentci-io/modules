@@ -11,7 +11,7 @@ Official Deno ZIP archives. Linux archives require a compatible glibc system.
 ## Usage
 
 ```sh
-fluentci run deno setup 2.1.0
+fluentci run setup-deno setup 2.1.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

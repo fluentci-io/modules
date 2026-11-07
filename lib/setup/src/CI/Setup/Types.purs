@@ -1,6 +1,7 @@
 module CI.Setup.Types where
 
 import Prelude
+import CI.Setup.ToolCatalog as ToolCatalog
 import Data.Argonaut.Core (Json, isNull)
 import Data.Argonaut.Decode (decodeJson, getFieldOptional)
 import Data.Array as Array
@@ -23,16 +24,21 @@ type Config =
   , init :: String
   , baseline :: Boolean
   , libc :: String
+  , cliVersion :: String
+  , jsVersion :: String
+  , pythonVersion :: String
+  , xtpVersion :: String
+  , binaryenVersion :: String
   }
 
 type Result = { tool :: String, version :: String, binDir :: String, environment :: Object.Object String }
 type Host = { os :: String, arch :: String }
 
 names :: Array String
-names = [ "bun", "deno", "determinate-nix", "elixir", "gleam", "go", "java", "nix", "node", "pkl", "rust", "zig" ]
+names = [ "bun", "deno", "determinate-nix", "elixir", "gleam", "go", "java", "nix", "node", "pkl", "rust", "zig" ] <> ToolCatalog.names
 
 isNix :: String -> Boolean
-isNix name = name == "nix" || name == "determinate-nix"
+isNix name = name == "nix" || name == "determinate-nix" || name == "nix-package"
 
 isBSD :: String -> Boolean
 isBSD os = Array.elem os [ "freebsd", "openbsd", "netbsd" ]
@@ -58,9 +64,10 @@ hostSupported name host
 
 defaults :: String -> Config
 defaults name =
-  { version: if name == "rust" then "stable" else if name == "java" then "21" else "latest"
+  { version: if name == "rust" then "stable" else if name == "java" then "21" else ToolCatalog.defaultVersion name
   , installDir: "", packageName: "", sudo: false, otpVersion: ""
   , daemon: true, init: "systemd", baseline: false, libc: "auto"
+  , cliVersion: "", jsVersion: "latest", pythonVersion: "latest", xtpVersion: "latest", binaryenVersion: "latest"
   }
 
 versionToken :: String -> Boolean
@@ -87,6 +94,8 @@ validDirectory raw =
 
 validateConfig :: String -> Config -> Either String Unit
 validateConfig _ config = do
+  traverse_ (\value -> unless (versionToken value) (Left "Invalid Extism component version")) [ config.jsVersion, config.pythonVersion, config.xtpVersion, config.binaryenVersion ]
+  unless (config.cliVersion == "" || versionToken config.cliVersion) $ Left "Invalid Extism CLI version"
   unless (versionToken config.version) $ Left "version must be a nonempty release or channel token"
   traverse_ (\value -> unless (not (String.contains (Pattern "\x0000") value)
     && not (String.contains (Pattern "\n") value) && not (String.contains (Pattern "\r") value))
@@ -110,6 +119,7 @@ decodeConfig name json = do
         (if name == "elixir" then [ "otpVersion" ] else []) <>
         (if name == "nix" then [ "daemon" ] else []) <>
         (if name == "determinate-nix" then [ "init" ] else []) <>
+        (if name == "extism" then [ "cliVersion", "jsVersion", "pythonVersion", "xtpVersion", "binaryenVersion" ] else []) <>
         (if name == "bun" then [ "baseline", "libc" ] else if name == "pkl" then [ "libc" ] else [])
   case Array.find (\key -> not (Array.elem key allowed)) (Object.keys fields) of
     Just key -> Left ("Unknown setup argument: " <> key)
@@ -125,6 +135,11 @@ decodeConfig name json = do
   init <- either (Left <<< show) (Right <<< fromMaybe initial.init) (getFieldOptional fields "init")
   baseline <- either (Left <<< show) (Right <<< fromMaybe initial.baseline) (getFieldOptional fields "baseline")
   libc <- either (Left <<< show) (Right <<< fromMaybe initial.libc) (getFieldOptional fields "libc")
-  let config = { version, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc }
+  cliVersion <- either (Left <<< show) (Right <<< fromMaybe initial.cliVersion) (getFieldOptional fields "cliVersion")
+  jsVersion <- either (Left <<< show) (Right <<< fromMaybe initial.jsVersion) (getFieldOptional fields "jsVersion")
+  pythonVersion <- either (Left <<< show) (Right <<< fromMaybe initial.pythonVersion) (getFieldOptional fields "pythonVersion")
+  xtpVersion <- either (Left <<< show) (Right <<< fromMaybe initial.xtpVersion) (getFieldOptional fields "xtpVersion")
+  binaryenVersion <- either (Left <<< show) (Right <<< fromMaybe initial.binaryenVersion) (getFieldOptional fields "binaryenVersion")
+  let config = { version, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
   validateConfig name config
   pure config

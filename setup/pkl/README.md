@@ -17,7 +17,7 @@ does not provide Pkl.
 ## Usage
 
 ```sh
-fluentci run pkl setup 0.33.0
+fluentci run setup-pkl setup 0.33.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

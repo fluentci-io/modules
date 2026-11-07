@@ -11,7 +11,7 @@ Precompiled Elixir ZIP archives from Hex, matched to the installed Erlang/OTP ma
 ## Usage
 
 ```sh
-fluentci run elixir setup 1.18.0
+fluentci run setup-elixir setup 1.18.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

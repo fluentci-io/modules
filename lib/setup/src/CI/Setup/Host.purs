@@ -105,7 +105,7 @@ versionFrom tool text = do
   let relevant = if tool == "elixir"
         then fromMaybe "" (Array.find (String.startsWith (Pattern "Elixir ")) (map trim (String.split (Pattern "\n") text)))
         else text
-  pattern <- either throw pure (Regex.regex "[0-9]+\\.[0-9]+(\\.[0-9]+)?([-+][0-9A-Za-z.-]+)?" noFlags)
+  pattern <- either throw pure (Regex.regex (if tool == "binaryen" then "[0-9]+" else "[0-9]+(\\.[0-9]+)+([-+][0-9A-Za-z.-]+)?") noFlags)
   case Regex.match pattern relevant of
     Just matched -> case NEA.head matched of
       Just version -> pure version

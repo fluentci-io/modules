@@ -11,7 +11,7 @@ Archives selected from the official Zig download index, with SHA-256 verificatio
 ## Usage
 
 ```sh
-fluentci run zig setup 0.14.0
+fluentci run setup-zig setup 0.14.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

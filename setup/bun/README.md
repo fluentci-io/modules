@@ -11,7 +11,7 @@ Official Bun ZIP archives. `baseline: true` selects the x86_64 baseline build; `
 ## Usage
 
 ```sh
-fluentci run bun setup 1.2.3
+fluentci run setup-bun setup 1.2.3
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

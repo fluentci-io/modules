@@ -11,7 +11,7 @@ Official upstream Nix installer. Select a Nix release or `latest`. Defaults to d
 ## Usage
 
 ```sh
-fluentci run nix setup 2.26.0
+fluentci run setup-nix setup 2.26.0
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

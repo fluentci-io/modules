@@ -11,7 +11,7 @@ Official Determinate Nix installer. `version` pins the **installer** release, wh
 ## Usage
 
 ```sh
-fluentci run determinate-nix setup 3.24.2
+fluentci run setup-determinate-nix setup 3.24.2
 ```
 
 Omit the version to use the default. The `setup` export also accepts a JSON

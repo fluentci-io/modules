@@ -6,7 +6,7 @@ and Spago. Each version can be selected independently.
 ## Usage
 
 ```sh
-fluentci run purescript setup 0.15.16
+fluentci run setup-purescript setup 0.15.16
 ```
 
 The `setup` WebAssembly export also accepts JSON plugin input:
