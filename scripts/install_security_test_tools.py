@@ -44,4 +44,4 @@ if __name__ == '__main__':
     parser.add_argument('--directory', type=Path, required=True)
     parser.add_argument('--tool', choices=['betterleaks', 'gitleaks', 'syft'], action='append')
     args = parser.parse_args()
-    install(args.directory.resolve(), args.tool or ['gitleaks', 'syft'])
+    install(args.directory.resolve(), args.tool or ['betterleaks', 'gitleaks', 'syft'])

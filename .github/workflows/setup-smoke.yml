@@ -37,8 +37,8 @@ jobs:
       - name: Build runtime setup modules
         shell: bash
         run: |
-          for directory in setup/*; do
-            test -f "$directory/package.json" || continue
+          for runtime in bun deno elixir gleam go java node pkl purescript rust zig; do
+            directory="setup/$runtime"
             npm ci --prefix "$directory"
             npm run build --prefix "$directory"
             node scripts/validate_wasm.mjs "$directory"
@@ -49,7 +49,12 @@ jobs:
           FLUENTCI_SETUP_LIVE: '1'
           FLUENTCI_REQUIRE_NATIVE_TESTS: '1'
           FLUENTCI_SETUP_ELIXIR_VERSION: ${{ runner.os == 'Linux' && '1.18.0' || 'latest' }}
-        run: node --test --test-name-pattern='actual upstream release' setup/*/test/setup.test.mjs 2>&1 | tee "$RUNNER_TEMP/setup-smoke.log"
+        run: |
+          tests=()
+          for runtime in bun deno elixir gleam go java node pkl purescript rust zig; do
+            tests+=("setup/$runtime/test/setup.test.mjs")
+          done
+          node --test --test-name-pattern='actual upstream release' "${tests[@]}" 2>&1 | tee "$RUNNER_TEMP/setup-smoke.log"
       - name: Preserve smoke test log
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

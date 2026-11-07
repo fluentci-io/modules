@@ -40,6 +40,12 @@ def validate(root=ROOT):
     if len(paths) != len(set(paths)):
         raise ValueError("Module paths must be unique")
     found = {str(path.parent.relative_to(root)) for path in root.glob("*/*/entry.mjs")}
+    directories = {str(path.relative_to(root))
+                   for category in {path.split('/')[0] for path in paths}
+                   for path in (root / category).iterdir()
+                   if path.is_dir() and not path.name.startswith('.')}
+    if directories - set(paths):
+        raise ValueError(f"Registry/source mismatch: unregistered={sorted(directories-set(paths))}")
     if set(paths) != found:
         raise ValueError(f"Registry/source mismatch: unregistered={sorted(found-set(paths))}, missing={sorted(set(paths)-found)}")
     license_text = (root / "LICENSE").read_text()
@@ -88,6 +94,28 @@ def validate(root=ROOT):
     return result
 
 
+
+def batches(modules, shards=4):
+    """Cover every module once per OS while bounding runner count."""
+    if shards < 1:
+        raise ValueError("shards must be positive")
+    buckets = [[] for _ in range(min(shards, len(modules)))]
+    for index, module in enumerate(modules):
+        buckets[index % len(buckets)].append(module)
+    result = []
+    for os_name in ["ubuntu-24.04", "macos-15"]:
+        for index, bucket in enumerate(buckets):
+            names = {module["name"] for module in bucket}
+            result.append({"os": os_name, "shard": index + 1, "modules": bucket,
+                           "browser": bool(names & {"cypress", "playwright"}),
+                           "bun": bool(names & {"cypress", "playwright", "gh-artifact", "gitlab-artifacts", "scorecard", "black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint"}),
+                           "build": bool(names & {"cmake", "meson", "ninja", "sccache"}),
+                           "formatters": bool(names & {"black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint"}),
+                           "uv": "uv" in names,
+                           "security": sorted(names & {"betterleaks", "gitleaks", "syft"})})
+    return {"include": result}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--github-output", action="store_true")
@@ -96,7 +124,7 @@ def main():
         modules = validate()
         print(f"Validated {len(modules)} modules and their declared entry points.")
         if args.github_output:
-            matrix = {"include": [dict(module, os=os_name) for module in modules for os_name in ["ubuntu-24.04", "macos-15"]]}
+            matrix = batches(modules)
             with open(os.environ["GITHUB_OUTPUT"], "a") as output:
                 output.write("matrix=" + json.dumps(matrix, separators=(",", ":")) + "\n")
     except (ValueError, KeyError, OSError, TypeError) as error:

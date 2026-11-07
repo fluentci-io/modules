@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -38,6 +39,10 @@ jobs:
         run: python containers/buildx/generate.py --check
       - name: Check generated CLI sources and schemas
         run: python scripts/generate_cli_modules.py --check
+      - name: Check generated setup sources and schemas
+        run: python scripts/generate_setup_tools.py --check
+      - name: Audit pipeline exports
+        run: python scripts/audit_modules.py --check
       - name: Lint workflows
         shell: bash
         run: |
@@ -48,16 +53,16 @@ jobs:
           "$RUNNER_TEMP/actionlint" -color
 
   modules:
-    name: ${{ matrix.name }} / ${{ matrix.os }}
+    name: Modules ${{ matrix.shard }} / ${{ matrix.os }}
     needs: validate
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 25
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.validate.outputs.matrix) }}
     env:
       FLUENTCI_REQUIRE_NATIVE_TESTS: '1'
-      MODULE_PATH: ${{ matrix.path }}
+      MODULE_BATCH: ${{ toJSON(matrix.modules) }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: ./.github/actions/setup-toolchain
@@ -66,15 +71,23 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends dpkg-dev rpm zip unzip
+      - name: Set up Bun for JavaScript integration tests
+        if: matrix.bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.4.3'
       - name: Install formatter and linter integration tools
-        if: startsWith(matrix.path, 'formatting/') || contains(fromJSON('["ruff", "biome", "shellcheck", "yamllint"]'), matrix.name)
+        if: matrix.formatters
         shell: bash
         run: |
           python3 -m venv "$RUNNER_TEMP/cli-python"
           "$RUNNER_TEMP/cli-python/bin/pip" install black==25.1.0 ruff==0.11.5 yamllint==1.37.0
-          npm install --prefix "$RUNNER_TEMP/cli-node" prettier@3.5.3 @biomejs/biome@1.9.4
-          echo "$RUNNER_TEMP/cli-python/bin" >> "$GITHUB_PATH"
-          echo "$RUNNER_TEMP/cli-node/node_modules/.bin" >> "$GITHUB_PATH"
+          mkdir -p "$RUNNER_TEMP/cli-node"
+          bun add --cwd "$RUNNER_TEMP/cli-node" --dev --exact prettier@3.5.3 @biomejs/biome@1.9.4
+          {
+            echo "$RUNNER_TEMP/cli-python/bin"
+            echo "$RUNNER_TEMP/cli-node/node_modules/.bin"
+          } >> "$GITHUB_PATH"
           if ! command -v rustfmt >/dev/null; then rustup component add rustfmt; fi
           if ! command -v shellcheck >/dev/null; then
             if [ "$RUNNER_OS" = Linux ]; then
@@ -85,36 +98,31 @@ jobs:
           fi
           echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
       - name: Install uv integration tool
-        if: matrix.name == 'uv'
+        if: matrix.uv
         shell: bash
         run: |
           python3 -m venv "$RUNNER_TEMP/cli-uv"
           "$RUNNER_TEMP/cli-uv/bin/pip" install uv==0.11.0
           echo "$RUNNER_TEMP/cli-uv/bin" >> "$GITHUB_PATH"
           echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
-      - name: Set up Bun for browser testing modules
-        if: startsWith(matrix.path, 'testing/')
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: '1.4.3'
+      - name: Require upload adapter tests
+        if: matrix.bun
+        run: echo 'FLUENTCI_REQUIRE_ARTIFACT_TESTS=1' >> "$GITHUB_ENV"
       - name: Install browser testing tools with Bun
-        if: startsWith(matrix.path, 'testing/')
+        if: matrix.browser
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/browser-tools"
           export CYPRESS_CACHE_FOLDER="$RUNNER_TEMP/cypress-cache"
           export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/playwright-browsers"
-          if [ "$MODULE_PATH" = testing/playwright ]; then
-            bun add --cwd "$RUNNER_TEMP/browser-tools" --dev --exact @playwright/test@1.65.0
-            "$RUNNER_TEMP/browser-tools/node_modules/.bin/playwright" install --with-deps --only-shell chromium
-          else
-            if [ "$RUNNER_OS" = Linux ]; then
-              sudo apt-get install --yes --no-install-recommends \
-                libgtk-3-0t64 libgbm1 libnotify4 libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
-            fi
-            CYPRESS_INSTALL_BINARY=0 bun add --cwd "$RUNNER_TEMP/browser-tools" --dev --exact cypress@16.2.1
-            "$RUNNER_TEMP/browser-tools/node_modules/.bin/cypress" install
+          bun add --cwd "$RUNNER_TEMP/browser-tools" --dev --exact @playwright/test@1.65.0
+          "$RUNNER_TEMP/browser-tools/node_modules/.bin/playwright" install --with-deps --only-shell chromium
+          if [ "$RUNNER_OS" = Linux ]; then
+            sudo apt-get install --yes --no-install-recommends \
+              libgtk-3-0t64 libgbm1 libnotify4 libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
           fi
+          CYPRESS_INSTALL_BINARY=0 bun add --cwd "$RUNNER_TEMP/browser-tools" --dev --exact cypress@16.2.1
+          "$RUNNER_TEMP/browser-tools/node_modules/.bin/cypress" install
           {
             echo "CYPRESS_CACHE_FOLDER=$CYPRESS_CACHE_FOLDER"
             echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH"
@@ -122,45 +130,42 @@ jobs:
             echo 'FLUENTCI_REQUIRE_BROWSER_TESTS=1'
           } >> "$GITHUB_ENV"
       - name: Install offline security integration tools
-        if: contains(fromJSON('["betterleaks", "gitleaks", "syft"]'), matrix.name)
+        if: toJSON(matrix.security) != '[]'
         shell: bash
         run: |
-          python3 scripts/install_security_test_tools.py --directory "$RUNNER_TEMP/security-tools" --tool "${{ matrix.name }}"
+          python3 scripts/install_security_test_tools.py --directory "$RUNNER_TEMP/security-tools"
           echo "$RUNNER_TEMP/security-tools" >> "$GITHUB_PATH"
           echo 'FLUENTCI_REQUIRE_SECURITY_TESTS=1' >> "$GITHUB_ENV"
+      - name: Install native build integration tools
+        if: matrix.build
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            sudo apt-get install --yes --no-install-recommends cmake meson ninja-build sccache build-essential
+          else
+            brew install cmake meson ninja sccache
+          fi
+          echo 'FLUENTCI_REQUIRE_BUILD_TESTS=1' >> "$GITHUB_ENV"
       - name: Cache PureScript dependencies
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: |
             ~/.cache/spago-nodejs
             ~/Library/Caches/spago-nodejs
-            ${{ matrix.path }}/.spago
-          key: spago-${{ runner.os }}-${{ runner.arch }}-${{ matrix.name }}-${{ hashFiles(format('{0}/spago.lock', matrix.path)) }}
-      - name: Install module dependencies
-        shell: bash
-        run: |
-          if [[ "$MODULE_PATH" == testing/* ]]; then
-            bun install --cwd "$MODULE_PATH" --frozen-lockfile
-          else
-            npm ci --prefix "$MODULE_PATH"
-          fi
-      - name: Build module
-        run: npm run build --prefix "$MODULE_PATH"
-      - name: Run all module tests
-        shell: bash
-        run: npm test --prefix "$MODULE_PATH" 2>&1 | tee "$RUNNER_TEMP/module-tests.log"
-      - name: Validate compiled WASM entry points
-        run: node scripts/validate_wasm.mjs "$MODULE_PATH"
+            */*/.spago
+          key: spago-${{ runner.os }}-${{ runner.arch }}-${{ matrix.shard }}-${{ hashFiles('**/spago.lock') }}
+      - name: Build and test every module in this batch
+        run: python3 scripts/test_module_batch.py --modules "$MODULE_BATCH" --log-dir "$RUNNER_TEMP/module-logs"
       - name: Verify the build preserves committed files
         run: git diff --exit-code
       - name: Upload test log and plugin
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
-          name: ${{ matrix.name }}-${{ matrix.os }}
+          name: modules-${{ matrix.shard }}-${{ matrix.os }}
           path: |
-            ${{ runner.temp }}/module-tests.log
-            ${{ matrix.path }}/dist/plugin.wasm
+            ${{ runner.temp }}/module-logs/
+            */*/dist/plugin.wasm
           if-no-files-found: warn
           retention-days: 7
 

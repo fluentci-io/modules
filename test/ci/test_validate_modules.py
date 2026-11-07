@@ -42,6 +42,11 @@ class ModuleValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unregistered"):
             validate(self.root)
 
+    def test_empty_named_directory_cannot_be_silently_skipped(self):
+        (self.root / 'setup/empty').mkdir()
+        with self.assertRaisesRegex(ValueError, 'unregistered'):
+            validate(self.root)
+
     def test_missing_tests_are_rejected(self):
         (self.module / "test.test.mjs").unlink()
         with self.assertRaisesRegex(ValueError, "test suite"):
@@ -75,6 +80,24 @@ class ModuleValidationTests(unittest.TestCase):
         p.write_text(p.read_text() * 2)
         with self.assertRaisesRegex(ValueError, "unique"):
             validate(self.root)
+
+
+class BatchTests(unittest.TestCase):
+    def test_large_registry_fits_eight_runners_and_covers_each_module(self):
+        from validate_modules import batches
+        modules=[{'name': 'module-'+str(i),'path':'setup/module-'+str(i)} for i in range(160)]
+        matrix=batches(modules)['include']
+        self.assertEqual(len(matrix),8)
+        for os_name in ['ubuntu-24.04','macos-15']:
+            found=[m for row in matrix if row['os']==os_name for m in row['modules']]
+            self.assertCountEqual(found,modules)
+            self.assertEqual(len({m['name'] for m in found}),len(modules))
+
+    def test_small_registry_does_not_spawn_empty_runners(self):
+        from validate_modules import batches
+        matrix=batches([{'name':'cypress','path':'testing/cypress'}])['include']
+        self.assertEqual(len(matrix),2)
+        self.assertTrue(all(row['browser'] for row in matrix))
 
 
 if __name__ == "__main__":
