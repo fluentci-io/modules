@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, rmSync, realpathSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, existsSync, rmSync, realpathSync, statSync, utimesSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fixture } from './host.mjs';
@@ -32,7 +32,12 @@ export function buildSuite(tool, plugin) {
         writeFileSync(join(project,'CMakeLists.txt'),'cmake_minimum_required(VERSION 3.16)\nproject(fixture C)\nadd_executable(hello hello.c)\nenable_testing()\nadd_test(NAME hello COMMAND hello)\ninstall(TARGETS hello DESTINATION bin)\n');
         invoke('configure');invoke('build',{parallel:2});invoke('test',{parallel:2});invoke('install',{prefix:join(project,'installed')});
         assert.ok(existsSync(join(project,'installed/bin/hello')));
-        writeFileSync(join(project,'hello.c'),'invalid C code\n');assert.throws(()=>invoke('build'),/failed/);
+        // Preserve the timestamp to reproduce build tools missing a rapid source edit.
+        const source=join(project,'hello.c');
+        const {atime,mtime}=statSync(source);
+        writeFileSync(source,'invalid C code\n');
+        utimesSync(source,atime,mtime);
+        assert.throws(()=>invoke('build',{cleanFirst:true}),/failed/);
       } else if(tool.name==='meson') {
         writeFileSync(join(project,'meson.build'),"project('fixture','c')\nexe=executable('hello','hello.c',install:true)\ntest('hello',exe)\n");
         invoke('configure',{prefix:'/usr'});invoke('compile');invoke('test');invoke('install',{destdir:join(project,'installed')});
