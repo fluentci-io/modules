@@ -37,7 +37,9 @@ export function runNative(tool, bundle) {
       mkdirSync(home);
       mkdirSync(payload);
       let relative, layout;
-      if (tool === "rust") {
+      if (tool === "pkl") {
+        executable(artifact, versionText(tool));
+      } else if (tool === "rust") {
         const source = join(root, "rustc");
         executable(source, versionText("rust"));
         writeFileSync(artifact, `#!/bin/sh\nset -eu\nmkdir -p "$CARGO_HOME/bin" "$RUSTUP_HOME"\ncp '${source}' "$CARGO_HOME/bin/rustc"\ncp '${source}' "$CARGO_HOME/bin/cargo"\n`);

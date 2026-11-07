@@ -29,7 +29,7 @@ type Result = { tool :: String, version :: String, binDir :: String, environment
 type Host = { os :: String, arch :: String }
 
 names :: Array String
-names = [ "bun", "deno", "determinate-nix", "elixir", "gleam", "go", "java", "nix", "node", "rust", "zig" ]
+names = [ "bun", "deno", "determinate-nix", "elixir", "gleam", "go", "java", "nix", "node", "pkl", "rust", "zig" ]
 
 isNix :: String -> Boolean
 isNix name = name == "nix" || name == "determinate-nix"
@@ -110,7 +110,7 @@ decodeConfig name json = do
         (if name == "elixir" then [ "otpVersion" ] else []) <>
         (if name == "nix" then [ "daemon" ] else []) <>
         (if name == "determinate-nix" then [ "init" ] else []) <>
-        (if name == "bun" then [ "baseline", "libc" ] else [])
+        (if name == "bun" then [ "baseline", "libc" ] else if name == "pkl" then [ "libc" ] else [])
   case Array.find (\key -> not (Array.elem key allowed)) (Object.keys fields) of
     Just key -> Left ("Unknown setup argument: " <> key)
     Nothing -> pure unit

@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { copyFileSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 
-export const versions = { bun: "1.2.3", deno: "2.1.0", elixir: "1.18.0", gleam: "1.9.1", go: "1.24.0", java: "21.0.5", node: "22.14.0", rust: "1.85.0", zig: "0.14.0", purescript: "0.15.16", nix: "2.26.0", "determinate-nix": "3.2.0" };
+export const versions = { pkl: "0.33.0", bun: "1.2.3", deno: "2.1.0", elixir: "1.18.0", gleam: "1.9.1", go: "1.24.0", java: "21.0.5", node: "22.14.0", rust: "1.85.0", zig: "0.14.0", purescript: "0.15.16", nix: "2.26.0", "determinate-nix": "3.2.0" };
 export function versionText(tool, version = versions[tool]) {
   if (tool === "go") return `go version go${version} linux/amd64\n`;
   if (tool === "java") return `openjdk version "${version}" 2025-01-01\n`;
@@ -19,6 +19,7 @@ export function fixture(tool, options = {}) {
   const normalizedArchitecture = ["amd64", "x64"].includes(architecture) ? "x86_64" : architecture === "arm64" ? "aarch64" : architecture;
   function metadata(url) {
     if (options.responses?.[url] !== undefined) return options.responses[url];
+    if (url.includes("api.github.com") && tool === "pkl") return JSON.stringify({tag_name: versions.pkl});
     if (url.includes("api.github.com")) return JSON.stringify({ tag_name: url.includes("oven-sh/bun") ? `bun-v${versions.bun}` : `v${versions[tool]}` });
     if (url.includes("nodejs.org/dist/index.json")) return JSON.stringify([{ version: `v${versions.node}`, lts: "Jod" }]);
     if (url.includes("go.dev/VERSION")) return `go${versions.go}\ntime 2025-01-01`;
@@ -33,6 +34,7 @@ export function fixture(tool, options = {}) {
     calls.push(args);
     if (options.command) { const result = options.command(args, stderr); if (result !== undefined) return result; }
     if (options.fail?.(args)) throw Error("Injected command failure: " + args.join(" "));
+    if (tool === "pkl" && args[0] === "java" && args[1] === "-version") return 'openjdk version "21.0.5"\n';
     if (tool === "zig" && args[1] === "--version") throw Error("Zig uses the version subcommand");
     if (args[0] === "curl" && !options.network) {
       if (args.includes("--output")) {

@@ -127,6 +127,24 @@ resolve tool host config = do
       version <- if requested == "latest" || requested == "lts" then nodeVersion requested else pure requested
       pure { version, url: "https://nodejs.org/dist/v" <> version <> "/node-v" <> version <> "-" <> darwin <> "-" <> nodeArch <> ".tar.gz"
         , layout: "tar-root", executable: "bin/node", sha256: "" }
+    "pkl" -> do
+      version <- if requested == "latest" then tag "apple/pkl" "" else pure requested
+      musl <- case config.libc of
+        "musl" -> pure true
+        "gnu" -> pure false
+        _ -> if host.os == "linux" then H.exists "/etc/alpine-release" else pure false
+      when (host.os == "macos" && musl) $ throw "Pkl musl builds are Linux-only"
+      let java = (host.os == "macos" && not arm) || (musl && arm)
+          asset = if java then "jpkl" else if host.os == "macos" then "pkl-macos-aarch64"
+            else if musl then "pkl-alpine-linux-amd64"
+            else "pkl-linux-" <> if arm then "aarch64" else "amd64"
+      when java $ do
+        H.requireTools [ "java" ]
+        installed <- H.captureWith Object.empty true [ "java", "-version" ] >>= H.versionFrom "java"
+        let major = fromMaybe 0 (Array.head (String.split (Pattern ".") installed) >>= Int.fromString)
+        unless (major >= 17) $ throw "Pkl Java executable requires Java 17 or newer; run the java setup module first"
+      pure { version, url: "https://github.com/apple/pkl/releases/download/" <> version <> "/" <> asset
+        , layout: "raw-bin", executable: "bin/pkl", sha256: "" }
     "zig" -> zigRelease requested host
     _ -> throw ("No archive installer for " <> tool)
 
@@ -135,7 +153,7 @@ install tool host config = do
   unless (config.packageName == "") $ throw "packageName is only supported by BSD package installations"
   when config.sudo $ throw "Archive installations are per-user; sudo is only used for BSD or Nix installations"
   H.requireTools [ "curl", "mktemp", "mkdir", "mv", "chmod", "rm", "test" ]
-  H.requireTools (if Array.elem tool [ "bun", "deno", "elixir" ] then [ "unzip" ] else [ "tar" ])
+  H.requireTools (if tool == "pkl" then [ "cp" ] else if Array.elem tool [ "bun", "deno", "elixir" ] then [ "unzip" ] else [ "tar" ])
   when (tool == "bun") $ H.requireTools [ "cp", "ln" ]
   release <- resolve tool host config
   unless (versionToken release.version) $ throw "Upstream returned an invalid release version"
@@ -160,7 +178,10 @@ install tool host config = do
       when (release.sha256 /= "") $ do
         digest <- P.sha256 (P.file archive) >>= H.unwrap
         unless (trim digest == release.sha256) $ throw "Downloaded setup archive SHA-256 mismatch"
-      if release.layout == "tar-root" then
+      if release.layout == "raw-bin" then do
+        H.run [ "mkdir", "-p", staged <> "/bin" ]
+        H.run [ "cp", archive, staged <> "/" <> release.executable ]
+      else if release.layout == "tar-root" then
         H.run [ "tar", "-xf", archive, "-C", staged, "--strip-components=1" ]
       else if release.layout == "tar-bin" then do
         H.run [ "mkdir", "-p", staged <> "/bin" ]

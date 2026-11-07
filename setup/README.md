@@ -1,6 +1,6 @@
 # Runtime setup modules
 
-Install Bun, Deno, Elixir, Gleam, Go, Java, Node.js, Rust, Zig, Nix, or
+Install Bun, Deno, Elixir, Gleam, Go, Java, Node.js, Pkl, Rust, Zig, Nix, or
 Determinate Nix from FluentCI. Every module exports `setup` and has a
 `setupWith` PureScript helper.
 
@@ -68,6 +68,7 @@ arguments; version strings and paths are not interpolated into shell commands.
 | [go](./go/README.md) | Exact release or `latest`. |
 | [java](./java/README.md) | JDK major, exact Temurin release such as `21.0.5+11`, or `latest` LTS. Default `21`. |
 | [node](./node/README.md) | Exact release, `latest`, or `lts`. |
+| [pkl](./pkl/README.md) | Exact release or `latest`; optional `libc`. Uses upstream `jpkl` with Java 17+ on macOS x86_64 and musl aarch64. |
 | [purescript](./purescript/README.md) | Compiler, Node, Bun, npm, and Spago versions can be selected independently. |
 | [rust](./rust/README.md) | Exact release, `stable`, `beta`, `nightly`, or dated rustup toolchain. Default `stable`. |
 | [zig](./zig/README.md) | Exact release in the official index or `latest` stable. |
