@@ -2,8 +2,8 @@
 
 FluentCI runs the same compiled modules inside GitHub Actions, Jenkins agents,
 Tekton steps, or another runner with the FluentCI host installed. Check out this
-repository with its `fluentci.toml`, build the modules you use, and supply plugin
-input as the final argument to `fluentci run MODULE FUNCTION INPUT`.
+repository with its `fluentci.toml`, build the modules you use, and use named component flags with `fluentci run MODULE FUNCTION --argument VALUE`.
+FluentCI v0.17.2 or newer is required.
 
 Setup names use `setup-`: `setup-cmake` installs CMake, while `cmake` configures,
 builds, installs, and tests a project. Setup publishes PATH to subsequent tasks
@@ -18,15 +18,15 @@ install a pinned CMake release. No cross-compiler is implied by package architec
 selection in dpkg or rpmbuild.
 
 ```sh
-fluentci run cmake configure '{"runDir":".fluentci/configure","buildDir":"build","buildType":"Release"}'
-fluentci run cmake build '{"runDir":".fluentci/build","buildDir":"build","parallel":2}'
-fluentci run cmake test '{"runDir":".fluentci/test","buildDir":"build"}'
+fluentci run cmake configure --run-dir .fluentci/configure --build-dir build --build-type Release
+fluentci run cmake build --run-dir .fluentci/build --build-dir build --parallel 2
+fluentci run cmake test --run-dir .fluentci/test --build-dir build
 ```
 
 A failed native command fails the module invocation. Do not reuse a `runDir` on
 reruns: include the CI run ID or remove the previous workspace through your CI
 engine's workspace lifecycle. The task logs and result JSON live in that directory.
-Declare output files with `"artifacts":{"package":"dist/package.tar.gz"}` to
+Declare output files with `--artifacts '["package=dist/package.tar.gz"]'` to
 include file sizes and SHA-256 metadata in the execution report. The CI engine
 still controls retention and cross-job transfer of those files.
 
@@ -41,11 +41,11 @@ steps:
   - name: Check formatting
     run: >-
       fluentci run prettier check
-      '{"runDir":".fluentci/format","files":["src"]}'
+      --run-dir .fluentci/format --files '["src"]'
   - name: Run tests
     run: >-
       fluentci run cmake test
-      '{"runDir":".fluentci/test","buildDir":"build"}'
+      --run-dir .fluentci/test --build-dir build
 ```
 
 These snippets assume the tool executables and build directory already exist.
@@ -53,7 +53,7 @@ For job uploads, `gh-artifact.upload` needs the Actions runtime token and result
 URL made available to the process; a repository `GITHUB_TOKEN` alone is insufficient.
 `setup-gh-artifact` installs its official artifact client through Bun. A normal
 Actions artifact action can also collect the output paths and run directories.
-Use `gh-artifact.release_upload` for release assets from another CI provider.
+Use `gh-artifact.release-upload` for release assets from another CI provider.
 
 ## Jenkins
 
@@ -64,9 +64,9 @@ agent. Module input contains configuration and paths, never token values.
 stage('Validate') {
   steps {
     sh '''
-      fluentci run terraform init '{"runDir":".fluentci/init"}'
-      fluentci run terraform validate '{"runDir":".fluentci/validate"}'
-      fluentci run terraform plan '{"runDir":".fluentci/plan","out":"plan.tfplan"}'
+      fluentci run terraform init --run-dir .fluentci/init
+      fluentci run terraform validate --run-dir .fluentci/validate
+      fluentci run terraform plan --run-dir .fluentci/plan --out plan.tfplan
     '''
     archiveArtifacts artifacts: 'plan.tfplan', fingerprint: true
   }
@@ -91,7 +91,7 @@ steps:
     script: |
       #!/bin/sh
       set -eu
-      fluentci run trivy filesystem '{"runDir":".fluentci/trivy","directory":"."}'
+      fluentci run trivy filesystem --run-dir .fluentci/trivy --directory .
 ```
 
 The runner image must provide the configured Trivy database/network access.

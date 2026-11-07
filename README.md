@@ -1,7 +1,8 @@
 # FluentCI Modules
 
-Reusable CI/CD modules written in PureScript and compiled to WebAssembly for
-FluentCI. Build containers, package Linux applications, publish artifacts, and
+Reusable CI/CD modules written in PureScript and compiled to native WebAssembly
+components for FluentCI **v0.17.2+**. Version 0.2.0 uses named typed arguments
+and native return values; see the [migration guide](./docs/COMPONENTS.md). Build containers, package Linux applications, publish artifacts, and
 cache Nix build outputs, format and lint sources, manage infrastructure, and
 deploy applications using independently configured modules.
 
@@ -10,268 +11,242 @@ deploy applications using independently configured modules.
 All modules are registered alphabetically in [fluentci.toml](./fluentci.toml).
 See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./docs/PIPELINES.md) for failure, credential, and artifact contracts.
 
-| Module | Purpose | WebAssembly functions |
+| Module | Purpose | Component functions |
 | --- | --- | --- |
-| [actionlint](./linting/actionlint/README.md) | Run Actionlint pipeline operations. | `run`, `version`, `lint` |
-| [argocd](./deployment/argocd/README.md) | Run Argo CD pipeline operations. | `run`, `version`, `app_get`, `app_sync`, [all commands](./deployment/argocd/OPTIONS.md) |
-| [artifactory](./artifacts/artifactory/README.md) | Run JFrog Artifactory pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/artifactory/OPTIONS.md) |
-| [aws](./cloud/aws/README.md) | Run AWS pipeline operations. | `run`, `version`, `identity`, `s3_cp`, [all commands](./cloud/aws/OPTIONS.md) |
-| [azure](./cloud/azure/README.md) | Run Azure pipeline operations. | `run`, `version`, `account_show`, `group_deploy`, [all commands](./cloud/azure/OPTIONS.md) |
-| [bazel](./build/bazel/README.md) | Run Bazel pipeline operations. | `run`, `version`, `build`, `test`, [all commands](./build/bazel/OPTIONS.md) |
-| [betterleaks](./security/betterleaks/README.md) | Run Betterleaks pipeline operations. | `run`, `version`, `scan_dir`, `scan_git` |
-| [biome](./linting/biome/README.md) | Run Biome pipeline operations. | `run`, `version`, `check`, `lint`, [all commands](./linting/biome/OPTIONS.md) |
-| [black](./formatting/black/README.md) | Run Black pipeline operations. | `run`, `version`, `format`, `check` |
-| [buildkit](./containers/buildkit/README.md) | Run BuildKit pipeline operations. | `run`, `version`, `build`, `prune`, [all commands](./containers/buildkit/OPTIONS.md) |
-| [buildx](./containers/buildx/README.md) | Build and publish container images. | `buildx`, `dap`, `debug`, `history`, [all commands](./containers/buildx/OPTIONS.md) |
-| [cachix](./caching/cachix/README.md) | Configure and publish Nix cache outputs. | `setup`, `push` |
-| [checkov](./security/checkov/README.md) | Run Checkov pipeline operations. | `run`, `version`, `scan` |
-| [cmake](./build/cmake/README.md) | Run CMake pipeline operations. | `run`, `version`, `configure`, `build`, [all commands](./build/cmake/OPTIONS.md) |
-| [codacy](./code-quality/codacy/README.md) | Run Codacy pipeline operations. | `run`, `help`, `upload` |
-| [codecov](./code-quality/codecov/README.md) | Run Codecov pipeline operations. | `run`, `version`, `upload` |
-| [coveralls](./code-quality/coveralls/README.md) | Run Coveralls pipeline operations. | `run`, `version`, `upload`, `done` |
-| [cypress](./testing/cypress/README.md) | Run Cypress pipeline operations. | `run`, `version`, `setup`, `test`, [all commands](./testing/cypress/OPTIONS.md) |
-| [digitalocean](./cloud/digitalocean/README.md) | Run DigitalOcean pipeline operations. | `run`, `version`, `account_get`, `droplets_list`, [all commands](./cloud/digitalocean/OPTIONS.md) |
-| [docker](./containers/docker/README.md) | Run Docker pipeline operations. | `run`, `version`, `build`, `pull`, [all commands](./containers/docker/OPTIONS.md) |
-| [doppler](./secrets/doppler/README.md) | Run Doppler pipeline operations. | `run`, `version`, `run_command`, `names`, [all commands](./secrets/doppler/OPTIONS.md) |
-| [dpkg](./packaging/dpkg/README.md) | Validate and build architecture-specific .deb packages. | `build`, `validate` |
-| [flyctl](./deployment/flyctl/README.md) | Run Fly.io pipeline operations. | `run`, `version`, `deploy`, `status`, [all commands](./deployment/flyctl/OPTIONS.md) |
-| [gcloud](./cloud/gcloud/README.md) | Run Google Cloud pipeline operations. | `run`, `version`, `config_list`, `run_deploy`, [all commands](./cloud/gcloud/OPTIONS.md) |
-| [gemfury](./publishing/gemfury/README.md) | Upload Linux packages to Gemfury. | `upload` |
-| [gh-artifact](./artifacts/gh-artifact/README.md) | Run GitHub artifacts pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/gh-artifact/OPTIONS.md) |
-| [gitlab-artifacts](./artifacts/gitlab-artifacts/README.md) | Run GitLab artifacts pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/gitlab-artifacts/OPTIONS.md) |
-| [gitleaks](./security/gitleaks/README.md) | Run Gitleaks pipeline operations. | `run`, `version`, `scan_dir`, `scan_git` |
-| [grype](./security/grype/README.md) | Run Grype pipeline operations. | `run`, `version`, `scan`, `db_update` |
-| [helm](./deployment/helm/README.md) | Run Helm pipeline operations. | `run`, `version`, `lint`, `template`, [all commands](./deployment/helm/OPTIONS.md) |
-| [infisical](./secrets/infisical/README.md) | Run Infisical pipeline operations. | `run`, `version`, `run_command` |
-| [jfrog-cli](./artifacts/jfrog-cli/README.md) | Run JFrog CLI pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/jfrog-cli/OPTIONS.md) |
-| [kamal](./deployment/kamal/README.md) | Run Kamal pipeline operations. | `run`, `version`, `deploy`, `setup`, [all commands](./deployment/kamal/OPTIONS.md) |
-| [kubectl](./deployment/kubectl/README.md) | Run Kubectl pipeline operations. | `run`, `version`, `apply`, `get`, [all commands](./deployment/kubectl/OPTIONS.md) |
-| [meson](./build/meson/README.md) | Run Meson pipeline operations. | `run`, `version`, `configure`, `compile`, [all commands](./build/meson/OPTIONS.md) |
-| [netlify](./deployment/netlify/README.md) | Run Netlify pipeline operations. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/netlify/OPTIONS.md) |
-| [nexus](./artifacts/nexus/README.md) | Run Nexus Repository pipeline operations. | `run`, `version`, `upload`, `download`, [all commands](./artifacts/nexus/OPTIONS.md) |
-| [ninja](./build/ninja/README.md) | Run Ninja pipeline operations. | `run`, `version`, `build`, `clean`, [all commands](./build/ninja/OPTIONS.md) |
-| [nix-package](./package-management/nix/README.md) | Run Nix packages pipeline operations. | `run`, `version`, `build`, `eval`, [all commands](./package-management/nix/OPTIONS.md) |
-| [openbao](./secrets/openbao/README.md) | Run OpenBao pipeline operations. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/openbao/OPTIONS.md) |
-| [opentofu](./infrastructure/opentofu/README.md) | Run OpenTofu pipeline operations. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/opentofu/OPTIONS.md) |
-| [oras](./artifacts/oras/README.md) | Run ORAS pipeline operations. | `run`, `version`, `push`, `pull`, [all commands](./artifacts/oras/OPTIONS.md) |
-| [playwright](./testing/playwright/README.md) | Run Playwright pipeline operations. | `run`, `version`, `setup`, `test`, [all commands](./testing/playwright/OPTIONS.md) |
-| [plumber](./security/plumber/README.md) | Run Plumber pipeline operations. | `run`, `version`, `analyze`, `validate_config` |
-| [podman](./containers/podman/README.md) | Run Podman pipeline operations. | `run`, `version`, `build`, `pull`, [all commands](./containers/podman/OPTIONS.md) |
-| [prettier](./formatting/prettier/README.md) | Run Prettier pipeline operations. | `run`, `version`, `format`, `check` |
-| [pulumi](./infrastructure/pulumi/README.md) | Run Pulumi pipeline operations. | `run`, `version`, `preview`, `up`, [all commands](./infrastructure/pulumi/OPTIONS.md) |
-| [railway](./deployment/railway/README.md) | Run Railway pipeline operations. | `run`, `version`, `up`, `status`, [all commands](./deployment/railway/OPTIONS.md) |
-| [rclone](./artifacts/rclone/README.md) | Run rclone pipeline operations. | `run`, `version`, `copy`, `copyto`, [all commands](./artifacts/rclone/OPTIONS.md) |
-| [render](./deployment/render/README.md) | Run Render pipeline operations. | `run`, `version`, `services`, `deploy`, [all commands](./deployment/render/OPTIONS.md) |
-| [rpmbuild](./packaging/rpmbuild/README.md) | Validate and build architecture-specific .rpm packages. | `build`, `validate` |
-| [ruff](./linting/ruff/README.md) | Run Ruff pipeline operations. | `run`, `version`, `check`, `format`, [all commands](./linting/ruff/OPTIONS.md) |
-| [rustfmt](./formatting/rustfmt/README.md) | Run Rustfmt pipeline operations. | `run`, `version`, `format`, `check`, [all commands](./formatting/rustfmt/OPTIONS.md) |
-| [sccache](./caching/sccache/README.md) | Run sccache pipeline operations. | `run`, `version`, `start_server`, `stop_server`, [all commands](./caching/sccache/OPTIONS.md) |
-| [scorecard](./security/scorecard/README.md) | Run OpenSSF Scorecard pipeline operations. | `run`, `version`, `scan`, `scan_local`, [all commands](./security/scorecard/OPTIONS.md) |
-| [semgrep](./security/semgrep/README.md) | Run Semgrep pipeline operations. | `run`, `version`, `scan`, `ci` |
-| [setup-actionlint](./setup/actionlint/README.md) | Install Actionlint and select a version. | `setup` |
-| [setup-argocd](./setup/argocd/README.md) | Install Argo CD and select a version. | `setup` |
-| [setup-artifactory](./setup/artifactory/README.md) | Install Artifactory and select a version. | `setup` |
-| [setup-aws](./setup/aws/README.md) | Install AWS and select a version. | `setup` |
-| [setup-azure](./setup/azure/README.md) | Install Azure and select a version. | `setup` |
-| [setup-babashka](./setup/babashka/README.md) | Install Babashka and select a version. | `setup` |
-| [setup-bazel](./setup/bazel/README.md) | Install Bazel and select a version. | `setup` |
-| [setup-betterleaks](./setup/betterleaks/README.md) | Install Betterleaks and select a version. | `setup` |
-| [setup-binaryen](./setup/binaryen/README.md) | Install Binaryen and select a version. | `setup` |
-| [setup-biome](./setup/biome/README.md) | Install Biome and select a version. | `setup` |
-| [setup-black](./setup/black/README.md) | Install Black and select a version. | `setup` |
-| [setup-buildkit](./setup/buildkit/README.md) | Install BuildKit and select a version. | `setup` |
-| [setup-buildx](./setup/buildx/README.md) | Install Buildx and select a version. | `setup` |
-| [setup-bun](./setup/bun/README.md) | Install bun and select a version. | `setup` |
-| [setup-cachix](./setup/cachix/README.md) | Install Cachix and select a version. | `setup` |
-| [setup-checkov](./setup/checkov/README.md) | Install Checkov and select a version. | `setup` |
-| [setup-clojure](./setup/clojure/README.md) | Install Clojure and select a version. | `setup` |
-| [setup-cmake](./setup/cmake/README.md) | Install CMake and select a version. | `setup` |
-| [setup-codacy](./setup/codacy/README.md) | Install Codacy and select a version. | `setup` |
-| [setup-codecov](./setup/codecov/README.md) | Install Codecov and select a version. | `setup` |
-| [setup-coveralls](./setup/coveralls/README.md) | Install Coveralls and select a version. | `setup` |
-| [setup-cypress](./setup/cypress/README.md) | Install Cypress and select a version. | `setup` |
-| [setup-deno](./setup/deno/README.md) | Install deno and select a version. | `setup` |
-| [setup-determinate-nix](./setup/determinate-nix/README.md) | Install determinate-nix and select a version. | `setup` |
-| [setup-digitalocean](./setup/digitalocean/README.md) | Install DigitalOcean and select a version. | `setup` |
-| [setup-docker](./setup/docker/README.md) | Install Docker and select a version. | `setup` |
-| [setup-doppler](./setup/doppler/README.md) | Install Doppler and select a version. | `setup` |
-| [setup-dpkg](./setup/dpkg/README.md) | Install Dpkg and select a version. | `setup` |
-| [setup-elixir](./setup/elixir/README.md) | Install elixir and select a version. | `setup` |
-| [setup-expo](./setup/expo/README.md) | Install Expo CLI and select a version. | `setup` |
-| [setup-extism](./setup/extism/README.md) | Install Extism and select a version. | `setup` |
-| [setup-extism-cli](./setup/extism-cli/README.md) | Install Extism-Cli and select a version. | `setup` |
-| [setup-extism-js](./setup/extism-js/README.md) | Install Extism-Js and select a version. | `setup` |
-| [setup-extism-py](./setup/extism-py/README.md) | Install Extism-Py and select a version. | `setup` |
-| [setup-flyctl](./setup/flyctl/README.md) | Install Fly.io and select a version. | `setup` |
-| [setup-gcloud](./setup/gcloud/README.md) | Install Google Cloud and select a version. | `setup` |
-| [setup-gemfury](./setup/gemfury/README.md) | Install Gemfury and select a version. | `setup` |
-| [setup-gh-artifact](./setup/gh-artifact/README.md) | Install Gh-Artifact and select a version. | `setup` |
-| [setup-gitlab-artifacts](./setup/gitlab-artifacts/README.md) | Install Gitlab-Artifacts and select a version. | `setup` |
-| [setup-gitleaks](./setup/gitleaks/README.md) | Install Gitleaks and select a version. | `setup` |
-| [setup-gleam](./setup/gleam/README.md) | Install gleam and select a version. | `setup` |
-| [setup-go](./setup/go/README.md) | Install go and select a version. | `setup` |
-| [setup-grype](./setup/grype/README.md) | Install Grype and select a version. | `setup` |
-| [setup-helm](./setup/helm/README.md) | Install Helm and select a version. | `setup` |
-| [setup-infisical](./setup/infisical/README.md) | Install Infisical and select a version. | `setup` |
-| [setup-java](./setup/java/README.md) | Install java and select a version. | `setup` |
-| [setup-jfrog-cli](./setup/jfrog-cli/README.md) | Install Jfrog-Cli and select a version. | `setup` |
-| [setup-kamal](./setup/kamal/README.md) | Install Kamal and select a version. | `setup` |
-| [setup-kubectl](./setup/kubectl/README.md) | Install Kubectl and select a version. | `setup` |
-| [setup-meson](./setup/meson/README.md) | Install Meson and select a version. | `setup` |
-| [setup-mise](./setup/mise/README.md) | Install Mise and select a version. | `setup` |
-| [setup-netlify](./setup/netlify/README.md) | Install Netlify and select a version. | `setup` |
-| [setup-nexus](./setup/nexus/README.md) | Install Nexus and select a version. | `setup` |
-| [setup-ninja](./setup/ninja/README.md) | Install Ninja and select a version. | `setup` |
-| [setup-nix](./setup/nix/README.md) | Install nix and select a version. | `setup` |
-| [setup-nix-package](./setup/nix-package/README.md) | Install Nix packages and select a version. | `setup` |
-| [setup-node](./setup/node/README.md) | Install node and select a version. | `setup` |
-| [setup-openbao](./setup/openbao/README.md) | Install OpenBao and select a version. | `setup` |
-| [setup-opentofu](./setup/opentofu/README.md) | Install OpenTofu and select a version. | `setup` |
-| [setup-oras](./setup/oras/README.md) | Install Oras and select a version. | `setup` |
-| [setup-pkl](./setup/pkl/README.md) | Install pkl and select a version. | `setup` |
-| [setup-playwright](./setup/playwright/README.md) | Install Playwright and select a version. | `setup` |
-| [setup-plumber](./setup/plumber/README.md) | Install Plumber and select a version. | `setup` |
-| [setup-podman](./setup/podman/README.md) | Install Podman and select a version. | `setup` |
-| [setup-prettier](./setup/prettier/README.md) | Install Prettier and select a version. | `setup` |
-| [setup-pulumi](./setup/pulumi/README.md) | Install Pulumi and select a version. | `setup` |
-| [setup-purescript](./setup/purescript/README.md) | Install purescript and select a version. | `setup` |
-| [setup-railway](./setup/railway/README.md) | Install Railway and select a version. | `setup` |
-| [setup-rclone](./setup/rclone/README.md) | Install Rclone and select a version. | `setup` |
-| [setup-render](./setup/render/README.md) | Install Render and select a version. | `setup` |
-| [setup-rpmbuild](./setup/rpmbuild/README.md) | Install Rpmbuild and select a version. | `setup` |
-| [setup-ruff](./setup/ruff/README.md) | Install Ruff and select a version. | `setup` |
-| [setup-rust](./setup/rust/README.md) | Install rust and select a version. | `setup` |
-| [setup-rustfmt](./setup/rustfmt/README.md) | Install Rustfmt and select a version. | `setup` |
-| [setup-sccache](./setup/sccache/README.md) | Install sccache and select a version. | `setup` |
-| [setup-scorecard](./setup/scorecard/README.md) | Install OpenSSF Scorecard and select a version. | `setup` |
-| [setup-semgrep](./setup/semgrep/README.md) | Install Semgrep and select a version. | `setup` |
-| [setup-shellcheck](./setup/shellcheck/README.md) | Install ShellCheck and select a version. | `setup` |
-| [setup-snyk](./setup/snyk/README.md) | Install Snyk and select a version. | `setup` |
-| [setup-sonarqube](./setup/sonarqube/README.md) | Install SonarQube and select a version. | `setup` |
-| [setup-syft](./setup/syft/README.md) | Install Syft and select a version. | `setup` |
-| [setup-tangled-artifacts](./setup/tangled-artifacts/README.md) | Install Tangled-Artifacts and select a version. | `setup` |
-| [setup-terraform](./setup/terraform/README.md) | Install Terraform and select a version. | `setup` |
-| [setup-terragrunt](./setup/terragrunt/README.md) | Install Terragrunt and select a version. | `setup` |
-| [setup-tg](./setup/tg/README.md) | Install Tg and select a version. | `setup` |
-| [setup-trivy](./setup/trivy/README.md) | Install Trivy and select a version. | `setup` |
-| [setup-trufflehog](./setup/trufflehog/README.md) | Install TruffleHog and select a version. | `setup` |
-| [setup-turborepo](./setup/turborepo/README.md) | Install Turborepo and select a version. | `setup` |
-| [setup-ubicloud](./setup/ubicloud/README.md) | Install Ubicloud and select a version. | `setup` |
-| [setup-uv](./setup/uv/README.md) | Install uv and select a version. | `setup` |
-| [setup-vault](./setup/vault/README.md) | Install Vault and select a version. | `setup` |
-| [setup-vercel](./setup/vercel/README.md) | Install Vercel and select a version. | `setup` |
-| [setup-xtp](./setup/xtp/README.md) | Install Xtp and select a version. | `setup` |
-| [setup-yamllint](./setup/yamllint/README.md) | Install Yamllint and select a version. | `setup` |
-| [setup-zig](./setup/zig/README.md) | Install zig and select a version. | `setup` |
-| [shellcheck](./linting/shellcheck/README.md) | Run ShellCheck pipeline operations. | `run`, `version`, `lint` |
-| [snyk](./security/snyk/README.md) | Run Snyk pipeline operations. | `run`, `version`, `setup`, `test`, [all commands](./security/snyk/OPTIONS.md) |
-| [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube pipeline operations. | `run`, `version`, `scan` |
-| [syft](./security/syft/README.md) | Run Syft pipeline operations. | `run`, `version`, `scan`, `convert` |
-| [tangled-artifacts](./artifacts/tangled-artifacts/README.md) | Run Tangled release artifacts pipeline operations. | `run`, `upload` |
-| [terraform](./infrastructure/terraform/README.md) | Run Terraform pipeline operations. | `run`, `version`, `init`, `validate`, [all commands](./infrastructure/terraform/OPTIONS.md) |
-| [terragrunt](./infrastructure/terragrunt/README.md) | Run Terragrunt pipeline operations. | `run`, `version`, `hcl_fmt`, `init`, [all commands](./infrastructure/terragrunt/OPTIONS.md) |
-| [trivy](./security/trivy/README.md) | Run Trivy pipeline operations. | `run`, `version`, `filesystem`, `image`, [all commands](./security/trivy/OPTIONS.md) |
-| [trufflehog](./security/trufflehog/README.md) | Run TruffleHog pipeline operations. | `run`, `version`, `filesystem`, `git` |
-| [ubicloud](./cloud/ubicloud/README.md) | Run Ubicloud pipeline operations. | `run`, `help` |
-| [uv](./package-management/uv/README.md) | Run uv pipeline operations. | `run`, `version`, `sync`, `lock`, [all commands](./package-management/uv/OPTIONS.md) |
-| [vault](./secrets/vault/README.md) | Run Vault pipeline operations. | `run`, `version`, `status`, `kv_list`, [all commands](./secrets/vault/OPTIONS.md) |
-| [vercel](./deployment/vercel/README.md) | Run Vercel pipeline operations. | `run`, `version`, `deploy`, `build`, [all commands](./deployment/vercel/OPTIONS.md) |
-| [yamllint](./linting/yamllint/README.md) | Run Yamllint pipeline operations. | `run`, `version`, `lint` |
+| [actionlint](./linting/actionlint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/actionlint/COMPONENT.md) |
+| [apko](./containers/apko/README.md) | Run a native command with literal arguments. | `run`, `version`, `build`, [typed contract](./containers/apko/COMPONENT.md) |
+| [argocd](./deployment/argocd/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `app-get`, [typed contract](./deployment/argocd/COMPONENT.md) |
+| [artifactory](./artifacts/artifactory/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/artifactory/COMPONENT.md) |
+| [aws](./cloud/aws/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `identity`, [typed contract](./cloud/aws/COMPONENT.md) |
+| [azure](./cloud/azure/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `account-show`, [typed contract](./cloud/azure/COMPONENT.md) |
+| [bazel](./build/bazel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./build/bazel/COMPONENT.md) |
+| [betterleaks](./security/betterleaks/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan-dir`, [typed contract](./security/betterleaks/COMPONENT.md) |
+| [biome](./linting/biome/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `check`, [typed contract](./linting/biome/COMPONENT.md) |
+| [black](./formatting/black/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/black/COMPONENT.md) |
+| [buildkit](./containers/buildkit/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/buildkit/COMPONENT.md) |
+| [buildx](./containers/buildx/README.md) | Run Docker Buildx buildx and return execution report paths. | `buildx`, `dap`, `debug`, [typed contract](./containers/buildx/COMPONENT.md) |
+| [cachix](./caching/cachix/README.md) | Configure a Cachix cache using host credentials. | `setup`, `push`, [typed contract](./caching/cachix/COMPONENT.md) |
+| [checkov](./security/checkov/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/checkov/COMPONENT.md) |
+| [cmake](./build/cmake/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `configure`, [typed contract](./build/cmake/COMPONENT.md) |
+| [codacy](./code-quality/codacy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `help`, `upload`, [typed contract](./code-quality/codacy/COMPONENT.md) |
+| [codecov](./code-quality/codecov/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/codecov/COMPONENT.md) |
+| [coveralls](./code-quality/coveralls/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/coveralls/COMPONENT.md) |
+| [cypress](./testing/cypress/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/cypress/COMPONENT.md) |
+| [digitalocean](./cloud/digitalocean/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `account-get`, [typed contract](./cloud/digitalocean/COMPONENT.md) |
+| [docker](./containers/docker/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/docker/COMPONENT.md) |
+| [doppler](./secrets/doppler/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/doppler/COMPONENT.md) |
+| [dpkg](./packaging/dpkg/README.md) | Build packages from a Linux dpkg package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/dpkg/COMPONENT.md) |
+| [flyctl](./deployment/flyctl/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/flyctl/COMPONENT.md) |
+| [gcloud](./cloud/gcloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `config-list`, [typed contract](./cloud/gcloud/COMPONENT.md) |
+| [gemfury](./publishing/gemfury/README.md) | Upload Linux packages to Gemfury using credentials from the host environment. | `upload`, [typed contract](./publishing/gemfury/COMPONENT.md) |
+| [gh-artifact](./artifacts/gh-artifact/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gh-artifact/COMPONENT.md) |
+| [gitlab-artifacts](./artifacts/gitlab-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gitlab-artifacts/COMPONENT.md) |
+| [gitleaks](./security/gitleaks/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan-dir`, [typed contract](./security/gitleaks/COMPONENT.md) |
+| [grype](./security/grype/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/grype/COMPONENT.md) |
+| [helm](./deployment/helm/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./deployment/helm/COMPONENT.md) |
+| [infisical](./secrets/infisical/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/infisical/COMPONENT.md) |
+| [jfrog-cli](./artifacts/jfrog-cli/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/jfrog-cli/COMPONENT.md) |
+| [kamal](./deployment/kamal/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/kamal/COMPONENT.md) |
+| [kubectl](./deployment/kubectl/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `apply`, [typed contract](./deployment/kubectl/COMPONENT.md) |
+| [meson](./build/meson/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `configure`, [typed contract](./build/meson/COMPONENT.md) |
+| [netlify](./deployment/netlify/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/netlify/COMPONENT.md) |
+| [nexus](./artifacts/nexus/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/nexus/COMPONENT.md) |
+| [ninja](./build/ninja/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./build/ninja/COMPONENT.md) |
+| [nix-package](./package-management/nix/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./package-management/nix/COMPONENT.md) |
+| [openbao](./secrets/openbao/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/openbao/COMPONENT.md) |
+| [opentofu](./infrastructure/opentofu/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/opentofu/COMPONENT.md) |
+| [oras](./artifacts/oras/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `push`, [typed contract](./artifacts/oras/COMPONENT.md) |
+| [playwright](./testing/playwright/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/playwright/COMPONENT.md) |
+| [plumber](./security/plumber/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `analyze`, [typed contract](./security/plumber/COMPONENT.md) |
+| [podman](./containers/podman/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/podman/COMPONENT.md) |
+| [prettier](./formatting/prettier/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/prettier/COMPONENT.md) |
+| [protolint](./linting/protolint/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/protolint/COMPONENT.md) |
+| [pulumi](./infrastructure/pulumi/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `preview`, [typed contract](./infrastructure/pulumi/COMPONENT.md) |
+| [railpack](./containers/railpack/README.md) | Run a native command with literal arguments. | `run`, `version`, `prepare`, [typed contract](./containers/railpack/COMPONENT.md) |
+| [railway](./deployment/railway/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `up`, [typed contract](./deployment/railway/COMPONENT.md) |
+| [rclone](./artifacts/rclone/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `copy`, [typed contract](./artifacts/rclone/COMPONENT.md) |
+| [render](./deployment/render/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `services`, [typed contract](./deployment/render/COMPONENT.md) |
+| [rpmbuild](./packaging/rpmbuild/README.md) | Build packages from a Linux rpmbuild package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/rpmbuild/COMPONENT.md) |
+| [ruff](./linting/ruff/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `check`, [typed contract](./linting/ruff/COMPONENT.md) |
+| [rustfmt](./formatting/rustfmt/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/rustfmt/COMPONENT.md) |
+| [sccache](./caching/sccache/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `start-server`, [typed contract](./caching/sccache/COMPONENT.md) |
+| [scorecard](./security/scorecard/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/scorecard/COMPONENT.md) |
+| [semgrep](./security/semgrep/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/semgrep/COMPONENT.md) |
+| [setup-actionlint](./setup/actionlint/README.md) | Install and verify actionlint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/actionlint/COMPONENT.md) |
+| [setup-apko](./setup/apko/README.md) | Install and verify apko, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/apko/COMPONENT.md) |
+| [setup-argocd](./setup/argocd/README.md) | Install and verify argocd, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/argocd/COMPONENT.md) |
+| [setup-artifactory](./setup/artifactory/README.md) | Install and verify artifactory, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/artifactory/COMPONENT.md) |
+| [setup-aws](./setup/aws/README.md) | Install and verify aws, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/aws/COMPONENT.md) |
+| [setup-azure](./setup/azure/README.md) | Install and verify azure, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/azure/COMPONENT.md) |
+| [setup-babashka](./setup/babashka/README.md) | Install and verify babashka, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/babashka/COMPONENT.md) |
+| [setup-bazel](./setup/bazel/README.md) | Install and verify bazel, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/bazel/COMPONENT.md) |
+| [setup-betterleaks](./setup/betterleaks/README.md) | Install and verify betterleaks, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/betterleaks/COMPONENT.md) |
+| [setup-binaryen](./setup/binaryen/README.md) | Install and verify binaryen, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/binaryen/COMPONENT.md) |
+| [setup-biome](./setup/biome/README.md) | Install and verify biome, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/biome/COMPONENT.md) |
+| [setup-black](./setup/black/README.md) | Install and verify black, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/black/COMPONENT.md) |
+| [setup-buf](./setup/buf/README.md) | Install and verify buf, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/buf/COMPONENT.md) |
+| [setup-buildkit](./setup/buildkit/README.md) | Install and verify buildkit, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/buildkit/COMPONENT.md) |
+| [setup-buildx](./setup/buildx/README.md) | Install and verify buildx, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/buildx/COMPONENT.md) |
+| [setup-bun](./setup/bun/README.md) | Install and verify bun, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/bun/COMPONENT.md) |
+| [setup-cachix](./setup/cachix/README.md) | Install and verify cachix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cachix/COMPONENT.md) |
+| [setup-checkov](./setup/checkov/README.md) | Install and verify checkov, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/checkov/COMPONENT.md) |
+| [setup-clojure](./setup/clojure/README.md) | Install and verify clojure, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/clojure/COMPONENT.md) |
+| [setup-cmake](./setup/cmake/README.md) | Install and verify cmake, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cmake/COMPONENT.md) |
+| [setup-codacy](./setup/codacy/README.md) | Install and verify codacy, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/codacy/COMPONENT.md) |
+| [setup-codecov](./setup/codecov/README.md) | Install and verify codecov, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/codecov/COMPONENT.md) |
+| [setup-coveralls](./setup/coveralls/README.md) | Install and verify coveralls, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/coveralls/COMPONENT.md) |
+| [setup-cypress](./setup/cypress/README.md) | Install and verify cypress, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cypress/COMPONENT.md) |
+| [setup-deno](./setup/deno/README.md) | Install and verify deno, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/deno/COMPONENT.md) |
+| [setup-determinate-nix](./setup/determinate-nix/README.md) | Install and verify determinate-nix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/determinate-nix/COMPONENT.md) |
+| [setup-devbox](./setup/devbox/README.md) | Install and verify devbox, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/devbox/COMPONENT.md) |
+| [setup-devenv](./setup/devenv/README.md) | Install and verify devenv, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/devenv/COMPONENT.md) |
+| [setup-digitalocean](./setup/digitalocean/README.md) | Install and verify digitalocean, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/digitalocean/COMPONENT.md) |
+| [setup-docker](./setup/docker/README.md) | Install and verify docker, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/docker/COMPONENT.md) |
+| [setup-doppler](./setup/doppler/README.md) | Install and verify doppler, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/doppler/COMPONENT.md) |
+| [setup-dpkg](./setup/dpkg/README.md) | Install and verify dpkg, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/dpkg/COMPONENT.md) |
+| [setup-elixir](./setup/elixir/README.md) | Install and verify elixir, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/elixir/COMPONENT.md) |
+| [setup-expo](./setup/expo/README.md) | Install and verify expo, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/expo/COMPONENT.md) |
+| [setup-extism](./setup/extism/README.md) | Install and verify extism, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism/COMPONENT.md) |
+| [setup-extism-cli](./setup/extism-cli/README.md) | Install and verify extism-cli, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-cli/COMPONENT.md) |
+| [setup-extism-js](./setup/extism-js/README.md) | Install and verify extism-js, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-js/COMPONENT.md) |
+| [setup-extism-py](./setup/extism-py/README.md) | Install and verify extism-py, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-py/COMPONENT.md) |
+| [setup-flox](./setup/flox/README.md) | Install and verify flox, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flox/COMPONENT.md) |
+| [setup-flyctl](./setup/flyctl/README.md) | Install and verify flyctl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flyctl/COMPONENT.md) |
+| [setup-gcloud](./setup/gcloud/README.md) | Install and verify gcloud, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gcloud/COMPONENT.md) |
+| [setup-gemfury](./setup/gemfury/README.md) | Install and verify gemfury, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gemfury/COMPONENT.md) |
+| [setup-gh-artifact](./setup/gh-artifact/README.md) | Install and verify gh-artifact, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gh-artifact/COMPONENT.md) |
+| [setup-gitlab-artifacts](./setup/gitlab-artifacts/README.md) | Install and verify gitlab-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitlab-artifacts/COMPONENT.md) |
+| [setup-gitleaks](./setup/gitleaks/README.md) | Install and verify gitleaks, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitleaks/COMPONENT.md) |
+| [setup-gleam](./setup/gleam/README.md) | Install and verify gleam, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gleam/COMPONENT.md) |
+| [setup-go](./setup/go/README.md) | Install and verify go, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/go/COMPONENT.md) |
+| [setup-grype](./setup/grype/README.md) | Install and verify grype, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/grype/COMPONENT.md) |
+| [setup-helm](./setup/helm/README.md) | Install and verify helm, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/helm/COMPONENT.md) |
+| [setup-infisical](./setup/infisical/README.md) | Install and verify infisical, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/infisical/COMPONENT.md) |
+| [setup-java](./setup/java/README.md) | Install and verify java, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/java/COMPONENT.md) |
+| [setup-jfrog-cli](./setup/jfrog-cli/README.md) | Install and verify jfrog-cli, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/jfrog-cli/COMPONENT.md) |
+| [setup-kamal](./setup/kamal/README.md) | Install and verify kamal, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/kamal/COMPONENT.md) |
+| [setup-kubectl](./setup/kubectl/README.md) | Install and verify kubectl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/kubectl/COMPONENT.md) |
+| [setup-meson](./setup/meson/README.md) | Install and verify meson, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/meson/COMPONENT.md) |
+| [setup-mise](./setup/mise/README.md) | Install and verify mise, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/mise/COMPONENT.md) |
+| [setup-netlify](./setup/netlify/README.md) | Install and verify netlify, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/netlify/COMPONENT.md) |
+| [setup-nexus](./setup/nexus/README.md) | Install and verify nexus, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/nexus/COMPONENT.md) |
+| [setup-ninja](./setup/ninja/README.md) | Install and verify ninja, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/ninja/COMPONENT.md) |
+| [setup-nix](./setup/nix/README.md) | Install and verify nix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/nix/COMPONENT.md) |
+| [setup-nix-package](./setup/nix-package/README.md) | Install and verify nix-package, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/nix-package/COMPONENT.md) |
+| [setup-node](./setup/node/README.md) | Install and verify node, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/node/COMPONENT.md) |
+| [setup-openbao](./setup/openbao/README.md) | Install and verify openbao, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/openbao/COMPONENT.md) |
+| [setup-opentofu](./setup/opentofu/README.md) | Install and verify opentofu, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/opentofu/COMPONENT.md) |
+| [setup-oras](./setup/oras/README.md) | Install and verify oras, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/oras/COMPONENT.md) |
+| [setup-pkgx](./setup/pkgx/README.md) | Install and verify pkgx, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pkgx/COMPONENT.md) |
+| [setup-pkl](./setup/pkl/README.md) | Install and verify pkl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pkl/COMPONENT.md) |
+| [setup-playwright](./setup/playwright/README.md) | Install and verify playwright, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/playwright/COMPONENT.md) |
+| [setup-plumber](./setup/plumber/README.md) | Install and verify plumber, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/plumber/COMPONENT.md) |
+| [setup-podman](./setup/podman/README.md) | Install and verify podman, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/podman/COMPONENT.md) |
+| [setup-prettier](./setup/prettier/README.md) | Install and verify prettier, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/prettier/COMPONENT.md) |
+| [setup-protolint](./setup/protolint/README.md) | Install and verify protolint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/protolint/COMPONENT.md) |
+| [setup-pulumi](./setup/pulumi/README.md) | Install and verify pulumi, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pulumi/COMPONENT.md) |
+| [setup-purescript](./setup/purescript/README.md) | Install and verify purescript, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/purescript/COMPONENT.md) |
+| [setup-railpack](./setup/railpack/README.md) | Install and verify railpack, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/railpack/COMPONENT.md) |
+| [setup-railway](./setup/railway/README.md) | Install and verify railway, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/railway/COMPONENT.md) |
+| [setup-rclone](./setup/rclone/README.md) | Install and verify rclone, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/rclone/COMPONENT.md) |
+| [setup-render](./setup/render/README.md) | Install and verify render, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/render/COMPONENT.md) |
+| [setup-rpmbuild](./setup/rpmbuild/README.md) | Install and verify rpmbuild, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/rpmbuild/COMPONENT.md) |
+| [setup-ruff](./setup/ruff/README.md) | Install and verify ruff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/ruff/COMPONENT.md) |
+| [setup-rust](./setup/rust/README.md) | Install and verify rust, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/rust/COMPONENT.md) |
+| [setup-rustfmt](./setup/rustfmt/README.md) | Install and verify rustfmt, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/rustfmt/COMPONENT.md) |
+| [setup-sccache](./setup/sccache/README.md) | Install and verify sccache, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sccache/COMPONENT.md) |
+| [setup-scorecard](./setup/scorecard/README.md) | Install and verify scorecard, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/scorecard/COMPONENT.md) |
+| [setup-semgrep](./setup/semgrep/README.md) | Install and verify semgrep, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/semgrep/COMPONENT.md) |
+| [setup-shellcheck](./setup/shellcheck/README.md) | Install and verify shellcheck, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/shellcheck/COMPONENT.md) |
+| [setup-snyk](./setup/snyk/README.md) | Install and verify snyk, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/snyk/COMPONENT.md) |
+| [setup-sonarqube](./setup/sonarqube/README.md) | Install and verify sonarqube, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sonarqube/COMPONENT.md) |
+| [setup-sqlfluff](./setup/sqlfluff/README.md) | Install and verify sqlfluff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sqlfluff/COMPONENT.md) |
+| [setup-sqruff](./setup/sqruff/README.md) | Install and verify sqruff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sqruff/COMPONENT.md) |
+| [setup-syft](./setup/syft/README.md) | Install and verify syft, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/syft/COMPONENT.md) |
+| [setup-tangled-artifacts](./setup/tangled-artifacts/README.md) | Install and verify tangled-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/tangled-artifacts/COMPONENT.md) |
+| [setup-terraform](./setup/terraform/README.md) | Install and verify terraform, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/terraform/COMPONENT.md) |
+| [setup-terragrunt](./setup/terragrunt/README.md) | Install and verify terragrunt, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/terragrunt/COMPONENT.md) |
+| [setup-tg](./setup/tg/README.md) | Install and verify tg, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/tg/COMPONENT.md) |
+| [setup-trivy](./setup/trivy/README.md) | Install and verify trivy, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/trivy/COMPONENT.md) |
+| [setup-trufflehog](./setup/trufflehog/README.md) | Install and verify trufflehog, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/trufflehog/COMPONENT.md) |
+| [setup-turborepo](./setup/turborepo/README.md) | Install and verify turborepo, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/turborepo/COMPONENT.md) |
+| [setup-ubicloud](./setup/ubicloud/README.md) | Install and verify ubicloud, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/ubicloud/COMPONENT.md) |
+| [setup-uv](./setup/uv/README.md) | Install and verify uv, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/uv/COMPONENT.md) |
+| [setup-vault](./setup/vault/README.md) | Install and verify vault, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/vault/COMPONENT.md) |
+| [setup-vercel](./setup/vercel/README.md) | Install and verify vercel, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/vercel/COMPONENT.md) |
+| [setup-wrangler](./setup/wrangler/README.md) | Install and verify wrangler, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/wrangler/COMPONENT.md) |
+| [setup-xtp](./setup/xtp/README.md) | Install and verify xtp, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/xtp/COMPONENT.md) |
+| [setup-yamllint](./setup/yamllint/README.md) | Install and verify yamllint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/yamllint/COMPONENT.md) |
+| [setup-zig](./setup/zig/README.md) | Install and verify zig, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/zig/COMPONENT.md) |
+| [shellcheck](./linting/shellcheck/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/shellcheck/COMPONENT.md) |
+| [snyk](./security/snyk/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./security/snyk/COMPONENT.md) |
+| [sonarqube](./code-quality/sonarqube/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./code-quality/sonarqube/COMPONENT.md) |
+| [sqlfluff](./linting/sqlfluff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqlfluff/COMPONENT.md) |
+| [sqruff](./linting/sqruff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqruff/COMPONENT.md) |
+| [syft](./security/syft/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/syft/COMPONENT.md) |
+| [tangled-artifacts](./artifacts/tangled-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `upload`, [typed contract](./artifacts/tangled-artifacts/COMPONENT.md) |
+| [terraform](./infrastructure/terraform/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/terraform/COMPONENT.md) |
+| [terragrunt](./infrastructure/terragrunt/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `hcl-fmt`, [typed contract](./infrastructure/terragrunt/COMPONENT.md) |
+| [trivy](./security/trivy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trivy/COMPONENT.md) |
+| [trufflehog](./security/trufflehog/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trufflehog/COMPONENT.md) |
+| [ubicloud](./cloud/ubicloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `help`, [typed contract](./cloud/ubicloud/COMPONENT.md) |
+| [uv](./package-management/uv/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `sync`, [typed contract](./package-management/uv/COMPONENT.md) |
+| [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |
+| [vercel](./deployment/vercel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/vercel/COMPONENT.md) |
+| [wrangler](./deployment/wrangler/README.md) | Run a Wrangler operation with literal arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/wrangler/COMPONENT.md) |
+| [yamllint](./linting/yamllint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/yamllint/COMPONENT.md) |
 
 Each module has its own dependencies, build scripts, tests, and documentation.
 Source APIs also expose helpers for composition in PureScript pipelines.
 
 ## Usage
 
-Install FluentCI and the host tools required by the module you want to use.
-Declare the module in your project's `fluentci.toml`, pointing `path` to its
-local source directory. For example, when the module is available under
-`vendor/fluentci-modules`:
+Register source modules with the component runtime:
 
 ```toml
 [[modules]]
 name = "gemfury"
-version = "0.1.0"
+version = "0.2.0"
 path = "vendor/fluentci-modules/publishing/gemfury"
 sdk = "purescript"
+runtime = "component"
 ```
 
-Build a package using your project's packaging tools, supply credentials
-through your environment or CI secret store, and upload it:
+Build packages first, configure credentials in the CI environment, then upload:
 
 ```sh
-export FURY_ACCOUNT=my-account
-export FURY_USER=publisher
-# Supply FURY_TOKEN through your shell or CI secret store.
-fluentci run gemfury upload dist/widget_1.2.0_arm64.deb
+fluentci run gemfury upload --files '["dist/app.deb","dist/app.rpm"]'
+fluentci run dpkg build --directory package --arch arm64 --output dist/app.deb
+fluentci run setup-node setup --version 22.14.0
+fluentci run cmake build --run-dir .fluentci/build --build-dir build --parallel 2
+fluentci run wrangler dry-run --run-dir .fluentci/worker --outdir dist/worker
 ```
 
-Buildx, the CLI modules, dpkg, and rpmbuild accept JSON objects as plugin input.
-For example, the dpkg `build` function accepts:
-
-```json
-{
-  "directory": "package",
-  "arch": "arm64",
-  "output": "dist/widget_1.2.0_arm64.deb"
-}
-```
-
-The package directory must contain `DEBIAN/control` and the files to install.
-RPM builds instead use a tree containing `SPECS/` and `SOURCES/`. Both packaging
-modules require Linux, check their required tools before proceeding, and
-validate metadata against the requested CPU architecture. Architecture
-selection does not cross-compile the payload.
-
-See each module's README for complete input formats, required host tools,
-authentication, and examples. Buildx requires a fresh `runDir` for every
-invocation; Cachix requires a Nix flake workspace. The CLI modules also require
-a fresh `runDir`, use an existing native CLI installation, and inherit its
-authentication configuration. See [the shared CLI guide](./lib/cli/README.md).
-The `nix-package` module manages packages; `nix` installs the runtime.
-
-## Runtime setup
-
-The [setup modules](./setup/README.md) install runtimes on Linux and macOS
-and use native package repositories on FreeBSD, OpenBSD, and NetBSD. BSD
-availability depends on the selected repository. Nix and Determinate Nix are
-limited to Linux/macOS. Select a specific version when available:
-
-```sh
-fluentci run node setup 22.14.0
-fluentci run rust setup stable
-```
-
-Setup verifies the installed runtime and publishes its PATH and runtime
-environment to later FluentCI commands. The shared setup guide documents
-version channels, BSD package selectors, and platform prerequisites.
+Functions use native named arguments and return typed values. Run
+`fluentci run MODULE FUNCTION --help` for types, descriptions, and return values.
+The [component guide](./docs/COMPONENTS.md) covers migration from JSON plugin
+input, structured results, list arguments, building, and validation.
 
 ## Development
 
-Install Node.js, Spago, the PureScript compiler, and `extism-js`. Build and
-test modules from their own directories:
+Install Node.js, Bun, PureScript, and Spago. Initialize the shared component
+compiler once, then build/test individual modules:
 
 ```sh
-cd packaging/dpkg
-npm ci
-npm run build
-npm test
+bun install --cwd lib/component --frozen-lockfile
+npm ci --prefix packaging/dpkg
+npm run build --prefix packaging/dpkg
+npm test --prefix packaging/dpkg
+node scripts/validate_wasm.mjs packaging/dpkg
 ```
 
-Each build produces `dist/plugin.wasm`. Linux integration tests for dpkg and
-rpmbuild create and inspect real packages when their native tools are
-available; those tests are skipped on other hosts.
-
-Buildx requires Python 3 for its generator checks. All module source dependencies
-and its generated command schema are included in this checkout.
-
-GitHub Actions builds and tests every registered module on Linux and macOS,
-validates compiled WASM exports, and runs scheduled upstream runtime smoke tests.
-See [the CI guide](./.github/README.md) for coverage and local checks.
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution conventions and
-verification guidance.
+Every `dist/plugin.wasm` is a native component with embedded typed contracts.
+CI checks compiled binary signatures and runs module tests on Linux/macOS;
+BSD package routing uses fixtures. See [CI](./.github/README.md),
+[CONTRIBUTING.md](./CONTRIBUTING.md), and the [audit](./docs/PIPELINE_AUDIT.md).
 
 ## License
 
 All modules are licensed under the [MIT License](./LICENSE).
+
+The vendored component inspection tools retain their [upstream MPL-2.0 license](./lib/component/inspection/LICENSE).

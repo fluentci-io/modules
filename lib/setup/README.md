@@ -3,7 +3,8 @@
 PureScript implementation shared by the [runtime setup modules](../../setup/README.md).
 This is a local Spago library, not a separately registered WebAssembly module.
 
-- `CI.Setup` dispatches installers and exposes the shared entry point.
+- `CI.Setup` dispatches installers; generated `CI.Component` functions expose
+  typed argument records and native setup-result records.
 - `CI.Setup.Types` validates configuration and host support.
 - `CI.Setup.Archive` resolves upstream releases and installs runtime archives.
 - `CI.Setup.BSD` installs native packages and activates package-owned executables.

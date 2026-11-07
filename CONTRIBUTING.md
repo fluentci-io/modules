@@ -6,7 +6,8 @@ making changes.
 
 ## Set up a module
 
-Install Node.js, Spago, the PureScript compiler, and `extism-js`. Run commands
+Install Node.js, Bun, Spago, and the PureScript compiler. Initialize the native
+component toolchain with `bun install --cwd lib/component --frozen-lockfile`. Run commands
 from the module directory; there is no root npm workspace:
 
 ```sh
@@ -26,11 +27,12 @@ the checkout.
 - Place modules under the appropriate category, such as `packaging/`,
   `containers/`, `caching/`, or `publishing/`.
 - Write module behavior in PureScript and expose WebAssembly entry points
-  through `entry.mjs` and the matching `main` declarations in `imports.d.ts`.
+  through explicit typed functions in `src/CI/Component.purs` and `entry.mjs`.
+  Give every argument a source description and return a native typed value.
 - Include a README, MIT `LICENSE`, package manifests and lockfiles, Spago
   configuration and lockfile, build script, tests, and `.gitignore`.
 - Register new modules in the root `fluentci.toml` with a unique name,
-  version, source path, and `sdk = "purescript"`. Update the root README's
+  version, source path, `sdk = "purescript"`, and `runtime = "component"`. Update the root README's
   module table as well.
 - Keep module metadata, paths, payloads, and configuration generic. Avoid
   embedding a particular application's binary name or release layout.
@@ -77,6 +79,10 @@ a target architecture does not provide a cross-compiler.
 For Buildx, edit `buildx-options.json` and regenerate using `python3 generate.py`
 rather than editing generated command sources or `OPTIONS.md` directly.
 `python3 generate.py --check` checks generated files without rewriting them.
+
+Run `python3 scripts/generate_components.py` after updating the source catalogs.
+Keep explicit typed argument records, native return types, and source `@param`
+descriptions for every public function. See [components](./docs/COMPONENTS.md).
 
 Run `python3 scripts/validate_modules.py` after changing module metadata or
 registration. CI derives its Linux/macOS matrix from this registry and validates

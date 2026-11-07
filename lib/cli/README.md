@@ -1,4 +1,4 @@
-# Shared CLI modules
+# Shared CLI implementation
 
 `fluentci-cli-common` validates JSON inputs and builds single-task FluentCI
 execution plans for the tool modules in this repository. Module entry points,
@@ -13,6 +13,11 @@ Run these commands from the repository root. Edit the catalog, regenerate, then
 build and test every CLI module after changing the common engine. Each module
 has its own pinned SDK, Spago lockfile, and npm dependencies. The relative
 `../../lib/cli` package must accompany its source when vendoring a module.
+
+The public component functions call `CI.CLI.execute` with typed source arguments
+and return an execution-result record. The internal JSON adapter and zero-argument
+`invoke` functions remain private regression fixtures. See the
+[component guide](../../docs/COMPONENTS.md) for the public ABI.
 
 ## Execution
 

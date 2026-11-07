@@ -1,8 +1,8 @@
 # Setup modules
 
 Install Bun, Deno, Elixir, Gleam, Go, Java, Node.js, Pkl, Rust, Zig, Nix, or
-Determinate Nix from FluentCI. Every module exports `setup` and has a
-`setupWith` PureScript helper.
+Determinate Nix from FluentCI. Every module exports a typed native `setup` function.
+Private PureScript helpers compose the underlying installers.
 
 The [PureScript toolchain module](./purescript/README.md) composes runtime setup
 with npm, the compiler, and Spago, with independent version selection.
@@ -27,35 +27,20 @@ a different machine. Other operating systems are rejected.
 
 ## Usage
 
-The modules are registered by name in the repository's `fluentci.toml`:
+Setup modules expose typed native functions on FluentCI v0.17.2+:
 
 ```sh
-fluentci run setup-node setup 22.14.0
-fluentci run setup-go setup 1.24.0
-fluentci run setup-rust setup stable
+fluentci run setup-node setup --version 22.14.0
+fluentci run setup-go setup --version 1.24.0
+fluentci run setup-rust setup --version stable
+fluentci run setup-node setup --help
 ```
 
-Omit input to use the module's default version. For more options, provide a
-JSON object as plugin input to `setup`:
-
-```json
-{
-  "version": "22.14.0",
-  "installDir": "/home/runner/tools/node"
-}
-```
-
-| Argument | Meaning |
-| --- | --- |
-| `version` | Release version or a documented channel. Defaults to `latest`, except Java (`21`) and Rust (`stable`). |
-| `installDir` | Optional absolute installation directory for Linux/macOS user installations. Omit for BSD and Nix. |
-| `packageName` | Optional native BSD package name, exact package identifier, or branch selector. Replaces the generated repository selector. |
-| `sudo` | Use `sudo -n` for BSD package installation or Nix installation. Default `false`; requires passwordless sudo. |
-
-Unknown fields, incorrect types, nulls, unsafe package selectors, and malformed
-version tokens are rejected. Installation directories cannot be `/`, contain
-parent traversal, NULs, line breaks, or colons. Host commands receive literal
-arguments; version strings and paths are not interpolated into shell commands.
+Optional flags include `--install-dir`, `--package-name`, and `--sudo`.
+Tool-specific flags are documented in each module's `COMPONENT.md` and embedded
+help. Results contain tool/version/bin-dir plus a list of environment name/value
+records. The [component guide](../docs/COMPONENTS.md) describes native results and
+migration from raw JSON input.
 
 ## Version selection
 
@@ -82,12 +67,8 @@ unless `packageName` is provided. Repository package versions and language
 versions can differ, so use `packageName` for versioned ports, package revisions,
 or flavors. For example, on FreeBSD:
 
-```json
-{
-  "version": "1.24.0",
-  "packageName": "go124",
-  "sudo": true
-}
+```sh
+fluentci run setup-go setup --version 1.24.0 --package-name go124 --sudo
 ```
 
 This succeeds only if the selected repository package reports Go 1.24.0.
@@ -123,16 +104,16 @@ upstream Nix and Determinate Nix requires an explicit uninstall. A pinned
 Determinate request also checks `/nix/nix-installer`'s version.
 
 After verification, setup updates the **FluentCI engine environment** for later
-commands and outputs a JSON result:
+commands and returns a native record (rendered as JSON by the CLI):
 
 ```json
 {
   "tool": "node",
   "version": "22.14.0",
-  "binDir": "/home/runner/tools/node/bin",
-  "environment": {
-    "PATH": "/home/runner/tools/node/bin:/usr/bin:/bin"
-  }
+  "bin-dir": "/home/runner/tools/node/bin",
+  "environment": [
+    {"name": "PATH", "value": "/home/runner/tools/node/bin:/usr/bin:/bin"}
+  ]
 }
 ```
 
@@ -161,7 +142,9 @@ npm run build
 npm test
 ```
 
-Install Node.js, Spago, the PureScript compiler, and `extism-js`. Build before
+Install Node.js, Bun, Spago, and the PureScript compiler; initialize the shared
+component toolchain with `bun install --cwd lib/component --frozen-lockfile` from
+the repository root. Build before
 testing: tests load the compiled plugin. All modules produce `dist/plugin.wasm`.
 Common host fixtures and tests live in [`test/setup`](../test/setup).
 
@@ -201,7 +184,7 @@ All setup modules and their shared library use the [MIT License](../LICENSE).
 
 Every operational tool has a `setup-<tool>` companion in the alphabetical root
 registry. Additional installers cover Babashka, Clojure, tg, mise, Turborepo,
-Expo CLI, Binaryen, and the Extism toolchain. The
+Expo CLI, Binaryen, the Extism toolchain, Railpack, apko, Devbox, devenv, Flox, pkgx, SQLFluff, protolint, and Buf. The
 [installer catalog](../lib/setup/tools.json) records the executable, package,
 release backend, native package selectors, and version probe for each tool.
 
@@ -225,7 +208,14 @@ Tool installation does not configure accounts, start daemons, install native mob
 SDKs, or authenticate remote caches. Use your CI runner's secret store and native
 credential/configuration mechanisms for subsequent commands.
 
-Tools without a version subcommand verify their help command. Go installs also
-read Go module build metadata; native packages can only report the requested
-selector for those tools. Select a trusted package identity explicitly when a
+Tools without a safe version subcommand verify that the executable exists and
+is executable. Go installs additionally read Go module build metadata; other
+backends can only report the requested selector for those tools. Select a trusted package identity explicitly when a
 repository uses a different name.
+
+Devbox needs Nix to create environments. devenv installs a selected upstream
+flake into a private Nix profile and requires Nix with flakes support. Flox
+uses native packages: Homebrew on macOS, and a configured package source or
+a preinstalled official package on Linux. pkgx installs its upstream launcher;
+packages it subsequently runs have their own platform requirements. See each
+installer README for version and privilege restrictions.
