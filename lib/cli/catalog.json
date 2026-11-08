@@ -3678,6 +3678,330 @@
     ]
   },
   {
+    "name": "cosign",
+    "path": "security/cosign",
+    "program": "cosign",
+    "title": "Cosign",
+    "docs": "https://docs.sigstore.dev/cosign/",
+    "notes": "Cosign 3.x bundle operations. Signing uses ambient CI OIDC or an explicit key. Verification retains transparency-log checks; no insecure bypass flags are added.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "strings",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": [
+              "--help"
+            ],
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal Cosign arguments in native order.",
+            "choices": []
+          }
+        ],
+        "description": "Run arbitrary Cosign commands with literal arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Report the installed Cosign version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "sign",
+        "args": [
+          "sign",
+          "--yes"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "--key",
+            "default": null,
+            "required": false,
+            "sample": "cosign.key",
+            "style": "value",
+            "scope": "option",
+            "description": "Key file, env:// reference, or supported KMS URI; credentials are inherited.",
+            "choices": []
+          },
+          {
+            "key": "image",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "style": "value",
+            "scope": "positional",
+            "description": "OCI image reference, preferably pinned by digest.",
+            "choices": []
+          }
+        ],
+        "description": "Sign an OCI image using a key or ambient CI OIDC credentials; publish the signature to its registry.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "sign_blob",
+        "args": [
+          "sign-blob",
+          "--yes"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "--key",
+            "default": null,
+            "required": false,
+            "sample": "cosign.key",
+            "style": "value",
+            "scope": "option",
+            "description": "Key file, env:// reference, or supported KMS URI; credentials are inherited.",
+            "choices": []
+          },
+          {
+            "key": "bundle",
+            "kind": "string",
+            "flag": "--bundle",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.sigstore.json",
+            "style": "value",
+            "scope": "option",
+            "description": "Destination Sigstore bundle file; parent directory must exist.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.tar.gz",
+            "style": "file",
+            "scope": "positional",
+            "description": "Artifact file to sign or verify.",
+            "choices": []
+          }
+        ],
+        "description": "Sign a local release artifact and write its Sigstore verification bundle.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "verify",
+        "args": [
+          "verify"
+        ],
+        "fields": [
+          {
+            "key": "certificateIdentity",
+            "kind": "string",
+            "flag": "--certificate-identity",
+            "default": null,
+            "required": true,
+            "sample": "https://github.com/org/repo/.github/workflows/release.yml@refs/heads/main",
+            "style": "value",
+            "scope": "option",
+            "description": "Exact expected certificate subject identity.",
+            "choices": []
+          },
+          {
+            "key": "certificateOidcIssuer",
+            "kind": "string",
+            "flag": "--certificate-oidc-issuer",
+            "default": null,
+            "required": true,
+            "sample": "https://token.actions.githubusercontent.com",
+            "style": "value",
+            "scope": "option",
+            "description": "Exact expected certificate OIDC issuer.",
+            "choices": []
+          },
+          {
+            "key": "image",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "style": "value",
+            "scope": "positional",
+            "description": "OCI image reference, preferably pinned by digest.",
+            "choices": []
+          }
+        ],
+        "description": "Verify an OCI image signature against an exact keyless identity and issuer; fail the pipeline on verification errors.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "verify_key",
+        "args": [
+          "verify"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "--key",
+            "default": null,
+            "required": true,
+            "sample": "cosign.key",
+            "style": "value",
+            "scope": "option",
+            "description": "Key file, env:// reference, or supported KMS URI; credentials are inherited.",
+            "choices": []
+          },
+          {
+            "key": "image",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "registry.example/app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "style": "value",
+            "scope": "positional",
+            "description": "OCI image reference, preferably pinned by digest.",
+            "choices": []
+          }
+        ],
+        "description": "Verify an OCI image signature against an explicit public key or KMS key.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "verify_blob",
+        "args": [
+          "verify-blob"
+        ],
+        "fields": [
+          {
+            "key": "certificateIdentity",
+            "kind": "string",
+            "flag": "--certificate-identity",
+            "default": null,
+            "required": true,
+            "sample": "https://github.com/org/repo/.github/workflows/release.yml@refs/heads/main",
+            "style": "value",
+            "scope": "option",
+            "description": "Exact expected certificate subject identity.",
+            "choices": []
+          },
+          {
+            "key": "certificateOidcIssuer",
+            "kind": "string",
+            "flag": "--certificate-oidc-issuer",
+            "default": null,
+            "required": true,
+            "sample": "https://token.actions.githubusercontent.com",
+            "style": "value",
+            "scope": "option",
+            "description": "Exact expected certificate OIDC issuer.",
+            "choices": []
+          },
+          {
+            "key": "bundle",
+            "kind": "string",
+            "flag": "--bundle",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.sigstore.json",
+            "style": "file",
+            "scope": "option",
+            "description": "Sigstore bundle file to read.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.tar.gz",
+            "style": "file",
+            "scope": "positional",
+            "description": "Artifact file to sign or verify.",
+            "choices": []
+          }
+        ],
+        "description": "Verify a release artifact and Sigstore bundle against an exact keyless identity and issuer.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "verify_blob_key",
+        "args": [
+          "verify-blob"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "--key",
+            "default": null,
+            "required": true,
+            "sample": "cosign.key",
+            "style": "value",
+            "scope": "option",
+            "description": "Key file, env:// reference, or supported KMS URI; credentials are inherited.",
+            "choices": []
+          },
+          {
+            "key": "bundle",
+            "kind": "string",
+            "flag": "--bundle",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.sigstore.json",
+            "style": "file",
+            "scope": "option",
+            "description": "Sigstore bundle file to read.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "dist/app.tar.gz",
+            "style": "file",
+            "scope": "positional",
+            "description": "Artifact file to sign or verify.",
+            "choices": []
+          }
+        ],
+        "description": "Verify a release artifact and Sigstore bundle against an explicit public key or KMS key.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "coveralls",
     "path": "code-quality/coveralls",
     "program": "coveralls",

@@ -15,7 +15,9 @@ import Foreign.Object as Object
 
 -- Shared configuration is decoded against each tool's own allowed fields.
 type Config =
-  { version :: String
+  { packages :: Array String
+  , project :: String
+  , version :: String
   , toolchain :: String
   , components :: Array String
   , targets :: Array String
@@ -71,6 +73,7 @@ hostSupported name host
 defaults :: String -> Config
 defaults name =
   { version: if name == "rust" then "stable" else if name == "java" then "21" else ToolCatalog.defaultVersion name
+  , packages: [], project: "."
   , trustedUsers: [], extraConf: []
   , toolchain: "", components: [], targets: [], profile: "minimal"
   , installDir: "", packageName: "", sudo: false, otpVersion: ""
@@ -102,6 +105,10 @@ validDirectory raw =
 
 validateConfig :: String -> Config -> Either String Unit
 validateConfig name config = do
+  when (not (Array.elem name [ "pkgx", "mise", "devbox", "flox" ]) && not (Array.null config.packages)) $ Left "packages requires setup-pkgx, setup-mise, setup-devbox, or setup-flox"
+  traverse_ (\value -> unless (validPackageSelector value) (Left "packages must contain nonempty package selectors, optionally with versions, without whitespace, shell syntax, or leading options")) config.packages
+  unless (validProject config.project) $ Left "project must be a nonempty directory without control characters"
+  when (not (Array.elem name [ "devbox", "flox" ]) && config.project /= ".") $ Left "project requires setup-devbox or setup-flox"
   when (name /= "determinate-nix" && (not (Array.null config.trustedUsers) || not (Array.null config.extraConf))) $ Left "trustedUsers and extraConf require setup-determinate-nix"
   traverse_ (\value -> unless (value /= "" && value /= "*" && all (\c -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || Array.elem c [ '_', '-', '@', '.' ]) (CU.toCharArray value)) (Left "Invalid trusted Nix user or group")) config.trustedUsers
   traverse_ (\line -> unless (String.contains (Pattern "=") line && not (Array.any (\c -> Array.elem c [ '\n', '\r', '\x0000' ]) (CU.toCharArray line))) (Left "extraConf entries must be single-line Nix key=value settings")) config.extraConf
@@ -127,11 +134,25 @@ validateConfig name config = do
   unless (Array.elem config.init [ "systemd", "none" ]) $ Left "init must be systemd or none"
   unless (Array.elem config.libc [ "auto", "gnu", "musl" ]) $ Left "libc must be auto, gnu, or musl"
 
+validPackageSelector :: String -> Boolean
+validPackageSelector value = case CU.charAt 0 value of
+  Just c | (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ->
+    all (\x -> (x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z') || (x >= '0' && x <= '9')
+      || Array.elem x [ '.', '_', '/', '+', '-', '@', ':', '=', '^', '~', '*', '<', '>', ',', '#', '%', '!' ]) (CU.toCharArray value)
+      && not (String.endsWith (Pattern "@") value)
+  _ -> false
+
+validProject :: String -> Boolean
+validProject value = Array.any (\c -> c /= ' ' && c /= '\t') (CU.toCharArray value)
+  && all (\c -> c >= ' ' && c /= '\x007f') (CU.toCharArray value)
+
 -- Reject unknown and null-valued fields instead of silently ignoring mistakes.
 decodeConfig :: String -> Json -> Either String Config
 decodeConfig name json = do
   fields <- either (Left <<< show) Right (decodeJson json)
   let allowed = [ "version", "installDir", "packageName", "sudo" ] <>
+        (if Array.elem name [ "pkgx", "mise", "devbox", "flox" ] then [ "packages" ] else []) <>
+        (if Array.elem name [ "devbox", "flox" ] then [ "project" ] else []) <>
         (if name == "rust" then [ "toolchain", "components", "targets", "profile" ] else []) <>
         (if name == "elixir" then [ "otpVersion" ] else []) <>
         (if name == "nix" then [ "daemon" ] else []) <>
@@ -143,6 +164,8 @@ decodeConfig name json = do
     Nothing -> pure unit
   when (Array.any isNull (Object.values fields)) $ Left "Setup arguments cannot be null"
   let initial = defaults name
+  packages <- either (Left <<< show) (Right <<< fromMaybe initial.packages) (getFieldOptional fields "packages")
+  project <- either (Left <<< show) (Right <<< fromMaybe initial.project) (getFieldOptional fields "project")
   version <- either (Left <<< show) (Right <<< fromMaybe initial.version) (getFieldOptional fields "version")
   toolchain <- either (Left <<< show) (Right <<< fromMaybe initial.toolchain) (getFieldOptional fields "toolchain")
   trustedUsers <- either (Left <<< show) (Right <<< fromMaybe initial.trustedUsers) (getFieldOptional fields "trustedUsers")
@@ -164,6 +187,6 @@ decodeConfig name json = do
   pythonVersion <- either (Left <<< show) (Right <<< fromMaybe initial.pythonVersion) (getFieldOptional fields "pythonVersion")
   xtpVersion <- either (Left <<< show) (Right <<< fromMaybe initial.xtpVersion) (getFieldOptional fields "xtpVersion")
   binaryenVersion <- either (Left <<< show) (Right <<< fromMaybe initial.binaryenVersion) (getFieldOptional fields "binaryenVersion")
-  let config = { version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, trustedUsers, extraConf, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
+  let config = { packages, project, version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, trustedUsers, extraConf, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
   validateConfig name config
   pure config

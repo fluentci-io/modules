@@ -30,6 +30,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [cmake](./build/cmake/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `configure`, [typed contract](./build/cmake/COMPONENT.md) |
 | [codacy](./code-quality/codacy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `help`, `upload`, [typed contract](./code-quality/codacy/COMPONENT.md) |
 | [codecov](./code-quality/codecov/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/codecov/COMPONENT.md) |
+| [cosign](./security/cosign/README.md) | Sign images and release files; enforce key or keyless signature verification. | `sign`, `sign-blob`, `verify`, `verify-key`, `verify-blob`, `verify-blob-key`, `run`, `version`, [typed contract](./security/cosign/COMPONENT.md) |
 | [coveralls](./code-quality/coveralls/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/coveralls/COMPONENT.md) |
 | [cypress](./testing/cypress/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/cypress/COMPONENT.md) |
 | [digitalocean](./cloud/digitalocean/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `account-get`, [typed contract](./cloud/digitalocean/COMPONENT.md) |
@@ -95,11 +96,13 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-cmake](./setup/cmake/README.md) | Install and verify cmake, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cmake/COMPONENT.md) |
 | [setup-codacy](./setup/codacy/README.md) | Install and verify codacy, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/codacy/COMPONENT.md) |
 | [setup-codecov](./setup/codecov/README.md) | Install and verify codecov, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/codecov/COMPONENT.md) |
+| [setup-cosign](./setup/cosign/README.md) | Install and verify Cosign and publish PATH. | `setup`, [typed contract](./setup/cosign/COMPONENT.md) |
 | [setup-coveralls](./setup/coveralls/README.md) | Install and verify coveralls, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/coveralls/COMPONENT.md) |
 | [setup-cypress](./setup/cypress/README.md) | Install and verify cypress, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cypress/COMPONENT.md) |
+| [setup-dagger](./setup/dagger/README.md) | Install and verify Dagger and publish PATH. | `setup`, [typed contract](./setup/dagger/COMPONENT.md) |
 | [setup-deno](./setup/deno/README.md) | Install and verify deno, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/deno/COMPONENT.md) |
 | [setup-determinate-nix](./setup/determinate-nix/README.md) | Install and verify determinate-nix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/determinate-nix/COMPONENT.md) |
-| [setup-devbox](./setup/devbox/README.md) | Install and verify devbox, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/devbox/COMPONENT.md) |
+| [setup-devbox](./setup/devbox/README.md) | Install devbox, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/devbox/COMPONENT.md) |
 | [setup-devenv](./setup/devenv/README.md) | Install and verify devenv, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/devenv/COMPONENT.md) |
 | [setup-digitalocean](./setup/digitalocean/README.md) | Install and verify digitalocean, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/digitalocean/COMPONENT.md) |
 | [setup-docker](./setup/docker/README.md) | Install and verify docker, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/docker/COMPONENT.md) |
@@ -113,7 +116,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-extism-js](./setup/extism-js/README.md) | Install and verify extism-js, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-js/COMPONENT.md) |
 | [setup-extism-py](./setup/extism-py/README.md) | Install and verify extism-py, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-py/COMPONENT.md) |
 | [setup-flakehub-push](./setup/flakehub-push/README.md) | Install and verify flakehub-push, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flakehub-push/COMPONENT.md) |
-| [setup-flox](./setup/flox/README.md) | Install and verify flox, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flox/COMPONENT.md) |
+| [setup-flox](./setup/flox/README.md) | Install flox, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/flox/COMPONENT.md) |
 | [setup-flyctl](./setup/flyctl/README.md) | Install and verify flyctl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flyctl/COMPONENT.md) |
 | [setup-gcloud](./setup/gcloud/README.md) | Install and verify gcloud, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gcloud/COMPONENT.md) |
 | [setup-gemfury](./setup/gemfury/README.md) | Install and verify gemfury, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gemfury/COMPONENT.md) |
@@ -130,8 +133,10 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-jfrog-cli](./setup/jfrog-cli/README.md) | Install and verify jfrog-cli, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/jfrog-cli/COMPONENT.md) |
 | [setup-kamal](./setup/kamal/README.md) | Install and verify kamal, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/kamal/COMPONENT.md) |
 | [setup-kubectl](./setup/kubectl/README.md) | Install and verify kubectl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/kubectl/COMPONENT.md) |
+| [setup-macports](./setup/macports/README.md) | Install and verify the signed native MacPorts system package. | `setup`, [typed contract](./setup/macports/COMPONENT.md) |
+| [setup-macports-rs](./setup/macports-rs/README.md) | Install and verify MacPorts Rust CLI and publish PATH. | `setup`, [typed contract](./setup/macports-rs/COMPONENT.md) |
 | [setup-meson](./setup/meson/README.md) | Install and verify meson, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/meson/COMPONENT.md) |
-| [setup-mise](./setup/mise/README.md) | Install and verify mise, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/mise/COMPONENT.md) |
+| [setup-mise](./setup/mise/README.md) | Install mise, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/mise/COMPONENT.md) |
 | [setup-netlify](./setup/netlify/README.md) | Install and verify netlify, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/netlify/COMPONENT.md) |
 | [setup-nexus](./setup/nexus/README.md) | Install and verify nexus, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/nexus/COMPONENT.md) |
 | [setup-ninja](./setup/ninja/README.md) | Install and verify ninja, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/ninja/COMPONENT.md) |
@@ -141,7 +146,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-openbao](./setup/openbao/README.md) | Install and verify openbao, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/openbao/COMPONENT.md) |
 | [setup-opentofu](./setup/opentofu/README.md) | Install and verify opentofu, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/opentofu/COMPONENT.md) |
 | [setup-oras](./setup/oras/README.md) | Install and verify oras, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/oras/COMPONENT.md) |
-| [setup-pkgx](./setup/pkgx/README.md) | Install and verify pkgx, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pkgx/COMPONENT.md) |
+| [setup-pkgx](./setup/pkgx/README.md) | Install pkgx, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/pkgx/COMPONENT.md) |
 | [setup-pkl](./setup/pkl/README.md) | Install and verify pkl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pkl/COMPONENT.md) |
 | [setup-playwright](./setup/playwright/README.md) | Install and verify playwright, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/playwright/COMPONENT.md) |
 | [setup-plumber](./setup/plumber/README.md) | Install and verify plumber, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/plumber/COMPONENT.md) |

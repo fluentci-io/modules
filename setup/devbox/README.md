@@ -1,54 +1,47 @@
 # Setup Devbox
 
-Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
-Function signatures and argument descriptions come from the compiled PureScript
-source and are embedded in the component; no raw JSON plugin input is required.
-
-## Usage
+Install and verify Devbox, then optionally install versioned packages for a
+CI/CD pipeline. Implemented as a typed PureScript Wasm component for FluentCI
+v0.17.2+.
 
 ```sh
-fluentci run setup-devbox setup --version latest
-```
-
-```sh
-fluentci run setup-devbox --help
+fluentci run setup-devbox setup --version latest \
+  --packages '["nodejs@22.14.0","python3@3.12.9"]' --project .
 fluentci run setup-devbox setup --help
 ```
 
-See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
-required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+`version` selects the **Devbox release**. `packages` is an optional list of
+native package selectors, each carrying its own version. Omitting the list or
+passing `[]` installs only the manager and preserves the existing behavior.
+Package/version availability depends on the manager’s registry and platform;
+missing versions and failed installs fail the setup call.
 
-## Requirements and behavior
+`packages` accepts Devbox selectors such as `nodejs@22` or
+`python3@3.12.9`. Nix must already be installed and available on PATH; use
+`setup-nix` first. Setup fails before installing the CLI if Nix is missing and
+packages were requested. It never starts an interactive Nix installer.
 
-Installs and verifies `devbox`, then returns `tool`, `version`, `bin-dir`, and
-`environment` (a list of `{name, value}` records). Environment updates are visible
-to later tasks in the same host session. Separate shell invocations must add the
-returned installation directory to PATH explicitly.
+`project` selects an existing project directory (default `.`). Setup initializes
+`devbox.json` if missing, adds the requested packages, and installs the resulting
+environment. This updates the project’s manifest and lockfile; existing packages
+are retained. Commit `devbox.lock` for reproducibility. The activated executable
+PATH is exported for later host tasks. Use `devbox run --config PROJECT -- CMD`
+when commands also need the full native environment and hooks.
 
-Devbox requires Nix for creating development environments; use setup-nix first. Setup installs only the versioned Devbox CLI.
+Package environments support Linux/macOS. CLI-only BSD setup still uses native
+repositories when available; supplying `packages` on BSD fails before mutation.
 
-Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
-are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
-Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
-pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
-Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
+The return type remains `tool`, `version`, `bin-dir`, and `environment` (a list
+of `{name, value}` records). `bin-dir` identifies the manager; use the returned
+**environment PATH** to include requested package executables. Updates apply to
+later tasks in the same host session. Separate processes must propagate the
+returned environment. No successful environment is published if installation or
+environment discovery fails; already installed files or project updates may remain.
 
-## Development
+For upstream archive installations, `install-dir` selects an absolute per-user
+manager prefix. Native packages use the system prefix; omit `install-dir`, use
+`package-name` for a native manager package selector, and `sudo` when needed.
+These manager installation options do not change package versions in `packages`.
 
-From this module directory, with Node.js, Bun, PureScript, and Spago installed:
-
-```sh
-bun install --cwd ../../lib/component --frozen-lockfile
-npm ci
-npm run build
-npm test
-```
-
-`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
-checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
-private regression tests and are not the published module interface.
-
-See the [component migration guide](../../docs/COMPONENTS.md) and
-[MIT License](./LICENSE).
+See [COMPONENT.md](./COMPONENT.md) for every typed argument and return,
+[upstream package syntax](https://github.com/jetify-com/devbox/blob/main/internal/boxcli/add.go), and [MIT License](./LICENSE).

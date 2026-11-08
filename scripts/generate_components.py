@@ -18,6 +18,7 @@ COMMON={
  'arch':'Target package CPU architecture; the payload must already be compiled for this architecture.',
  'spec':'RPM spec file inside the package tree.',
  'output':'Destination path for generated packages.',
+ 'packages':'Package selectors to install, optionally with per-package versions using the selected manager’s syntax; omitted or empty lists install only the manager.',
  'version':'Tool release or supported channel to install; omitted values use the documented default.',
  'toolchain':'Rustup toolchain channel or exact release; alias for version. Both must agree when provided.',
  'components':'Rustup components to install, such as rustfmt and clippy.',
@@ -63,7 +64,8 @@ def doc(text):return str(text).replace('\n',' ').replace('\r',' ')
 def describe(key,prop,context):
  text=prop.get('description','')
  if not text or text==key:
-  text=COMMON.get(key)
+  setup_only={'packages','toolchain','components','targets','trustedUsers','extraConf','profile'}
+  text=COMMON.get(key) if key not in setup_only or context.startswith('setup-') else None
   if not text:
    label=re.sub(r'([a-z])([A-Z])',r'\1 \2',key).replace('_',' ')
    text=f'{label[:1].upper()+label[1:]} supplied to the {context} operation.'
@@ -77,6 +79,8 @@ SETUP={'type':'object','required':['tool','version','binDir','environment'],'pro
 def setup_props(name):
  props={k:{'type':t} for k,t in [('version','string'),('installDir','string'),('packageName','string'),('sudo','boolean')]}
  extras={'rust':{'toolchain':'string','components':'array','targets':'array','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
+ if name in ['pkgx','mise','devbox','flox']:extras[name]={'packages':'array'}
+ if name in ['devbox','flox']:extras[name]['project']='string'
  props.update({k:({'type':v,'items':{'type':'string'}} if v=='array' else {'type':v}) for k,v in extras.get(name,{}).items()});return props
 
 def generated():
@@ -129,6 +133,7 @@ def generated():
    elif name=='cachix':
     properties={'cache':{'type':'string'}};required=['cache'];returned='{ enabled :: Boolean, cache :: String }';output={'type':'object','properties':{'enabled':{'type':'boolean'},'cache':{'type':'string'}},'required':['enabled','cache'],'additionalProperties':False};description=('Configure' if function=='setup' else 'Push the result closure to')+' a Cachix cache using host credentials.'
     body=['  present <- P.hasEnv "CACHIX_AUTH_TOKEN" >>= unwrap','  token <- if present then P.getEnv "CACHIX_AUTH_TOKEN" >>= unwrap else pure ""',f'  Native.{"setupWith" if function=="setup" else "pushResultWith"} args.cache','  pure { enabled: trim token /= "", cache: args.cache }']
+   if category=='setup' and tool in ['devbox','flox']:properties['project']['description']='Project environment directory to initialize or update; defaults to the current directory. Creates or updates the manager manifest and lockfile when packages are supplied.'
    for key,prop in properties.items():prop['description']=describe(key,prop,name+' '+function)
    args_type='{ '+', '.join(quoted(key)+' :: '+('' if key in required else 'Maybe ')+('('+scalar(prop['type'])+')' if prop['type']=='array' and key not in required else scalar(prop['type'])) for key,prop in properties.items())+' }'
    source+=['-- | '+doc(description)]+['-- | @param '+key+' '+prop['description'] for key,prop in properties.items()]

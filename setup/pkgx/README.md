@@ -1,54 +1,43 @@
-# Setup Pkgx
+# Setup pkgx
 
-Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
-Function signatures and argument descriptions come from the compiled PureScript
-source and are embedded in the component; no raw JSON plugin input is required.
-
-## Usage
+Install and verify pkgx, then optionally install versioned packages for a
+CI/CD pipeline. Implemented as a typed PureScript Wasm component for FluentCI
+v0.17.2+.
 
 ```sh
-fluentci run setup-pkgx setup --version latest
-```
-
-```sh
-fluentci run setup-pkgx --help
+fluentci run setup-pkgx setup --version latest \
+  --packages '["nodejs.org@22.14.0","python.org=3.12.9"]'
 fluentci run setup-pkgx setup --help
 ```
 
-See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
-required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+`version` selects the **pkgx release**. `packages` is an optional list of
+native package selectors, each carrying its own version. Omitting the list or
+passing `[]` installs only the manager and preserves the existing behavior.
+Package/version availability depends on the manager’s registry and platform;
+missing versions and failed installs fail the setup call.
 
-## Requirements and behavior
+Use fully qualified pkgx names where possible: `nodejs.org@22` selects the
+22.x family; `python.org=3.12.9` requests an exact release. Selectors must not
+include the leading `+`; the module adds it when invoking pkgx. Packages and
+their dependencies are downloaded to pkgx’s store. Their executable, library,
+and package-specific runtime variables are exported for subsequent host tasks.
+The module uses pkgx’s JSON metadata and native execution environment; it does
+not modify shell startup files or install packages into a system prefix.
 
-Installs and verifies `pkgx`, then returns `tool`, `version`, `bin-dir`, and
-`environment` (a list of `{name, value}` records). Environment updates are visible
-to later tasks in the same host session. Separate shell invocations must add the
-returned installation directory to PATH explicitly.
+Package environments support Linux/macOS. CLI-only BSD setup still uses native
+repositories when available; supplying `packages` on BSD fails before mutation.
 
-Installs the pkgx launcher. Packages requested later by pkgx have their own platform availability and network requirements.
+The return type remains `tool`, `version`, `bin-dir`, and `environment` (a list
+of `{name, value}` records). `bin-dir` identifies the manager; use the returned
+**environment PATH** to include requested package executables. Updates apply to
+later tasks in the same host session. Separate processes must propagate the
+returned environment. No successful environment is published if installation or
+environment discovery fails; already installed files or project updates may remain.
 
-Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
-are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
-Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
-pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
-Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
+For upstream archive installations, `install-dir` selects an absolute per-user
+manager prefix. Native packages use the system prefix; omit `install-dir`, use
+`package-name` for a native manager package selector, and `sudo` when needed.
+These manager installation options do not change package versions in `packages`.
 
-## Development
-
-From this module directory, with Node.js, Bun, PureScript, and Spago installed:
-
-```sh
-bun install --cwd ../../lib/component --frozen-lockfile
-npm ci
-npm run build
-npm test
-```
-
-`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
-checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
-private regression tests and are not the published module interface.
-
-See the [component migration guide](../../docs/COMPONENTS.md) and
-[MIT License](./LICENSE).
+See [COMPONENT.md](./COMPONENT.md) for every typed argument and return,
+[upstream package syntax](https://docs.pkgx.sh/pkgx/pkgx), and [MIT License](./LICENSE).

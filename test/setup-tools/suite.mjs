@@ -12,7 +12,7 @@ export async function suite(name,directory){
  const {substitute}=await import(new URL('output/CI.Setup.Tools/index.js',directory));
  const version=name==='aws'?'2.2.3':name==='binaryen'?'125':tool.defaultVersion==='stable'?'stable':tool.defaultVersion==='latest'?'1.2.3':tool.defaultVersion;
  function fixture(options={}){
-  const os=options.os??'linux',arch=options.arch??'x86_64';
+  const os=options.os??(name==='macports-rs'?'macos':'linux'),arch=options.arch??'x86_64';
   const normalized={os:os==='darwin'?'macos':os,arch:['arm64','aarch64'].includes(arch)?'aarch64':'x86_64'};
   const actual=options.actualVersion??(version==='stable'?'1.2.3':version);
   return hostFixture(name,{input:{version,...options.input},os,arch,...options,command:(args,stderr)=>{
@@ -26,7 +26,7 @@ export async function suite(name,directory){
     if(url.includes('api.github.com')){
      const selected=tools.find(t=>t.repository&&url.includes('/repos/'+t.repository+'/'))??tool;
      const releaseVersion=selected.name==='binaryen'?'125':actual;
-     return JSON.stringify({tag_name:selected.tagPrefix+releaseVersion,assets:[{name:substitute(normalized)(releaseVersion)(selected.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:options.digest??null}]});
+     return JSON.stringify({tag_name:selected.tagPrefix+releaseVersion,assets:[{name:substitute(normalized)(releaseVersion)(selected.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:options.digest??(name==='macports-rs'?'sha256:'+'a'.repeat(64):null)}]});
     }
     if(url.includes('clojure')||url.includes('stable.txt'))return actual;
    }
@@ -39,6 +39,7 @@ export async function suite(name,directory){
  test(name+': installs, verifies, and publishes PATH on Linux/macOS',()=>{
   for(const os of ['linux','macos','darwin']){
    if(['dpkg','rpmbuild'].includes(name)&&os!=='linux')continue;
+   if(name==='macports-rs'&&os==='linux'){const f=fixture({os});assert.throws(plugin.setup,/macOS-only/);assert.equal(f.calls.length,0);continue;}
    const f=fixture({os});plugin.setup();const result=JSON.parse(f.output[0]);
    assert.equal(result.tool,name==='nix-package'?'nix':name);
    assert.ok(result.binDir.startsWith('/'));
@@ -49,6 +50,7 @@ export async function suite(name,directory){
  test(name+': uses native BSD repositories or rejects Linux-only/Nix tools',()=>{
   for(const os of ['freebsd','openbsd','netbsd']){
    const f=fixture({os});
+   if(name==='macports-rs'){assert.throws(plugin.setup,/macOS-only/);assert.equal(f.calls.length,0);continue;}
    if(['dpkg','rpmbuild','nix-package'].includes(name)){assert.throws(plugin.setup,/Linux/);continue;}
    plugin.setup();assert.ok(f.calls.some(a=>['pkg','pkg_add','pkgin'].includes(a[0])));
    assert.ok(!f.calls.some(a=>a[0]==='curl'));

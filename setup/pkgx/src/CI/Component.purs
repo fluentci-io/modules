@@ -15,7 +15,8 @@ import CI.Setup.Types as Types
 -- | @param installDir Absolute per-user installation prefix; omit for native package installations.
 -- | @param packageName Native package or port selector overriding the default repository package name.
 -- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.
-setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean } -> Effect Contract.SetupResult
+-- | @param packages Package selectors to install, optionally with per-package versions using the selected manager’s syntax; omitted or empty lists install only the manager.
+setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, packages :: Maybe (Array String) } -> Effect Contract.SetupResult
 setup args = do
   config <- either throw pure (Types.decodeConfig "pkgx" (Contract.input (Contract.encodeInput args)))
   Contract.setupResult <$> Setup.install "pkgx" config

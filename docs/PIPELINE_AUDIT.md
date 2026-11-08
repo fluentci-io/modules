@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 186 modules. This inventory covers every public
+The registry contains 191 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -73,6 +73,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [cmake](../build/cmake/README.md) | Configure, compile, test, or inspect a build graph. | `run` (escape hatch), `version` (diagnostic), `configure` (pipeline operation), `build` (pipeline operation), `install` (pipeline operation), `test` (pipeline operation) |
 | [codacy](../code-quality/codacy/README.md) | Upload coverage or run a code quality analysis. | `run` (escape hatch), `help` (diagnostic), `upload` (pipeline operation) |
 | [codecov](../code-quality/codecov/README.md) | Upload coverage or run a code quality analysis. | `run` (escape hatch), `version` (diagnostic), `upload` (pipeline operation) |
+| [cosign](../security/cosign/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `sign` (pipeline operation), `sign-blob` (pipeline operation), `verify` (pipeline operation), `verify-key` (pipeline operation), `verify-blob` (pipeline operation), `verify-blob-key` (pipeline operation) |
 | [coveralls](../code-quality/coveralls/README.md) | Upload coverage or run a code quality analysis. | `run` (escape hatch), `version` (diagnostic), `upload` (pipeline operation), `done` (pipeline operation) |
 | [cypress](../testing/cypress/README.md) | Install test dependencies or browsers, run tests, and propagate failures. | `run` (escape hatch), `version` (diagnostic), `setup` (pipeline operation), `test` (pipeline operation), `install` (pipeline operation), `verify` (pipeline operation), `cache-list` (diagnostic) |
 | [digitalocean](../cloud/digitalocean/README.md) | Inspect accounts, provision resources, or transfer deployment outputs. | `run` (escape hatch), `version` (diagnostic), `account-get` (pipeline operation), `droplets-list` (pipeline operation), `apps-create` (pipeline operation), `apps-update` (pipeline operation), `apps-deploy` (pipeline operation) |
@@ -138,8 +139,10 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-cmake](../setup/cmake/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-codacy](../setup/codacy/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-codecov](../setup/codecov/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-cosign](../setup/cosign/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-coveralls](../setup/coveralls/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-cypress](../setup/cypress/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-dagger](../setup/dagger/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-deno](../setup/deno/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-determinate-nix](../setup/determinate-nix/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-devbox](../setup/devbox/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
@@ -173,6 +176,8 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-jfrog-cli](../setup/jfrog-cli/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-kamal](../setup/kamal/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-kubectl](../setup/kubectl/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-macports](../setup/macports/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-macports-rs](../setup/macports-rs/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-meson](../setup/meson/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-mise](../setup/mise/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-netlify](../setup/netlify/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |

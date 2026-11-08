@@ -1,54 +1,43 @@
-# Setup Mise
+# Setup mise
 
-Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
-Function signatures and argument descriptions come from the compiled PureScript
-source and are embedded in the component; no raw JSON plugin input is required.
-
-## Usage
+Install and verify mise, then optionally install versioned packages for a
+CI/CD pipeline. Implemented as a typed PureScript Wasm component for FluentCI
+v0.17.2+.
 
 ```sh
-fluentci run setup-mise setup --version latest
-```
-
-```sh
-fluentci run setup-mise --help
+fluentci run setup-mise setup --version latest \
+  --packages '["node@22.14.0","python@3.12.9"]'
 fluentci run setup-mise setup --help
 ```
 
-See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
-required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+`version` selects the **mise release**. `packages` is an optional list of
+native package selectors, each carrying its own version. Omitting the list or
+passing `[]` installs only the manager and preserves the existing behavior.
+Package/version availability depends on the manager’s registry and platform;
+missing versions and failed installs fail the setup call.
 
-## Requirements and behavior
+Use mise selectors such as `node@22.14.0`, `python@3.12.9`, or
+`npm:prettier@3.5.3`. Setup invokes `mise install` with the list, then reads
+`mise env --json` for those selectors. It exports the selected tools’ PATH and
+environment without changing global mise configuration or running `mise use`.
+Mise may also read the current project’s trusted configuration; its environment
+settings and hooks remain governed by native mise behavior. Supply only trusted
+project configuration and backends.
 
-Installs and verifies `mise`, then returns `tool`, `version`, `bin-dir`, and
-`environment` (a list of `{name, value}` records). Environment updates are visible
-to later tasks in the same host session. Separate shell invocations must add the
-returned installation directory to PATH explicitly.
+Linux/macOS install the versioned upstream CLI. BSD uses native repositories
+when available; each mise backend independently determines its OS/tool support.
 
+The return type remains `tool`, `version`, `bin-dir`, and `environment` (a list
+of `{name, value}` records). `bin-dir` identifies the manager; use the returned
+**environment PATH** to include requested package executables. Updates apply to
+later tasks in the same host session. Separate processes must propagate the
+returned environment. No successful environment is published if installation or
+environment discovery fails; already installed files or project updates may remain.
 
+For upstream archive installations, `install-dir` selects an absolute per-user
+manager prefix. Native packages use the system prefix; omit `install-dir`, use
+`package-name` for a native manager package selector, and `sudo` when needed.
+These manager installation options do not change package versions in `packages`.
 
-Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
-are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
-Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
-pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
-Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
-
-## Development
-
-From this module directory, with Node.js, Bun, PureScript, and Spago installed:
-
-```sh
-bun install --cwd ../../lib/component --frozen-lockfile
-npm ci
-npm run build
-npm test
-```
-
-`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
-checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
-private regression tests and are not the published module interface.
-
-See the [component migration guide](../../docs/COMPONENTS.md) and
-[MIT License](./LICENSE).
+See [COMPONENT.md](./COMPONENT.md) for every typed argument and return,
+[upstream package syntax](https://mise.jdx.dev/cli/install.html), and [MIT License](./LICENSE).

@@ -484,6 +484,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "cosign",
+    "title": "Cosign",
+    "program": "cosign",
+    "backend": "github",
+    "package": "",
+    "repository": "sigstore/cosign",
+    "asset": "cosign-{os}-{goarch}",
+    "format": "raw",
+    "member": "cosign",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "cosign",
+    "macPackage": "cosign",
+    "freebsdPackage": "cosign",
+    "openbsdPackage": "cosign",
+    "netbsdPackage": "cosign",
+    "notes": "Installs the signing CLI. Registry credentials and CI OIDC permissions are configured by the pipeline.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "coveralls",
     "title": "Coveralls",
     "program": "coveralls",
@@ -530,6 +553,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "dagger",
+    "title": "Dagger",
+    "program": "dagger",
+    "backend": "github",
+    "package": "",
+    "repository": "dagger/dagger",
+    "asset": "dagger_v{version}_{os}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "dagger",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "dagger",
+    "macPackage": "dagger",
+    "freebsdPackage": "dagger",
+    "openbsdPackage": "dagger",
+    "netbsdPackage": "dagger",
+    "notes": "Installs the CLI only; a working Dagger engine/container runtime is required for pipeline execution. BSD uses native packages when available.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "devbox",
     "title": "Devbox",
     "program": "devbox",
@@ -549,7 +595,7 @@
     "freebsdPackage": "devbox",
     "openbsdPackage": "devbox",
     "netbsdPackage": "devbox",
-    "notes": "Devbox requires Nix for creating development environments; use setup-nix first. Setup installs only the versioned Devbox CLI.",
+    "notes": "Optionally initializes or updates a project with versioned packages and exports its executable PATH. Package setup requires Nix already on PATH and Linux/macOS.",
     "tagPrefix": ""
   },
   {
@@ -846,7 +892,7 @@
     "freebsdPackage": "flox",
     "openbsdPackage": "flox",
     "netbsdPackage": "flox",
-    "notes": "macOS uses the official Homebrew flox formula. Linux requires a configured package source providing Flox, or installation of the official Flox .deb/.rpm first. Pinned releases must exist in that package source. Native package installs require appropriate privileges; setup does not configure vendor repositories.",
+    "notes": "Native CLI installation requires an available vendor package source. Optionally initializes or updates a local environment with versioned packages and exports its executable PATH; package environments require Linux/macOS.",
     "tagPrefix": "v"
   },
   {
@@ -1151,6 +1197,52 @@
     "tagPrefix": "v"
   },
   {
+    "name": "macports",
+    "title": "MacPorts",
+    "program": "port",
+    "backend": "macports",
+    "package": "",
+    "repository": "macports/macports-base",
+    "asset": "",
+    "format": "pkg",
+    "member": "port",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "macports",
+    "macPackage": "macports",
+    "freebsdPackage": "macports",
+    "openbsdPackage": "macports",
+    "netbsdPackage": "macports",
+    "notes": "macOS only. Installs the signed official system package to /opt/local; requires root or sudo. Existing installations must match the selected release.",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "macports-rs",
+    "title": "MacPorts Rust CLI",
+    "program": "port",
+    "backend": "github",
+    "package": "",
+    "repository": "tsirysndr/macports-rs",
+    "asset": "port-{rustarch}-apple-darwin.tar.gz",
+    "format": "tar",
+    "member": "port",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "macports-rs",
+    "macPackage": "macports-rs",
+    "freebsdPackage": "macports-rs",
+    "openbsdPackage": "macports-rs",
+    "netbsdPackage": "macports-rs",
+    "notes": "macOS only, Intel and Apple Silicon. Installs port and portindex. PATH order selects between this implementation and native MacPorts.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "meson",
     "title": "Meson",
     "program": "meson",
@@ -1193,7 +1285,7 @@
     "freebsdPackage": "mise",
     "openbsdPackage": "mise",
     "netbsdPackage": "mise",
-    "notes": "",
+    "notes": "Optionally installs versioned tool/backend selectors and exports mise env without modifying global configuration. Backend and package availability depend on the host.",
     "tagPrefix": "v"
   },
   {
@@ -1377,7 +1469,7 @@
     "freebsdPackage": "pkgx",
     "openbsdPackage": "pkgx",
     "netbsdPackage": "pkgx",
-    "notes": "Installs the pkgx launcher. Packages requested later by pkgx have their own platform availability and network requirements.",
+    "notes": "Optionally downloads versioned packages and exports their native runtime environment. Package environments require Linux/macOS; BSD supports native CLI-only setup when available.",
     "tagPrefix": "v"
   },
   {

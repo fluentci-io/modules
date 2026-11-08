@@ -35,6 +35,8 @@ setup = Setup.setup "{name}"
 '''
   yield d/'legacy-entry.mjs',f'export {{ setup }} from "./output/{mod}/index.js";\n'
   props={'version':{'type':'string','default':t['defaultVersion']},'installDir':{'type':'string'},'packageName':{'type':'string'},'sudo':{'type':'boolean','default':False}}
+  if name in ['pkgx','mise','devbox','flox']:props['packages']={'type':'array','items':{'type':'string'},'description':'Packages to install, optionally with native version selectors.'}
+  if name in ['devbox','flox']:props['project']={'type':'string','default':'.','description':'Project environment directory to initialize or update.'}
   if name=='extism':
    for key in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']:props[key]={'type':'string'}
   yield d/'legacy-schema.json',json.dumps({'name':'setup-'+name,'exports':{'setup':{'input':{'type':'object','properties':props,'additionalProperties':False},'output':{'type':'object','properties':{'tool':{'type':'string'},'version':{'type':'string'},'binDir':{'type':'string'},'environment':{'type':'object'}}}}}},indent=2)+'\n'

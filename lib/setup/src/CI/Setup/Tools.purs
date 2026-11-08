@@ -6,6 +6,7 @@ import CI.Setup.Installer as Installer
 import CI.Setup.BSD as BSD
 import CI.Setup.Host as H
 import CI.Setup.OTP as Erlang
+import CI.Setup.MacPorts as MacPorts
 import CI.Setup.Types (Config, Host, Result, defaults, isBSD, versionToken)
 import CI.Setup.ToolCatalog as Catalog
 import Data.Argonaut.Decode (decodeJson)
@@ -185,7 +186,15 @@ githubRelease tool host requested = do
     Nothing -> throw ("No official " <> tool.name <> " asset for " <> host.os <> "/" <> host.arch <> ": " <> wanted)
     Just asset -> pure asset
   digest <- case asset.digest >>= String.stripPrefix (Pattern "sha256:") of
-    Nothing -> pure ""
+    Nothing -> if tool.name == "macports-rs" then do
+      checksum <- case Array.find (\entry -> entry.name == wanted <> ".sha256") assets of
+        Nothing -> throw "macports-rs release has no SHA-256 checksum"
+        Just entry -> pure entry
+      text <- trim <$> H.fetch checksum.browser_download_url
+      case Array.head (String.split (Pattern " ") text) of
+        Just value | value /= "" -> pure value
+        _ -> throw "Invalid macports-rs release checksum"
+      else pure ""
     Just value -> pure value
   pure { version, url: asset.browser_download_url, sha256: digest }
 
@@ -243,7 +252,9 @@ install name host config = do
   tool <- lookup name
   when (Array.elem name [ "dpkg", "rpmbuild" ] && host.os /= "linux") $ throw (name <> " setup is Linux-only")
   when (name == "gh" && isBSD host.os && config.installDir /= "") $ throw "Native GitHub CLI packages use the system prefix; omit installDir"
-  if tool.name == "erlang" then do
+  when (Array.elem name [ "macports", "macports-rs" ] && host.os /= "macos") $ throw (name <> " setup is macOS-only")
+  if name == "macports" then MacPorts.install host config
+  else if tool.name == "erlang" then do
     target <- if isBSD host.os || config.packageName /= "" || config.sudo then pure Nothing else Erlang.platform host
     case target of
       Just value -> Erlang.install host value config
@@ -398,6 +409,7 @@ install name host config = do
             Just value -> pure value
             Nothing -> throw "Missing upstream release metadata"
           extract tool info.url info.sha256 destination
+          when (name == "macports-rs") $ H.run [ "ln", "-sf", "port", destination <> "/bin/portindex" ]
           pure info.version
         version <- verify tool expected executable
         when (name == "aws" && not (String.startsWith (Pattern "2.") version)) $ throw "AWS CLI v2 is required"

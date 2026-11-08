@@ -13,5 +13,7 @@ Install and verify devbox, select its version, and publish its environment for s
 | `install-dir` | `string` | no | Absolute per-user installation prefix; omit for native package installations. |
 | `package-name` | `string` | no | Native package or port selector overriding the default repository package name. |
 | `sudo` | `boolean` | no | Use noninteractive sudo for native package or system installation; defaults to false. |
+| `packages` | `array` | no | Package selectors to install, optionally with per-package versions using the selected manager’s syntax; omitted or empty lists install only the manager. |
+| `project` | `string` | no | Project environment directory to initialize or update; defaults to the current directory. Creates or updates the manager manifest and lockfile when packages are supplied. |
 
 Returns `Contract.SetupResult`.

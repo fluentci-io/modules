@@ -18,6 +18,13 @@
           "sudo": {
             "type": "boolean",
             "default": false
+          },
+          "packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Packages to install, optionally with native version selectors."
           }
         },
         "additionalProperties": false
