@@ -11,7 +11,7 @@ export function versionText(tool, version = versions[tool]) {
   return `${tool === "rust" ? "rustc" : tool} ${version}\n`;
 }
 export function fixture(tool, options = {}) {
-  const calls = [], output = [], updates = [];
+  const calls = [], output = [], updates = [], scopedCalls = [];
   const environment = { HOME: "/home/test", PATH: "/usr/bin:/bin", TMPDIR: "/tmp", ...options.env };
   let pending = [];
   const platform = (options.os ?? "linux") === "darwin" ? "macos" : options.os ?? "linux";
@@ -30,9 +30,20 @@ export function fixture(tool, options = {}) {
     }
     throw Error("Unexpected metadata URL: " + url);
   }
-  function command(args, stderr) {
+  function command(args, stderr, commandEnvironment = environment) {
+    if (args[0] === "env" && /^[A-Za-z_][A-Za-z0-9_]*=/.test(args[1] ?? "")) {
+      const childEnvironment = { ...commandEnvironment };
+      let index = 1;
+      while (/^[A-Za-z_][A-Za-z0-9_]*=/.test(args[index] ?? "")) {
+        const separator = args[index].indexOf("=");
+        childEnvironment[args[index].slice(0, separator)] = args[index].slice(separator + 1);
+        index++;
+      }
+      scopedCalls.push({ args: args.slice(index), environment: childEnvironment });
+      return command(args.slice(index), stderr, childEnvironment);
+    }
     calls.push(args);
-    if (options.command) { const result = options.command(args, stderr); if (result !== undefined) return result; }
+    if (options.command) { const result = options.command(args, stderr, commandEnvironment); if (result !== undefined) return result; }
     if (options.fail?.(args)) throw Error("Injected command failure: " + args.join(" "));
     if (tool === "pkl" && args[0] === "java" && args[1] === "-version") return 'openjdk version "21.0.5"\n';
     if (tool === "zig" && args[1] === "--version") throw Error("Zig uses the version subcommand");
@@ -46,7 +57,7 @@ export function fixture(tool, options = {}) {
     if (options.fakeErlang && args[0] === "which" && args[1] === "erl") return "/fixture/erl";
     if (options.fakeErlang && args[0] === "erl") return "27";
     if (options.native) {
-      const result = spawnSync(args[0], args.slice(1), { encoding: "utf8", env: { ...process.env, ...environment } });
+      const result = spawnSync(args[0], args.slice(1), { encoding: "utf8", env: { ...process.env, ...commandEnvironment } });
       if (result.error) throw result.error;
       if (result.status !== 0) throw Error(`${args[0]} failed: ${result.stdout}\n${result.stderr}`);
       return stderr ? result.stderr : result.stdout;
@@ -106,5 +117,5 @@ export function fixture(tool, options = {}) {
       return "";
     } }),
   };
-  return { calls, output, environment, updates };
+  return { calls, output, environment, updates, scopedCalls };
 }

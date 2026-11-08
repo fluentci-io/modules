@@ -8,8 +8,8 @@ import Data.Argonaut.Encode (encodeJson)
 import Data.Argonaut.Parser (jsonParser)
 import Data.Array as Array
 import Data.Array.NonEmpty as NEA
-import Data.Either (Either(..), either, isRight)
-import Data.Foldable (foldl, traverse_)
+import Data.Either (Either(..), either)
+import Data.Foldable (traverse_)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as String
 import Data.String.Common (trim)
@@ -46,8 +46,14 @@ userHome = do
 
 captureWith :: Object.Object String -> Boolean -> Array String -> Effect String
 captureWith environment stderr args = do
-  let pipeline = foldl (\p key -> P.withEnv key (fromMaybe "" (Object.lookup key environment)) p)
-        (P.pipeline "setup") (Object.keys environment) # P.exec args
+  when (Array.null args) $ throw "Setup commands require an executable"
+  -- The legacy SDK emits withEnv through the process-wide set_envs import.
+  -- Use env for command-local overrides, leaving publication to activate.
+  pattern <- either throw pure (Regex.regex "^[A-Za-z_][A-Za-z0-9_]*$" noFlags)
+  traverse_ (\key -> unless (Regex.test pattern key) (throw "Invalid setup environment variable name")) (Object.keys environment)
+  let assignments = map (\key -> key <> "=" <> fromMaybe "" (Object.lookup key environment)) (Object.keys environment)
+      command = if Array.null assignments then args else [ "env" ] <> assignments <> args
+      pipeline = P.pipeline "setup" # P.exec command
   (if stderr then P.stderr pipeline else P.stdout pipeline) >>= unwrap
 
 capture :: Array String -> Effect String

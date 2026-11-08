@@ -46,8 +46,10 @@ export async function packageSuite(tool, directory) {
  });
  test(tool+': package or environment failure never publishes successful setup',()=>{
   const f=host({fail:args=>args[0].endsWith('/'+tool)&&!['version','--version'].includes(args[1])});
+  const before={...f.environment};
   assert.throws(setup);assert.equal(f.output.length,0);assert.equal(f.updates.length,0);
-  for(const environment of [tool==='mise'?'{}':'',tool==='mise'?'not JSON':'BAD-NAME\0value\0']){const h=host({environment});assert.throws(setup);assert.equal(h.updates.length,0);}
+  assert.deepEqual(f.environment,before);
+  for(const environment of [tool==='mise'?'{}':'',tool==='mise'?'not JSON':'BAD-NAME\0value\0']){const h=host({environment});assert.throws(setup);assert.equal(h.updates.length,0);assert.equal(h.output.length,0);}
  });
  test(tool+': blank package strings keep CLI-only setup behavior',()=>{
   for(const packages of ['', '  ']) {
