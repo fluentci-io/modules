@@ -13,5 +13,6 @@ Install and verify cachix, select its version, and publish its environment for s
 | `install-dir` | `string` | no | Absolute per-user installation prefix; omit for native package installations. |
 | `package-name` | `string` | no | Native package or port selector overriding the default repository package name. |
 | `sudo` | `boolean` | no | Use noninteractive sudo for native package or system installation; defaults to false. |
+| `cache` | `string` | no | Cachix cache name to enable with cachix use after installation; omit for CLI-only setup. Public caches need no token; private caches use inherited CACHIX_AUTH_TOKEN. |
 
 Returns `Contract.SetupResult`.

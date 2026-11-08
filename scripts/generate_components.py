@@ -79,6 +79,7 @@ SETUP={'type':'object','required':['tool','version','binDir','environment'],'pro
 def setup_props(name):
  props={k:{'type':t} for k,t in [('version','string'),('installDir','string'),('packageName','string'),('sudo','boolean')]}
  extras={'rust':{'toolchain':'string','components':'array','targets':'array','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
+ if name=='cachix':extras[name]={'cache':'string'}
  if name in ['pkgx','mise','devbox','flox']:extras[name]={'packages':'string'}
  if name in ['devbox','flox']:extras[name]['project']='string'
  props.update({k:({'type':v,'items':{'type':'string'}} if v=='array' else {'type':v}) for k,v in extras.get(name,{}).items()});return props
@@ -133,6 +134,7 @@ def generated():
    elif name=='cachix':
     properties={'cache':{'type':'string'}};required=['cache'];returned='{ enabled :: Boolean, cache :: String }';output={'type':'object','properties':{'enabled':{'type':'boolean'},'cache':{'type':'string'}},'required':['enabled','cache'],'additionalProperties':False};description=('Configure' if function=='setup' else 'Push the result closure to')+' a Cachix cache using host credentials.'
     body=['  present <- P.hasEnv "CACHIX_AUTH_TOKEN" >>= unwrap','  token <- if present then P.getEnv "CACHIX_AUTH_TOKEN" >>= unwrap else pure ""',f'  Native.{"setupWith" if function=="setup" else "pushResultWith"} args.cache','  pure { enabled: trim token /= "", cache: args.cache }']
+   if category=='setup' and tool=='cachix':properties['cache']['description']='Cachix cache name to enable with cachix use after installation; omit for CLI-only setup. Public caches need no token; private caches use inherited CACHIX_AUTH_TOKEN.'
    if category=='setup' and tool in ['devbox','flox']:properties['project']['description']='Project environment directory to initialize or update; defaults to the current directory. Creates or updates the manager manifest and lockfile when packages are supplied.'
    for key,prop in properties.items():prop['description']=describe(key,prop,name+' '+function)
    args_type='{ '+', '.join(quoted(key)+' :: '+('' if key in required else 'Maybe ')+('('+scalar(prop['type'])+')' if prop['type']=='array' and key not in required else scalar(prop['type'])) for key,prop in properties.items())+' }'

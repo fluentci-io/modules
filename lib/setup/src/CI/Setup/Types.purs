@@ -16,7 +16,8 @@ import Foreign.Object as Object
 
 -- Shared configuration is decoded against each tool's own allowed fields.
 type Config =
-  { packages :: Array String
+  { cache :: String
+  , packages :: Array String
   , project :: String
   , version :: String
   , toolchain :: String
@@ -74,7 +75,7 @@ hostSupported name host
 defaults :: String -> Config
 defaults name =
   { version: if name == "rust" then "stable" else if name == "java" then "21" else ToolCatalog.defaultVersion name
-  , packages: [], project: "."
+  , cache: "", packages: [], project: "."
   , trustedUsers: [], extraConf: []
   , toolchain: "", components: [], targets: [], profile: "minimal"
   , installDir: "", packageName: "", sudo: false, otpVersion: ""
@@ -106,6 +107,8 @@ validDirectory raw =
 
 validateConfig :: String -> Config -> Either String Unit
 validateConfig name config = do
+  when (name /= "cachix" && config.cache /= "") $ Left "cache requires setup-cachix"
+  unless (config.cache == "" || validCache config.cache) $ Left "cache must be a lowercase DNS label of 1-63 letters, digits, or hyphens"
   when (not (Array.elem name [ "pkgx", "mise", "devbox", "flox" ]) && not (Array.null config.packages)) $ Left "packages requires setup-pkgx, setup-mise, setup-devbox, or setup-flox"
   traverse_ (\value -> unless (validPackageSelector value) (Left "packages must contain nonempty package selectors, optionally with versions, without whitespace, shell syntax, or leading options")) config.packages
   unless (validProject config.project) $ Left "project must be a nonempty directory without control characters"
@@ -135,6 +138,11 @@ validateConfig name config = do
   unless (Array.elem config.init [ "systemd", "none" ]) $ Left "init must be systemd or none"
   unless (Array.elem config.libc [ "auto", "gnu", "musl" ]) $ Left "libc must be auto, gnu, or musl"
 
+validCache :: String -> Boolean
+validCache value = CU.length value > 0 && CU.length value <= 63
+  && not (String.startsWith (Pattern "-") value) && not (String.endsWith (Pattern "-") value)
+  && all (\c -> (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-') (CU.toCharArray value)
+
 validPackageSelector :: String -> Boolean
 validPackageSelector value = case CU.charAt 0 value of
   Just c | (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ->
@@ -152,6 +160,7 @@ decodeConfig :: String -> Json -> Either String Config
 decodeConfig name json = do
   fields <- either (Left <<< show) Right (decodeJson json)
   let allowed = [ "version", "installDir", "packageName", "sudo" ] <>
+        (if name == "cachix" then [ "cache" ] else []) <>
         (if Array.elem name [ "pkgx", "mise", "devbox", "flox" ] then [ "packages" ] else []) <>
         (if Array.elem name [ "devbox", "flox" ] then [ "project" ] else []) <>
         (if name == "rust" then [ "toolchain", "components", "targets", "profile" ] else []) <>
@@ -165,6 +174,8 @@ decodeConfig name json = do
     Nothing -> pure unit
   when (Array.any isNull (Object.values fields)) $ Left "Setup arguments cannot be null"
   let initial = defaults name
+  cache <- either (Left <<< show) (Right <<< fromMaybe initial.cache) (getFieldOptional fields "cache")
+  when (Object.member "cache" fields && not (validCache cache)) $ Left "cache must be a lowercase DNS label of 1-63 letters, digits, or hyphens"
   packageList <- either (Left <<< show) (Right <<< fromMaybe "") (getFieldOptional fields "packages")
   let packages = if trim packageList == "" then [] else map trim (String.split (Pattern ",") packageList)
   project <- either (Left <<< show) (Right <<< fromMaybe initial.project) (getFieldOptional fields "project")
@@ -189,6 +200,6 @@ decodeConfig name json = do
   pythonVersion <- either (Left <<< show) (Right <<< fromMaybe initial.pythonVersion) (getFieldOptional fields "pythonVersion")
   xtpVersion <- either (Left <<< show) (Right <<< fromMaybe initial.xtpVersion) (getFieldOptional fields "xtpVersion")
   binaryenVersion <- either (Left <<< show) (Right <<< fromMaybe initial.binaryenVersion) (getFieldOptional fields "binaryenVersion")
-  let config = { packages, project, version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, trustedUsers, extraConf, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
+  let config = { cache, packages, project, version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, trustedUsers, extraConf, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
   validateConfig name config
   pure config

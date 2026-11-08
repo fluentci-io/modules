@@ -32,12 +32,15 @@ install tool config = do
   when (isBSD host.os && Array.elem tool [ "pkgx", "devbox", "flox" ] && not (Array.null config.packages)) $
     throw (tool <> " package environments support Linux and macOS only; omit packages for native CLI-only setup")
   when (tool == "devbox" && not (Array.null config.packages)) $ H.requireTools [ "nix" ]
+  when (tool == "cachix" && config.cache /= "") $ H.requireTools [ "nix" ]
   let configured = config { installDir = cleanDirectory config.installDir, version = if config.toolchain == "" then config.version else config.toolchain }
   result <- if Tools.supports tool then Tools.install tool host configured
     else if isBSD host.os then BSD.install tool host configured
     else if isNix tool || tool == "rust" then Installer.install tool host configured
     else Archive.install tool host configured
   prepared <- Packages.install tool configured result
+  when (tool == "cachix" && config.cache /= "") $
+    void (H.captureWith prepared.environment false [ prepared.binDir <> "/cachix", "use", config.cache ])
   H.activate prepared
   pure prepared
 

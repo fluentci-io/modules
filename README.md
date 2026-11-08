@@ -90,7 +90,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-buildkit](./setup/buildkit/README.md) | Install and verify buildkit, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/buildkit/COMPONENT.md) |
 | [setup-buildx](./setup/buildx/README.md) | Install and verify buildx, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/buildx/COMPONENT.md) |
 | [setup-bun](./setup/bun/README.md) | Install and verify bun, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/bun/COMPONENT.md) |
-| [setup-cachix](./setup/cachix/README.md) | Install and verify cachix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cachix/COMPONENT.md) |
+| [setup-cachix](./setup/cachix/README.md) | Install Cachix and optionally enable a named Nix binary cache. | `setup`, [typed contract](./setup/cachix/COMPONENT.md) |
 | [setup-checkov](./setup/checkov/README.md) | Install and verify checkov, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/checkov/COMPONENT.md) |
 | [setup-clojure](./setup/clojure/README.md) | Install and verify clojure, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/clojure/COMPONENT.md) |
 | [setup-cmake](./setup/cmake/README.md) | Install and verify cmake, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cmake/COMPONENT.md) |

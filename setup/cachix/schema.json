@@ -22,6 +22,10 @@
           "sudo": {
             "type": "boolean",
             "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Cachix cache name to enable with cachix use after installation; omit for CLI-only setup. Public caches need no token; private caches use inherited CACHIX_AUTH_TOKEN."
           }
         },
         "required": [],

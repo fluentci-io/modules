@@ -18,6 +18,10 @@
           "sudo": {
             "type": "boolean",
             "default": false
+          },
+          "cache": {
+            "type": "string",
+            "description": "Cachix cache name to enable with cachix use; omit for CLI-only setup."
           }
         },
         "additionalProperties": false

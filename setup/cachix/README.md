@@ -1,54 +1,40 @@
 # Setup Cachix
 
-Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
-Function signatures and argument descriptions come from the compiled PureScript
-source and are embedded in the component; no raw JSON plugin input is required.
-
-## Usage
+Install and verify Cachix, then optionally configure a named binary cache with
+`cachix use`. A typed PureScript Wasm component for FluentCI v0.17.2+.
 
 ```sh
+fluentci run setup-cachix setup --cache fluentci
 fluentci run setup-cachix setup --version latest
-```
-
-```sh
-fluentci run setup-cachix --help
 fluentci run setup-cachix setup --help
 ```
 
-See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
-required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+`cache` is the **cache name**, such as `fluentci`, rather than a signing key or
+access token. After verifying the installed CLI, setup runs that executable’s
+`cachix use CACHE` to configure Nix’s substituter and trusted public key. The
+name must be a lowercase DNS label of 1–63 letters, digits, or hyphens, without
+leading or trailing hyphens. Invalid names fail before installation starts.
+Omitting `cache` retains CLI-only setup.
 
-## Requirements and behavior
+Public caches need no authentication. For a private cache, supply
+`CACHIX_AUTH_TOKEN` through the runner’s secret environment before setup. The
+module does not put that token in command arguments or the returned environment.
+Setup configures cache reads; it does not upload build outputs or install an
+automatic upload hook. Use native `cachix push CACHE PATH` for uploads.
 
-Installs and verifies `cachix`, then returns `tool`, `version`, `bin-dir`, and
-`environment` (a list of `{name, value}` records). Environment updates are visible
-to later tasks in the same host session. Separate shell invocations must add the
-returned installation directory to PATH explicitly.
+`version` selects the Cachix CLI release, independently of the cache name. On
+Linux/macOS the installer requires an existing Nix installation with flakes
+support and creates a private Nix profile under the per-user installation prefix.
+BSD CLI installation uses native packages when available. Configuring a cache
+also requires Nix on PATH and permission to update the applicable Nix
+configuration; `cachix use` determines the native configuration location. Native
+package or configuration failures propagate, and no successful setup environment
+is published when cache configuration fails.
 
- Uses native repositories; configure the vendor repository first for tools absent from the distribution repository. Pinned versions must be available in that repository.
+Returns `tool`, `version`, `bin-dir`, and `environment`. Environment updates apply
+to later tasks in the same host session; separate processes must propagate the
+returned PATH. Cachix’s Nix configuration changes persist on the runner.
+See [COMPONENT.md](./COMPONENT.md) for all typed arguments and returns.
 
-Linux/macOS use the configured upstream or ecosystem installer. JavaScript tools
-are installed through Bun, bootstrapping Node.js/Bun when missing. Python, Go,
-Ruby, and Java prerequisites depend on the selected tool. BSD uses native pkg,
-pkg_add, or pkgin repositories; missing packages/versions fail clearly. Nix and
-Determinate Nix support Linux/macOS only; dpkg/rpmbuild installers are Linux-only.
-
-## Development
-
-From this module directory, with Node.js, Bun, PureScript, and Spago installed:
-
-```sh
-bun install --cwd ../../lib/component --frozen-lockfile
-npm ci
-npm run build
-npm test
-```
-
-`dist/plugin.wasm` is the native component; `dist/fluentci.metadata.json` is its
-checksummed contract sidecar. The CJS bundles and `legacy-entry.mjs` exist only for
-private regression tests and are not the published module interface.
-
-See the [component migration guide](../../docs/COMPONENTS.md) and
+[Cachix cache configuration](https://docs.cachix.org/getting-started) ·
 [MIT License](./LICENSE).

@@ -365,7 +365,7 @@
     "freebsdPackage": "cachix",
     "openbsdPackage": "cachix",
     "netbsdPackage": "cachix",
-    "notes": " Uses native repositories; configure the vendor repository first for tools absent from the distribution repository. Pinned versions must be available in that repository.",
+    "notes": "Requires existing Nix with flakes support on Linux/macOS and installs a private Nix profile. BSD uses native packages when available. Optional cache configures cachix use; private cache credentials come from inherited CACHIX_AUTH_TOKEN.",
     "tagPrefix": "v"
   },
   {
