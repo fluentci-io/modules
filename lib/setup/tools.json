@@ -1216,7 +1216,7 @@
     "freebsdPackage": "macports",
     "openbsdPackage": "macports",
     "netbsdPackage": "macports",
-    "notes": "macOS only. Installs the signed official system package to /opt/local; requires root or sudo. Existing installations must match the selected release.",
+    "notes": "macOS only. Installs the signed official system package to /opt/local; requires root or sudo. Optionally installs comma-separated port names and exports bin/sbin. Existing CLI installations must match the selected release.",
     "tagPrefix": "v"
   },
   {
@@ -1239,7 +1239,7 @@
     "freebsdPackage": "macports-rs",
     "openbsdPackage": "macports-rs",
     "netbsdPackage": "macports-rs",
-    "notes": "macOS only, Intel and Apple Silicon. Installs port and portindex. PATH order selects between this implementation and native MacPorts.",
+    "notes": "macOS only, Intel and Apple Silicon. Installs port and portindex per-user. Optionally installs comma-separated ports using this CLI; sudo applies only to requested port installs. Exports the default /opt/local package bin/sbin while keeping the selected CLI first.",
     "tagPrefix": "v"
   },
   {

@@ -36,7 +36,7 @@ setup = Setup.setup "{name}"
   yield d/'legacy-entry.mjs',f'export {{ setup }} from "./output/{mod}/index.js";\n'
   props={'version':{'type':'string','default':t['defaultVersion']},'installDir':{'type':'string'},'packageName':{'type':'string'},'sudo':{'type':'boolean','default':False}}
   if name=='cachix':props['cache']={'type':'string','description':'Cachix cache name to enable with cachix use; omit for CLI-only setup.'}
-  if name in ['pkgx','mise','devbox','flox']:props['packages']={'type':'string','description':'Comma-separated packages to install, optionally with native version selectors.'}
+  if name in ['pkgx','mise','devbox','flox','macports','macports-rs']:props['packages']={'type':'string','description':'Comma-separated packages to install, optionally with native version selectors.'}
   if name in ['devbox','flox']:props['project']={'type':'string','default':'.','description':'Project environment directory to initialize or update.'}
   if name=='extism':
    for key in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']:props[key]={'type':'string'}

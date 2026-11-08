@@ -18,6 +18,10 @@
           "sudo": {
             "type": "boolean",
             "default": false
+          },
+          "packages": {
+            "type": "string",
+            "description": "Comma-separated packages to install, optionally with native version selectors."
           }
         },
         "additionalProperties": false

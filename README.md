@@ -133,8 +133,8 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-jfrog-cli](./setup/jfrog-cli/README.md) | Install and verify jfrog-cli, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/jfrog-cli/COMPONENT.md) |
 | [setup-kamal](./setup/kamal/README.md) | Install and verify kamal, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/kamal/COMPONENT.md) |
 | [setup-kubectl](./setup/kubectl/README.md) | Install and verify kubectl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/kubectl/COMPONENT.md) |
-| [setup-macports](./setup/macports/README.md) | Install and verify the signed native MacPorts system package. | `setup`, [typed contract](./setup/macports/COMPONENT.md) |
-| [setup-macports-rs](./setup/macports-rs/README.md) | Install and verify MacPorts Rust CLI and publish PATH. | `setup`, [typed contract](./setup/macports-rs/COMPONENT.md) |
+| [setup-macports](./setup/macports/README.md) | Install native MacPorts and optionally install pipeline dependency ports. | `setup`, [typed contract](./setup/macports/COMPONENT.md) |
+| [setup-macports-rs](./setup/macports-rs/README.md) | Install the MacPorts Rust CLI and optionally install pipeline dependency ports. | `setup`, [typed contract](./setup/macports-rs/COMPONENT.md) |
 | [setup-meson](./setup/meson/README.md) | Install and verify meson, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/meson/COMPONENT.md) |
 | [setup-mise](./setup/mise/README.md) | Install mise, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/mise/COMPONENT.md) |
 | [setup-netlify](./setup/netlify/README.md) | Install and verify netlify, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/netlify/COMPONENT.md) |

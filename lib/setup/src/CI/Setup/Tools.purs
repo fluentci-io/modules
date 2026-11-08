@@ -298,7 +298,8 @@ install name host config = do
     H.result name actual rust.binDir rust.environment
   else do
     unless (config.packageName == "") $ throw "packageName is only supported by native package installations"
-    when config.sudo $ throw "This installer is per-user; omit sudo"
+    when (config.sudo && not (name == "macports-rs" && not (Array.null config.packages))) $
+      throw (if name == "macports-rs" then "sudo requires a nonempty packages list; the CLI installation is per-user" else "This installer is per-user; omit sudo")
     H.requireTools [ "mkdir", "test", "which", "chmod", "cp", "mv", "ln", "find", "dirname" ]
     githubInfo <- if tool.backend == "github" then Just <$> githubRelease tool host config.version else pure Nothing
     let selectedVersion = maybe config.version _.version githubInfo

@@ -21,7 +21,11 @@
           },
           "sudo": {
             "type": "boolean",
-            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            "description": "Use noninteractive sudo for requested port installs; setup-macports also uses it for its system installer. The macports-rs CLI itself is always installed without sudo."
+          },
+          "packages": {
+            "type": "string",
+            "description": "Comma-separated MacPorts port names to install, such as git,cmake,python312; omit or leave blank for CLI-only setup. Package versions come from the configured ports tree."
           }
         },
         "required": [],

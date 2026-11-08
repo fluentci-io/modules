@@ -48,10 +48,14 @@ install :: String -> Config -> Result -> Effect Result
 install tool config installed
   | Array.null config.packages = pure installed
   | otherwise = do
-    let executable = installed.binDir <> "/" <> tool
+    let executable = installed.binDir <> "/" <> if Array.elem tool [ "macports", "macports-rs" ] then "port" else tool
         capture = H.captureWith installed.environment false
         run = void <<< capture
-    environment <- if tool == "mise" then do
+    environment <- if Array.elem tool [ "macports", "macports-rs" ] then do
+      when config.sudo $ H.requireTools [ "sudo" ]
+      run ((if config.sudo then [ "sudo", "-n" ] else []) <> [ executable, "-N", "install" ] <> config.packages)
+      pure (Object.singleton "PATH" "/opt/local/bin:/opt/local/sbin")
+    else if tool == "mise" then do
       run ([ executable, "--yes", "install", "--" ] <> config.packages)
       json <- capture ([ executable, "env", "--json", "--" ] <> config.packages) >>= H.json
       decode json :: Effect (Object.Object String)

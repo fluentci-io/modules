@@ -109,8 +109,9 @@ validateConfig :: String -> Config -> Either String Unit
 validateConfig name config = do
   when (name /= "cachix" && config.cache /= "") $ Left "cache requires setup-cachix"
   unless (config.cache == "" || validCache config.cache) $ Left "cache must be a lowercase DNS label of 1-63 letters, digits, or hyphens"
-  when (not (Array.elem name [ "pkgx", "mise", "devbox", "flox" ]) && not (Array.null config.packages)) $ Left "packages requires setup-pkgx, setup-mise, setup-devbox, or setup-flox"
+  when (not (Array.elem name [ "pkgx", "mise", "devbox", "flox", "macports", "macports-rs" ]) && not (Array.null config.packages)) $ Left "packages requires a supported package-manager setup module"
   traverse_ (\value -> unless (validPackageSelector value) (Left "packages must contain nonempty package selectors, optionally with versions, without whitespace, shell syntax, or leading options")) config.packages
+  when (Array.elem name [ "macports", "macports-rs" ]) $ traverse_ (\value -> unless (validPortName value) (Left "MacPorts packages must be port names, such as git,cmake,python312; versions and variants are selected by the configured ports tree")) config.packages
   unless (validProject config.project) $ Left "project must be a nonempty directory without control characters"
   when (not (Array.elem name [ "devbox", "flox" ]) && config.project /= ".") $ Left "project requires setup-devbox or setup-flox"
   when (name /= "determinate-nix" && (not (Array.null config.trustedUsers) || not (Array.null config.extraConf))) $ Left "trustedUsers and extraConf require setup-determinate-nix"
@@ -143,6 +144,13 @@ validCache value = CU.length value > 0 && CU.length value <= 63
   && not (String.startsWith (Pattern "-") value) && not (String.endsWith (Pattern "-") value)
   && all (\c -> (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-') (CU.toCharArray value)
 
+validPortName :: String -> Boolean
+validPortName value = case CU.charAt 0 value of
+  Just c | (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ->
+    all (\x -> (x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z') || (x >= '0' && x <= '9')
+      || Array.elem x [ '.', '_', '+', '-' ]) (CU.toCharArray value)
+  _ -> false
+
 validPackageSelector :: String -> Boolean
 validPackageSelector value = case CU.charAt 0 value of
   Just c | (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ->
@@ -161,7 +169,7 @@ decodeConfig name json = do
   fields <- either (Left <<< show) Right (decodeJson json)
   let allowed = [ "version", "installDir", "packageName", "sudo" ] <>
         (if name == "cachix" then [ "cache" ] else []) <>
-        (if Array.elem name [ "pkgx", "mise", "devbox", "flox" ] then [ "packages" ] else []) <>
+        (if Array.elem name [ "pkgx", "mise", "devbox", "flox", "macports", "macports-rs" ] then [ "packages" ] else []) <>
         (if Array.elem name [ "devbox", "flox" ] then [ "project" ] else []) <>
         (if name == "rust" then [ "toolchain", "components", "targets", "profile" ] else []) <>
         (if name == "elixir" then [ "otpVersion" ] else []) <>

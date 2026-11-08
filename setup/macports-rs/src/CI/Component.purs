@@ -14,8 +14,9 @@ import CI.Setup.Types as Types
 -- | @param version Tool release or supported channel to install; omitted values use the documented default.
 -- | @param installDir Absolute per-user installation prefix; omit for native package installations.
 -- | @param packageName Native package or port selector overriding the default repository package name.
--- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.
-setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean } -> Effect Contract.SetupResult
+-- | @param sudo Use noninteractive sudo for requested port installs; setup-macports also uses it for its system installer. The macports-rs CLI itself is always installed without sudo.
+-- | @param packages Comma-separated MacPorts port names to install, such as git,cmake,python312; omit or leave blank for CLI-only setup. Package versions come from the configured ports tree.
+setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, packages :: Maybe String } -> Effect Contract.SetupResult
 setup args = do
   config <- either throw pure (Types.decodeConfig "macports-rs" (Contract.input (Contract.encodeInput args)))
   Contract.setupResult <$> Setup.install "macports-rs" config
