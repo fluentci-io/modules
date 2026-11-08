@@ -26,6 +26,20 @@
           "init": {
             "type": "string",
             "description": "Determinate Nix service integration: systemd or none."
+          },
+          "trustedUsers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional trusted Nix users or @groups; root is retained. Only set on trusted machines."
+          },
+          "extraConf": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Additional single-line Nix key=value settings passed literally to the installer."
           }
         },
         "required": [],

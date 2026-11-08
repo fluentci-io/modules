@@ -595,7 +595,7 @@ runtime = "component"
 
 [[modules]]
 name = "setup-determinate-nix"
-version = "0.2.0"
+version = "0.2.1"
 path = "setup/determinate-nix"
 sdk = "purescript"
 runtime = "component"

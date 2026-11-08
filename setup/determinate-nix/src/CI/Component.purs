@@ -16,7 +16,9 @@ import CI.Setup.Types as Types
 -- | @param packageName Native package or port selector overriding the default repository package name.
 -- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.
 -- | @param init Determinate Nix service integration: systemd or none.
-setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, init :: Maybe String } -> Effect Contract.SetupResult
+-- | @param trustedUsers Additional trusted Nix users or @groups; root is retained. Only set on trusted machines.
+-- | @param extraConf Additional single-line Nix key=value settings passed literally to the installer.
+setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, init :: Maybe String, trustedUsers :: Maybe (Array String), extraConf :: Maybe (Array String) } -> Effect Contract.SetupResult
 setup args = do
   config <- either throw pure (Types.decodeConfig "determinate-nix" (Contract.input (Contract.encodeInput args)))
   Contract.setupResult <$> Setup.install "determinate-nix" config

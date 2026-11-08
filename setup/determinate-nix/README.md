@@ -20,6 +20,19 @@ required flag, and return type. The [schema](./schema.json) describes the same
 contract. Optional values retain the native module defaults. Lists use JSON array
 syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
 
+## Custom configuration
+
+```sh
+fluentci run setup-determinate-nix@v0.2.1 setup --sudo --trusted-users '["runner"]' --extra-conf '["max-jobs = auto", "accept-flake-config = true"]'
+```
+
+`trusted-users` retains root and accepts user or `@group` names. Trust only users
+who may administer this machine's Nix store. `extra-conf` accepts an array of
+single-line Nix `key = value` settings, passed as literal installer arguments.
+These settings apply during a fresh installation. Existing installations reject
+these options instead of silently skipping them; edit `/etc/nix/nix.custom.conf`
+and reload the daemon explicitly for an existing installation.
+
 ## Requirements and behavior
 
 Installs and verifies `determinate-nix`, then returns `tool`, `version`, `bin-dir`, and

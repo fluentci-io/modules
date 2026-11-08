@@ -19,6 +19,8 @@ type Config =
   , toolchain :: String
   , components :: Array String
   , targets :: Array String
+  , trustedUsers :: Array String
+  , extraConf :: Array String
   , profile :: String
   , installDir :: String
   , packageName :: String
@@ -69,6 +71,7 @@ hostSupported name host
 defaults :: String -> Config
 defaults name =
   { version: if name == "rust" then "stable" else if name == "java" then "21" else ToolCatalog.defaultVersion name
+  , trustedUsers: [], extraConf: []
   , toolchain: "", components: [], targets: [], profile: "minimal"
   , installDir: "", packageName: "", sudo: false, otpVersion: ""
   , daemon: true, init: "systemd", baseline: false, libc: "auto"
@@ -99,6 +102,10 @@ validDirectory raw =
 
 validateConfig :: String -> Config -> Either String Unit
 validateConfig name config = do
+  when (name /= "determinate-nix" && (not (Array.null config.trustedUsers) || not (Array.null config.extraConf))) $ Left "trustedUsers and extraConf require setup-determinate-nix"
+  traverse_ (\value -> unless (value /= "" && value /= "*" && all (\c -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || Array.elem c [ '_', '-', '@', '.' ]) (CU.toCharArray value)) (Left "Invalid trusted Nix user or group")) config.trustedUsers
+  traverse_ (\line -> unless (String.contains (Pattern "=") line && not (Array.any (\c -> Array.elem c [ '\n', '\r', '\x0000' ]) (CU.toCharArray line))) (Left "extraConf entries must be single-line Nix key=value settings")) config.extraConf
+
   unless (config.toolchain == "" || versionToken config.toolchain) $ Left "Invalid Rust toolchain"
   traverse_ (\value -> unless (versionToken value) (Left "Invalid Rust component or target")) (config.components <> config.targets)
   unless (Array.elem config.profile [ "minimal", "default", "complete" ]) $ Left "Rust profile must be minimal, default, or complete"
@@ -128,7 +135,7 @@ decodeConfig name json = do
         (if name == "rust" then [ "toolchain", "components", "targets", "profile" ] else []) <>
         (if name == "elixir" then [ "otpVersion" ] else []) <>
         (if name == "nix" then [ "daemon" ] else []) <>
-        (if name == "determinate-nix" then [ "init" ] else []) <>
+        (if name == "determinate-nix" then [ "init", "trustedUsers", "extraConf" ] else []) <>
         (if name == "extism" then [ "cliVersion", "jsVersion", "pythonVersion", "xtpVersion", "binaryenVersion" ] else []) <>
         (if name == "bun" then [ "baseline", "libc" ] else if name == "pkl" then [ "libc" ] else [])
   case Array.find (\key -> not (Array.elem key allowed)) (Object.keys fields) of
@@ -138,6 +145,8 @@ decodeConfig name json = do
   let initial = defaults name
   version <- either (Left <<< show) (Right <<< fromMaybe initial.version) (getFieldOptional fields "version")
   toolchain <- either (Left <<< show) (Right <<< fromMaybe initial.toolchain) (getFieldOptional fields "toolchain")
+  trustedUsers <- either (Left <<< show) (Right <<< fromMaybe initial.trustedUsers) (getFieldOptional fields "trustedUsers")
+  extraConf <- either (Left <<< show) (Right <<< fromMaybe initial.extraConf) (getFieldOptional fields "extraConf")
   components <- either (Left <<< show) (Right <<< fromMaybe initial.components) (getFieldOptional fields "components")
   targets <- either (Left <<< show) (Right <<< fromMaybe initial.targets) (getFieldOptional fields "targets")
   profile <- either (Left <<< show) (Right <<< fromMaybe initial.profile) (getFieldOptional fields "profile")
@@ -155,6 +164,6 @@ decodeConfig name json = do
   pythonVersion <- either (Left <<< show) (Right <<< fromMaybe initial.pythonVersion) (getFieldOptional fields "pythonVersion")
   xtpVersion <- either (Left <<< show) (Right <<< fromMaybe initial.xtpVersion) (getFieldOptional fields "xtpVersion")
   binaryenVersion <- either (Left <<< show) (Right <<< fromMaybe initial.binaryenVersion) (getFieldOptional fields "binaryenVersion")
-  let config = { version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
+  let config = { version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, trustedUsers, extraConf, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
   validateConfig name config
   pure config

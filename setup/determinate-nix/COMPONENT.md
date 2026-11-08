@@ -14,5 +14,7 @@ Install and verify determinate-nix, select its version, and publish its environm
 | `package-name` | `string` | no | Native package or port selector overriding the default repository package name. |
 | `sudo` | `boolean` | no | Use noninteractive sudo for native package or system installation; defaults to false. |
 | `init` | `string` | no | Determinate Nix service integration: systemd or none. |
+| `trusted-users` | `array` | no | Additional trusted Nix users or @groups; root is retained. Only set on trusted machines. |
+| `extra-conf` | `array` | no | Additional single-line Nix key=value settings passed literally to the installer. |
 
 Returns `Contract.SetupResult`.

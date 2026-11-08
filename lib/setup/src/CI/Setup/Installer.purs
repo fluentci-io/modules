@@ -50,12 +50,15 @@ install tool host config = do
           else [ "install" ] <> (if host.os == "linux" then [ "linux" ] else []) <>
             [ "--no-confirm", "--no-modify-profile" ] <>
             (if host.os == "linux" then [ "--init", config.init ] else [])
+        configuration = config.extraConf <> (if Array.null config.trustedUsers then [] else [ "trusted-users = " <> String.joinWith " " (Array.nub ([ "root" ] <> config.trustedUsers)) ])
+        extraArgs = Array.concatMap (\line -> [ "--extra-conf", line ]) configuration
         privilege = if config.sudo then [ "sudo", "-n" ] else []
     when config.sudo $ H.requireTools [ "sudo" ]
     present <- H.exists executable
+    when (present && not (Array.null configuration)) $ throw "Nix is already installed; apply trustedUsers/extraConf to /etc/nix/nix.custom.conf explicitly and restart the daemon"
     unless present $ H.withTemp \temp -> do
       H.download url (temp <> "/install.sh")
-      H.run (privilege <> [ "sh", temp <> "/install.sh" ] <> args)
+      H.run (privilege <> [ "sh", temp <> "/install.sh" ] <> args <> extraArgs)
     when (tool == "determinate-nix" && pinned /= "latest") $
       void (H.verify "nix-installer" pinned "/nix/nix-installer")
     text <- H.capture [ executable, "--version" ]

@@ -28,7 +28,7 @@ install tool config = do
     throw "baseline, libc, and otpVersion apply to upstream installs, not native BSD packages"
   when (tool == "rust" && isBSD host.os && (config.toolchain /= "" || not (Array.null config.components) || not (Array.null config.targets) || config.profile /= "minimal")) $
     throw "Rust toolchain, components, targets, and profile require rustup; native BSD packages do not support these options"
-  let configured = config { installDir = cleanDirectory config.installDir }
+  let configured = config { installDir = cleanDirectory config.installDir, version = if config.toolchain == "" then config.version else config.toolchain }
   result <- if Tools.supports tool then Tools.install tool host configured
     else if isBSD host.os then BSD.install tool host configured
     else if isNix tool || tool == "rust" then Installer.install tool host configured

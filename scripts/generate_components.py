@@ -22,6 +22,8 @@ COMMON={
  'toolchain':'Rustup toolchain channel or exact release; alias for version. Both must agree when provided.',
  'components':'Rustup components to install, such as rustfmt and clippy.',
  'targets':'Rust target triples to install, such as wasm32-wasip2.',
+ 'trustedUsers':'Additional trusted Nix users or @groups; root is retained. Only set on trusted machines.',
+ 'extraConf':'Additional single-line Nix key=value settings passed literally to the installer.',
  'profile':'Rustup installation profile: minimal (default), default, or complete.',
  'installDir':'Absolute per-user installation prefix; omit for native package installations.',
  'packageName':'Native package or port selector overriding the default repository package name.',
@@ -74,7 +76,7 @@ SETUP={'type':'object','required':['tool','version','binDir','environment'],'pro
 
 def setup_props(name):
  props={k:{'type':t} for k,t in [('version','string'),('installDir','string'),('packageName','string'),('sudo','boolean')]}
- extras={'rust':{'toolchain':'string','components':'array','targets':'array','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
+ extras={'rust':{'toolchain':'string','components':'array','targets':'array','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
  props.update({k:({'type':v,'items':{'type':'string'}} if v=='array' else {'type':v}) for k,v in extras.get(name,{}).items()});return props
 
 def generated():
