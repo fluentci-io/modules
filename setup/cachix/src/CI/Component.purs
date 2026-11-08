@@ -11,7 +11,7 @@ import CI.Setup as Setup
 import CI.Setup.Types as Types
 
 -- | Install and verify cachix, select its version, and publish its environment for subsequent tasks.
--- | @param version Tool release or supported channel to install; omitted values use the documented default.
+-- | @param version Expected Cachix version from the configured nixpkgs registry entry; latest accepts the packaged version. An explicit version mismatch fails setup.
 -- | @param installDir Absolute per-user installation prefix; omit for native package installations.
 -- | @param packageName Native package or port selector overriding the default repository package name.
 -- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.

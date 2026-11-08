@@ -374,6 +374,11 @@ install name host config = do
           let platform = (if host.os == "macos" then "darwin-" else "linux-") <> if host.arch == "aarch64" then "arm" else "x86_64"
           extract (tool { format = "tar" }) ("https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-" <> selected <> "-" <> platform <> ".tar.gz") "" destination
           pure selected
+        else if tool.backend == "nixpkgs" then do
+          H.requireTools [ "nix" ]
+          H.run [ "nix", "--extra-experimental-features", "nix-command flakes", "profile", "install", "--profile", destination <> "/profile", "nixpkgs#" <> tool.package ]
+          H.run [ "ln", "-s", destination <> "/profile/bin", destination <> "/bin" ]
+          pure config.version
         else if tool.backend == "cachix" then do
           H.requireTools [ "nix", "curl" ]
           selected <- if config.version == "latest" then _.version <$> release tool "latest" else pure config.version

@@ -134,6 +134,7 @@ def generated():
    elif name=='cachix':
     properties={'cache':{'type':'string'}};required=['cache'];returned='{ enabled :: Boolean, cache :: String }';output={'type':'object','properties':{'enabled':{'type':'boolean'},'cache':{'type':'string'}},'required':['enabled','cache'],'additionalProperties':False};description=('Configure' if function=='setup' else 'Push the result closure to')+' a Cachix cache using host credentials.'
     body=['  present <- P.hasEnv "CACHIX_AUTH_TOKEN" >>= unwrap','  token <- if present then P.getEnv "CACHIX_AUTH_TOKEN" >>= unwrap else pure ""',f'  Native.{"setupWith" if function=="setup" else "pushResultWith"} args.cache','  pure { enabled: trim token /= "", cache: args.cache }']
+   if category=='setup' and tool=='cachix':properties['version']['description']='Expected Cachix version from the configured nixpkgs registry entry; latest accepts the packaged version. An explicit version mismatch fails setup.'
    if category=='setup' and tool=='cachix':properties['cache']['description']='Cachix cache name to enable with cachix use after installation; omit for CLI-only setup. Public caches need no token; private caches use inherited CACHIX_AUTH_TOKEN.'
    if category=='setup' and tool in ['devbox','flox']:properties['project']['description']='Project environment directory to initialize or update; defaults to the current directory. Creates or updates the manager manifest and lockfile when packages are supplied.'
    for key,prop in properties.items():prop['description']=describe(key,prop,name+' '+function)

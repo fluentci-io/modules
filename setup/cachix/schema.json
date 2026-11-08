@@ -9,7 +9,7 @@
         "properties": {
           "version": {
             "type": "string",
-            "description": "Tool release or supported channel to install; omitted values use the documented default."
+            "description": "Expected Cachix version from the configured nixpkgs registry entry; latest accepts the packaged version. An explicit version mismatch fails setup."
           },
           "installDir": {
             "type": "string",

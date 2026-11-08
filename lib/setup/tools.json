@@ -349,8 +349,8 @@
     "name": "cachix",
     "title": "Cachix",
     "program": "cachix",
-    "backend": "cachix",
-    "package": "",
+    "backend": "nixpkgs",
+    "package": "cachix",
     "repository": "cachix/cachix",
     "asset": "",
     "format": "",
@@ -365,7 +365,7 @@
     "freebsdPackage": "cachix",
     "openbsdPackage": "cachix",
     "netbsdPackage": "cachix",
-    "notes": "Requires existing Nix with flakes support on Linux/macOS and installs a private Nix profile. BSD uses native packages when available. Optional cache configures cachix use; private cache credentials come from inherited CACHIX_AUTH_TOKEN.",
+    "notes": "Linux/macOS installs nixpkgs#cachix into a private Nix profile; requires existing Nix with flakes support. A requested version must match the Cachix version provided by the selected nixpkgs registry entry. BSD uses native packages when available. Optional cache configures cachix use; private cache credentials come from inherited CACHIX_AUTH_TOKEN.",
     "tagPrefix": "v"
   },
   {
