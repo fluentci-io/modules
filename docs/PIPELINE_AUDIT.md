@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 182 modules. This inventory covers every public
+The registry contains 184 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -96,6 +96,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [nexus](../artifacts/nexus/README.md) | Publish or retrieve build outputs and release assets. | `run` (escape hatch), `version` (diagnostic), `upload` (pipeline operation), `download` (pipeline operation), `head` (pipeline operation) |
 | [ninja](../build/ninja/README.md) | Configure, compile, test, or inspect a build graph. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `clean` (pipeline operation), `targets` (diagnostic) |
 | [nix-package](../package-management/nix/README.md) | Resolve, lock, build, or publish project dependencies. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `eval` (pipeline operation), `flake-check` (pipeline operation), `flake-update` (pipeline operation), `profile-install` (pipeline operation), `store-gc` (pipeline operation) |
+| [nix-publish](../publishing/nix-publish/README.md) | Publish built packages to a package repository. | `check` (pipeline operation), `metadata` (pipeline operation), `outputs` (pipeline operation), `flakehub` (pipeline operation), `flakestry` (pipeline operation) |
 | [openbao](../secrets/openbao/README.md) | Inject secrets into child commands or manage secret metadata and files. | `run` (escape hatch), `version` (diagnostic), `status` (pipeline operation), `kv-list` (pipeline operation), `kv-metadata` (pipeline operation), `kv-put` (pipeline operation), `kv-delete` (pipeline operation) |
 | [opentofu](../infrastructure/opentofu/README.md) | Validate, preview, apply, or inspect infrastructure changes. | `run` (escape hatch), `version` (diagnostic), `init` (pipeline operation), `validate` (pipeline operation), `fmt` (pipeline operation), `plan` (pipeline operation), `apply` (pipeline operation), `destroy` (pipeline operation), `output` (pipeline operation) |
 | [oras](../artifacts/oras/README.md) | Publish or retrieve build outputs and release assets. | `run` (escape hatch), `version` (diagnostic), `push` (pipeline operation), `pull` (pipeline operation), `copy` (pipeline operation), `discover` (pipeline operation) |
@@ -153,6 +154,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-extism-cli](../setup/extism-cli/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-extism-js](../setup/extism-js/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-extism-py](../setup/extism-py/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-flakehub-push](../setup/flakehub-push/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-flox](../setup/flox/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-flyctl](../setup/flyctl/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gcloud](../setup/gcloud/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |

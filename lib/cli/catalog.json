@@ -8916,6 +8916,217 @@
     ]
   },
   {
+    "name": "nix-publish",
+    "path": "publishing/nix-publish",
+    "program": "nix",
+    "title": "Nix publishing",
+    "docs": "https://flakestry.dev",
+    "notes": "Publish the checked-out release to FlakeHub or Flakestry. Requires Nix with flakes, GitHub Actions OIDC, and the registry-specific GitHub token. FlakeHub uses flakehub-push; Flakestry uses Bun and built-in HTTP/JSON support. No credentials are accepted as arguments. Validate the flake and check out the requested tag/commit before publishing.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "check",
+        "args": [
+          "--extra-experimental-features",
+          "nix-command flakes",
+          "flake",
+          "check",
+          "--no-write-lock-file"
+        ],
+        "fields": [
+          {
+            "key": "flake",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Local flake path or reference to inspect; defaults to the selected project checkout."
+          }
+        ],
+        "description": "Evaluate and build flake checks without modifying flake.lock.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "metadata",
+        "args": [
+          "--extra-experimental-features",
+          "nix-command flakes",
+          "flake",
+          "metadata",
+          "--json",
+          "--no-write-lock-file"
+        ],
+        "fields": [
+          {
+            "key": "flake",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Local flake path or reference to inspect; defaults to the selected project checkout."
+          }
+        ],
+        "description": "Inspect locked flake metadata as JSON without modifying flake.lock.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "outputs",
+        "args": [
+          "--extra-experimental-features",
+          "nix-command flakes",
+          "flake",
+          "show",
+          "--json",
+          "--all-systems",
+          "--no-write-lock-file"
+        ],
+        "fields": [
+          {
+            "key": "flake",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Local flake path or reference to inspect; defaults to the selected project checkout."
+          }
+        ],
+        "description": "Inspect flake outputs for every supported system as JSON.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "flakehub",
+        "args": [],
+        "fields": [
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "FlakeHub flake name as OWNER/REPOSITORY; no repository name is hardcoded."
+          },
+          {
+            "key": "version",
+            "kind": "string",
+            "flag": "--tag",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Release tag to publish, such as v1.2.3."
+          },
+          {
+            "key": "visibility",
+            "kind": "string",
+            "flag": "--visibility",
+            "default": "public",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "public",
+              "unlisted",
+              "private"
+            ],
+            "description": "Flake visibility: public, unlisted, or private."
+          }
+        ],
+        "description": "Publish the checked-out flake release to FlakeHub using GitHub OIDC.",
+        "program": "flakehub-push",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "flakestry",
+        "args": [
+          "-e",
+          "import {spawnSync} from 'node:child_process';\ntry {\nconst [version,ref,readme,registry,ignoreConflicts]=process.argv.slice(1);\nconst required=name=>{const value=process.env[name];if(!value?.trim())throw Error('Set '+name+' before publishing');return value;};\nconst github=required('GH_TOKEN'),requestToken=required('ACTIONS_ID_TOKEN_REQUEST_TOKEN');\nconst requestUrl=new URL(required('ACTIONS_ID_TOKEN_REQUEST_URL'));\nconst base=new URL(registry);\nif(base.protocol!=='https:'||base.username||base.password||base.search||base.hash||base.pathname!=='/')throw Error('Flakestry URL must be an HTTPS origin');\nif(requestUrl.protocol!=='https:')throw Error('OIDC request URL must use HTTPS');\nif(!version?.trim()||!ref?.trim())throw Error('version and ref are required');\nconst evaluate=args=>{const result=spawnSync('nix',['--extra-experimental-features','nix-command flakes','flake',...args,'--no-write-lock-file'],{encoding:'utf8',maxBuffer:64*1024*1024});if(result.error||result.status!==0)throw Error('Nix '+args[0]+' failed; publication cancelled');let value;try{value=JSON.parse(result.stdout);}catch{throw Error('Invalid Nix '+args[0]+' JSON; publication cancelled');}if(!value||typeof value!=='object'||Array.isArray(value))throw Error('Invalid Nix '+args[0]+' result');return {value,errors:result.stderr};};\nconst metadata=evaluate(['metadata','--json']),outputs=evaluate(['show','--json','--all-systems']);\nrequestUrl.searchParams.set('audience',base.origin);\nconst identity=await fetch(requestUrl,{headers:{Authorization:'bearer '+requestToken},redirect:'error',signal:AbortSignal.timeout(120000)});\nif(!identity.ok)throw Error('GitHub OIDC request failed: HTTP '+identity.status);\nconst oidc=(await identity.json()).value;\nif(typeof oidc!=='string'||!oidc.trim())throw Error('GitHub OIDC returned no token');\nconst response=await fetch(new URL('/api/publish',base),{method:'POST',headers:{'Content-Type':'application/json','Github-Token':github,Authorization:'Bearer '+oidc},body:JSON.stringify({metadata:metadata.value,metadata_errors:metadata.errors,outputs:outputs.value,outputs_errors:outputs.errors,readme,version,ref}),redirect:'error',signal:AbortSignal.timeout(120000)});\nconst conflict=response.status===409&&ignoreConflicts==='true';\nif(!response.ok&&!conflict)throw Error('Flakestry publication failed: HTTP '+response.status);\nconsole.log(JSON.stringify({registry:base.origin,version,ref,published:!conflict,alreadyExists:conflict}));\n} catch (error) { console.error(error instanceof Error ? error.message : \"Nix publishing failed\"); process.exitCode=1; }",
+          "--"
+        ],
+        "fields": [
+          {
+            "key": "version",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Release version or tag to publish, such as v1.2.3."
+          },
+          {
+            "key": "ref",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Git commit SHA corresponding to the selected release and checkout."
+          },
+          {
+            "key": "readme",
+            "kind": "string",
+            "flag": "",
+            "default": "README.md",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Repository-relative README filename used by the Flakestry registry."
+          },
+          {
+            "key": "url",
+            "kind": "string",
+            "flag": "",
+            "default": "https://flakestry.dev",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "HTTPS Flakestry registry origin; also used as the GitHub OIDC audience."
+          },
+          {
+            "key": "ignoreConflicts",
+            "kind": "boolean",
+            "flag": "",
+            "default": false,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Treat HTTP 409 for an existing release as success; other HTTP errors still fail."
+          }
+        ],
+        "description": "Publish locked flake metadata and outputs to Flakestry using GitHub OIDC.",
+        "program": "bun",
+        "environment": {},
+        "example": {}
+      }
+    ]
+  },
+  {
     "name": "openbao",
     "path": "secrets/openbao",
     "program": "bao",

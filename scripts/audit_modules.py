@@ -49,8 +49,11 @@ def inventory():
             # Legacy modules have separately reviewed setup companions.
             if tool not in {'cachix', 'gemfury', 'buildx', 'dpkg', 'rpmbuild'}:
                 raise ValueError(f'{path}: missing prerequisite installation contract')
-        if category != 'setup' and not (ROOT / 'setup' / module['name'] / 'entry.mjs').exists():
-            raise ValueError(f'{path}: missing setup companion')
+        prerequisites = {'nix-publish': ['nix', 'bun', 'flakehub-push']}.get(module['name'], [module['name']])
+        if category != 'setup':
+            for prerequisite in prerequisites:
+                if not (ROOT / 'setup' / prerequisite / 'entry.mjs').exists():
+                    raise ValueError(f'{path}: missing setup companion for {prerequisite}')
         commands = {c['name']: c for c in catalog.get(path, {}).get('commands', [])}
         if commands and set(commands) != set(exports):
             raise ValueError(f'{path}: exported functions differ from reviewed catalog')

@@ -783,6 +783,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "flakehub-push",
+    "title": "FlakeHub Push",
+    "program": "flakehub-push",
+    "backend": "cachix",
+    "package": "",
+    "repository": "DeterminateSystems/flakehub-push",
+    "asset": "",
+    "format": "",
+    "member": "flakehub-push",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": false,
+    "defaultVersion": "latest",
+    "linuxPackage": "flakehub-push",
+    "macPackage": "flakehub-push",
+    "freebsdPackage": "flakehub-push",
+    "openbsdPackage": "flakehub-push",
+    "netbsdPackage": "flakehub-push",
+    "notes": "Requires an existing Nix installation with flakes support. Version selects an upstream release tag (for example 7 or v7), not the publisher Cargo version. Installs that pinned flake in a private profile and checks executability without invoking authenticated publishing commands. The returned version is the selected release. GitHub OIDC credentials are required only when publishing.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "flox",
     "title": "Flox",
     "program": "flox",

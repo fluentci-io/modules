@@ -53,6 +53,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [nexus](./artifacts/nexus/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/nexus/COMPONENT.md) |
 | [ninja](./build/ninja/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./build/ninja/COMPONENT.md) |
 | [nix-package](./package-management/nix/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./package-management/nix/COMPONENT.md) |
+| [nix-publish](./publishing/nix-publish/README.md) | Publish Nix flakes to FlakeHub or Flakestry. | `flakehub`, `flakestry`, [typed contract](./publishing/nix-publish/COMPONENT.md) |
 | [openbao](./secrets/openbao/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/openbao/COMPONENT.md) |
 | [opentofu](./infrastructure/opentofu/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/opentofu/COMPONENT.md) |
 | [oras](./artifacts/oras/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `push`, [typed contract](./artifacts/oras/COMPONENT.md) |
@@ -110,6 +111,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-extism-cli](./setup/extism-cli/README.md) | Install and verify extism-cli, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-cli/COMPONENT.md) |
 | [setup-extism-js](./setup/extism-js/README.md) | Install and verify extism-js, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-js/COMPONENT.md) |
 | [setup-extism-py](./setup/extism-py/README.md) | Install and verify extism-py, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-py/COMPONENT.md) |
+| [setup-flakehub-push](./setup/flakehub-push/README.md) | Install and verify flakehub-push, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flakehub-push/COMPONENT.md) |
 | [setup-flox](./setup/flox/README.md) | Install and verify flox, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flox/COMPONENT.md) |
 | [setup-flyctl](./setup/flyctl/README.md) | Install and verify flyctl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flyctl/COMPONENT.md) |
 | [setup-gcloud](./setup/gcloud/README.md) | Install and verify gcloud, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gcloud/COMPONENT.md) |

@@ -1,0 +1,280 @@
+{
+  "name": "nix-publish",
+  "exports": {
+    "check": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "flake": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Local flake path or reference to inspect; defaults to the selected project checkout."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "metadata": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "flake": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Local flake path or reference to inspect; defaults to the selected project checkout."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "outputs": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "flake": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Local flake path or reference to inspect; defaults to the selected project checkout."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "flakehub": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "FlakeHub flake name as OWNER/REPOSITORY; no repository name is hardcoded."
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Release tag to publish, such as v1.2.3."
+          },
+          "visibility": {
+            "type": "string",
+            "minLength": 1,
+            "default": "public",
+            "enum": [
+              "public",
+              "unlisted",
+              "private"
+            ],
+            "description": "Flake visibility: public, unlisted, or private."
+          }
+        },
+        "required": [
+          "runDir",
+          "name",
+          "version"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "flakestry": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Release version or tag to publish, such as v1.2.3."
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git commit SHA corresponding to the selected release and checkout."
+          },
+          "readme": {
+            "type": "string",
+            "minLength": 1,
+            "default": "README.md",
+            "description": "Repository-relative README filename used by the Flakestry registry."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "default": "https://flakestry.dev",
+            "description": "HTTPS Flakestry registry origin; also used as the GitHub OIDC audience."
+          },
+          "ignoreConflicts": {
+            "type": "boolean",
+            "default": false,
+            "description": "Treat HTTP 409 for an existing release as success; other HTTP errors still fail."
+          }
+        },
+        "required": [
+          "runDir",
+          "version",
+          "ref"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

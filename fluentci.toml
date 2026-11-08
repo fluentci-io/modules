@@ -279,6 +279,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "nix-publish"
+version = "0.2.0"
+path = "publishing/nix-publish"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "openbao"
 version = "0.2.0"
 path = "secrets/openbao"
@@ -674,6 +681,13 @@ runtime = "component"
 name = "setup-extism-py"
 version = "0.2.0"
 path = "setup/extism-py"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-flakehub-push"
+version = "0.2.0"
+path = "setup/flakehub-push"
 sdk = "purescript"
 runtime = "component"
 
