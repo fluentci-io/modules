@@ -6,13 +6,14 @@ v0.17.2+.
 
 ```sh
 fluentci run setup-pkgx setup --version latest \
-  --packages '["nodejs.org@22.14.0","python.org=3.12.9"]'
+  --packages nodejs.org@22.14.0,python.org=3.12.9
 fluentci run setup-pkgx setup --help
 ```
 
-`version` selects the **pkgx release**. `packages` is an optional list of
-native package selectors, each carrying its own version. Omitting the list or
-passing `[]` installs only the manager and preserves the existing behavior.
+`version` selects the **pkgx release**. `packages` is an optional comma-separated string of
+native package selectors, each carrying its own version. Omitting it or passing
+a blank value installs only the manager and preserves the existing behavior.
+Whitespace around selectors is trimmed; empty entries between commas are rejected.
 Package/version availability depends on the manager’s registry and platform;
 missing versions and failed installs fail the setup call.
 

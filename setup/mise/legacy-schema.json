@@ -20,11 +20,8 @@
             "default": false
           },
           "packages": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Packages to install, optionally with native version selectors."
+            "type": "string",
+            "description": "Comma-separated packages to install, optionally with native version selectors."
           }
         },
         "additionalProperties": false

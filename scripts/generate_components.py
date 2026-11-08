@@ -18,7 +18,7 @@ COMMON={
  'arch':'Target package CPU architecture; the payload must already be compiled for this architecture.',
  'spec':'RPM spec file inside the package tree.',
  'output':'Destination path for generated packages.',
- 'packages':'Package selectors to install, optionally with per-package versions using the selected manager’s syntax; omitted or empty lists install only the manager.',
+ 'packages':'Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager.',
  'version':'Tool release or supported channel to install; omitted values use the documented default.',
  'toolchain':'Rustup toolchain channel or exact release; alias for version. Both must agree when provided.',
  'components':'Rustup components to install, such as rustfmt and clippy.',
@@ -79,7 +79,7 @@ SETUP={'type':'object','required':['tool','version','binDir','environment'],'pro
 def setup_props(name):
  props={k:{'type':t} for k,t in [('version','string'),('installDir','string'),('packageName','string'),('sudo','boolean')]}
  extras={'rust':{'toolchain':'string','components':'array','targets':'array','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
- if name in ['pkgx','mise','devbox','flox']:extras[name]={'packages':'array'}
+ if name in ['pkgx','mise','devbox','flox']:extras[name]={'packages':'string'}
  if name in ['devbox','flox']:extras[name]['project']='string'
  props.update({k:({'type':v,'items':{'type':'string'}} if v=='array' else {'type':v}) for k,v in extras.get(name,{}).items()});return props
 

@@ -24,11 +24,8 @@
             "description": "Use noninteractive sudo for native package or system installation; defaults to false."
           },
           "packages": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Package selectors to install, optionally with per-package versions using the selected manager\u2019s syntax; omitted or empty lists install only the manager."
+            "type": "string",
+            "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager\u2019s syntax; omitted or blank values install only the manager."
           },
           "project": {
             "type": "string",

@@ -12,7 +12,7 @@ export async function packageSuite(tool, directory) {
  const packagePath='/tools/node/bin:/usr/bin:/bin';
  const project="/tmp/project ' literal";
  function host(options={}) {
-  return fixture(tool,{existing:true,os:options.os??'linux',input:{version:'1.2.3',packages,...options.input},command:args=>{
+  return fixture(tool,{existing:true,os:options.os??'linux',input:{version:'1.2.3',packages:packages.join(','),...options.input},command:args=>{
    if(options.fail?.(args))throw Error('Package fixture failure');
    if(args[0]==='which')return '/usr/local/bin/'+args[1];
    if(args[0]==='curl'&&!args.includes('--output'))return JSON.stringify({tag_name:definition.tagPrefix+'1.2.3',assets:[{name:substitute({os:'linux',arch:'x86_64'})('1.2.3')(definition.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:null}]});
@@ -39,7 +39,7 @@ export async function packageSuite(tool, directory) {
   if(['devbox','flox'].includes(tool))assert.ok(f.calls.some(a=>a.includes('init')&&a.includes(project)));
  });
  test(tool+': rejects malformed package input before any host command',()=>{
-  for(const value of [null,'node@22',[42],[''],['--help'],['+node'],['node@'],['node\n@22'],['node;id'],['$(touch injected)'],['node @22']]){
+  for(const value of [null,42,[],['node@22'],[42],',node','node,','node,,python','--help','+node','node@','node\n@22','node;id','$(touch injected)','node @22']){
    const f=host({input:{packages:value}});assert.throws(setup);assert.equal(f.calls.length,0);assert.equal(f.updates.length,0);
   }
   if(['devbox','flox'].includes(tool))for(const project of ['', '  ', 'bad\npath', 42]){const f=host({input:{project}});assert.throws(setup);assert.equal(f.calls.length,0);}
@@ -49,9 +49,16 @@ export async function packageSuite(tool, directory) {
   assert.throws(setup);assert.equal(f.output.length,0);assert.equal(f.updates.length,0);
   for(const environment of [tool==='mise'?'{}':'',tool==='mise'?'not JSON':'BAD-NAME\0value\0']){const h=host({environment});assert.throws(setup);assert.equal(h.updates.length,0);}
  });
- test(tool+': empty lists keep CLI-only setup behavior',()=>{
-  const f=host({input:{packages:[]}});setup();assert.equal(f.output.length,1);
-  assert.ok(!f.calls.some(a=>['install','add','env','init','activate','--json'].includes(a[1])||a[1]==='--yes'));
+ test(tool+': blank package strings keep CLI-only setup behavior',()=>{
+  for(const packages of ['', '  ']) {
+   const f=host({input:{packages}});setup();assert.equal(f.output.length,1);
+   assert.ok(!f.calls.some(a=>['install','add','env','init','activate','--json'].includes(a[1])||a[1]==='--yes'));
+  }
+ });
+ test(tool+': trims whitespace around comma-separated selectors',()=>{
+  const f=host({input:{packages:'  '+packages.join(' , ')+'  '}});setup();
+  const invocation=f.calls.find(a=>a[0].endsWith('/'+tool)&&a.includes(tool==='pkgx'?'--json':tool==='devbox'?'add':'install'));
+  for(const selector of packages)assert.ok(invocation.includes(tool==='pkgx'?'+'+selector:selector));
  });
  if(['devbox','flox'].includes(tool))test(tool+': reuses an existing project without reinitializing it',()=>{
   const f=host({projectExists:true});setup();assert.ok(!f.calls.some(a=>a[1]==='init'));
@@ -63,11 +70,11 @@ export async function packageSuite(tool, directory) {
  if(tool!=='mise')test(tool+': rejects package environments on BSD before mutations',()=>{
   for(const os of ['freebsd','netbsd','openbsd']){const f=host({os});assert.throws(setup,/Linux and macOS/);assert.equal(f.calls.length,0);}
  });
- test(tool+': typed component accepts a package list and returns its environment',async()=>{
+ test(tool+': typed component accepts comma-separated packages and returns its environment',async()=>{
   const native=await import(new URL('output/CI.Component/index.js',directory));
   const {Just,Nothing}=await import(new URL('output/Data.Maybe/index.js',directory));
   const properties=JSON.parse(readFileSync(new URL('schema.json',directory))).exports.setup.input.properties;
-  const args=Object.fromEntries(Object.keys(properties).map(key=>[key,Nothing.value]));args.version=new Just('1.2.3');args.packages=new Just(packages);
+  const args=Object.fromEntries(Object.keys(properties).map(key=>[key,Nothing.value]));args.version=new Just('1.2.3');args.packages=new Just(packages.join(','));
   host();const result=native.setup(args)();assert.ok(result.environment.some(v=>v.name==='PATH'&&v.value.includes('/tools/node/bin')));
  });
 }

@@ -10,6 +10,7 @@ import Data.Foldable (all, traverse_)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as String
 import Data.String.CodeUnits as CU
+import Data.String.Common (trim)
 import Data.String.Pattern (Pattern(..))
 import Foreign.Object as Object
 
@@ -164,7 +165,8 @@ decodeConfig name json = do
     Nothing -> pure unit
   when (Array.any isNull (Object.values fields)) $ Left "Setup arguments cannot be null"
   let initial = defaults name
-  packages <- either (Left <<< show) (Right <<< fromMaybe initial.packages) (getFieldOptional fields "packages")
+  packageList <- either (Left <<< show) (Right <<< fromMaybe "") (getFieldOptional fields "packages")
+  let packages = if trim packageList == "" then [] else map trim (String.split (Pattern ",") packageList)
   project <- either (Left <<< show) (Right <<< fromMaybe initial.project) (getFieldOptional fields "project")
   version <- either (Left <<< show) (Right <<< fromMaybe initial.version) (getFieldOptional fields "version")
   toolchain <- either (Left <<< show) (Right <<< fromMaybe initial.toolchain) (getFieldOptional fields "toolchain")
