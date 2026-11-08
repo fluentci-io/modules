@@ -16,6 +16,10 @@ import Foreign.Object as Object
 -- Shared configuration is decoded against each tool's own allowed fields.
 type Config =
   { version :: String
+  , toolchain :: String
+  , components :: Array String
+  , targets :: Array String
+  , profile :: String
   , installDir :: String
   , packageName :: String
   , sudo :: Boolean
@@ -65,6 +69,7 @@ hostSupported name host
 defaults :: String -> Config
 defaults name =
   { version: if name == "rust" then "stable" else if name == "java" then "21" else ToolCatalog.defaultVersion name
+  , toolchain: "", components: [], targets: [], profile: "minimal"
   , installDir: "", packageName: "", sudo: false, otpVersion: ""
   , daemon: true, init: "systemd", baseline: false, libc: "auto"
   , cliVersion: "", jsVersion: "latest", pythonVersion: "latest", xtpVersion: "latest", binaryenVersion: "latest"
@@ -93,7 +98,11 @@ validDirectory raw =
     && all (\c -> not (Array.elem c [ ':', '\x0000', '\n', '\r' ])) (CU.toCharArray value)
 
 validateConfig :: String -> Config -> Either String Unit
-validateConfig _ config = do
+validateConfig name config = do
+  unless (config.toolchain == "" || versionToken config.toolchain) $ Left "Invalid Rust toolchain"
+  traverse_ (\value -> unless (versionToken value) (Left "Invalid Rust component or target")) (config.components <> config.targets)
+  unless (Array.elem config.profile [ "minimal", "default", "complete" ]) $ Left "Rust profile must be minimal, default, or complete"
+  when (name /= "rust" && (config.toolchain /= "" || not (Array.null config.components) || not (Array.null config.targets) || config.profile /= "minimal")) $ Left "Rust options only apply to setup-rust"
   traverse_ (\value -> unless (versionToken value) (Left "Invalid Extism component version")) [ config.jsVersion, config.pythonVersion, config.xtpVersion, config.binaryenVersion ]
   unless (config.cliVersion == "" || versionToken config.cliVersion) $ Left "Invalid Extism CLI version"
   unless (versionToken config.version) $ Left "version must be a nonempty release or channel token"
@@ -116,6 +125,7 @@ decodeConfig :: String -> Json -> Either String Config
 decodeConfig name json = do
   fields <- either (Left <<< show) Right (decodeJson json)
   let allowed = [ "version", "installDir", "packageName", "sudo" ] <>
+        (if name == "rust" then [ "toolchain", "components", "targets", "profile" ] else []) <>
         (if name == "elixir" then [ "otpVersion" ] else []) <>
         (if name == "nix" then [ "daemon" ] else []) <>
         (if name == "determinate-nix" then [ "init" ] else []) <>
@@ -127,6 +137,11 @@ decodeConfig name json = do
   when (Array.any isNull (Object.values fields)) $ Left "Setup arguments cannot be null"
   let initial = defaults name
   version <- either (Left <<< show) (Right <<< fromMaybe initial.version) (getFieldOptional fields "version")
+  toolchain <- either (Left <<< show) (Right <<< fromMaybe initial.toolchain) (getFieldOptional fields "toolchain")
+  components <- either (Left <<< show) (Right <<< fromMaybe initial.components) (getFieldOptional fields "components")
+  targets <- either (Left <<< show) (Right <<< fromMaybe initial.targets) (getFieldOptional fields "targets")
+  profile <- either (Left <<< show) (Right <<< fromMaybe initial.profile) (getFieldOptional fields "profile")
+  when (toolchain /= "" && Object.member "version" fields && version /= toolchain) $ Left "version and toolchain must agree when both are supplied"
   installDir <- either (Left <<< show) (Right <<< fromMaybe initial.installDir) (getFieldOptional fields "installDir")
   packageName <- either (Left <<< show) (Right <<< fromMaybe initial.packageName) (getFieldOptional fields "packageName")
   sudo <- either (Left <<< show) (Right <<< fromMaybe initial.sudo) (getFieldOptional fields "sudo")
@@ -140,6 +155,6 @@ decodeConfig name json = do
   pythonVersion <- either (Left <<< show) (Right <<< fromMaybe initial.pythonVersion) (getFieldOptional fields "pythonVersion")
   xtpVersion <- either (Left <<< show) (Right <<< fromMaybe initial.xtpVersion) (getFieldOptional fields "xtpVersion")
   binaryenVersion <- either (Left <<< show) (Right <<< fromMaybe initial.binaryenVersion) (getFieldOptional fields "binaryenVersion")
-  let config = { version, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
+  let config = { version: if toolchain == "" then version else toolchain, toolchain, components, targets, profile, installDir, packageName, sudo, otpVersion, daemon, init, baseline, libc, cliVersion, jsVersion, pythonVersion, xtpVersion, binaryenVersion }
   validateConfig name config
   pure config

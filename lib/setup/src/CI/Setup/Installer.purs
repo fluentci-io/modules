@@ -3,6 +3,7 @@ module CI.Setup.Installer (install) where
 import Prelude
 import CI.Setup.Host as H
 import CI.Setup.Types (Config, Host, Result)
+import Data.Array as Array
 import Data.Maybe (fromMaybe)
 import Data.String as String
 import Data.String.Pattern (Pattern(..))
@@ -25,7 +26,11 @@ install tool host config = do
     H.withTemp \temp -> do
       H.download "https://sh.rustup.rs" (temp <> "/install.sh")
       H.runWith (Object.insert "RUSTUP_INIT_SKIP_PATH_CHECK" "yes" environment)
-        [ "sh", temp <> "/install.sh", "-y", "--no-modify-path", "--profile", "minimal", "--default-toolchain", version ]
+        [ "sh", temp <> "/install.sh", "-y", "--no-modify-path", "--profile", config.profile, "--default-toolchain", version ]
+    unless (Array.null config.components) $
+      H.runWith environment ([ cargoHome <> "/bin/rustup", "component", "add", "--toolchain", version ] <> Array.nub config.components)
+    unless (Array.null config.targets) $
+      H.runWith environment ([ cargoHome <> "/bin/rustup", "target", "add", "--toolchain", version ] <> Array.nub config.targets)
     actual <- H.verifyWith environment "rust" version (cargoHome <> "/bin/rustc")
     void (H.verifyWith environment "rust" version (cargoHome <> "/bin/cargo"))
     H.result tool actual (cargoHome <> "/bin") environment

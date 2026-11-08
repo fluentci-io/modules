@@ -22,6 +22,28 @@
           "sudo": {
             "type": "boolean",
             "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          },
+          "toolchain": {
+            "type": "string",
+            "description": "Rustup toolchain channel or exact release; alias for version. Both must agree when provided."
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Rustup components to install, such as rustfmt and clippy."
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Rust target triples to install, such as wasm32-wasip2."
+          },
+          "profile": {
+            "type": "string",
+            "description": "Rustup installation profile: minimal (default), default, or complete."
           }
         },
         "required": [],

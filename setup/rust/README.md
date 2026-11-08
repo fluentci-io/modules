@@ -7,7 +7,7 @@ source and are embedded in the component; no raw JSON plugin input is required.
 ## Usage
 
 ```sh
-fluentci run setup-rust setup --version 1.85.0
+fluentci run setup-rust@v0.2.1 setup --toolchain stable --components '["rustfmt", "clippy"]' --targets '["wasm32-wasip2"]' --profile minimal
 ```
 
 ```sh
@@ -19,6 +19,13 @@ See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
 required flag, and return type. The [schema](./schema.json) describes the same
 contract. Optional values retain the native module defaults. Lists use JSON array
 syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+
+`--toolchain` selects a channel, dated nightly, or exact release. `--version`
+remains an alias; both must agree when supplied together. `--components` and
+`--targets` are typed string lists installed for that toolchain, with duplicates
+removed. Profiles are `minimal` (default), `default`, and `complete`. Explicit
+rustup options fail on BSD, which uses native packages. Failed installation
+never publishes a successful setup result or activates the installed bin directory.
 
 ## Requirements and behavior
 
