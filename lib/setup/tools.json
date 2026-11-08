@@ -668,6 +668,27 @@
     "tagPrefix": "v"
   },
   {
+    "name": "erlang",
+    "title": "Erlang/OTP",
+    "program": "erl",
+    "backend": "erlang",
+    "package": "",
+    "repository": "erlang/otp",
+    "asset": "",
+    "format": "tar",
+    "member": "erl",
+    "versionArgs": [],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "erlang",
+    "macPackage": "erlang",
+    "freebsdPackage": "erlang",
+    "openbsdPackage": "erlang",
+    "netbsdPackage": "erlang",
+    "notes": "Linux Ubuntu 22.04/24.04/26.04 uses Hex OTP builds; macOS uses erlef/otp_builds as in setup-beam. Other Linux distributions and BSDs use native packages. Versions may be exact releases, numeric branches, or latest. Native package availability limits selectable releases; packageName explicitly selects a native package. Archive prefixes are per-user.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "expo",
     "title": "Expo CLI",
     "program": "expo",
@@ -895,6 +916,29 @@
     "openbsdPackage": "curl",
     "netbsdPackage": "curl",
     "notes": "Installs curl, the transport used by the Gemfury upload module; account credentials remain in the host environment. Uses native repositories; configure the vendor repository first for tools absent from the distribution repository. Pinned versions must be available in that repository.",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "gh",
+    "title": "GitHub CLI",
+    "program": "gh",
+    "backend": "github",
+    "package": "",
+    "repository": "cli/cli",
+    "asset": "gh_{version}_{ghos}_{goarch}.{ghformat}",
+    "format": "tar",
+    "member": "gh",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "gh",
+    "macPackage": "gh",
+    "freebsdPackage": "gh",
+    "openbsdPackage": "gh",
+    "netbsdPackage": "gh",
+    "notes": "Linux/macOS use official versioned GitHub CLI release archives. FreeBSD, NetBSD, and OpenBSD use native gh packages and verify the selected version; missing packages or versions fail clearly. Authentication remains in GH_TOKEN or native gh configuration.",
     "tagPrefix": "v"
   },
   {

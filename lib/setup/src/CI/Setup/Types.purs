@@ -104,7 +104,7 @@ validateConfig _ config = do
     Left "installDir must be an absolute directory other than /, without parent traversal, colons, or control characters"
   unless (config.packageName == "" || (not (String.startsWith (Pattern "-") config.packageName)
     && all (\c -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')
-      || Array.elem c [ '.', '-', '_', '+', '%' ]) (CU.toCharArray config.packageName))) $
+      || Array.elem c [ '.', '-', '_', '+', '%', '@' ]) (CU.toCharArray config.packageName))) $
     Left "packageName must be a native package name or selector, without paths or options"
   unless (config.otpVersion == "" || all (\c -> c >= '0' && c <= '9') (CU.toCharArray config.otpVersion)) $
     Left "otpVersion must be an Erlang/OTP major version"

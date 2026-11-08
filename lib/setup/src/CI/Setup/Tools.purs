@@ -5,6 +5,7 @@ import CI.Setup.Archive as Archive
 import CI.Setup.Installer as Installer
 import CI.Setup.BSD as BSD
 import CI.Setup.Host as H
+import CI.Setup.OTP as Erlang
 import CI.Setup.Types (Config, Host, Result, defaults, isBSD, versionToken)
 import CI.Setup.ToolCatalog as Catalog
 import Data.Argonaut.Decode (decodeJson)
@@ -46,7 +47,7 @@ stripV value = fromMaybe value (String.stripPrefix (Pattern "v") value)
 verify :: Tool -> String -> String -> Effect String
 verify tool expected executable = do
   H.run [ "test", "-x", executable ]
-  if not tool.checkVersion then pure expected else do
+  if tool.name == "erlang" then Erlang.verify expected executable else if not tool.checkVersion then pure expected else do
     text <- H.capture ([ executable ] <> tool.versionArgs)
     actual <- H.versionFrom tool.name text
     when (tool.name == "aws" && not (String.startsWith (Pattern "2.") actual)) $ throw "AWS CLI v2 is required"
@@ -115,7 +116,11 @@ nativeInstall tool host config = do
   H.requireTools ([ manager, "which", "dirname" ] <> if config.sudo then [ "sudo" ] else [])
   catchException (\error -> throw ("Native setup of " <> tool.name <> " failed. Configure the vendor repository, select an available version/packageName, and check permissions. " <> message error)) $
     H.run (privilege <> args)
-  executable <- trim <$> H.capture [ "which", tool.program ]
+  executable <- if tool.name == "erlang" && manager == "brew" then do
+    prefix <- trim <$> H.capture [ "brew", "--prefix", selector ]
+    unless (String.startsWith (Pattern "/") prefix) $ throw "Homebrew returned an invalid Erlang prefix"
+    pure (prefix <> "/bin/erl")
+    else trim <$> H.capture [ "which", tool.program ]
   unless (String.startsWith (Pattern "/") executable) $ throw ("Installed package did not provide " <> tool.program <> " on PATH")
   actual <- verify tool (if config.version == "stable" then "latest" else config.version) executable
   binDir <- trim <$> H.capture [ "dirname", executable ]
@@ -201,7 +206,7 @@ extract tool url digest destination = do
       H.run [ "mkdir", "-p", destination <> "/bin" ]
       H.run [ "cp", temp <> "/archive", destination <> "/bin/" <> tool.program ]
     else do
-      if tool.format == "zip" || (tool.name == "gh-artifact" && String.contains (Pattern "macOS") url) then H.run [ "unzip", "-q", temp <> "/archive", "-d", destination <> "/payload" ]
+      if tool.format == "zip" || (Array.elem tool.name [ "gh", "gh-artifact" ] && String.contains (Pattern "macOS") url) then H.run [ "unzip", "-q", temp <> "/archive", "-d", destination <> "/payload" ]
       else H.run [ "tar", "-xf", temp <> "/archive", "-C", destination <> "/payload" ]
       -- Preserve adjacent resources and helper programs. Locate exactly one main executable.
       matches <- trim <$> H.capture [ "find", destination <> "/payload", "-type", "f", "-name", tool.program ]
@@ -237,7 +242,15 @@ install :: String -> Host -> Config -> Effect Result
 install name host config = do
   tool <- lookup name
   when (Array.elem name [ "dpkg", "rpmbuild" ] && host.os /= "linux") $ throw (name <> " setup is Linux-only")
-  if tool.backend == "extism-family" then do
+  when (name == "gh" && isBSD host.os && config.installDir /= "") $ throw "Native GitHub CLI packages use the system prefix; omit installDir"
+  if tool.name == "erlang" then do
+    target <- if isBSD host.os || config.packageName /= "" || config.sudo then pure Nothing else Erlang.platform host
+    case target of
+      Just value -> Erlang.install host value config
+      Nothing -> do
+        unless (config.installDir == "") $ throw "Native Erlang packages use the system prefix; omit installDir"
+        native tool host (config { version = Erlang.normalizeVersion config.version })
+  else if tool.backend == "extism-family" then do
     let components =
           [ { name: "binaryen", version: config.binaryenVersion, variable: "BINARYEN_VERSION" }
           , { name: "extism-cli", version: if config.cliVersion == "" then config.version else config.cliVersion, variable: "EXTISM_CLI_VERSION" }

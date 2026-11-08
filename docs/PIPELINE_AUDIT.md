@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 184 modules. This inventory covers every public
+The registry contains 186 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -149,6 +149,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-doppler](../setup/doppler/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-dpkg](../setup/dpkg/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-elixir](../setup/elixir/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-erlang](../setup/erlang/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-expo](../setup/expo/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-extism](../setup/extism/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-extism-cli](../setup/extism-cli/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
@@ -159,6 +160,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-flyctl](../setup/flyctl/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gcloud](../setup/gcloud/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gemfury](../setup/gemfury/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-gh](../setup/gh/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gh-artifact](../setup/gh-artifact/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gitlab-artifacts](../setup/gitlab-artifacts/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gitleaks](../setup/gitleaks/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |

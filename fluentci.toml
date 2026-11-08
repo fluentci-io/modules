@@ -650,6 +650,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-erlang"
+version = "0.2.0"
+path = "setup/erlang"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-expo"
 version = "0.2.0"
 path = "setup/expo"
@@ -716,6 +723,13 @@ runtime = "component"
 name = "setup-gemfury"
 version = "0.2.0"
 path = "setup/gemfury"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-gh"
+version = "0.2.0"
+path = "setup/gh"
 sdk = "purescript"
 runtime = "component"
 

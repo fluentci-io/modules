@@ -106,6 +106,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-doppler](./setup/doppler/README.md) | Install and verify doppler, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/doppler/COMPONENT.md) |
 | [setup-dpkg](./setup/dpkg/README.md) | Install and verify dpkg, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/dpkg/COMPONENT.md) |
 | [setup-elixir](./setup/elixir/README.md) | Install and verify elixir, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/elixir/COMPONENT.md) |
+| [setup-erlang](./setup/erlang/README.md) | Install Erlang/OTP with archive or native-package setup and version verification. | `setup`, [typed contract](./setup/erlang/COMPONENT.md) |
 | [setup-expo](./setup/expo/README.md) | Install and verify expo, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/expo/COMPONENT.md) |
 | [setup-extism](./setup/extism/README.md) | Install and verify extism, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism/COMPONENT.md) |
 | [setup-extism-cli](./setup/extism-cli/README.md) | Install and verify extism-cli, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-cli/COMPONENT.md) |
@@ -116,6 +117,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-flyctl](./setup/flyctl/README.md) | Install and verify flyctl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flyctl/COMPONENT.md) |
 | [setup-gcloud](./setup/gcloud/README.md) | Install and verify gcloud, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gcloud/COMPONENT.md) |
 | [setup-gemfury](./setup/gemfury/README.md) | Install and verify gemfury, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gemfury/COMPONENT.md) |
+| [setup-gh](./setup/gh/README.md) | Install the GitHub CLI and publish its executable directory to PATH. | `setup`, [typed contract](./setup/gh/COMPONENT.md) |
 | [setup-gh-artifact](./setup/gh-artifact/README.md) | Install and verify gh-artifact, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gh-artifact/COMPONENT.md) |
 | [setup-gitlab-artifacts](./setup/gitlab-artifacts/README.md) | Install and verify gitlab-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitlab-artifacts/COMPONENT.md) |
 | [setup-gitleaks](./setup/gitleaks/README.md) | Install and verify gitleaks, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitleaks/COMPONENT.md) |

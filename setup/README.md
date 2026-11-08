@@ -219,3 +219,12 @@ uses native packages: Homebrew on macOS, and a configured package source or
 a preinstalled official package on Linux. pkgx installs its upstream launcher;
 packages it subsequently runs have their own platform requirements. See each
 installer README for version and privilege restrictions.
+
+## Erlang and GitHub CLI
+
+[setup-erlang](./erlang/README.md) follows setup-beam archive selection on Ubuntu/macOS
+and uses native packages on other Linux distributions and the BSDs. It verifies
+OTP_VERSION, the compiler, and the command-line tools. [setup-gh](./gh/README.md)
+uses official GitHub CLI archives on Linux/macOS and native gh packages on BSD.
+Both return the verified version and PATH updates; BSD availability depends on
+the configured package repository.
