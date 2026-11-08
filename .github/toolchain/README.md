@@ -26,10 +26,22 @@ writes the final PATH and environment changes to `GITHUB_PATH` and `GITHUB_ENV`
 for later workflow steps. This includes environment changes from a local setup
 component invoked with `--file` in the smoke job.
 
-Caches are separated by OS, architecture, profile, and toolchain configuration.
+Download caches are separated by OS, architecture, profile, and toolchain configuration.
 Each cached CLI archive and component is checksum-verified before use. Native
 component build dependencies use the frozen Bun lockfile in `lib/component`.
 The existing eight module batches are retained.
 
 Bootstrap logic and environment propagation have isolated tests under `test/ci`.
 Runtime setup, package downloads, and new plugin execution run in CI.
+
+## Published 0.2.0 compatibility
+
+The original setup modules compare a directory probe with `yes`, while the host
+returns `yes\n`. Their false negative breaks reuse of an existing prefix. Source
+installers now trim this output; patched setup releases must be published before
+CI can select that fix from the registry. Until then, bootstrap uses fresh
+per-job installation directories and caches downloads rather than installed
+FluentCI runtime prefixes. The full profile invokes setup-purescript once to
+compose Node/Bun instead of installing its prerequisites a second time.
+
+Managed Python caching remains enabled because uv handles that cache itself.

@@ -65,8 +65,10 @@ requireTools = traverse_ (\tool -> catchException
   (run [ "which", tool ]))
 
 exists :: String -> Effect Boolean
-exists path = (_ == "yes") <$> capture
-  [ "sh", "-c", "if test -e \"$1\"; then printf yes; fi", "fluentci-probe-exists", path ]
+exists path = do
+  output <- capture
+    [ "sh", "-c", "if test -e \"$1\"; then printf yes; fi", "fluentci-probe-exists", path ]
+  pure (trim output == "yes")
 
 findExecutable :: String -> Effect String
 findExecutable program = trim <$> capture

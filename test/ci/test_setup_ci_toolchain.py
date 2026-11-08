@@ -89,6 +89,36 @@ class ToolchainTests(unittest.TestCase):
             self.assertEqual(command.call_args.args[0], ['/cache/fluentci', 'run', '--wasm', '/cache/setup-node.wasm', 'setup', '--version', '24.22.2'])
             self.assertEqual(environment['PATH'], '/tools/bin:/usr/bin')
 
+    def test_profiles_use_fresh_prefixes_without_repeating_purescript_prerequisites(self):
+        config = json.loads((ROOT / '.github/toolchain/versions.json').read_text())
+        for profile, expected in [('base', ['node', 'bun', 'uv']), ('full', ['purescript', 'uv'])]:
+            with tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                python = root / 'python'
+                python.touch()
+                environment = {'PATH': '/usr/bin', 'RUNNER_TEMP': str(root)}
+                def run(argv, env):
+                    return str(python) if argv[:3] == ['uv', 'python', 'find'] else 'fixture version'
+                package = {'url': 'https://example.com/component.wasm', 'sha256': 'a' * 64}
+                with patch.object(toolchain, 'install_cli', return_value=root / 'fluentci'), \
+                     patch.object(toolchain, 'resolve_module', return_value=package), \
+                     patch.object(toolchain, 'verified_download', return_value=root / 'component.wasm'), \
+                     patch.object(toolchain, 'run_component') as component, \
+                     patch.object(toolchain, 'command', side_effect=run):
+                    toolchain.setup_toolchain(profile, config, root / 'cache', environment)
+                self.assertEqual([call.args[4] for call in component.call_args_list], expected)
+                prefixes = []
+                for call in component.call_args_list:
+                    arguments = call.args[2]
+                    self.assertEqual(arguments[-2], '--install-dir')
+                    prefix = Path(arguments[-1])
+                    self.assertTrue(prefix.is_absolute())
+                    self.assertFalse(prefix.exists(), 'SDK must exclusively create the install directory')
+                    self.assertEqual(prefix.name, call.args[4])
+                    prefixes.append(prefix)
+                self.assertEqual(len(prefixes), len(set(prefixes)))
+                self.assertEqual(environment['PATH'].split(os.pathsep)[0], str(python.parent))
+
     def test_workflows_use_published_setup_modules_without_third_party_setup_actions(self):
         files = list((ROOT / '.github/workflows').glob('*.yml')) + [ROOT / '.github/actions/setup-toolchain/action.yml']
         for file in files:

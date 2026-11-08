@@ -194,13 +194,21 @@ def export_environment(before, after):
 def setup_toolchain(profile, config, cache, environment):
     cli = install_cli(config['fluentci'], cache)
     environment['PATH'] = str(cli.parent) + os.pathsep + environment['PATH']
-    for key in ['node', 'bun', 'uv'] + (['purescript'] if profile == 'full' else []):
+    # Published setup-purescript composes Node and Bun itself. Do not install
+    # those prerequisites twice through legacy setup components in a full job.
+    keys = ['purescript', 'uv'] if profile == 'full' else ['node', 'bun', 'uv']
+    # 0.2.0 probes reject the host's trailing newline and cannot reuse prefixes.
+    # Keep each published invocation on a fresh prefix until patched releases
+    # are published. Leave these directories alive for subsequent job steps.
+    runtime_root = Path(tempfile.mkdtemp(prefix='fluentci-toolchain-', dir=environment.get('RUNNER_TEMP')))
+    for key in keys:
         definition = config['modules'][key]
         print('Installing ' + definition['name'] + '@' + definition['version'], flush=True)
         package = resolve_module(config['registry'], definition)
         artifact = verified_download(package['url'], package['sha256'],
                                      cache / 'components' / (package['sha256'] + '.wasm'))
-        run_component(cli, artifact, definition['arguments'], environment, key)
+        arguments = [*definition['arguments'], '--install-dir', str(runtime_root / key)]
+        run_component(cli, artifact, arguments, environment, key)
     command(['uv', 'python', 'install', config['python']], environment)
     python = command(['uv', 'python', 'find', '--managed-python', config['python']], environment).strip()
     if not Path(python).is_absolute() or not Path(python).is_file():

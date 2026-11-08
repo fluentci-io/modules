@@ -96,7 +96,11 @@ export function fixture(tool, options = {}) {
           return arg.slice(1, -1).replaceAll("'\\''", "'");
         }));
       }
-      if (name === "stdout" || name === "stderr") return pending.map(args => command(args, name === "stderr")).join("");
+      if (name === "stdout" || name === "stderr") {
+        const value = pending.map(args => command(args, name === "stderr")).join("");
+        // The real legacy host terminates captured output lines, even for printf.
+        return value && !value.endsWith("\n") ? value + "\n" : value;
+      }
       if (name === "file") return JSON.stringify({ id: "file-fixture" });
       if (name === "sha256") return options.native ? createHash("sha256").update(readFileSync(value)).digest("hex") : options.actualDigest ?? "a".repeat(64);
       return "";

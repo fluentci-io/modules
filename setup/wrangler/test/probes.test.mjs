@@ -18,3 +18,12 @@ test('optional installer probes never create failed host tasks for missing paths
   assert.equal(exists(join(directory,'injected'))(),false);
  } finally {rmSync(directory,{recursive:true,force:true});}
 });
+
+test('existence probes accept host line endings and reject unrelated output',()=>{
+ for(const output of ['yes','yes\n','yes\r\n','  yes  \n']) {
+  fixture('wrangler',{command:()=>output});assert.equal(exists('/fixture/existing')(),true);
+ }
+ for(const output of ['', '\n', 'no\n', 'yesterday\n']) {
+  fixture('wrangler',{command:()=>output});assert.equal(exists('/fixture/missing')(),false);
+ }
+});
