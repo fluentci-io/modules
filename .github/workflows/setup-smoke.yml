@@ -30,19 +30,20 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends erlang-base erlang-crypto erlang-public-key erlang-ssl zip unzip
-      - name: Install macOS Erlang
-        if: runner.os == 'macOS'
-        run: brew install erlang
+          sudo apt-get install --yes --no-install-recommends zip unzip
       - name: Build runtime setup modules
         shell: bash
         run: |
-          for runtime in bun deno elixir gleam go java node pkl purescript rust zig; do
+          for runtime in bun deno elixir erlang gh gleam go java node pkl purescript rust zig; do
             directory="setup/$runtime"
             npm ci --prefix "$directory"
             npm run build --prefix "$directory"
             node scripts/validate_wasm.mjs "$directory"
           done
+      - name: Install Erlang through the new component
+        run: python3 scripts/setup_ci_toolchain.py --file setup/erlang/dist/plugin.wasm -- --version 27.3.4
+      - name: Verify Erlang and GitHub CLI setup modules
+        run: node --test setup/erlang/test/*.test.mjs setup/gh/test/*.test.mjs
       - name: Install and execute real upstream runtimes in temporary directories
         shell: bash
         env:

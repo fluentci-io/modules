@@ -17,22 +17,14 @@ jobs:
   validate:
     name: Validate registry and workflows
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     outputs:
       matrix: ${{ steps.modules.outputs.matrix }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+      - uses: ./.github/actions/setup-toolchain
         with:
-          python-version: '3.12'
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
-        with:
-          node-version: '24'
-      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: '1.4.3'
-      - name: Install component contract validators
-        run: bun install --cwd lib/component --frozen-lockfile
+          profile: base
       - name: Validate every registered module
         id: modules
         run: python scripts/validate_modules.py --github-output
@@ -100,14 +92,9 @@ jobs:
             fi
           fi
           echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
-      - name: Install uv integration tool
+      - name: Require uv integration tests
         if: matrix.uv
-        shell: bash
-        run: |
-          python3 -m venv "$RUNNER_TEMP/cli-uv"
-          "$RUNNER_TEMP/cli-uv/bin/pip" install uv==0.11.0
-          echo "$RUNNER_TEMP/cli-uv/bin" >> "$GITHUB_PATH"
-          echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
+        run: echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
       - name: Require upload adapter tests
         if: matrix.bun
         run: echo 'FLUENTCI_REQUIRE_ARTIFACT_TESTS=1' >> "$GITHUB_ENV"
