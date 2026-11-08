@@ -1,4 +1,4 @@
-module CI.Setup.MacPorts (install) where
+module CI.Setup.MacPortsInstaller (install) where
 
 import Prelude
 import CI.Setup.Host as H

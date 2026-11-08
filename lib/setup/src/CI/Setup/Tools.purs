@@ -6,12 +6,12 @@ import CI.Setup.Installer as Installer
 import CI.Setup.BSD as BSD
 import CI.Setup.Host as H
 import CI.Setup.OTP as Erlang
-import CI.Setup.MacPorts as MacPorts
+import CI.Setup.MacPortsInstaller as MacPorts
 import CI.Setup.Types (Config, Host, Result, defaults, isBSD, versionToken)
 import CI.Setup.ToolCatalog as Catalog
 import Data.Argonaut.Decode (decodeJson)
 import Data.Array as Array
-import Data.Either (Either(..), either, isRight)
+import Data.Either (Either(..), either)
 import Data.Foldable (foldl)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.String as String
