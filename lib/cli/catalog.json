@@ -10378,7 +10378,7 @@
   },
   {
     "name": "planetscale",
-    "path": "database/planetscale",
+    "path": "databases/planetscale",
     "program": "pscale",
     "title": "PlanetScale",
     "docs": "https://planetscale.com/docs/cli",
@@ -20501,7 +20501,7 @@
   },
   {
     "name": "xata",
-    "path": "database/xata",
+    "path": "databases/xata",
     "program": "xata",
     "title": "Xata",
     "docs": "https://xata.io/docs/cli",

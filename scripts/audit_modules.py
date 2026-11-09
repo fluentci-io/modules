@@ -17,7 +17,7 @@ PURPOSES = {
     'cloud': 'Inspect accounts, provision resources, or transfer deployment outputs.',
     'code-quality': 'Upload coverage or run a code quality analysis.',
     'containers': 'Build, tag, publish, or inspect container images and build caches.',
-    'database': 'Manage preview databases, migrations, schema deployments, queries, and database access.',
+    'databases': 'Manage preview databases, migrations, schema deployments, queries, and database access.',
     'deployment': 'Deploy an application and inspect its rollout or service state.',
     'formatting': 'Format source files or fail CI when formatting differs.',
     'infrastructure': 'Validate, preview, apply, or inspect infrastructure changes.',

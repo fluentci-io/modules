@@ -28,7 +28,7 @@ Returns `tool`, `version`, `bin-dir`, and `environment`. Environment changes app
 to subsequent host tasks; separate processes must propagate the returned
 variables. See [COMPONENT.md](./COMPONENT.md) for all typed arguments and returns.
 
-Use [the database module](../../database/planetscale/README.md) for pipeline operations.
+Use [the database module](../../databases/planetscale/README.md) for pipeline operations.
 SQL clients required by native shell/connect commands remain runner prerequisites.
 
 [Upstream CLI](https://github.com/planetscale/cli) · [MIT wrapper license](./LICENSE).

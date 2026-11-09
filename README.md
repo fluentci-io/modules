@@ -58,7 +58,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [openbao](./secrets/openbao/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/openbao/COMPONENT.md) |
 | [opentofu](./infrastructure/opentofu/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/opentofu/COMPONENT.md) |
 | [oras](./artifacts/oras/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `push`, [typed contract](./artifacts/oras/COMPONENT.md) |
-| [planetscale](./database/planetscale/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./database/planetscale/COMPONENT.md) |
+| [planetscale](./databases/planetscale/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./databases/planetscale/COMPONENT.md) |
 | [playwright](./testing/playwright/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/playwright/COMPONENT.md) |
 | [plumber](./security/plumber/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `analyze`, [typed contract](./security/plumber/COMPONENT.md) |
 | [podman](./containers/podman/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/podman/COMPONENT.md) |
@@ -206,7 +206,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |
 | [vercel](./deployment/vercel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/vercel/COMPONENT.md) |
 | [wrangler](./deployment/wrangler/README.md) | Run a Wrangler operation with literal arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/wrangler/COMPONENT.md) |
-| [xata](./database/xata/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./database/xata/COMPONENT.md) |
+| [xata](./databases/xata/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./databases/xata/COMPONENT.md) |
 | [yamllint](./linting/yamllint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/yamllint/COMPONENT.md) |
 
 Each module has its own dependencies, build scripts, tests, and documentation.

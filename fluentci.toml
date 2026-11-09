@@ -316,7 +316,7 @@ runtime = "component"
 [[modules]]
 name = "planetscale"
 version = "0.1.0"
-path = "database/planetscale"
+path = "databases/planetscale"
 sdk = "purescript"
 runtime = "component"
 
@@ -1352,7 +1352,7 @@ runtime = "component"
 [[modules]]
 name = "xata"
 version = "0.1.0"
-path = "database/xata"
+path = "databases/xata"
 sdk = "purescript"
 runtime = "component"
 
