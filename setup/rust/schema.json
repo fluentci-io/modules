@@ -28,18 +28,12 @@
             "description": "Rustup toolchain channel or exact release; alias for version. Both must agree when provided."
           },
           "components": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Rustup components to install, such as rustfmt and clippy."
+            "type": "string",
+            "description": "Comma-separated Rustup components to install, such as rustfmt,clippy; omitted or blank values add no components."
           },
           "targets": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Rust target triples to install, such as wasm32-wasip2."
+            "type": "string",
+            "description": "Comma-separated Rust target triples to install, such as wasm32-wasip2,wasm32-unknown-unknown; omitted or blank values add no targets."
           },
           "profile": {
             "type": "string",

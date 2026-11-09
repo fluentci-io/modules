@@ -144,6 +144,9 @@ validCache value = CU.length value > 0 && CU.length value <= 63
   && not (String.startsWith (Pattern "-") value) && not (String.endsWith (Pattern "-") value)
   && all (\c -> (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-') (CU.toCharArray value)
 
+commaSeparated :: String -> Array String
+commaSeparated value = if trim value == "" then [] else map trim (String.split (Pattern ",") value)
+
 validPortName :: String -> Boolean
 validPortName value = case CU.charAt 0 value of
   Just c | (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ->
@@ -185,14 +188,16 @@ decodeConfig name json = do
   cache <- either (Left <<< show) (Right <<< fromMaybe initial.cache) (getFieldOptional fields "cache")
   when (Object.member "cache" fields && not (validCache cache)) $ Left "cache must be a lowercase DNS label of 1-63 letters, digits, or hyphens"
   packageList <- either (Left <<< show) (Right <<< fromMaybe "") (getFieldOptional fields "packages")
-  let packages = if trim packageList == "" then [] else map trim (String.split (Pattern ",") packageList)
+  let packages = commaSeparated packageList
   project <- either (Left <<< show) (Right <<< fromMaybe initial.project) (getFieldOptional fields "project")
   version <- either (Left <<< show) (Right <<< fromMaybe initial.version) (getFieldOptional fields "version")
   toolchain <- either (Left <<< show) (Right <<< fromMaybe initial.toolchain) (getFieldOptional fields "toolchain")
   trustedUsers <- either (Left <<< show) (Right <<< fromMaybe initial.trustedUsers) (getFieldOptional fields "trustedUsers")
   extraConf <- either (Left <<< show) (Right <<< fromMaybe initial.extraConf) (getFieldOptional fields "extraConf")
-  components <- either (Left <<< show) (Right <<< fromMaybe initial.components) (getFieldOptional fields "components")
-  targets <- either (Left <<< show) (Right <<< fromMaybe initial.targets) (getFieldOptional fields "targets")
+  componentList <- either (Left <<< show) (Right <<< fromMaybe "") (getFieldOptional fields "components")
+  targetList <- either (Left <<< show) (Right <<< fromMaybe "") (getFieldOptional fields "targets")
+  let components = commaSeparated componentList
+      targets = commaSeparated targetList
   profile <- either (Left <<< show) (Right <<< fromMaybe initial.profile) (getFieldOptional fields "profile")
   when (toolchain /= "" && Object.member "version" fields && version /= toolchain) $ Left "version and toolchain must agree when both are supplied"
   installDir <- either (Left <<< show) (Right <<< fromMaybe initial.installDir) (getFieldOptional fields "installDir")

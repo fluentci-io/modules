@@ -21,8 +21,8 @@ COMMON={
  'packages':'Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager.',
  'version':'Tool release or supported channel to install; omitted values use the documented default.',
  'toolchain':'Rustup toolchain channel or exact release; alias for version. Both must agree when provided.',
- 'components':'Rustup components to install, such as rustfmt and clippy.',
- 'targets':'Rust target triples to install, such as wasm32-wasip2.',
+ 'components':'Comma-separated Rustup components to install, such as rustfmt,clippy; omitted or blank values add no components.',
+ 'targets':'Comma-separated Rust target triples to install, such as wasm32-wasip2,wasm32-unknown-unknown; omitted or blank values add no targets.',
  'trustedUsers':'Additional trusted Nix users or @groups; root is retained. Only set on trusted machines.',
  'extraConf':'Additional single-line Nix key=value settings passed literally to the installer.',
  'profile':'Rustup installation profile: minimal (default), default, or complete.',
@@ -78,7 +78,7 @@ SETUP={'type':'object','required':['tool','version','binDir','environment'],'pro
 
 def setup_props(name):
  props={k:{'type':t} for k,t in [('version','string'),('installDir','string'),('packageName','string'),('sudo','boolean')]}
- extras={'rust':{'toolchain':'string','components':'array','targets':'array','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
+ extras={'rust':{'toolchain':'string','components':'string','targets':'string','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
  if name=='cachix':extras[name]={'cache':'string'}
  if name in ['pkgx','mise','devbox','flox','macports','macports-rs']:extras[name]={'packages':'string'}
  if name in ['devbox','flox']:extras[name]['project']='string'

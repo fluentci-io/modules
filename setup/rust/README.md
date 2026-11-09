@@ -7,7 +7,7 @@ source and are embedded in the component; no raw JSON plugin input is required.
 ## Usage
 
 ```sh
-fluentci run setup-rust@v0.2.1 setup --toolchain stable --components '["rustfmt", "clippy"]' --targets '["wasm32-wasip2"]' --profile minimal
+fluentci run setup-rust setup --toolchain stable --components rustfmt,clippy --targets wasm32-wasip2,wasm32-unknown-unknown --profile minimal
 ```
 
 ```sh
@@ -17,13 +17,16 @@ fluentci run setup-rust setup --help
 
 See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
 required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+contract. Optional values retain the native module defaults. List arguments use
+comma-separated text; boolean arguments accept switches. Native function/flag
+names use kebab-case.
 
 `--toolchain` selects a channel, dated nightly, or exact release. `--version`
 remains an alias; both must agree when supplied together. `--components` and
-`--targets` are typed string lists installed for that toolchain, with duplicates
-removed. Profiles are `minimal` (default), `default`, and `complete`. Explicit
+`--targets` accept comma-separated strings installed for that toolchain, with
+duplicates removed and whitespace around entries trimmed. Omitted or blank
+values add no components or targets. Empty entries between commas, JSON arrays,
+and invalid names are rejected before host commands. Profiles are `minimal` (default), `default`, and `complete`. Explicit
 rustup options fail on BSD, which uses native packages. Failed installation
 never publishes a successful setup result or activates the installed bin directory.
 

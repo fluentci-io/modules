@@ -14,8 +14,8 @@ Install and verify rust, select its version, and publish its environment for sub
 | `package-name` | `string` | no | Native package or port selector overriding the default repository package name. |
 | `sudo` | `boolean` | no | Use noninteractive sudo for native package or system installation; defaults to false. |
 | `toolchain` | `string` | no | Rustup toolchain channel or exact release; alias for version. Both must agree when provided. |
-| `components` | `array` | no | Rustup components to install, such as rustfmt and clippy. |
-| `targets` | `array` | no | Rust target triples to install, such as wasm32-wasip2. |
+| `components` | `string` | no | Comma-separated Rustup components to install, such as rustfmt,clippy; omitted or blank values add no components. |
+| `targets` | `string` | no | Comma-separated Rust target triples to install, such as wasm32-wasip2,wasm32-unknown-unknown; omitted or blank values add no targets. |
 | `profile` | `string` | no | Rustup installation profile: minimal (default), default, or complete. |
 
 Returns `Contract.SetupResult`.

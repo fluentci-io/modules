@@ -16,10 +16,10 @@ import CI.Setup.Types as Types
 -- | @param packageName Native package or port selector overriding the default repository package name.
 -- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.
 -- | @param toolchain Rustup toolchain channel or exact release; alias for version. Both must agree when provided.
--- | @param components Rustup components to install, such as rustfmt and clippy.
--- | @param targets Rust target triples to install, such as wasm32-wasip2.
+-- | @param components Comma-separated Rustup components to install, such as rustfmt,clippy; omitted or blank values add no components.
+-- | @param targets Comma-separated Rust target triples to install, such as wasm32-wasip2,wasm32-unknown-unknown; omitted or blank values add no targets.
 -- | @param profile Rustup installation profile: minimal (default), default, or complete.
-setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, toolchain :: Maybe String, components :: Maybe (Array String), targets :: Maybe (Array String), profile :: Maybe String } -> Effect Contract.SetupResult
+setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, toolchain :: Maybe String, components :: Maybe String, targets :: Maybe String, profile :: Maybe String } -> Effect Contract.SetupResult
 setup args = do
   config <- either throw pure (Types.decodeConfig "rust" (Contract.input (Contract.encodeInput args)))
   Contract.setupResult <$> Setup.install "rust" config
