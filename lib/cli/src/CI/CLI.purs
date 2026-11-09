@@ -1,9 +1,11 @@
-module CI.CLI (makePlan, invoke, execute) where
+module CI.CLI (makePlan, invoke, execute, csvInput) where
 
 import Prelude
 import CI.CLI.Catalog as Catalog
+import CI.CLI.CSV as CSV
 import Data.Argonaut.Core (Json, isNull)
 import Data.Argonaut.Decode (class DecodeJson, decodeJson, getFieldOptional)
+import Data.Argonaut.Encode (encodeJson)
 import Data.Argonaut.Parser (jsonParser)
 import Data.Array as Array
 import Data.Either (Either(..), either)
@@ -54,6 +56,17 @@ optional object key fallback =
 validText :: String -> Boolean
 validText value = not (String.contains (Pattern "\x0000") value)
 
+-- Public CSV modules keep artifact lists as strings at the typed boundary.
+csvInput :: Json -> Effect Json
+csvInput json = do
+  object <- either throw pure (jsonValue json :: Either String (Object.Object Json))
+  case Object.lookup "artifacts" object of
+    Nothing -> pure json
+    Just value -> do
+      text <- either throw pure (jsonValue value)
+      entries <- either throw pure (CSV.parse text)
+      pure (encodeJson (Object.insert "artifacts" (encodeJson entries) object))
+
 valueTokens :: Field -> Json -> Either String (Array String)
 valueTokens field value = do
   tokens <- case field.kind of
@@ -62,6 +75,12 @@ valueTokens field value = do
       unless (trim text /= "" && validText text) $ Left (field.key <> " must be a nonempty string without NUL")
       unless (Array.null field.choices || Array.elem text field.choices) $ Left ("Invalid value for " <> field.key)
       pure [ text ]
+    "csv" -> do
+      text <- jsonValue value
+      values <- CSV.parse text
+      when (field.required && Array.null values) $ Left (field.key <> " must not be empty")
+      unless (all validText values) $ Left (field.key <> " must not contain NUL")
+      pure values
     "strings" -> do
       values <- jsonValue value
       when (field.required && Array.null values) $ Left (field.key <> " must not be empty")
@@ -121,7 +140,7 @@ prepare name commandName json = do
     pure (map (\path -> { kind: if String.startsWith (Pattern "directory") field.style then "-d" else "-f", path }) resolved.args))
       (Array.filter (\field -> Array.elem field.style [ "file", "directory", "file-separate", "directory-separate" ]) command.fields)
   let scope scopeName = Array.concatMap _.args (Array.filter (\field -> field.scope == scopeName) fields)
-      args = scope "global" <> command.args <> scope "option" <> scope "positional" <> scope "raw"
+      args = scope "global" <> command.args <> scope "option" <> scope "positional" <> scope "suffix" <> scope "raw"
       environment = Object.union command.environment tool.environment
       task = Plan.task name executable project # Plan.withArgs args # Plan.withTimeout timeoutMs
       configured = foldl (\current key -> current # Plan.withEnv key (fromMaybe "" (Object.lookup key environment))) task (Object.keys environment)

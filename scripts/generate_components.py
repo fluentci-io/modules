@@ -109,8 +109,10 @@ def generated():
     command=next(c for c in catalog[module['path']]['commands'] if c['name']==function)
     definition=json.loads((directory/'legacy-schema.json').read_text())['exports'][function]['input']
     properties=copy.deepcopy(definition['properties']);required=definition['required'];properties['artifacts']={'type':'array','items':{'type':'string'}}
+    if catalog[module['path']].get('csvLists'):
+     properties['artifacts']={'type':'string','description':'Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas.'}
     description=command['description']
-    body=['  json <- Contract.cliInput (Contract.encodeInput args)',f'  Native.execute "{name}" "{function}" json']
+    body=['  json <- '+('Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput' if catalog[module['path']].get('csvLists') else 'Contract.cliInput (Contract.encodeInput args)'),f'  Native.execute "{name}" "{function}" json']
    elif category=='setup':
     properties=setup_props(tool);output=copy.deepcopy(SETUP);returned='Contract.SetupResult';description=f'Install and verify {tool}, select its version, and publish its environment for subsequent tasks.'
     if tool=='purescript':

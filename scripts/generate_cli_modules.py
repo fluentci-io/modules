@@ -34,7 +34,7 @@ def generated():
             properties['artifacts']={'type':'object','additionalProperties':{'type':'string','minLength':1},'description':'Named output files to collect with their sizes and SHA-256 digests in the execution report.'}
             required = ['runDir']
             for field in command['fields']:
-                kind = field['kind']
+                kind = 'string' if field['kind']=='csv' else field['kind']
                 prop = {'type':'array','items':{'type':'string','minLength':1}} if kind == 'strings' else {'type':kind}
                 if kind == 'string': prop['minLength'] = 1
                 if kind == 'integer' and field['style'] != 'signed': prop['minimum'] = 0 if field['style'] == 'nonnegative' else 1
@@ -49,7 +49,7 @@ def generated():
         docs=[f'# {tool["title"]} module arguments','', 'Generated from [the CLI catalog](../../lib/cli/catalog.json).','',
               'Every export requires a fresh `runDir`. Common fields are `project` (default `.`),',
               '`executable` (the CLI program or path), `timeoutMs` (default `900000`), and',
-              '`artifacts` (an object mapping output names to file paths).','']
+              ('`artifacts` is a comma-separated NAME=PATH string in the public component contract.' if tool.get('csvLists') else '`artifacts` (an object mapping output names to file paths).'),'']
         for command in tool['commands']:
             docs += [f'## `{command["name"]}`','',command['description'],'', '| Field | Type | CLI argument | Default / required |','| --- | --- | --- | --- |']
             for field in command['fields']:
@@ -63,7 +63,7 @@ def generated():
                     argument = field['flag'] + ' <values...>'
                 elif field['flag'] and field['style'] != 'switch':
                     argument += '=<value>'
-                kind = field['kind'] + (' (' + ', '.join(field['choices']) + ')' if field['choices'] else '')
+                kind = ('string (CSV)' if field['kind']=='csv' else field['kind']) + (' (' + ', '.join(field['choices']) + ')' if field['choices'] else '')
                 docs.append(f'| `{field["key"]}` | `{kind}` | `{argument}`' + (' (global)' if field['scope']=='global' else '') + f' | {default} |')
             docs.append('')
         yield directory / 'OPTIONS.md', '\n'.join(docs)

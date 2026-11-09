@@ -10377,6 +10377,2550 @@
     ]
   },
   {
+    "name": "planetscale",
+    "path": "database/planetscale",
+    "program": "pscale",
+    "title": "PlanetScale",
+    "docs": "https://planetscale.com/docs/cli",
+    "notes": "All CLI command groups are exposed. Authentication is inherited from the runner. CSV arguments are literal tokens, never shell fragments.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Execute any PlanetScale CLI feature with literal CSV arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the installed pscale CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "agents",
+        "args": [
+          "agents"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale agents command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "login",
+        "args": [
+          "login"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale login command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "logout",
+        "args": [
+          "logout"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale logout command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "agent_guide",
+        "args": [
+          "agent-guide"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale agent-guide command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "api",
+        "args": [
+          "api"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale api command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "audit_log",
+        "args": [
+          "audit-log"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale audit-log command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth",
+        "args": [
+          "auth"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale auth command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "billing",
+        "args": [
+          "billing"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale billing command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "completion",
+        "args": [
+          "completion"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale completion command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "org",
+        "args": [
+          "org"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale org command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ping",
+        "args": [
+          "ping"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale ping command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "region",
+        "args": [
+          "region"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale region command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "signup",
+        "args": [
+          "signup"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale signup command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "size",
+        "args": [
+          "size"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale size command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "service_token",
+        "args": [
+          "service-token"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale service-token command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "backup",
+        "args": [
+          "backup"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale backup command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch",
+        "args": [
+          "branch"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale branch command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "database",
+        "args": [
+          "database"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale database command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "insights",
+        "args": [
+          "insights"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale insights command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "inspect",
+        "args": [
+          "inspect"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale inspect command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "logs",
+        "args": [
+          "logs"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale logs command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "metrics",
+        "args": [
+          "metrics"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale metrics command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "webhook",
+        "args": [
+          "webhook"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale webhook command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "connect",
+        "args": [
+          "connect"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale connect command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy_request",
+        "args": [
+          "deploy-request"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale deploy-request command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "keyspace",
+        "args": [
+          "keyspace"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale keyspace command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "maintenance",
+        "args": [
+          "maintenance"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale maintenance command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "password",
+        "args": [
+          "password"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale password command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "shell",
+        "args": [
+          "shell"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale shell command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "import_command",
+        "args": [
+          "import"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale import command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "sql",
+        "args": [
+          "sql"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale sql command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "workflow",
+        "args": [
+          "workflow"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale workflow command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "role_command",
+        "args": [
+          "role"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale role command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pgbouncer",
+        "args": [
+          "pgbouncer"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale pgbouncer command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "dedicated_read_replica",
+        "args": [
+          "dedicated-read-replica"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale dedicated-read-replica command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "read_only_replica",
+        "args": [
+          "read-only-replica"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale read-only-replica command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "traffic_control",
+        "args": [
+          "traffic-control"
+        ],
+        "fields": [
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete pscale traffic-control command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_create",
+        "args": [
+          "branch",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Source database name.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "New branch name.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "fromBranch",
+            "kind": "string",
+            "flag": "--from",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Parent branch to fork.",
+            "choices": []
+          },
+          {
+            "key": "region",
+            "kind": "string",
+            "flag": "--region",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Region for the branch.",
+            "choices": []
+          },
+          {
+            "key": "clusterSize",
+            "kind": "string",
+            "flag": "--cluster-size",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Compute cluster size.",
+            "choices": []
+          },
+          {
+            "key": "wait",
+            "kind": "boolean",
+            "flag": "--wait",
+            "default": true,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Wait for the new branch to be ready.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Create a preview branch and wait for readiness by default.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_list",
+        "args": [
+          "branch",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database whose branches are listed.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "List database branches for preview environment discovery.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_show",
+        "args": [
+          "branch",
+          "show"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect a database branch and its readiness information.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_delete",
+        "args": [
+          "branch",
+          "delete"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Confirm deletion without an interactive prompt.",
+            "choices": []
+          },
+          {
+            "key": "deleteDescendants",
+            "kind": "boolean",
+            "flag": "--delete-descendants",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Also delete descendant branches.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Delete a preview branch during pipeline cleanup.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_schema",
+        "args": [
+          "branch",
+          "schema"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Retrieve a branch schema for inspection or artifact collection.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "database_list",
+        "args": [
+          "database",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "List databases visible to the pipeline credentials.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy_request_create",
+        "args": [
+          "deploy-request",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch containing the schema changes.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "into",
+            "kind": "string",
+            "flag": "--into",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Destination branch; native parent/default is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "notes",
+            "kind": "string",
+            "flag": "--notes",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Notes attached to the deploy request.",
+            "choices": []
+          },
+          {
+            "key": "autoDeleteBranch",
+            "kind": "boolean",
+            "flag": "--auto-delete-branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Delete the source branch after deployment completes.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Open a schema deploy request from a branch.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy_request_show",
+        "args": [
+          "deploy-request",
+          "show"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "request",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Deploy request number or source branch.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect a deploy request before applying schema changes.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy_request_diff",
+        "args": [
+          "deploy-request",
+          "diff"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "requestNumber",
+            "kind": "integer",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": 12,
+            "style": "value",
+            "scope": "positional",
+            "description": "Numeric deploy request number.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect schema changes in a deploy request.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy_request_deploy",
+        "args": [
+          "deploy-request",
+          "deploy"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "request",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Deploy request number or source branch.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "wait",
+            "kind": "boolean",
+            "flag": "--wait",
+            "default": true,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Wait until deployment finishes.",
+            "choices": []
+          },
+          {
+            "key": "strategy",
+            "kind": "string",
+            "flag": "--strategy",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native deployment strategy.",
+            "choices": [
+              "serial",
+              "parallel"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Deploy a schema request and wait for completion by default.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "sql_query",
+        "args": [
+          "sql"
+        ],
+        "fields": [
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Database.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch.",
+            "choices": []
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PlanetScale organization name.",
+            "choices": []
+          },
+          {
+            "key": "outputFormat",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Native output format.",
+            "choices": [
+              "human",
+              "json",
+              "csv"
+            ]
+          },
+          {
+            "key": "query",
+            "kind": "string",
+            "flag": "--query",
+            "default": null,
+            "required": true,
+            "sample": "SELECT 1",
+            "style": "value",
+            "scope": "suffix",
+            "description": "SQL text passed literally as one argument.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Database access role.",
+            "choices": []
+          },
+          {
+            "key": "dbname",
+            "kind": "string",
+            "flag": "--dbname",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "PostgreSQL database name.",
+            "choices": []
+          },
+          {
+            "key": "keyspace",
+            "kind": "string",
+            "flag": "--keyspace",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "suffix",
+            "description": "Vitess keyspace or shard target.",
+            "choices": []
+          },
+          {
+            "key": "replica",
+            "kind": "boolean",
+            "flag": "--replica",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Use a read replica.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "suffix",
+            "description": "Enable native execution of destructive SQL.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Execute a noninteractive SQL query and propagate query failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
     "name": "playwright",
     "path": "testing/playwright",
     "program": "playwright",
@@ -17954,6 +20498,2341 @@
         "example": {}
       }
     ]
+  },
+  {
+    "name": "xata",
+    "path": "database/xata",
+    "program": "xata",
+    "title": "Xata",
+    "docs": "https://xata.io/docs/cli",
+    "notes": "All CLI command groups are exposed. Authentication is inherited from the runner. CSV arguments are literal tokens, never shell fragments.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Execute any Xata CLI feature with literal CSV arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Print the installed Xata CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "skill",
+        "args": [
+          "skill"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata skill command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "init",
+        "args": [
+          "init"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata init command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "onboard",
+        "args": [
+          "onboard"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata onboard command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth",
+        "args": [
+          "auth"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata auth command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "organization",
+        "args": [
+          "organization"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata organization command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "project",
+        "args": [
+          "project"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata project command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch",
+        "args": [
+          "branch"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata branch command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "keys",
+        "args": [
+          "keys"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata keys command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "roll",
+        "args": [
+          "roll"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata roll command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "clone",
+        "args": [
+          "clone"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata clone command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "stream",
+        "args": [
+          "stream"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata stream command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "status",
+        "args": [
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata status command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "licenses",
+        "args": [
+          "licenses"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata licenses command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "checkout",
+        "args": [
+          "checkout"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata checkout command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "scratch",
+        "args": [
+          "scratch"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata scratch command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "console",
+        "args": [
+          "console"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata console command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "upgrade",
+        "args": [
+          "upgrade"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata upgrade command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "completions",
+        "args": [
+          "completions"
+        ],
+        "fields": [
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run the complete xata completions command surface, including every nested subcommand and native flag.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_create",
+        "args": [
+          "branch",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": true,
+            "sample": "ci-preview",
+            "style": "value",
+            "scope": "option",
+            "description": "Name of the new branch.",
+            "choices": []
+          },
+          {
+            "key": "parentBranch",
+            "kind": "string",
+            "flag": "--parent-branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Parent branch ID or name to fork.",
+            "choices": []
+          },
+          {
+            "key": "noParent",
+            "kind": "boolean",
+            "flag": "--no-parent",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "option",
+            "description": "Create a root branch instead of forking.",
+            "choices": []
+          },
+          {
+            "key": "region",
+            "kind": "string",
+            "flag": "--region",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Region for a new root branch.",
+            "choices": []
+          },
+          {
+            "key": "instanceType",
+            "kind": "string",
+            "flag": "--instance-type",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Compute instance type for a new root branch.",
+            "choices": []
+          },
+          {
+            "key": "postgresVersion",
+            "kind": "string",
+            "flag": "--postgres-version",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL image version for a new root branch.",
+            "choices": []
+          },
+          {
+            "key": "description",
+            "kind": "string",
+            "flag": "--description",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Description of the preview branch.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Create a preview database branch; use branch-wait-ready before running tests.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_delete",
+        "args": [
+          "branch",
+          "delete"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch ID or name to delete.",
+            "choices": []
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "option",
+            "description": "Confirm branch deletion without an interactive prompt.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Delete a database branch during pipeline cleanup.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_list",
+        "args": [
+          "branch",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "List database branches for the selected project.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_describe",
+        "args": [
+          "branch",
+          "describe"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch ID or name to inspect.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect a database branch and its current state.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_wait_ready",
+        "args": [
+          "branch",
+          "wait-ready"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch ID or name to wait for.",
+            "choices": []
+          },
+          {
+            "key": "wake",
+            "kind": "boolean",
+            "flag": "--wake",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "switch",
+            "scope": "option",
+            "description": "Wake a hibernated branch while waiting.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Block the pipeline until a branch is healthy; task timeoutMs bounds the wait.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "branch_url",
+        "args": [
+          "branch",
+          "url"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Branch ID or name whose connection string is requested.",
+            "choices": []
+          },
+          {
+            "key": "database",
+            "kind": "string",
+            "flag": "--database",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL database name.",
+            "choices": []
+          },
+          {
+            "key": "connectionType",
+            "kind": "string",
+            "flag": "--type",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Connection routing type.",
+            "choices": [
+              "primary",
+              "primary-or-replica",
+              "replica",
+              "pooler"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Write the selected branch connection string to the task stdout file.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "project_create",
+        "args": [
+          "project",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": true,
+            "sample": "ci-project",
+            "style": "value",
+            "scope": "option",
+            "description": "Name of the project.",
+            "choices": []
+          },
+          {
+            "key": "region",
+            "kind": "string",
+            "flag": "--region",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Region for the first branch.",
+            "choices": []
+          },
+          {
+            "key": "instanceType",
+            "kind": "string",
+            "flag": "--instance-type",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Compute instance type for the first branch.",
+            "choices": []
+          },
+          {
+            "key": "postgresVersion",
+            "kind": "string",
+            "flag": "--postgres-version",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL image version for the first branch.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Create a Xata project and its initial branch using explicit CI configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_init",
+        "args": [
+          "roll",
+          "init"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll init for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_start",
+        "args": [
+          "roll",
+          "start"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "migrationFile",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "migrations/001.json",
+            "style": "file",
+            "scope": "positional",
+            "description": "Local pgroll migration file to start.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll start for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_complete",
+        "args": [
+          "roll",
+          "complete"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll complete for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_rollback",
+        "args": [
+          "roll",
+          "rollback"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll rollback for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_status",
+        "args": [
+          "roll",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll status for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_migrate",
+        "args": [
+          "roll",
+          "migrate"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll migrate for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_pull",
+        "args": [
+          "roll",
+          "pull"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll pull for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migration_baseline",
+        "args": [
+          "roll",
+          "baseline"
+        ],
+        "fields": [
+          {
+            "key": "organizationId",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata organization ID.",
+            "choices": []
+          },
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Xata project ID; native checkout context is used when omitted.",
+            "choices": []
+          },
+          {
+            "key": "profile",
+            "kind": "string",
+            "flag": "--profile",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Request JSON output where supported by the native command.",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Target Xata branch ID or name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Run pgroll baseline for the selected database branch and propagate migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
   },
   {
     "name": "yamllint",

@@ -18,6 +18,7 @@ export async function suite(directory) {
   const { makePlan } = await import(new URL('output/CI.CLI/index.js', directory));
   const { compile } = await import(new URL('output/FluentCI.Host.Plan/index.js', directory));
   const plan = (command, input) => JSON.parse(right(compile(right(makePlan(tool.name)(command)(input)))));
+  const rawArguments = args => tool.csvLists ? args.map(value=>'"'+value.replaceAll('"','""')+'"').join(',') : args;
   const inputFor = command => Object.fromEntries([['runDir', '/tmp/fresh-run'], ...command.fields.filter(f => f.required && f.default === null).map(f => [f.key, sample(f)])]);
   nativeSuite(tool, plugin);
   artifactSuite(tool, plugin);
@@ -122,7 +123,7 @@ export async function suite(directory) {
   });
   test('raw command arguments preserve shell syntax and option ordering', () => {
     const args=['--flag','a b',"quote ' 世界; $(touch injected)",'--','-literal'];
-    assert.deepEqual(plan('run',{runDir:'run',arguments:args}).tasks[0].args,args);
+    assert.deepEqual(plan('run',{runDir:'run',arguments:rawArguments(args)}).tasks[0].args,args);
   });
   if (tool.name === 'ubicloud') test('requires token without recording its value in plan', () => {
     const f=fixture({input:{runDir:'run'},env:{UBI_TOKEN:''}}); assert.throws(plugin.help,/UBI_TOKEN/); assert.equal(f.plans.length,0);
@@ -136,12 +137,12 @@ export async function suite(directory) {
       writeFileSync(executable,'#!/bin/sh\nprintf "%s\\n" "$PWD" "$@"\n'); chmodSync(executable,0o755);
       const args=['space value',"$(touch injected); ' 世界",'--option'];
       const runDir=join(project,'run');
-      let f=fixture({native:true,input:{project,runDir,executable,arguments:args}}); plugin.run();
+      let f=fixture({native:true,input:{project,runDir,executable,arguments:rawArguments(args)}}); plugin.run();
       assert.equal(JSON.parse(f.output[0]).outcome,'succeeded');
       assert.equal(readFileSync(join(runDir,tool.name+'.stdout'),'utf8'),[project,...args,''].join('\n'));
       assert.throws(plugin.run,/already exists/);
       writeFileSync(executable,'#!/bin/sh\nexit 7\n');
-      f=fixture({native:true,input:{project,runDir:join(project,'failed'),executable,arguments:['x']}});
+      f=fixture({native:true,input:{project,runDir:join(project,'failed'),executable,arguments:rawArguments(['x'])}});
       assert.throws(plugin.run,/failed/); assert.equal(f.output.length,0);
     } finally { rmSync(project,{recursive:true,force:true}); }
   });
