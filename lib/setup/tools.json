@@ -1473,6 +1473,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "planetscale",
+    "title": "PlanetScale",
+    "program": "pscale",
+    "backend": "github",
+    "package": "",
+    "repository": "planetscale/cli",
+    "asset": "pscale_{version}_{ghos}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "pscale",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "pscale",
+    "macPackage": "pscale",
+    "freebsdPackage": "pscale",
+    "openbsdPackage": "pscale",
+    "netbsdPackage": "pscale",
+    "notes": "Installs the CLI only; credentials, database servers, and native SQL clients remain pipeline prerequisites.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "playwright",
     "title": "Playwright",
     "program": "playwright",
@@ -2252,6 +2275,29 @@
     "openbsdPackage": "wrangler",
     "netbsdPackage": "wrangler",
     "notes": "Installs the Wrangler npm package through Bun. Requires a Node.js release supported by the selected Wrangler version; missing Node.js and Bun are bootstrapped. Cloudflare credentials remain in the CI environment.",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "xata",
+    "title": "Xata",
+    "program": "xata",
+    "backend": "xata",
+    "package": "",
+    "repository": "xataio/cli",
+    "asset": "",
+    "format": "raw",
+    "member": "xata",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "xata",
+    "macPackage": "xata",
+    "freebsdPackage": "xata",
+    "openbsdPackage": "xata",
+    "netbsdPackage": "xata",
+    "notes": "Installs the CLI only; credentials, database servers, and native SQL clients remain pipeline prerequisites.",
     "tagPrefix": "v"
   },
   {

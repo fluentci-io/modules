@@ -12,11 +12,12 @@ import CI.Setup.ToolCatalog as Catalog
 import Data.Argonaut.Decode (decodeJson)
 import Data.Array as Array
 import Data.Either (Either(..), either)
-import Data.Foldable (foldl)
+import Data.Foldable (all, foldl)
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.String as String
 import Data.Traversable (traverse)
 import Data.String.Common (trim)
+import Data.String.CodeUnits as CU
 import Data.String.Pattern (Pattern(..), Replacement(..))
 import Effect (Effect)
 import Effect.Exception (catchException, message, throw, try)
@@ -171,6 +172,26 @@ release tool requested = do
   unless (versionToken version) $ throw "Upstream returned an invalid release version"
   pure { version, url: value, sha256: "" }
 
+xataRelease :: Host -> String -> Effect { version :: String, url :: String, sha256 :: String }
+xataRelease host requested = do
+  H.requireTools [ "curl" ]
+  when (host.os == "linux") $ do
+    alpine <- H.exists "/etc/alpine-release"
+    when alpine $ throw "Xata upstream binaries require glibc; Alpine/musl is not supported"
+  let root = "https://xata-cli-versions.s3.amazonaws.com/"
+      wanted = stripV requested
+      endpoint = root <> if wanted == "latest" then "channels/latest/manifest.json" else "versions/" <> wanted <> "-latest/manifest.json"
+      target = (if host.os == "macos" then "darwin" else "linux") <> "-" <> if host.arch == "aarch64" then "arm64" else "x64"
+  manifest <- H.fetch endpoint >>= H.json
+  version <- H.field "version" manifest
+  unless (versionToken version && (wanted == "latest" || wanted == version)) $ throw "Xata manifest version mismatch"
+  targets <- H.field "targets" manifest
+  binary <- H.field target targets :: Effect { url :: String, sha256sum :: String }
+  unless (String.startsWith (Pattern (root <> "versions/")) binary.url) $ throw "Unexpected Xata download URL"
+  unless (CU.length binary.sha256sum == 64 && all (\c -> (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) (CU.toCharArray binary.sha256sum)) $
+    throw "Xata manifest must provide a SHA-256 checksum"
+  pure { version, url: binary.url, sha256: binary.sha256sum }
+
 githubRelease :: Tool -> Host -> String -> Effect { version :: String, url :: String, sha256 :: String }
 githubRelease tool host requested = do
   let tag = tool.tagPrefix <> fromMaybe requested (String.stripPrefix (Pattern tool.tagPrefix) requested)
@@ -301,7 +322,8 @@ install name host config = do
     when (config.sudo && not (name == "macports-rs" && not (Array.null config.packages))) $
       throw (if name == "macports-rs" then "sudo requires a nonempty packages list; the CLI installation is per-user" else "This installer is per-user; omit sudo")
     H.requireTools [ "mkdir", "test", "which", "chmod", "cp", "mv", "ln", "find", "dirname" ]
-    githubInfo <- if tool.backend == "github" then Just <$> githubRelease tool host config.version else pure Nothing
+    githubInfo <- if tool.backend == "github" then Just <$> githubRelease tool host config.version
+      else if tool.backend == "xata" then Just <$> xataRelease host config.version else pure Nothing
     let selectedVersion = maybe config.version _.version githubInfo
     home <- if config.installDir == "" then H.userHome else pure ""
     let destination = if config.installDir == "" then home <> "/.local/share/fluentci/" <> name <> "/" <> selectedVersion else config.installDir
@@ -409,7 +431,7 @@ install name host config = do
           extract (tool { format = if tool.backend == "helm" then "tar" else "zip" }) url "" destination
           pure info.version
         else do
-          H.requireTools [ "curl", "tar", "unzip" ]
+          H.requireTools (if tool.format == "raw" then [ "curl" ] else [ "curl", "tar", "unzip" ])
           when (name == "buildx") $ H.requireTools [ "docker" ]
           info <- case githubInfo of
             Just value -> pure value
