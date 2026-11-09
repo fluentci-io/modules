@@ -1,0 +1,2203 @@
+{
+  "name": "xata",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "skill": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "init": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "onboard": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "auth": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "organization": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "project": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "keys": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "roll": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "clone": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "stream": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "licenses": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "checkout": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "scratch": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "console": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "upgrade": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "completions": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch_create": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the new branch."
+          },
+          "parentBranch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Parent branch ID or name to fork."
+          },
+          "noParent": {
+            "type": "boolean",
+            "description": "Create a root branch instead of forking."
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Region for a new root branch."
+          },
+          "instanceType": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Compute instance type for a new root branch."
+          },
+          "postgresVersion": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL image version for a new root branch."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Description of the preview branch."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch_delete": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch ID or name to delete."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Confirm branch deletion without an interactive prompt."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "branch"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch_describe": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch ID or name to inspect."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "branch"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch_wait_ready": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch ID or name to wait for."
+          },
+          "wake": {
+            "type": "boolean",
+            "description": "Wake a hibernated branch while waiting."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "branch"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "branch_url": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch ID or name whose connection string is requested."
+          },
+          "database": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL database name."
+          },
+          "connectionType": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "primary",
+              "primary-or-replica",
+              "replica",
+              "pooler"
+            ],
+            "description": "Connection routing type."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "branch"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "project_create": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the project."
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Region for the first branch."
+          },
+          "instanceType": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Compute instance type for the first branch."
+          },
+          "postgresVersion": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL image version for the first branch."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_init": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_start": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "migrationFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local pgroll migration file to start."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "migrationFile"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_complete": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_rollback": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_migrate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_pull": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migration_baseline": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "organizationId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata organization ID."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Xata project ID; native checkout context is used when omitted."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Xata authentication profile; credentials remain in the host environment or native configuration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Request JSON output where supported by the native command."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Xata branch ID or name."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional native argument tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

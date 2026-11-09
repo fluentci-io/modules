@@ -58,6 +58,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [openbao](./secrets/openbao/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/openbao/COMPONENT.md) |
 | [opentofu](./infrastructure/opentofu/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/opentofu/COMPONENT.md) |
 | [oras](./artifacts/oras/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `push`, [typed contract](./artifacts/oras/COMPONENT.md) |
+| [planetscale](./database/planetscale/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./database/planetscale/COMPONENT.md) |
 | [playwright](./testing/playwright/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/playwright/COMPONENT.md) |
 | [plumber](./security/plumber/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `analyze`, [typed contract](./security/plumber/COMPONENT.md) |
 | [podman](./containers/podman/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/podman/COMPONENT.md) |
@@ -148,6 +149,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-oras](./setup/oras/README.md) | Install and verify oras, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/oras/COMPONENT.md) |
 | [setup-pkgx](./setup/pkgx/README.md) | Install pkgx, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/pkgx/COMPONENT.md) |
 | [setup-pkl](./setup/pkl/README.md) | Install and verify pkl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pkl/COMPONENT.md) |
+| [setup-planetscale](./setup/planetscale/README.md) | Install and verify the PlanetScale CLI and publish PATH. | `setup`, [typed contract](./setup/planetscale/COMPONENT.md) |
 | [setup-playwright](./setup/playwright/README.md) | Install and verify playwright, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/playwright/COMPONENT.md) |
 | [setup-plumber](./setup/plumber/README.md) | Install and verify plumber, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/plumber/COMPONENT.md) |
 | [setup-podman](./setup/podman/README.md) | Install and verify podman, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/podman/COMPONENT.md) |
@@ -184,6 +186,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-vault](./setup/vault/README.md) | Install and verify vault, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/vault/COMPONENT.md) |
 | [setup-vercel](./setup/vercel/README.md) | Install and verify vercel, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/vercel/COMPONENT.md) |
 | [setup-wrangler](./setup/wrangler/README.md) | Install and verify wrangler, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/wrangler/COMPONENT.md) |
+| [setup-xata](./setup/xata/README.md) | Install and verify the Xata CLI and publish PATH. | `setup`, [typed contract](./setup/xata/COMPONENT.md) |
 | [setup-xtp](./setup/xtp/README.md) | Install and verify xtp, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/xtp/COMPONENT.md) |
 | [setup-yamllint](./setup/yamllint/README.md) | Install and verify yamllint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/yamllint/COMPONENT.md) |
 | [setup-zig](./setup/zig/README.md) | Install and verify zig, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/zig/COMPONENT.md) |
@@ -203,6 +206,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |
 | [vercel](./deployment/vercel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/vercel/COMPONENT.md) |
 | [wrangler](./deployment/wrangler/README.md) | Run a Wrangler operation with literal arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/wrangler/COMPONENT.md) |
+| [xata](./database/xata/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./database/xata/COMPONENT.md) |
 | [yamllint](./linting/yamllint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/yamllint/COMPONENT.md) |
 
 Each module has its own dependencies, build scripts, tests, and documentation.

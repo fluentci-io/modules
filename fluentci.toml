@@ -314,6 +314,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "planetscale"
+version = "0.1.0"
+path = "database/planetscale"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "playwright"
 version = "0.1.0"
 path = "testing/playwright"
@@ -944,6 +951,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-planetscale"
+version = "0.1.0"
+path = "setup/planetscale"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-playwright"
 version = "0.1.0"
 path = "setup/playwright"
@@ -1196,6 +1210,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-xata"
+version = "0.1.0"
+path = "setup/xata"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-xtp"
 version = "0.1.0"
 path = "setup/xtp"
@@ -1325,6 +1346,13 @@ runtime = "component"
 name = "wrangler"
 version = "0.1.0"
 path = "deployment/wrangler"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "xata"
+version = "0.1.0"
+path = "database/xata"
 sdk = "purescript"
 runtime = "component"
 
