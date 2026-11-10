@@ -951,6 +951,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-php"
+version = "0.1.0"
+path = "setup/php"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-pkgx"
 version = "0.2.1"
 path = "setup/pkgx"

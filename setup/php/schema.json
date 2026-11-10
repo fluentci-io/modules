@@ -1,0 +1,83 @@
+{
+  "name": "setup-php",
+  "runtime": "component",
+  "exports": {
+    "setup": {
+      "description": "Install and verify PHP and optional versioned CI tools, then publish their environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "default": "latest",
+            "description": "PHP major/minor prefix or exact upstream release, including prereleases; latest/stable resolves the latest available release. Versions are discovered dynamically by the PHP backend. BSD is limited to native repository packages. Default: \"latest\"."
+          },
+          "installDir": {
+            "type": "string",
+            "description": "Absolute per-user prefix for the PHP manager and isolated tool environments; native BSD packages require this to be omitted."
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Native package or port selector overriding the default repository package name."
+          },
+          "sudo": {
+            "type": "boolean",
+            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          },
+          "tools": {
+            "type": "string",
+            "default": "composer",
+            "description": "Comma-separated PHP tools, optionally name:version, such as composer:2,phpunit:11,phpstan. Blank or none skips module tool installation. Supports documented aliases and vendor/package:version with a matching executable name. Default: \"composer\"."
+          },
+          "miseVersion": {
+            "type": "string",
+            "default": "latest",
+            "description": "mise release used to install PHP on Linux/macOS; ignored for native BSD packages. Default: \"latest\"."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
