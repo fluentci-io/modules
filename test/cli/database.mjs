@@ -13,9 +13,20 @@ export async function databaseSuite(name,directory) {
   for(const root of reference[name].commands) {
    const command=tool.commands.find(command=>command.args.length===1&&command.args[0]===root);
    assert.ok(command,root+' is not exposed');
-   const f=fixture({input:{runDir:'/tmp/group-run',arguments:'--help'}});plugin[command.name]();
-   assert.deepEqual(f.plans[0].plan.tasks[0].args,[root,'--help']);
+   const input={runDir:'/tmp/group-run'};
+   const expected=[root];
+   if(root!=='version') {
+    assert.ok(command.fields.some(field=>field.key==='arguments'&&field.kind==='csv'),root+' must accept CSV arguments');
+    input.arguments='--help';expected.push('--help');
+   }
+   const f=fixture({input});plugin[command.name]();
+   assert.deepEqual(f.plans[0].plan.tasks[0].args,expected,root);
   }
+ });
+ test(name+': version rejects native arguments before any host command',()=>{
+  const f=fixture({input:{runDir:'/tmp/version-arguments',arguments:'--help'}});
+  assert.throws(plugin.version,/Unknown .* argument: arguments/);
+  assert.equal(f.calls.length,0);assert.equal(f.plans.length,0);
  });
  test(name+': quoted CSV preserves commas, quotes, whitespace, and shell syntax literally',()=>{
   const f=fixture({input:{runDir:'/tmp/csv-run',arguments:'sql,"select a,b from t where value=""x""","literal $(touch injected); 世界"'}});plugin.run();
