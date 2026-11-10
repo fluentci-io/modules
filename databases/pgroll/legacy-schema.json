@@ -1,0 +1,1612 @@
+{
+  "name": "pgroll",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "init": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "validate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing YAML or JSON migration file to validate against the target database."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "start": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing YAML or JSON migration file to start."
+          },
+          "backfillBatchDelay": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Delay between backfill batches as a Go duration, for example 1s or 1000ms."
+          },
+          "backfillBatchSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Positive number of rows per backfill batch; native default 1000."
+          },
+          "complete": {
+            "type": "boolean",
+            "description": "Complete the migration immediately after applying it; native default false."
+          },
+          "skipValidation": {
+            "type": "boolean",
+            "description": "Explicitly bypass native migration validation; native default false."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "complete": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "rollback": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing directory containing ordered migration files."
+          },
+          "backfillBatchDelay": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Delay between backfill batches as a Go duration, for example 1s or 1000ms."
+          },
+          "backfillBatchSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Positive number of rows per backfill batch; native default 1000."
+          },
+          "complete": {
+            "type": "boolean",
+            "description": "Complete the final migration instead of leaving it active."
+          },
+          "expectOne": {
+            "type": "boolean",
+            "description": "Abort when more than one outstanding migration would be applied."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "analyze": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "baseline": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "baselineVersion": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the baseline migration; this resets migration history."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for the generated baseline file; created by pgroll if absent."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Write migration files in JSON instead of YAML."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "baselineVersion",
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "pull": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination directory for migration history; created by pgroll if absent."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Write migration files in JSON instead of YAML."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "convert": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing SQL input file to convert to a pgroll migration."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Write migration files in JSON instead of YAML."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "update": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing directory of migration files to rewrite to the current format."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Write migration files in JSON instead of YAML."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "create": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Migration filename stem, including a relative path if desired; pgroll adds .yaml or .json."
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Write migration files in JSON instead of YAML."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "latest": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "latest_migration": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "local": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing local migration directory; omit to discover the latest version from the target database."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "latest_schema": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "local": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing local migration directory; omit to discover the latest version from the target database."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "latest_url": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "postgresUrl": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "PostgreSQL schema to migrate; native default public."
+          },
+          "stateSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Schema containing pgroll internal state; native default pgroll."
+          },
+          "lockTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500."
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional PostgreSQL role used while executing migrations."
+          },
+          "useVersionSchema": {
+            "type": "boolean",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Enable native verbose logging."
+          },
+          "local": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing local migration directory; omit to discover the latest version from the target database."
+          },
+          "connectionString": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional connection URL to rewrite; omit to use PGROLL_PG_URL or postgresUrl. Output may contain credentials."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "completion": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

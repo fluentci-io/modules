@@ -1450,6 +1450,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "pgroll",
+    "title": "pgroll",
+    "program": "pgroll",
+    "backend": "github",
+    "package": "",
+    "repository": "xataio/pgroll",
+    "asset": "pgroll.{hostos}.{goarch}",
+    "format": "raw",
+    "member": "pgroll",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "pgroll",
+    "macPackage": "pgroll",
+    "freebsdPackage": "pgroll",
+    "openbsdPackage": "pgroll",
+    "netbsdPackage": "pgroll",
+    "notes": "Official standalone Linux/macOS binaries; BSD uses native packages when available.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "pkgx",
     "title": "Pkgx",
     "program": "pkgx",

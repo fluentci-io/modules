@@ -314,6 +314,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "pgroll"
+version = "0.1.0"
+path = "databases/pgroll"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "planetscale"
 version = "0.1.0"
 path = "databases/planetscale"
@@ -933,6 +940,13 @@ runtime = "component"
 name = "setup-oras"
 version = "0.1.0"
 path = "setup/oras"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-pgroll"
+version = "0.1.0"
+path = "setup/pgroll"
 sdk = "purescript"
 runtime = "component"
 

@@ -10377,6 +10377,2230 @@
     ]
   },
   {
+    "name": "pgroll",
+    "path": "databases/pgroll",
+    "program": "pgroll",
+    "title": "pgroll",
+    "docs": "https://github.com/xataio/pgroll",
+    "notes": "Use setup-pgroll or provide pgroll on PATH. Prefer PGROLL_PG_URL for database credentials. Named migration functions require a reachable PostgreSQL database and suitable privileges; local latest lookups use --local. baseline resets migration history; create always uses --empty to avoid prompts. Extra native features use literal CSV arguments.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Execute any pgroll feature with literal CSV arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the installed pgroll version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "init",
+        "args": [
+          "init"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Initialize pgroll state in the target database; no migration file is required.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "validate",
+        "args": [
+          "validate"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "file",
+            "scope": "positional",
+            "description": "Existing YAML or JSON migration file to validate against the target database.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Validate a migration file against the target database before application.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "start",
+        "args": [
+          "start"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "file",
+            "scope": "positional",
+            "description": "Existing YAML or JSON migration file to start.",
+            "choices": []
+          },
+          {
+            "key": "backfillBatchDelay",
+            "kind": "string",
+            "flag": "--backfill-batch-delay",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Delay between backfill batches as a Go duration, for example 1s or 1000ms.",
+            "choices": []
+          },
+          {
+            "key": "backfillBatchSize",
+            "kind": "integer",
+            "flag": "--backfill-batch-size",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Positive number of rows per backfill batch; native default 1000.",
+            "choices": []
+          },
+          {
+            "key": "complete",
+            "kind": "boolean",
+            "flag": "--complete",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Complete the migration immediately after applying it; native default false.",
+            "choices": []
+          },
+          {
+            "key": "skipValidation",
+            "kind": "boolean",
+            "flag": "--skip-validation",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Explicitly bypass native migration validation; native default false.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Start a migration, backfill data, and optionally complete it.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "complete",
+        "args": [
+          "complete"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Complete the currently active migration in the database; no migration file is required.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "rollback",
+        "args": [
+          "rollback"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Roll back the currently active migration; completed migrations retain native rollback limitations.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate",
+        "args": [
+          "migrate"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "directory",
+            "scope": "positional",
+            "description": "Existing directory containing ordered migration files.",
+            "choices": []
+          },
+          {
+            "key": "backfillBatchDelay",
+            "kind": "string",
+            "flag": "--backfill-batch-delay",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Delay between backfill batches as a Go duration, for example 1s or 1000ms.",
+            "choices": []
+          },
+          {
+            "key": "backfillBatchSize",
+            "kind": "integer",
+            "flag": "--backfill-batch-size",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Positive number of rows per backfill batch; native default 1000.",
+            "choices": []
+          },
+          {
+            "key": "complete",
+            "kind": "boolean",
+            "flag": "--complete",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Complete the final migration instead of leaving it active.",
+            "choices": []
+          },
+          {
+            "key": "expectOne",
+            "kind": "boolean",
+            "flag": "--expect-one",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Abort when more than one outstanding migration would be applied.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Apply outstanding migrations from a directory and propagate native failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "status",
+        "args": [
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Report active migration and schema state in the target database.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "analyze",
+        "args": [
+          "analyze"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Analyze the target database SQL schema using the native hidden diagnostic command.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "baseline",
+        "args": [
+          "baseline",
+          "--yes"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "baselineVersion",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "value",
+            "scope": "positional",
+            "description": "Name of the baseline migration; this resets migration history.",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "value",
+            "scope": "positional",
+            "description": "Directory for the generated baseline file; created by pgroll if absent.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write migration files in JSON instead of YAML.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Reset migration history to a baseline and write its placeholder file without a confirmation prompt.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pull",
+        "args": [
+          "pull"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "value",
+            "scope": "positional",
+            "description": "Destination directory for migration history; created by pgroll if absent.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write migration files in JSON instead of YAML.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Pull missing migration history from the database into local files.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "convert",
+        "args": [
+          "convert"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "file",
+            "scope": "positional",
+            "description": "Existing SQL input file to convert to a pgroll migration.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write migration files in JSON instead of YAML.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Convert SQL statements from a file to a pgroll migration using native conversion rules.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "update",
+        "args": [
+          "update"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "directory",
+            "scope": "positional",
+            "description": "Existing directory of migration files to rewrite to the current format.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write migration files in JSON instead of YAML.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Rewrite outdated migration files in place; review changes before committing them.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "create",
+        "args": [
+          "create",
+          "--empty"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": true,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Migration filename stem, including a relative path if desired; pgroll adds .yaml or .json.",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write migration files in JSON instead of YAML.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Create an empty named migration file noninteractively in the working directory.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "latest",
+        "args": [
+          "latest"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Access native latest subcommands through the CSV arguments string.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "latest_migration",
+        "args": [
+          "latest",
+          "migration"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "local",
+            "kind": "string",
+            "flag": "--local",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "directory",
+            "scope": "option",
+            "description": "Existing local migration directory; omit to discover the latest version from the target database.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Print the latest migration from the target database or local migration directory.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "latest_schema",
+        "args": [
+          "latest",
+          "schema"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "local",
+            "kind": "string",
+            "flag": "--local",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "directory",
+            "scope": "option",
+            "description": "Existing local migration directory; omit to discover the latest version from the target database.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Print the latest schema from the target database or local migration directory.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "latest_url",
+        "args": [
+          "latest",
+          "url"
+        ],
+        "fields": [
+          {
+            "key": "postgresUrl",
+            "kind": "string",
+            "flag": "--postgres-url",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL connection URL; prefer inherited PGROLL_PG_URL for credentials because explicit arguments appear in execution plans.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "PostgreSQL schema to migrate; native default public.",
+            "choices": []
+          },
+          {
+            "key": "stateSchema",
+            "kind": "string",
+            "flag": "--pgroll-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Schema containing pgroll internal state; native default pgroll.",
+            "choices": []
+          },
+          {
+            "key": "lockTimeout",
+            "kind": "integer",
+            "flag": "--lock-timeout",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "PostgreSQL DDL lock timeout in milliseconds; native default 500.",
+            "choices": []
+          },
+          {
+            "key": "role",
+            "kind": "string",
+            "flag": "--role",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Optional PostgreSQL role used while executing migrations.",
+            "choices": []
+          },
+          {
+            "key": "useVersionSchema",
+            "kind": "boolean",
+            "flag": "--use-version-schema",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Create version schemas for migrations; native default true. Explicit false is passed through.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Enable native verbose logging.",
+            "choices": []
+          },
+          {
+            "key": "local",
+            "kind": "string",
+            "flag": "--local",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "directory",
+            "scope": "option",
+            "description": "Existing local migration directory; omit to discover the latest version from the target database.",
+            "choices": []
+          },
+          {
+            "key": "connectionString",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "positional",
+            "description": "Optional connection URL to rewrite; omit to use PGROLL_PG_URL or postgresUrl. Output may contain credentials.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Print the latest connection URL with version schema search_path from the target database or local migration directory.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "completion",
+        "args": [
+          "completion"
+        ],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as comma-separated text; double-quote CSV entries containing commas and double embedded quotes. No shell expansion occurs.",
+            "choices": []
+          }
+        ],
+        "description": "Generate shell completion scripts through literal native CSV arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
     "name": "planetscale",
     "path": "databases/planetscale",
     "program": "pscale",
