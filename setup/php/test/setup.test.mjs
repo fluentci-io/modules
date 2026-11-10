@@ -26,7 +26,7 @@ function host(options={}){
    if(args[2].includes('version_compare'))return version.startsWith('5.')||version.startsWith('7.1.')?'yes':'no';
   }
   if(args[0]==='pkg_info'&&args.includes('-e'))return 'php-8.4.7';
-  if(args.includes('--version')&&/\/php\d*$/.test(args[0]))return 'PHP '+version;
+  if(args[1]==='--version'&&/\/php\d*$/.test(args[0]))return 'PHP '+version;
   if(args[1]?.endsWith('/composer')&&args.includes('--version'))return 'Composer version '+(options.composerVersion??'2.8.5');
   if(args[1]?.includes('/vendor/bin/')&&args.includes('--version'))return 'Tool version 11.1.0';
   return undefined;
@@ -70,6 +70,19 @@ test('custom Composer packages use their basename as executable',()=>{
 test('Composer latest selects the compatible LTS channel for legacy PHP',()=>{
  const f=host({phpVersion:'5.6.40',composerVersion:'2.2.25',input:{version:'5.6'}});setup();
  assert.ok(f.calls.some(a=>a[1]?.endsWith('/composer-setup.php')&&a.includes('--2.2')));
+});
+test('Composer channels and exact releases are verified using the Composer script version',()=>{
+ for(const [requested,reported,selector]of [['1','1.10.27','--1'],['2','2.8.5','--2'],['2.2','2.2.25','--2.2'],['2.8.5','2.8.5','--version=2.8.5']]){
+  const f=host({composerVersion:reported,input:{tools:'composer:'+requested}});setup();
+  assert.ok(f.calls.some(a=>a[1]?.endsWith('/composer-setup.php')&&a.includes(selector)));
+  assert.ok(f.calls.some(a=>a[1]?.endsWith('/composer')&&a.includes('--version')));
+  assert.equal(f.updates.length,1);
+ }
+ for(const [requested,reported]of [['2','1.10.27'],['2.2','2.8.5'],['2.8.5','2.8.6']]){
+  const f=host({composerVersion:reported,input:{tools:'composer:'+requested}});
+  assert.throws(setup,/Installed Composer version mismatch/);
+  assert.equal(f.updates.length,0);assert.equal(f.output.length,0);
+ }
 });
 test('blank tool lists skip module tool installation',()=>{
  for(const tools of ['', '   ', 'none']){
