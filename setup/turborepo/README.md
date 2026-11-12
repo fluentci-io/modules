@@ -17,8 +17,7 @@ fluentci run setup-turborepo setup --help
 
 See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
 required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+contract. Optional values retain the native module defaults. Boolean arguments accept switches. Native function/flag names use kebab-case.
 
 ## Requirements and behavior
 
@@ -52,3 +51,5 @@ private regression tests and are not the published module interface.
 
 See the [component migration guide](../../docs/COMPONENTS.md) and
 [MIT License](./LICENSE).
+
+Use [the Turborepo build module](../../build/turborepo/README.md) for typed task execution, affected builds, dry runs and workspace pruning. The build module depends on this installer; no separate setup-turbo module is needed.

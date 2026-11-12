@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 205 modules. This inventory covers every public
+The registry contains 208 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -100,6 +100,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [ninja](../build/ninja/README.md) | Configure, compile, test, or inspect a build graph. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `clean` (pipeline operation), `targets` (diagnostic) |
 | [nix-package](../package-management/nix/README.md) | Resolve, lock, build, or publish project dependencies. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `eval` (pipeline operation), `flake-check` (pipeline operation), `flake-update` (pipeline operation), `profile-install` (pipeline operation), `store-gc` (pipeline operation) |
 | [nix-publish](../publishing/nix-publish/README.md) | Publish built packages to a package repository. | `check` (pipeline operation), `metadata` (pipeline operation), `outputs` (pipeline operation), `flakehub` (pipeline operation), `flakestry` (pipeline operation) |
+| [nx](../build/nx/README.md) | Configure, compile, test, or inspect a build graph. | `run` (escape hatch), `version` (diagnostic), `run-target` (pipeline operation), `run-many` (pipeline operation), `affected` (pipeline operation), `show-projects` (pipeline operation), `show-project` (pipeline operation), `graph` (pipeline operation), `format-check` (pipeline operation), `sync-check` (pipeline operation), `report` (pipeline operation) |
 | [openbao](../secrets/openbao/README.md) | Inject secrets into child commands or manage secret metadata and files. | `run` (escape hatch), `version` (diagnostic), `status` (pipeline operation), `kv-list` (pipeline operation), `kv-metadata` (pipeline operation), `kv-put` (pipeline operation), `kv-delete` (pipeline operation) |
 | [opentofu](../infrastructure/opentofu/README.md) | Validate, preview, apply, or inspect infrastructure changes. | `run` (escape hatch), `version` (diagnostic), `init` (pipeline operation), `validate` (pipeline operation), `fmt` (pipeline operation), `plan` (pipeline operation), `apply` (pipeline operation), `destroy` (pipeline operation), `output` (pipeline operation) |
 | [oras](../artifacts/oras/README.md) | Publish or retrieve build outputs and release assets. | `run` (escape hatch), `version` (diagnostic), `push` (pipeline operation), `pull` (pipeline operation), `copy` (pipeline operation), `discover` (pipeline operation) |
@@ -194,6 +195,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-nix](../setup/nix/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-nix-package](../setup/nix-package/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-node](../setup/node/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-nx](../setup/nx/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-openbao](../setup/openbao/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-opentofu](../setup/opentofu/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-oras](../setup/oras/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
@@ -254,6 +256,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [terragrunt](../infrastructure/terragrunt/README.md) | Validate, preview, apply, or inspect infrastructure changes. | `run` (escape hatch), `version` (diagnostic), `hcl-fmt` (pipeline operation), `init` (pipeline operation), `plan` (pipeline operation), `apply` (pipeline operation), `destroy` (pipeline operation), `validate` (pipeline operation) |
 | [trivy](../security/trivy/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `filesystem` (pipeline operation), `image` (pipeline operation), `config` (pipeline operation), `sbom` (pipeline operation) |
 | [trufflehog](../security/trufflehog/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `filesystem` (pipeline operation), `git` (pipeline operation) |
+| [turborepo](../build/turborepo/README.md) | Configure, compile, test, or inspect a build graph. | `run` (escape hatch), `version` (diagnostic), `run-tasks` (pipeline operation), `affected` (pipeline operation), `dry-run` (pipeline operation), `prune` (pipeline operation), `list-packages` (pipeline operation), `info` (pipeline operation) |
 | [ubicloud](../cloud/ubicloud/README.md) | Inspect accounts, provision resources, or transfer deployment outputs. | `run` (escape hatch), `help` (diagnostic) |
 | [uv](../package-management/uv/README.md) | Resolve, lock, build, or publish project dependencies. | `run` (escape hatch), `version` (diagnostic), `sync` (pipeline operation), `lock` (pipeline operation), `run-command` (pipeline operation), `build` (pipeline operation), `publish` (pipeline operation), `venv` (pipeline operation), `add` (pipeline operation), `pip-install` (pipeline operation) |
 | [vault](../secrets/vault/README.md) | Inject secrets into child commands or manage secret metadata and files. | `run` (escape hatch), `version` (diagnostic), `status` (pipeline operation), `kv-list` (pipeline operation), `kv-metadata` (pipeline operation), `kv-put` (pipeline operation), `kv-delete` (pipeline operation) |

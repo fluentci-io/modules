@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-nx": "path:name = \"setup-nx\"\nruntime = \"component\"\npath = \"../../setup/nx\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

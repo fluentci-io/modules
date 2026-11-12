@@ -1,0 +1,1050 @@
+{
+  "name": "nx",
+  "runtime": "component",
+  "exports": {
+    "run": {
+      "description": "Run arbitrary literal Nx CLI arguments.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Print the Nx CLI versions.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "run_target": {
+      "description": "Execute one project target, such as app:build:production.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project:target[:configuration] selector."
+          },
+          "configuration": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named workspace task configuration, for example production."
+          },
+          "parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum concurrent task processes."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project names or patterns to exclude."
+          },
+          "outputStyle": {
+            "type": "string",
+            "minLength": 1,
+            "default": "static",
+            "enum": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ],
+            "description": "Native task log rendering; defaults to stable CI output. Default: \"static\". Allowed values: static, static-failures-only, stream, stream-without-prefixes, summary, dynamic-legacy, dynamic, tui."
+          },
+          "skipCache": {
+            "type": "boolean",
+            "description": "Rerun tasks even when local or remote results are cached."
+          },
+          "skipRemoteCache": {
+            "type": "boolean",
+            "description": "Disable remote cache access."
+          },
+          "bail": {
+            "type": "boolean",
+            "description": "Stop after the first task failure."
+          },
+          "skipSync": {
+            "type": "boolean",
+            "description": "Skip automatic sync generators before task execution."
+          },
+          "graph": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the task graph to a file or stdout instead of executing tasks."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "target"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "run_many": {
+      "description": "Execute targets across selected projects; omitted projects selects all eligible projects.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "targets": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated targets such as build,test,lint."
+          },
+          "projects": {
+            "type": "string",
+            "description": "Comma-separated project names, tags or patterns; blank selects all eligible projects."
+          },
+          "configuration": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named workspace task configuration, for example production."
+          },
+          "parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum concurrent task processes."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project names or patterns to exclude."
+          },
+          "outputStyle": {
+            "type": "string",
+            "minLength": 1,
+            "default": "static",
+            "enum": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ],
+            "description": "Native task log rendering; defaults to stable CI output. Default: \"static\". Allowed values: static, static-failures-only, stream, stream-without-prefixes, summary, dynamic-legacy, dynamic, tui."
+          },
+          "skipCache": {
+            "type": "boolean",
+            "description": "Rerun tasks even when local or remote results are cached."
+          },
+          "skipRemoteCache": {
+            "type": "boolean",
+            "description": "Disable remote cache access."
+          },
+          "bail": {
+            "type": "boolean",
+            "description": "Stop after the first task failure."
+          },
+          "skipSync": {
+            "type": "boolean",
+            "description": "Skip automatic sync generators before task execution."
+          },
+          "graph": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the task graph to a file or stdout instead of executing tasks."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "targets"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "affected": {
+      "description": "Execute targets only for projects affected by the selected changes.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "targets": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated targets such as build,test,lint."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "configuration": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named workspace task configuration, for example production."
+          },
+          "parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum concurrent task processes."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project names or patterns to exclude."
+          },
+          "outputStyle": {
+            "type": "string",
+            "minLength": 1,
+            "default": "static",
+            "enum": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ],
+            "description": "Native task log rendering; defaults to stable CI output. Default: \"static\". Allowed values: static, static-failures-only, stream, stream-without-prefixes, summary, dynamic-legacy, dynamic, tui."
+          },
+          "skipCache": {
+            "type": "boolean",
+            "description": "Rerun tasks even when local or remote results are cached."
+          },
+          "skipRemoteCache": {
+            "type": "boolean",
+            "description": "Disable remote cache access."
+          },
+          "bail": {
+            "type": "boolean",
+            "description": "Stop after the first task failure."
+          },
+          "skipSync": {
+            "type": "boolean",
+            "description": "Skip automatic sync generators before task execution."
+          },
+          "graph": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the task graph to a file or stdout instead of executing tasks."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "targets"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "show_projects": {
+      "description": "Print matching project names as JSON without running targets.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "List only affected projects."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "projects": {
+            "type": "string",
+            "description": "Comma-separated project selectors."
+          },
+          "withTargets": {
+            "type": "string",
+            "description": "Comma-separated targets that matching projects must expose."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project exclusions."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "show_project": {
+      "description": "Print the resolved configuration of a project.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace project name."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "projectName"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "graph": {
+      "description": "Write a project graph without opening a browser.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output graph filename, such as graph.json; need not exist."
+          },
+          "focus": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project to focus the graph on."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "Include affected projects only."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "format_check": {
+      "description": "Fail when selected workspace files are not formatted.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "projects": {
+            "type": "string",
+            "description": "Comma-separated projects to check."
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Check all projects; mutually exclusive with projects in Nx."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "sync_check": {
+      "description": "Fail when workspace sync generators would change files.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "report": {
+      "description": "Print Nx workspace and plugin version diagnostics.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

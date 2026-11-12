@@ -1,0 +1,832 @@
+{
+  "name": "turborepo",
+  "runtime": "component",
+  "exports": {
+    "run": {
+      "description": "Run arbitrary literal Turbo CLI arguments.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Print the Turbo CLI version.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "run_tasks": {
+      "description": "Run selected workspace tasks with native dependency ordering and caching.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "tasks": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated turbo.json task names, such as build,test,lint."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "Select packages changed since the configured Git base/head."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax."
+          },
+          "concurrency": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for local task cache entries."
+          },
+          "envMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "strict",
+              "loose"
+            ],
+            "description": "Environment filtering mode; strict retains native protection. Allowed values: strict, loose."
+          },
+          "continueMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ],
+            "description": "Which tasks may continue after a failure; failures still fail the module. Allowed values: never, dependencies-successful, always."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Ignore cached results and rerun tasks."
+          },
+          "summarize": {
+            "type": "boolean",
+            "description": "Write a native run summary under .turbo/runs."
+          },
+          "outputLogs": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ],
+            "description": "Task log selection. Allowed values: full, hash-only, new-only, errors-only, none."
+          },
+          "ui": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stream",
+            "enum": [
+              "stream",
+              "tui"
+            ],
+            "description": "Log interface; defaults to a noninteractive stream. Default: \"stream\". Allowed values: stream, tui."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "tasks"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "affected": {
+      "description": "Run tasks only in affected packages; requires the Git comparison history.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "tasks": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated turbo.json task names, such as build,test,lint."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax."
+          },
+          "concurrency": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for local task cache entries."
+          },
+          "envMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "strict",
+              "loose"
+            ],
+            "description": "Environment filtering mode; strict retains native protection. Allowed values: strict, loose."
+          },
+          "continueMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ],
+            "description": "Which tasks may continue after a failure; failures still fail the module. Allowed values: never, dependencies-successful, always."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Ignore cached results and rerun tasks."
+          },
+          "summarize": {
+            "type": "boolean",
+            "description": "Write a native run summary under .turbo/runs."
+          },
+          "outputLogs": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ],
+            "description": "Task log selection. Allowed values: full, hash-only, new-only, errors-only, none."
+          },
+          "ui": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stream",
+            "enum": [
+              "stream",
+              "tui"
+            ],
+            "description": "Log interface; defaults to a noninteractive stream. Default: \"stream\". Allowed values: stream, tui."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "tasks"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dry_run": {
+      "description": "Print a JSON task plan without executing workspace tasks.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "tasks": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated turbo.json task names, such as build,test,lint."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "Limit the plan to affected packages."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax."
+          },
+          "concurrency": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for local task cache entries."
+          },
+          "envMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "strict",
+              "loose"
+            ],
+            "description": "Environment filtering mode; strict retains native protection. Allowed values: strict, loose."
+          },
+          "continueMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ],
+            "description": "Which tasks may continue after a failure; failures still fail the module. Allowed values: never, dependencies-successful, always."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Ignore cached results and rerun tasks."
+          },
+          "summarize": {
+            "type": "boolean",
+            "description": "Write a native run summary under .turbo/runs."
+          },
+          "outputLogs": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ],
+            "description": "Task log selection. Allowed values: full, hash-only, new-only, errors-only, none."
+          },
+          "ui": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stream",
+            "enum": [
+              "stream",
+              "tui"
+            ],
+            "description": "Log interface; defaults to a noninteractive stream. Default: \"stream\". Allowed values: stream, tui."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "tasks"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "prune": {
+      "description": "Generate a partial workspace and pruned lockfile for a package.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "package": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace package to retain."
+          },
+          "docker": {
+            "type": "boolean",
+            "description": "Separate manifests and source for Docker layer caching."
+          },
+          "outDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for the pruned workspace; need not exist."
+          },
+          "useGitignore": {
+            "type": "boolean",
+            "description": "Respect gitignore rules when copying files."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "package"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "list_packages": {
+      "description": "Inspect packages, dependencies and tasks without executing tasks.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "packages": {
+            "type": "string",
+            "description": "Comma-separated package names; omit or leave blank for all packages."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "List affected packages only."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "pretty"
+            ],
+            "description": "Output format. Default: \"json\". Allowed values: json, pretty."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "info": {
+      "description": "Print Turbo environment diagnostics.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

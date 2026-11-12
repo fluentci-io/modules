@@ -59,6 +59,8 @@ def generated():
                     argument = (field['flag'] + '=' if field['flag'] else '') + field['style'][7:] + '<value>'
                 elif field['style'] in ['separate','file-separate','directory-separate']:
                     argument = field['flag'] + ' <value>'
+                elif field['style'] == 'comma-list':
+                    argument = field['flag'] + '=<comma-separated values>'
                 elif field['style'] == 'space-list':
                     argument = field['flag'] + ' <values...>'
                 elif field['flag'] and field['style'] != 'switch':

@@ -1,0 +1,774 @@
+{
+  "name": "nx",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "run_target": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project:target[:configuration] selector."
+          },
+          "configuration": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named workspace task configuration, for example production."
+          },
+          "parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum concurrent task processes."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project names or patterns to exclude."
+          },
+          "outputStyle": {
+            "type": "string",
+            "minLength": 1,
+            "default": "static",
+            "enum": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ],
+            "description": "Native task log rendering; defaults to stable CI output."
+          },
+          "skipCache": {
+            "type": "boolean",
+            "description": "Rerun tasks even when local or remote results are cached."
+          },
+          "skipRemoteCache": {
+            "type": "boolean",
+            "description": "Disable remote cache access."
+          },
+          "bail": {
+            "type": "boolean",
+            "description": "Stop after the first task failure."
+          },
+          "skipSync": {
+            "type": "boolean",
+            "description": "Skip automatic sync generators before task execution."
+          },
+          "graph": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the task graph to a file or stdout instead of executing tasks."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "target"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "run_many": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "targets": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated targets such as build,test,lint."
+          },
+          "projects": {
+            "type": "string",
+            "description": "Comma-separated project names, tags or patterns; blank selects all eligible projects."
+          },
+          "configuration": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named workspace task configuration, for example production."
+          },
+          "parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum concurrent task processes."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project names or patterns to exclude."
+          },
+          "outputStyle": {
+            "type": "string",
+            "minLength": 1,
+            "default": "static",
+            "enum": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ],
+            "description": "Native task log rendering; defaults to stable CI output."
+          },
+          "skipCache": {
+            "type": "boolean",
+            "description": "Rerun tasks even when local or remote results are cached."
+          },
+          "skipRemoteCache": {
+            "type": "boolean",
+            "description": "Disable remote cache access."
+          },
+          "bail": {
+            "type": "boolean",
+            "description": "Stop after the first task failure."
+          },
+          "skipSync": {
+            "type": "boolean",
+            "description": "Skip automatic sync generators before task execution."
+          },
+          "graph": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the task graph to a file or stdout instead of executing tasks."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "targets"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "affected": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "targets": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated targets such as build,test,lint."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "configuration": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named workspace task configuration, for example production."
+          },
+          "parallel": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum concurrent task processes."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project names or patterns to exclude."
+          },
+          "outputStyle": {
+            "type": "string",
+            "minLength": 1,
+            "default": "static",
+            "enum": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ],
+            "description": "Native task log rendering; defaults to stable CI output."
+          },
+          "skipCache": {
+            "type": "boolean",
+            "description": "Rerun tasks even when local or remote results are cached."
+          },
+          "skipRemoteCache": {
+            "type": "boolean",
+            "description": "Disable remote cache access."
+          },
+          "bail": {
+            "type": "boolean",
+            "description": "Stop after the first task failure."
+          },
+          "skipSync": {
+            "type": "boolean",
+            "description": "Skip automatic sync generators before task execution."
+          },
+          "graph": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the task graph to a file or stdout instead of executing tasks."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "targets"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "show_projects": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "List only affected projects."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "projects": {
+            "type": "string",
+            "description": "Comma-separated project selectors."
+          },
+          "withTargets": {
+            "type": "string",
+            "description": "Comma-separated targets that matching projects must expose."
+          },
+          "exclude": {
+            "type": "string",
+            "description": "Comma-separated project exclusions."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "show_project": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace project name."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "projectName"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "graph": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output graph filename, such as graph.json; need not exist."
+          },
+          "focus": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project to focus the graph on."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "Include affected projects only."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "format_check": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git base ref or SHA for affected detection."
+          },
+          "head": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git head ref or SHA for affected detection."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated changed paths; deleted files do not need to exist."
+          },
+          "projects": {
+            "type": "string",
+            "description": "Comma-separated projects to check."
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Check all projects; mutually exclusive with projects in Nx."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "sync_check": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "report": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

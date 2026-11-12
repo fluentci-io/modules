@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-turborepo": "path:name = \"setup-turborepo\"\nruntime = \"component\"\npath = \"../../setup/turborepo\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

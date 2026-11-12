@@ -62,6 +62,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [ninja](./build/ninja/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./build/ninja/COMPONENT.md) |
 | [nix-package](./package-management/nix/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./package-management/nix/COMPONENT.md) |
 | [nix-publish](./publishing/nix-publish/README.md) | Publish Nix flakes to FlakeHub or Flakestry. | `flakehub`, `flakestry`, [typed contract](./publishing/nix-publish/COMPONENT.md) |
+| [nx](./build/nx/README.md) | Run workspace targets, affected builds and CI checks. | `run-many`, `affected`, `run-target`, [typed contract](./build/nx/COMPONENT.md) |
 | [openbao](./secrets/openbao/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/openbao/COMPONENT.md) |
 | [opentofu](./infrastructure/opentofu/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/opentofu/COMPONENT.md) |
 | [oras](./artifacts/oras/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `push`, [typed contract](./artifacts/oras/COMPONENT.md) |
@@ -156,6 +157,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-nix](./setup/nix/README.md) | Install and verify nix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/nix/COMPONENT.md) |
 | [setup-nix-package](./setup/nix-package/README.md) | Install and verify nix-package, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/nix-package/COMPONENT.md) |
 | [setup-node](./setup/node/README.md) | Install and verify node, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/node/COMPONENT.md) |
+| [setup-nx](./setup/nx/README.md) | Install and verify a selected Nx CLI release. | `setup`, [typed contract](./setup/nx/COMPONENT.md) |
 | [setup-openbao](./setup/openbao/README.md) | Install and verify openbao, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/openbao/COMPONENT.md) |
 | [setup-opentofu](./setup/opentofu/README.md) | Install and verify opentofu, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/opentofu/COMPONENT.md) |
 | [setup-oras](./setup/oras/README.md) | Install and verify oras, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/oras/COMPONENT.md) |
@@ -216,6 +218,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [terragrunt](./infrastructure/terragrunt/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `hcl-fmt`, [typed contract](./infrastructure/terragrunt/COMPONENT.md) |
 | [trivy](./security/trivy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trivy/COMPONENT.md) |
 | [trufflehog](./security/trufflehog/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trufflehog/COMPONENT.md) |
+| [turborepo](./build/turborepo/README.md) | Run cached tasks, affected builds and workspace pruning. | `run-tasks`, `affected`, `prune`, [typed contract](./build/turborepo/COMPONENT.md) |
 | [ubicloud](./cloud/ubicloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `help`, [typed contract](./cloud/ubicloud/COMPONENT.md) |
 | [uv](./package-management/uv/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `sync`, [typed contract](./package-management/uv/COMPONENT.md) |
 | [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |

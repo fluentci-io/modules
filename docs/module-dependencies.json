@@ -138,6 +138,9 @@
     "setup-bun",
     "setup-flakehub-push"
   ],
+  "nx": [
+    "setup-nx"
+  ],
   "openbao": [
     "setup-openbao"
   ],
@@ -242,6 +245,9 @@
   ],
   "trufflehog": [
     "setup-trufflehog"
+  ],
+  "turborepo": [
+    "setup-turborepo"
   ],
   "ubicloud": [
     "setup-ubicloud"

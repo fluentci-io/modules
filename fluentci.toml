@@ -307,6 +307,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "nx"
+version = "0.1.0"
+path = "build/nx"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "openbao"
 version = "0.1.0"
 path = "secrets/openbao"
@@ -965,6 +972,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-nx"
+version = "0.1.0"
+path = "setup/nx"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-openbao"
 version = "0.1.0"
 path = "setup/openbao"
@@ -1381,6 +1395,13 @@ runtime = "component"
 name = "trufflehog"
 version = "0.1.0"
 path = "security/trufflehog"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "turborepo"
+version = "0.1.0"
+path = "build/turborepo"
 sdk = "purescript"
 runtime = "component"
 

@@ -1,0 +1,631 @@
+{
+  "name": "turborepo",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "run_tasks": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "tasks": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated turbo.json task names, such as build,test,lint."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "Select packages changed since the configured Git base/head."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax."
+          },
+          "concurrency": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for local task cache entries."
+          },
+          "envMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "strict",
+              "loose"
+            ],
+            "description": "Environment filtering mode; strict retains native protection."
+          },
+          "continueMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ],
+            "description": "Which tasks may continue after a failure; failures still fail the module."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Ignore cached results and rerun tasks."
+          },
+          "summarize": {
+            "type": "boolean",
+            "description": "Write a native run summary under .turbo/runs."
+          },
+          "outputLogs": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ],
+            "description": "Task log selection."
+          },
+          "ui": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stream",
+            "enum": [
+              "stream",
+              "tui"
+            ],
+            "description": "Log interface; defaults to a noninteractive stream."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "tasks"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "affected": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "tasks": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated turbo.json task names, such as build,test,lint."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax."
+          },
+          "concurrency": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for local task cache entries."
+          },
+          "envMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "strict",
+              "loose"
+            ],
+            "description": "Environment filtering mode; strict retains native protection."
+          },
+          "continueMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ],
+            "description": "Which tasks may continue after a failure; failures still fail the module."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Ignore cached results and rerun tasks."
+          },
+          "summarize": {
+            "type": "boolean",
+            "description": "Write a native run summary under .turbo/runs."
+          },
+          "outputLogs": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ],
+            "description": "Task log selection."
+          },
+          "ui": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stream",
+            "enum": [
+              "stream",
+              "tui"
+            ],
+            "description": "Log interface; defaults to a noninteractive stream."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "tasks"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "dry_run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "tasks": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Comma-separated turbo.json task names, such as build,test,lint."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "Limit the plan to affected packages."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax."
+          },
+          "concurrency": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%."
+          },
+          "cache": {
+            "type": "string",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for local task cache entries."
+          },
+          "envMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "strict",
+              "loose"
+            ],
+            "description": "Environment filtering mode; strict retains native protection."
+          },
+          "continueMode": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ],
+            "description": "Which tasks may continue after a failure; failures still fail the module."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Ignore cached results and rerun tasks."
+          },
+          "summarize": {
+            "type": "boolean",
+            "description": "Write a native run summary under .turbo/runs."
+          },
+          "outputLogs": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ],
+            "description": "Task log selection."
+          },
+          "ui": {
+            "type": "string",
+            "minLength": 1,
+            "default": "stream",
+            "enum": [
+              "stream",
+              "tui"
+            ],
+            "description": "Log interface; defaults to a noninteractive stream."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "tasks"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "prune": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "package": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Workspace package to retain."
+          },
+          "docker": {
+            "type": "boolean",
+            "description": "Separate manifests and source for Docker layer caching."
+          },
+          "outDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for the pruned workspace; need not exist."
+          },
+          "useGitignore": {
+            "type": "boolean",
+            "description": "Respect gitignore rules when copying files."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir",
+          "package"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "list_packages": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "packages": {
+            "type": "string",
+            "description": "Comma-separated package names; omit or leave blank for all packages."
+          },
+          "filters": {
+            "type": "string",
+            "description": "Comma-separated native package selectors."
+          },
+          "affected": {
+            "type": "boolean",
+            "description": "List affected packages only."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "pretty"
+            ],
+            "description": "Output format."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "info": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

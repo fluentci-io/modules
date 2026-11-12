@@ -107,6 +107,7 @@ valueTokens field value = do
       Just prefix -> map (prefix <> _) tokens
       Nothing -> tokens
     else if field.style == "switch" then if Array.null tokens then [] else [ field.flag ]
+    else if field.style == "comma-list" then if Array.null tokens then [] else [ field.flag <> "=" <> String.joinWith "," tokens ]
     else if field.style == "space-list" then if Array.null tokens then [] else [ field.flag ] <> tokens
     else if Array.elem field.style [ "separate", "file-separate", "directory-separate" ] then Array.concatMap (\token -> [ field.flag, token ]) tokens
     else case String.stripPrefix (Pattern "prefix:") field.style of

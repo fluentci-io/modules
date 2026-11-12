@@ -1427,6 +1427,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "nx",
+    "title": "Nx",
+    "program": "nx",
+    "backend": "bun",
+    "package": "nx",
+    "repository": "",
+    "asset": "",
+    "format": "",
+    "member": "nx",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "24.0.6",
+    "linuxPackage": "nx",
+    "macPackage": "nx",
+    "freebsdPackage": "nx",
+    "openbsdPackage": "nx",
+    "netbsdPackage": "nx",
+    "notes": "Install the versioned Nx CLI with Bun; workspace Nx and executor/plugin dependencies must be installed separately. Workspace commands may delegate to the local Nx version.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "openbao",
     "title": "OpenBao",
     "program": "bao",

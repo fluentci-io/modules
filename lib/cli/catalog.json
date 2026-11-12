@@ -11597,6 +11597,938 @@
     ]
   },
   {
+    "name": "nx",
+    "path": "build/nx",
+    "title": "Nx",
+    "program": "nx",
+    "docs": "https://nx.dev/docs/reference/nx-commands",
+    "notes": "Install workspace dependencies from their lockfile first. Affected detection requires Git history. Credentials remain in inherited environment variables. CLI setup does not install workspace plugins or task dependencies.",
+    "environment": {
+      "CI": "true",
+      "NX_DAEMON": "false"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "description": "Run arbitrary literal Nx CLI arguments.",
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "description": "Print the Nx CLI versions.",
+        "fields": [],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_target",
+        "args": [
+          "run"
+        ],
+        "description": "Execute one project target, such as app:build:production.",
+        "fields": [
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "app:build",
+            "style": "value",
+            "scope": "positional",
+            "description": "Project:target[:configuration] selector.",
+            "choices": []
+          },
+          {
+            "key": "configuration",
+            "kind": "string",
+            "flag": "--configuration",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Named workspace task configuration, for example production.",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "integer",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": 4,
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum concurrent task processes.",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "csv",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": "*-e2e",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated project names or patterns to exclude.",
+            "choices": []
+          },
+          {
+            "key": "outputStyle",
+            "kind": "string",
+            "flag": "--outputStyle",
+            "default": "static",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Native task log rendering; defaults to stable CI output.",
+            "choices": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ]
+          },
+          {
+            "key": "skipCache",
+            "kind": "boolean",
+            "flag": "--skipNxCache",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rerun tasks even when local or remote results are cached.",
+            "choices": []
+          },
+          {
+            "key": "skipRemoteCache",
+            "kind": "boolean",
+            "flag": "--skipRemoteCache",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Disable remote cache access.",
+            "choices": []
+          },
+          {
+            "key": "bail",
+            "kind": "boolean",
+            "flag": "--nxBail",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Stop after the first task failure.",
+            "choices": []
+          },
+          {
+            "key": "skipSync",
+            "kind": "boolean",
+            "flag": "--skipSync",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip automatic sync generators before task execution.",
+            "choices": []
+          },
+          {
+            "key": "graph",
+            "kind": "string",
+            "flag": "--graph",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write the task graph to a file or stdout instead of executing tasks.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_many",
+        "args": [
+          "run-many"
+        ],
+        "description": "Execute targets across selected projects; omitted projects selects all eligible projects.",
+        "fields": [
+          {
+            "key": "targets",
+            "kind": "csv",
+            "flag": "--targets",
+            "default": null,
+            "required": true,
+            "sample": "build",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated targets such as build,test,lint.",
+            "choices": []
+          },
+          {
+            "key": "projects",
+            "kind": "csv",
+            "flag": "--projects",
+            "default": null,
+            "required": false,
+            "sample": "app",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated project names, tags or patterns; blank selects all eligible projects.",
+            "choices": []
+          },
+          {
+            "key": "configuration",
+            "kind": "string",
+            "flag": "--configuration",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Named workspace task configuration, for example production.",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "integer",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": 4,
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum concurrent task processes.",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "csv",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": "*-e2e",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated project names or patterns to exclude.",
+            "choices": []
+          },
+          {
+            "key": "outputStyle",
+            "kind": "string",
+            "flag": "--outputStyle",
+            "default": "static",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Native task log rendering; defaults to stable CI output.",
+            "choices": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ]
+          },
+          {
+            "key": "skipCache",
+            "kind": "boolean",
+            "flag": "--skipNxCache",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rerun tasks even when local or remote results are cached.",
+            "choices": []
+          },
+          {
+            "key": "skipRemoteCache",
+            "kind": "boolean",
+            "flag": "--skipRemoteCache",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Disable remote cache access.",
+            "choices": []
+          },
+          {
+            "key": "bail",
+            "kind": "boolean",
+            "flag": "--nxBail",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Stop after the first task failure.",
+            "choices": []
+          },
+          {
+            "key": "skipSync",
+            "kind": "boolean",
+            "flag": "--skipSync",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip automatic sync generators before task execution.",
+            "choices": []
+          },
+          {
+            "key": "graph",
+            "kind": "string",
+            "flag": "--graph",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write the task graph to a file or stdout instead of executing tasks.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "affected",
+        "args": [
+          "affected"
+        ],
+        "description": "Execute targets only for projects affected by the selected changes.",
+        "fields": [
+          {
+            "key": "targets",
+            "kind": "csv",
+            "flag": "--targets",
+            "default": null,
+            "required": true,
+            "sample": "build",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated targets such as build,test,lint.",
+            "choices": []
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git base ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "head",
+            "kind": "string",
+            "flag": "--head",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git head ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--files",
+            "default": null,
+            "required": false,
+            "sample": "src/app.ts",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated changed paths; deleted files do not need to exist.",
+            "choices": []
+          },
+          {
+            "key": "configuration",
+            "kind": "string",
+            "flag": "--configuration",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Named workspace task configuration, for example production.",
+            "choices": []
+          },
+          {
+            "key": "parallel",
+            "kind": "integer",
+            "flag": "--parallel",
+            "default": null,
+            "required": false,
+            "sample": 4,
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum concurrent task processes.",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "csv",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": "*-e2e",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated project names or patterns to exclude.",
+            "choices": []
+          },
+          {
+            "key": "outputStyle",
+            "kind": "string",
+            "flag": "--outputStyle",
+            "default": "static",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Native task log rendering; defaults to stable CI output.",
+            "choices": [
+              "static",
+              "static-failures-only",
+              "stream",
+              "stream-without-prefixes",
+              "summary",
+              "dynamic-legacy",
+              "dynamic",
+              "tui"
+            ]
+          },
+          {
+            "key": "skipCache",
+            "kind": "boolean",
+            "flag": "--skipNxCache",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rerun tasks even when local or remote results are cached.",
+            "choices": []
+          },
+          {
+            "key": "skipRemoteCache",
+            "kind": "boolean",
+            "flag": "--skipRemoteCache",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Disable remote cache access.",
+            "choices": []
+          },
+          {
+            "key": "bail",
+            "kind": "boolean",
+            "flag": "--nxBail",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Stop after the first task failure.",
+            "choices": []
+          },
+          {
+            "key": "skipSync",
+            "kind": "boolean",
+            "flag": "--skipSync",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip automatic sync generators before task execution.",
+            "choices": []
+          },
+          {
+            "key": "graph",
+            "kind": "string",
+            "flag": "--graph",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write the task graph to a file or stdout instead of executing tasks.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "show_projects",
+        "args": [
+          "show",
+          "projects",
+          "--json"
+        ],
+        "description": "Print matching project names as JSON without running targets.",
+        "fields": [
+          {
+            "key": "affected",
+            "kind": "boolean",
+            "flag": "--affected",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "List only affected projects.",
+            "choices": []
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git base ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "head",
+            "kind": "string",
+            "flag": "--head",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git head ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--files",
+            "default": null,
+            "required": false,
+            "sample": "src/app.ts",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated changed paths; deleted files do not need to exist.",
+            "choices": []
+          },
+          {
+            "key": "projects",
+            "kind": "csv",
+            "flag": "--projects",
+            "default": null,
+            "required": false,
+            "sample": "app",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated project selectors.",
+            "choices": []
+          },
+          {
+            "key": "withTargets",
+            "kind": "csv",
+            "flag": "--withTarget",
+            "default": null,
+            "required": false,
+            "sample": "build",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated targets that matching projects must expose.",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "csv",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": "*-e2e",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated project exclusions.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "show_project",
+        "args": [
+          "show",
+          "project",
+          "--json"
+        ],
+        "description": "Print the resolved configuration of a project.",
+        "fields": [
+          {
+            "key": "projectName",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "app",
+            "style": "value",
+            "scope": "positional",
+            "description": "Workspace project name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "graph",
+        "args": [
+          "graph",
+          "--open=false"
+        ],
+        "description": "Write a project graph without opening a browser.",
+        "fields": [
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": true,
+            "sample": "graph.json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output graph filename, such as graph.json; need not exist.",
+            "choices": []
+          },
+          {
+            "key": "focus",
+            "kind": "string",
+            "flag": "--focus",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Project to focus the graph on.",
+            "choices": []
+          },
+          {
+            "key": "affected",
+            "kind": "boolean",
+            "flag": "--affected",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Include affected projects only.",
+            "choices": []
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git base ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "head",
+            "kind": "string",
+            "flag": "--head",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git head ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--files",
+            "default": null,
+            "required": false,
+            "sample": "src/app.ts",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated changed paths; deleted files do not need to exist.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "format_check",
+        "args": [
+          "format:check"
+        ],
+        "description": "Fail when selected workspace files are not formatted.",
+        "fields": [
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git base ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "head",
+            "kind": "string",
+            "flag": "--head",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Git head ref or SHA for affected detection.",
+            "choices": []
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--files",
+            "default": null,
+            "required": false,
+            "sample": "src/app.ts",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated changed paths; deleted files do not need to exist.",
+            "choices": []
+          },
+          {
+            "key": "projects",
+            "kind": "csv",
+            "flag": "--projects",
+            "default": null,
+            "required": false,
+            "sample": "app",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated projects to check.",
+            "choices": []
+          },
+          {
+            "key": "all",
+            "kind": "boolean",
+            "flag": "--all",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Check all projects; mutually exclusive with projects in Nx.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "sync_check",
+        "args": [
+          "sync:check"
+        ],
+        "description": "Fail when workspace sync generators would change files.",
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "report",
+        "args": [
+          "report"
+        ],
+        "description": "Print Nx workspace and plugin version diagnostics.",
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
     "name": "openbao",
     "path": "secrets/openbao",
     "program": "bao",
@@ -24719,6 +25651,766 @@
         "example": {}
       }
     ]
+  },
+  {
+    "name": "turborepo",
+    "path": "build/turborepo",
+    "title": "Turborepo",
+    "program": "turbo",
+    "docs": "https://turborepo.dev/docs/reference/run",
+    "notes": "Install workspace dependencies from their lockfile first. Affected detection requires Git history. Credentials remain in inherited environment variables. CLI setup does not install workspace plugins or task dependencies.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "description": "Run arbitrary literal Turbo CLI arguments.",
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "description": "Print the Turbo CLI version.",
+        "fields": [],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_tasks",
+        "args": [
+          "run"
+        ],
+        "description": "Run selected workspace tasks with native dependency ordering and caching.",
+        "fields": [
+          {
+            "key": "tasks",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "build",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated turbo.json task names, such as build,test,lint.",
+            "choices": []
+          },
+          {
+            "key": "affected",
+            "kind": "boolean",
+            "flag": "--affected",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Select packages changed since the configured Git base/head.",
+            "choices": []
+          },
+          {
+            "key": "filters",
+            "kind": "csv",
+            "flag": "--filter",
+            "default": null,
+            "required": false,
+            "sample": "web...",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax.",
+            "choices": []
+          },
+          {
+            "key": "concurrency",
+            "kind": "string",
+            "flag": "--concurrency",
+            "default": null,
+            "required": false,
+            "sample": "4",
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%.",
+            "choices": []
+          },
+          {
+            "key": "cache",
+            "kind": "csv",
+            "flag": "--cache",
+            "default": null,
+            "required": false,
+            "sample": "local:rw",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r.",
+            "choices": []
+          },
+          {
+            "key": "cacheDir",
+            "kind": "string",
+            "flag": "--cache-dir",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Directory for local task cache entries.",
+            "choices": []
+          },
+          {
+            "key": "envMode",
+            "kind": "string",
+            "flag": "--env-mode",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Environment filtering mode; strict retains native protection.",
+            "choices": [
+              "strict",
+              "loose"
+            ]
+          },
+          {
+            "key": "continueMode",
+            "kind": "string",
+            "flag": "--continue",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Which tasks may continue after a failure; failures still fail the module.",
+            "choices": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ]
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Ignore cached results and rerun tasks.",
+            "choices": []
+          },
+          {
+            "key": "summarize",
+            "kind": "boolean",
+            "flag": "--summarize",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Write a native run summary under .turbo/runs.",
+            "choices": []
+          },
+          {
+            "key": "outputLogs",
+            "kind": "string",
+            "flag": "--output-logs",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Task log selection.",
+            "choices": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ]
+          },
+          {
+            "key": "ui",
+            "kind": "string",
+            "flag": "--ui",
+            "default": "stream",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Log interface; defaults to a noninteractive stream.",
+            "choices": [
+              "stream",
+              "tui"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "affected",
+        "args": [
+          "run",
+          "--affected"
+        ],
+        "description": "Run tasks only in affected packages; requires the Git comparison history.",
+        "fields": [
+          {
+            "key": "tasks",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "build",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated turbo.json task names, such as build,test,lint.",
+            "choices": []
+          },
+          {
+            "key": "filters",
+            "kind": "csv",
+            "flag": "--filter",
+            "default": null,
+            "required": false,
+            "sample": "web...",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax.",
+            "choices": []
+          },
+          {
+            "key": "concurrency",
+            "kind": "string",
+            "flag": "--concurrency",
+            "default": null,
+            "required": false,
+            "sample": "4",
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%.",
+            "choices": []
+          },
+          {
+            "key": "cache",
+            "kind": "csv",
+            "flag": "--cache",
+            "default": null,
+            "required": false,
+            "sample": "local:rw",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r.",
+            "choices": []
+          },
+          {
+            "key": "cacheDir",
+            "kind": "string",
+            "flag": "--cache-dir",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Directory for local task cache entries.",
+            "choices": []
+          },
+          {
+            "key": "envMode",
+            "kind": "string",
+            "flag": "--env-mode",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Environment filtering mode; strict retains native protection.",
+            "choices": [
+              "strict",
+              "loose"
+            ]
+          },
+          {
+            "key": "continueMode",
+            "kind": "string",
+            "flag": "--continue",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Which tasks may continue after a failure; failures still fail the module.",
+            "choices": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ]
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Ignore cached results and rerun tasks.",
+            "choices": []
+          },
+          {
+            "key": "summarize",
+            "kind": "boolean",
+            "flag": "--summarize",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Write a native run summary under .turbo/runs.",
+            "choices": []
+          },
+          {
+            "key": "outputLogs",
+            "kind": "string",
+            "flag": "--output-logs",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Task log selection.",
+            "choices": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ]
+          },
+          {
+            "key": "ui",
+            "kind": "string",
+            "flag": "--ui",
+            "default": "stream",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Log interface; defaults to a noninteractive stream.",
+            "choices": [
+              "stream",
+              "tui"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "dry_run",
+        "args": [
+          "run",
+          "--dry=json"
+        ],
+        "description": "Print a JSON task plan without executing workspace tasks.",
+        "fields": [
+          {
+            "key": "tasks",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "build",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated turbo.json task names, such as build,test,lint.",
+            "choices": []
+          },
+          {
+            "key": "affected",
+            "kind": "boolean",
+            "flag": "--affected",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Limit the plan to affected packages.",
+            "choices": []
+          },
+          {
+            "key": "filters",
+            "kind": "csv",
+            "flag": "--filter",
+            "default": null,
+            "required": false,
+            "sample": "web...",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated native package selectors; repeated flags preserve dependency and Git-range syntax.",
+            "choices": []
+          },
+          {
+            "key": "concurrency",
+            "kind": "string",
+            "flag": "--concurrency",
+            "default": null,
+            "required": false,
+            "sample": "4",
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum concurrent tasks as an integer or percentage, such as 4 or 50%.",
+            "choices": []
+          },
+          {
+            "key": "cache",
+            "kind": "csv",
+            "flag": "--cache",
+            "default": null,
+            "required": false,
+            "sample": "local:rw",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated cache source policies, such as local:rw,remote:r.",
+            "choices": []
+          },
+          {
+            "key": "cacheDir",
+            "kind": "string",
+            "flag": "--cache-dir",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Directory for local task cache entries.",
+            "choices": []
+          },
+          {
+            "key": "envMode",
+            "kind": "string",
+            "flag": "--env-mode",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Environment filtering mode; strict retains native protection.",
+            "choices": [
+              "strict",
+              "loose"
+            ]
+          },
+          {
+            "key": "continueMode",
+            "kind": "string",
+            "flag": "--continue",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Which tasks may continue after a failure; failures still fail the module.",
+            "choices": [
+              "never",
+              "dependencies-successful",
+              "always"
+            ]
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Ignore cached results and rerun tasks.",
+            "choices": []
+          },
+          {
+            "key": "summarize",
+            "kind": "boolean",
+            "flag": "--summarize",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Write a native run summary under .turbo/runs.",
+            "choices": []
+          },
+          {
+            "key": "outputLogs",
+            "kind": "string",
+            "flag": "--output-logs",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Task log selection.",
+            "choices": [
+              "full",
+              "hash-only",
+              "new-only",
+              "errors-only",
+              "none"
+            ]
+          },
+          {
+            "key": "ui",
+            "kind": "string",
+            "flag": "--ui",
+            "default": "stream",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Log interface; defaults to a noninteractive stream.",
+            "choices": [
+              "stream",
+              "tui"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "prune",
+        "args": [
+          "prune"
+        ],
+        "description": "Generate a partial workspace and pruned lockfile for a package.",
+        "fields": [
+          {
+            "key": "package",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "web",
+            "style": "value",
+            "scope": "positional",
+            "description": "Workspace package to retain.",
+            "choices": []
+          },
+          {
+            "key": "docker",
+            "kind": "boolean",
+            "flag": "--docker",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Separate manifests and source for Docker layer caching.",
+            "choices": []
+          },
+          {
+            "key": "outDir",
+            "kind": "string",
+            "flag": "--out-dir",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Destination for the pruned workspace; need not exist.",
+            "choices": []
+          },
+          {
+            "key": "useGitignore",
+            "kind": "boolean",
+            "flag": "--use-gitignore",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "value",
+            "scope": "option",
+            "description": "Respect gitignore rules when copying files.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "list_packages",
+        "args": [
+          "ls"
+        ],
+        "description": "Inspect packages, dependencies and tasks without executing tasks.",
+        "fields": [
+          {
+            "key": "packages",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "web",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated package names; omit or leave blank for all packages.",
+            "choices": []
+          },
+          {
+            "key": "filters",
+            "kind": "csv",
+            "flag": "--filter",
+            "default": null,
+            "required": false,
+            "sample": "web...",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated native package selectors.",
+            "choices": []
+          },
+          {
+            "key": "affected",
+            "kind": "boolean",
+            "flag": "--affected",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "List affected packages only.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Output format.",
+            "choices": [
+              "json",
+              "pretty"
+            ]
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "info",
+        "args": [
+          "info"
+        ],
+        "description": "Print Turbo environment diagnostics.",
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal command tokens in CSV form; include -- as an entry to forward flags to underlying tasks.",
+            "choices": []
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
   },
   {
     "name": "ubicloud",

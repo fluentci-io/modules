@@ -117,6 +117,7 @@ versionFrom :: String -> String -> Effect String
 versionFrom tool text = do
   let relevant = if tool == "elixir"
         then fromMaybe "" (Array.find (String.startsWith (Pattern "Elixir ")) (map trim (String.split (Pattern "\n") text)))
+        else if tool == "nx" then fromMaybe text (Array.find (String.contains (Pattern "- Global: v")) (String.split (Pattern "\n") text))
         else text
   pattern <- either throw pure (Regex.regex (if tool == "binaryen" then "[0-9]+" else "[0-9]+(\\.[0-9]+)+([-+][0-9A-Za-z.-]+)?") noFlags)
   case Regex.match pattern relevant of

@@ -1,0 +1,13 @@
+{
+  "module": "turborepo",
+  "requirements": [
+    {
+      "alias": "setup-turborepo",
+      "program": "turbo",
+      "probe": [
+        "which",
+        "turbo"
+      ]
+    }
+  ]
+}
