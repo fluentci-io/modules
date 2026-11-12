@@ -7,15 +7,16 @@ import Data.Either (either)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Exception (throw)
-import CI.Setup as Setup
-import CI.Setup.Types as Types
+import CI.Setup.UvEnvironment as Native
 
--- | Install and verify uv, select its version, and publish its environment for subsequent tasks.
+-- | Install and verify uv, optionally configure a Python version and isolated tools, and publish their environment.
 -- | @param version Tool release or supported channel to install; omitted values use the documented default.
 -- | @param installDir Absolute per-user installation prefix; omit for native package installations.
 -- | @param packageName Native package or port selector overriding the default repository package name.
 -- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.
-setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean } -> Effect Contract.SetupResult
+-- | @param pythonVersion Optional Python release or interpreter selector such as 3.13 or cpython-3.13.1; omit to retain uv-only setup. BSD selects an existing matching interpreter without downloads.
+-- | @param tools Comma-separated Python CLI packages with optional single native version constraints, such as ruff==0.12.0,httpie. Blank or omitted values install no tools.
+setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, pythonVersion :: Maybe String, tools :: Maybe String } -> Effect Contract.SetupResult
 setup args = do
-  config <- either throw pure (Types.decodeConfig "uv" (Contract.input (Contract.encodeInput args)))
-  Contract.setupResult <$> Setup.install "uv" config
+  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))
+  Contract.setupResult <$> Native.setupWith config

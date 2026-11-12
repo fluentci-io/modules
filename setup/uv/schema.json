@@ -3,7 +3,7 @@
   "runtime": "component",
   "exports": {
     "setup": {
-      "description": "Install and verify uv, select its version, and publish its environment for subsequent tasks.",
+      "description": "Install and verify uv, optionally configure a Python version and isolated tools, and publish their environment.",
       "input": {
         "type": "object",
         "properties": {
@@ -22,6 +22,14 @@
           "sudo": {
             "type": "boolean",
             "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          },
+          "pythonVersion": {
+            "type": "string",
+            "description": "Optional Python release or interpreter selector such as 3.13 or cpython-3.13.1; omit to retain uv-only setup. BSD selects an existing matching interpreter without downloads."
+          },
+          "tools": {
+            "type": "string",
+            "description": "Comma-separated Python CLI packages with optional single native version constraints, such as ruff==0.12.0,httpie. Blank or omitted values install no tools."
           }
         },
         "required": [],

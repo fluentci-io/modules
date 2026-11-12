@@ -1204,7 +1204,7 @@ runtime = "component"
 
 [[modules]]
 name = "setup-uv"
-version = "0.2.1"
+version = "0.3.0"
 path = "setup/uv"
 sdk = "purescript"
 runtime = "component"

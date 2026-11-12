@@ -18,6 +18,14 @@
           "sudo": {
             "type": "boolean",
             "default": false
+          },
+          "pythonVersion": {
+            "type": "string",
+            "description": "Optional Python version to install or select; omit for uv-only setup."
+          },
+          "tools": {
+            "type": "string",
+            "description": "Comma-separated tools to install, optionally with native version constraints such as ruff==0.12.0."
           }
         },
         "additionalProperties": false

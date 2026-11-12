@@ -2,15 +2,16 @@
 module CI.Setup.Uv (setup, setupWith, defaultConfig) where
 
 import Prelude (Unit)
-import CI.Setup as Setup
-import CI.Setup.Types (Config, Result, defaults)
 import Effect (Effect)
+import CI.Setup.Types (Result)
+import CI.Setup.UvEnvironment (Config)
+import CI.Setup.UvEnvironment as Native
 
 defaultConfig :: Config
-defaultConfig = defaults "uv"
+defaultConfig = Native.defaultConfig
 
 setupWith :: Config -> Effect Result
-setupWith = Setup.install "uv"
+setupWith = Native.setupWith
 
 setup :: Effect Unit
-setup = Setup.setup "uv"
+setup = Native.setup
