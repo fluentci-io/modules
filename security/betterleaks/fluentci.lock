@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-betterleaks": "path:name = \"setup-betterleaks\"\nruntime = \"component\"\npath = \"../../setup/betterleaks\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

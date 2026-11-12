@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trivy" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "trivy" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trivy" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "trivy" "version" json
 
 -- | Scan a filesystem and fail when selected findings are present.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -47,7 +48,7 @@ version args = do
 filesystem :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), severity :: Maybe String, format :: Maybe String, output :: Maybe String, scanners :: Maybe String, ignoreUnfixed :: Maybe Boolean, skipDbUpdate :: Maybe Boolean, offlineScan :: Maybe Boolean, directory :: Maybe String } -> Effect Contract.ExecutionResult
 filesystem args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trivy" "filesystem" json
+  Native.executeWithSetup Dependencies.ensureFor "trivy" "filesystem" json
 
 -- | Scan a container image and fail at the selected severity.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -66,7 +67,7 @@ filesystem args = do
 image :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), severity :: Maybe String, format :: Maybe String, output :: Maybe String, scanners :: Maybe String, ignoreUnfixed :: Maybe Boolean, skipDbUpdate :: Maybe Boolean, offlineScan :: Maybe Boolean, image :: String } -> Effect Contract.ExecutionResult
 image args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trivy" "image" json
+  Native.executeWithSetup Dependencies.ensureFor "trivy" "image" json
 
 -- | Scan infrastructure configuration for misconfigurations.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -82,7 +83,7 @@ image args = do
 config :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), severity :: Maybe String, format :: Maybe String, output :: Maybe String, skipCheckUpdate :: Maybe Boolean, directory :: Maybe String } -> Effect Contract.ExecutionResult
 config args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trivy" "config" json
+  Native.executeWithSetup Dependencies.ensureFor "trivy" "config" json
 
 -- | Scan an existing SBOM for vulnerabilities.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -98,4 +99,4 @@ config args = do
 sbom :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), severity :: Maybe String, format :: Maybe String, output :: Maybe String, skipDbUpdate :: Maybe Boolean, file :: String } -> Effect Contract.ExecutionResult
 sbom args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trivy" "sbom" json
+  Native.executeWithSetup Dependencies.ensureFor "trivy" "sbom" json

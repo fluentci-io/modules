@@ -1,0 +1,258 @@
+{
+  "actionlint": [
+    "setup-actionlint"
+  ],
+  "apko": [
+    "setup-apko"
+  ],
+  "argocd": [
+    "setup-argocd"
+  ],
+  "artifactory": [
+    "setup-artifactory"
+  ],
+  "aws": [
+    "setup-aws"
+  ],
+  "azure": [
+    "setup-azure"
+  ],
+  "bazel": [
+    "setup-bazel"
+  ],
+  "betterleaks": [
+    "setup-betterleaks"
+  ],
+  "biome": [
+    "setup-biome"
+  ],
+  "black": [
+    "setup-black"
+  ],
+  "buildkit": [
+    "setup-buildkit"
+  ],
+  "buildx": [
+    "setup-docker",
+    "setup-buildx"
+  ],
+  "cachix": [
+    "setup-nix",
+    "setup-cachix"
+  ],
+  "checkov": [
+    "setup-checkov"
+  ],
+  "cmake": [
+    "setup-cmake"
+  ],
+  "codacy": [
+    "setup-codacy"
+  ],
+  "codecov": [
+    "setup-codecov"
+  ],
+  "cosign": [
+    "setup-cosign"
+  ],
+  "coveralls": [
+    "setup-coveralls"
+  ],
+  "cypress": [
+    "setup-cypress",
+    "setup-bun"
+  ],
+  "digitalocean": [
+    "setup-digitalocean"
+  ],
+  "docker": [
+    "setup-docker"
+  ],
+  "doppler": [
+    "setup-doppler"
+  ],
+  "dpkg": [
+    "setup-dpkg"
+  ],
+  "flyctl": [
+    "setup-flyctl"
+  ],
+  "gcloud": [
+    "setup-gcloud"
+  ],
+  "gemfury": [
+    "setup-gemfury"
+  ],
+  "gh-artifact": [
+    "setup-gh-artifact",
+    "setup-bun"
+  ],
+  "gitlab-artifacts": [
+    "setup-gitlab-artifacts",
+    "setup-bun"
+  ],
+  "gitleaks": [
+    "setup-gitleaks"
+  ],
+  "grype": [
+    "setup-grype"
+  ],
+  "helm": [
+    "setup-helm"
+  ],
+  "infisical": [
+    "setup-infisical"
+  ],
+  "jfrog-cli": [
+    "setup-jfrog-cli"
+  ],
+  "kamal": [
+    "setup-kamal"
+  ],
+  "kubectl": [
+    "setup-kubectl"
+  ],
+  "meson": [
+    "setup-meson"
+  ],
+  "netlify": [
+    "setup-netlify"
+  ],
+  "nexus": [
+    "setup-nexus"
+  ],
+  "ninja": [
+    "setup-ninja"
+  ],
+  "nix-package": [
+    "setup-nix-package"
+  ],
+  "nix-publish": [
+    "setup-nix",
+    "setup-bun",
+    "setup-flakehub-push"
+  ],
+  "openbao": [
+    "setup-openbao"
+  ],
+  "opentofu": [
+    "setup-opentofu"
+  ],
+  "oras": [
+    "setup-oras"
+  ],
+  "pgroll": [
+    "setup-pgroll"
+  ],
+  "planetscale": [
+    "setup-planetscale"
+  ],
+  "playwright": [
+    "setup-playwright",
+    "setup-bun"
+  ],
+  "plumber": [
+    "setup-plumber"
+  ],
+  "podman": [
+    "setup-podman"
+  ],
+  "prettier": [
+    "setup-prettier"
+  ],
+  "protolint": [
+    "setup-protolint"
+  ],
+  "pulumi": [
+    "setup-pulumi"
+  ],
+  "railpack": [
+    "setup-railpack"
+  ],
+  "railway": [
+    "setup-railway"
+  ],
+  "rclone": [
+    "setup-rclone"
+  ],
+  "render": [
+    "setup-render"
+  ],
+  "rpmbuild": [
+    "setup-rpmbuild"
+  ],
+  "ruff": [
+    "setup-ruff"
+  ],
+  "rustfmt": [
+    "setup-rustfmt"
+  ],
+  "sccache": [
+    "setup-sccache"
+  ],
+  "scorecard": [
+    "setup-scorecard",
+    "setup-bun"
+  ],
+  "semgrep": [
+    "setup-semgrep"
+  ],
+  "setup-android": [
+    "setup-java"
+  ],
+  "shellcheck": [
+    "setup-shellcheck"
+  ],
+  "snyk": [
+    "setup-snyk",
+    "setup-bun"
+  ],
+  "sonarqube": [
+    "setup-sonarqube"
+  ],
+  "sqlfluff": [
+    "setup-sqlfluff"
+  ],
+  "sqruff": [
+    "setup-sqruff"
+  ],
+  "syft": [
+    "setup-syft"
+  ],
+  "tangled-artifacts": [
+    "setup-tangled-artifacts"
+  ],
+  "terraform": [
+    "setup-terraform"
+  ],
+  "terragrunt": [
+    "setup-terragrunt"
+  ],
+  "trivy": [
+    "setup-trivy"
+  ],
+  "trufflehog": [
+    "setup-trufflehog"
+  ],
+  "ubicloud": [
+    "setup-ubicloud"
+  ],
+  "uv": [
+    "setup-uv"
+  ],
+  "vault": [
+    "setup-vault"
+  ],
+  "vercel": [
+    "setup-vercel"
+  ],
+  "wrangler": [
+    "setup-wrangler"
+  ],
+  "xata": [
+    "setup-xata"
+  ],
+  "yamllint": [
+    "setup-yamllint"
+  ]
+}

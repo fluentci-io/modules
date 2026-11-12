@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "version" json
 
 -- | Install the test framework in project using Bun. Browser binaries are installed separately with install.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -40,7 +41,7 @@ version args = do
 setup :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), version :: Maybe String } -> Effect Contract.ExecutionResult
 setup args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "setup" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "setup" json
 
 -- | Run Cypress specs headlessly, returning a failure if any tests fail.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -63,7 +64,7 @@ setup args = do
 test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), browser :: Maybe String, configFile :: Maybe String, config :: Maybe String, spec :: Maybe String, reporter :: Maybe String, reporterOptions :: Maybe String, component :: Maybe Boolean, record :: Maybe Boolean, parallel :: Maybe Boolean, group :: Maybe String, ciBuildId :: Maybe String, tag :: Maybe String } -> Effect Contract.ExecutionResult
 test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "test" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "test" json
 
 -- | Download the Cypress binary matching the installed npm package.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -75,7 +76,7 @@ test args = do
 install :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), force :: Maybe Boolean } -> Effect Contract.ExecutionResult
 install args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "install" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "install" json
 
 -- | Verify that the installed Cypress binary can start.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -86,7 +87,7 @@ install args = do
 verify :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 verify args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "verify" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "verify" json
 
 -- | List installed Cypress binaries.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -97,4 +98,4 @@ verify args = do
 cache_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 cache_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cypress" "cache_list" json
+  Native.executeWithSetup Dependencies.ensureFor "cypress" "cache_list" json

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-prettier": "path:name = \"setup-prettier\"\nruntime = \"component\"\npath = \"../../setup/prettier\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

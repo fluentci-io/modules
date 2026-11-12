@@ -1,0 +1,21 @@
+{
+  "module": "scorecard",
+  "requirements": [
+    {
+      "alias": "setup-scorecard",
+      "program": "scorecard",
+      "probe": [
+        "which",
+        "scorecard"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "module": "tangled-artifacts",
+  "requirements": [
+    {
+      "alias": "setup-tangled-artifacts",
+      "program": "tangled-release-asset-uploader",
+      "probe": [
+        "which",
+        "tangled-release-asset-uploader"
+      ]
+    }
+  ]
+}

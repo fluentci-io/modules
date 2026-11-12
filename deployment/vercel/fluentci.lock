@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-vercel": "path:name = \"setup-vercel\"\nruntime = \"component\"\npath = \"../../setup/vercel\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

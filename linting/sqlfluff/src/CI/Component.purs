@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run a native command with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqlfluff" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "sqlfluff" "run" json
 
 -- | Print the installed tool version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqlfluff" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "sqlfluff" "version" json
 
 -- | Lint SQL and fail the pipeline on violations or parsing errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -48,7 +49,7 @@ version args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, dialect :: Maybe String, templater :: Maybe String, rules :: Maybe String, excludeRules :: Maybe String, processes :: Maybe Int, format :: Maybe String, writeOutput :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqlfluff" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "sqlfluff" "lint" json
 
 -- | Apply fixable SQL rules to the selected project files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -66,7 +67,7 @@ lint args = do
 fix :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, dialect :: Maybe String, templater :: Maybe String, rules :: Maybe String, excludeRules :: Maybe String, processes :: Maybe Int, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 fix args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqlfluff" "fix" json
+  Native.executeWithSetup Dependencies.ensureFor "sqlfluff" "fix" json
 
 -- | Parse SQL to detect syntax and templating errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -85,4 +86,4 @@ fix args = do
 parse :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, dialect :: Maybe String, templater :: Maybe String, rules :: Maybe String, excludeRules :: Maybe String, processes :: Maybe Int, format :: Maybe String, path :: Maybe String } -> Effect Contract.ExecutionResult
 parse args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqlfluff" "parse" json
+  Native.executeWithSetup Dependencies.ensureFor "sqlfluff" "parse" json

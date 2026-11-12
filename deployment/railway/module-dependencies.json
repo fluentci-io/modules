@@ -1,0 +1,13 @@
+{
+  "module": "railway",
+  "requirements": [
+    {
+      "alias": "setup-railway",
+      "program": "railway",
+      "probe": [
+        "which",
+        "railway"
+      ]
+    }
+  ]
+}

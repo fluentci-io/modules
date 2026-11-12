@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gcloud" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "gcloud" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gcloud" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "gcloud" "version" json
 
 -- | config list
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -41,7 +42,7 @@ version args = do
 config_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), cloudProject :: Maybe String, account :: Maybe String } -> Effect Contract.ExecutionResult
 config_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gcloud" "config_list" json
+  Native.executeWithSetup Dependencies.ensureFor "gcloud" "config_list" json
 
 -- | Deploy a container image to Cloud Run.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -57,7 +58,7 @@ config_list args = do
 run_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), cloudProject :: Maybe String, account :: Maybe String, image :: String, region :: String, service :: String } -> Effect Contract.ExecutionResult
 run_deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gcloud" "run_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "gcloud" "run_deploy" json
 
 -- | storage cp
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -73,7 +74,7 @@ run_deploy args = do
 storage_cp :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), cloudProject :: Maybe String, account :: Maybe String, recursive :: Maybe Boolean, source :: String, destination :: String } -> Effect Contract.ExecutionResult
 storage_cp args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gcloud" "storage_cp" json
+  Native.executeWithSetup Dependencies.ensureFor "gcloud" "storage_cp" json
 
 -- | instances list
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -86,4 +87,4 @@ storage_cp args = do
 instances_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), cloudProject :: Maybe String, account :: Maybe String } -> Effect Contract.ExecutionResult
 instances_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gcloud" "instances_list" json
+  Native.executeWithSetup Dependencies.ensureFor "gcloud" "instances_list" json

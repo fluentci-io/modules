@@ -1,0 +1,13 @@
+{
+  "module": "digitalocean",
+  "requirements": [
+    {
+      "alias": "setup-digitalocean",
+      "program": "doctl",
+      "probe": [
+        "which",
+        "doctl"
+      ]
+    }
+  ]
+}

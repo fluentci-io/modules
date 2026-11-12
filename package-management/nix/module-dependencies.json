@@ -1,0 +1,13 @@
+{
+  "module": "nix-package",
+  "requirements": [
+    {
+      "alias": "setup-nix-package",
+      "program": "nix",
+      "probe": [
+        "which",
+        "nix"
+      ]
+    }
+  ]
+}

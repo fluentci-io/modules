@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-codacy": "path:name = \"setup-codacy\"\nruntime = \"component\"\npath = \"../../setup/codacy\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

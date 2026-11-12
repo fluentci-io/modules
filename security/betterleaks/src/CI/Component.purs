@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "betterleaks" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "betterleaks" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "betterleaks" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "betterleaks" "version" json
 
 -- | Scan files using Betterleaks 1.x with redaction and credential validation disabled.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,7 +47,7 @@ version args = do
 scan_dir :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, reportFormat :: Maybe String, reportPath :: Maybe String, confidence :: Maybe String, enableRule :: Maybe (Array String), disableRule :: Maybe (Array String), directory :: Maybe String } -> Effect Contract.ExecutionResult
 scan_dir args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "betterleaks" "scan_dir" json
+  Native.executeWithSetup Dependencies.ensureFor "betterleaks" "scan_dir" json
 
 -- | Scan Git history with Betterleaks 1.x, failing on detected secrets.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -65,4 +66,4 @@ scan_dir args = do
 scan_git :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, reportFormat :: Maybe String, reportPath :: Maybe String, confidence :: Maybe String, enableRule :: Maybe (Array String), disableRule :: Maybe (Array String), logOpts :: Maybe String, repository :: Maybe String } -> Effect Contract.ExecutionResult
 scan_git args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "betterleaks" "scan_git" json
+  Native.executeWithSetup Dependencies.ensureFor "betterleaks" "scan_git" json

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-shellcheck": "path:name = \"setup-shellcheck\"\nruntime = \"component\"\npath = \"../../setup/shellcheck\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

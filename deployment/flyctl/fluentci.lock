@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-flyctl": "path:name = \"setup-flyctl\"\nruntime = \"component\"\npath = \"../../setup/flyctl\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

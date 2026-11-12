@@ -1,0 +1,13 @@
+{
+  "module": "ruff",
+  "requirements": [
+    {
+      "alias": "setup-ruff",
+      "program": "ruff",
+      "probe": [
+        "which",
+        "ruff"
+      ]
+    }
+  ]
+}

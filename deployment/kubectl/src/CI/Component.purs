@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kubectl" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "kubectl" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kubectl" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "kubectl" "version" json
 
 -- | apply
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,7 +45,7 @@ version args = do
 apply :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), context :: Maybe String, namespace :: Maybe String, kubeconfig :: Maybe String, filename :: Array String, recursive :: Maybe Boolean } -> Effect Contract.ExecutionResult
 apply args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kubectl" "apply" json
+  Native.executeWithSetup Dependencies.ensureFor "kubectl" "apply" json
 
 -- | get
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ apply args = do
 get :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), context :: Maybe String, namespace :: Maybe String, kubeconfig :: Maybe String, output :: Maybe String, resource :: String, name :: Maybe String } -> Effect Contract.ExecutionResult
 get args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kubectl" "get" json
+  Native.executeWithSetup Dependencies.ensureFor "kubectl" "get" json
 
 -- | delete
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -77,7 +78,7 @@ get args = do
 delete_resources :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), context :: Maybe String, namespace :: Maybe String, kubeconfig :: Maybe String, filename :: Array String, ignoreNotFound :: Maybe Boolean } -> Effect Contract.ExecutionResult
 delete_resources args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kubectl" "delete_resources" json
+  Native.executeWithSetup Dependencies.ensureFor "kubectl" "delete_resources" json
 
 -- | rollout status
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -93,4 +94,4 @@ delete_resources args = do
 rollout_status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), context :: Maybe String, namespace :: Maybe String, kubeconfig :: Maybe String, timeout :: Maybe String, resource :: String } -> Effect Contract.ExecutionResult
 rollout_status args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kubectl" "rollout_status" json
+  Native.executeWithSetup Dependencies.ensureFor "kubectl" "rollout_status" json

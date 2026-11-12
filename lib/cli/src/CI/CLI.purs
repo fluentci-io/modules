@@ -1,4 +1,4 @@
-module CI.CLI (makePlan, invoke, execute, csvInput) where
+module CI.CLI (makePlan, invoke, execute, executeWithSetup, csvInput) where
 
 import Prelude
 import CI.CLI.Catalog as Catalog
@@ -32,7 +32,7 @@ type Command =
   }
 type Tool = { name :: String, program :: String, environment :: Object.Object String, commands :: Array Command }
 type Runtime = { project :: String, runDir :: String, executable :: String, timeoutMs :: Int }
-type Prepared = { runtime :: Runtime, plan :: Plan.Plan, checks :: Array { kind :: String, path :: String } }
+type Prepared = { runtime :: Runtime, plan :: Plan.Plan, checks :: Array { kind :: String, path :: String }, automaticSetup :: Boolean }
 
 jsonValue :: forall a. DecodeJson a => Json -> Either String a
 jsonValue = either (Left <<< show) Right <<< decodeJson
@@ -146,6 +146,7 @@ prepare name commandName json = do
       configured = foldl (\current key -> current # Plan.withEnv key (fromMaybe "" (Object.lookup key environment))) task (Object.keys environment)
       declared = foldl (\current key -> current # Plan.artifact key (fromMaybe "" (Object.lookup key artifacts))) configured (Object.keys artifacts)
   pure { runtime: { project, runDir, executable, timeoutMs }
+       , automaticSetup: not (Object.member "executable" object)
        , checks: Array.concat fileFields
        , plan: Plan.plan [ declared ] # Plan.withInheritedEnv true # Plan.withJobs 1 }
 
@@ -161,8 +162,15 @@ capture :: Array String -> Effect String
 capture args = P.pipeline "cli-preflight" # P.exec args # P.stdout >>= unwrap
 
 execute :: String -> String -> Json -> Effect { outcome :: String, runDir :: String, reportPath :: String, stdoutPath :: String, stderrPath :: String }
-execute name commandName json = do
+execute = executePrepared false (const (pure unit))
+
+executeWithSetup :: (String -> Effect Unit) -> String -> String -> Json -> Effect { outcome :: String, runDir :: String, reportPath :: String, stdoutPath :: String, stderrPath :: String }
+executeWithSetup = executePrepared true
+
+executePrepared :: Boolean -> (String -> Effect Unit) -> String -> String -> Json -> Effect { outcome :: String, runDir :: String, reportPath :: String, stdoutPath :: String, stderrPath :: String }
+executePrepared allowSetup setupDependency name commandName json = do
   prepared <- either throw pure (prepare name commandName json)
+  let automaticSetup = allowSetup && prepared.automaticSetup
   os <- P.getOS >>= unwrap
   unless (Array.elem os [ "linux", "macos", "freebsd", "openbsd", "netbsd" ]) $
     throw ("Unsupported CLI host OS: " <> os)
@@ -171,10 +179,14 @@ execute name commandName json = do
     token <- if present then P.getEnv "UBI_TOKEN" >>= unwrap else pure ""
     when (trim token == "") $ throw "Set UBI_TOKEN before invoking the Ubicloud CLI"
   void (capture [ "test", "-d", prepared.runtime.project ])
+  when automaticSetup do
+    traverse_ (\check -> void (capture [ "test", check.kind, if String.startsWith (Pattern "/") check.path then check.path else prepared.runtime.project <> "/" <> check.path ])) prepared.checks
+    setupDependency prepared.runtime.executable
   catchException (\error -> throw ("Required CLI is unavailable: " <> prepared.runtime.executable <> ". " <> message error)) do
     void (capture (if String.contains (Pattern "/") prepared.runtime.executable
       then [ "test", "-x", prepared.runtime.executable ] else [ "which", prepared.runtime.executable ]))
-  traverse_ (\check -> void (capture [ "test", check.kind, if String.startsWith (Pattern "/") check.path then check.path else prepared.runtime.project <> "/" <> check.path ])) prepared.checks
+  unless automaticSetup $
+    traverse_ (\check -> void (capture [ "test", check.kind, if String.startsWith (Pattern "/") check.path then check.path else prepared.runtime.project <> "/" <> check.path ])) prepared.checks
   report <- P.runPlan prepared.runtime.runDir prepared.plan >>= unwrap
   unless (report.outcome == Just RunSucceeded) $
     throw (name <> " failed; inspect " <> prepared.runtime.runDir <> "/result.json")

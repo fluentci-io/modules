@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "version" json
 
 -- | Build an image from a context.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -47,7 +48,7 @@ version args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), tag :: Maybe (Array String), file :: Maybe String, buildArg :: Maybe (Array String), target :: Maybe String, platform :: Maybe String, noCache :: Maybe Boolean, pull :: Maybe Boolean, context :: Maybe String } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "build" json
 
 -- | Pull an image.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -60,7 +61,7 @@ build args = do
 pull :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), platform :: Maybe String, image :: String } -> Effect Contract.ExecutionResult
 pull args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "pull" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "pull" json
 
 -- | Push an authenticated image reference.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -72,7 +73,7 @@ pull args = do
 push :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), image :: String } -> Effect Contract.ExecutionResult
 push args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "push" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "push" json
 
 -- | Create an image tag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -85,7 +86,7 @@ push args = do
 tag :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), source :: String, target :: String } -> Effect Contract.ExecutionResult
 tag args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "tag" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "tag" json
 
 -- | Run an image with optional command arguments.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -106,7 +107,7 @@ tag args = do
 container_run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), rm :: Maybe Boolean, detach :: Maybe Boolean, name :: Maybe String, publish :: Maybe (Array String), volume :: Maybe (Array String), env :: Maybe (Array String), network :: Maybe String, workdir :: Maybe String, image :: String, command :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 container_run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "container_run" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "container_run" json
 
 -- | Run Compose with its native subcommand arguments.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -120,4 +121,4 @@ container_run args = do
 compose :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), file :: Maybe (Array String), projectName :: Maybe String, arguments :: Array String } -> Effect Contract.ExecutionResult
 compose args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "docker" "compose" json
+  Native.executeWithSetup Dependencies.ensureFor "docker" "compose" json

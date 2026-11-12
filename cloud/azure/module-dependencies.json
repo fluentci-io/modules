@@ -1,0 +1,13 @@
+{
+  "module": "azure",
+  "requirements": [
+    {
+      "alias": "setup-azure",
+      "program": "az",
+      "probe": [
+        "which",
+        "az"
+      ]
+    }
+  ]
+}

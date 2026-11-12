@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "infisical" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "infisical" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "infisical" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "infisical" "version" json
 
 -- | Run a child process with secrets injected into its environment.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,4 +45,4 @@ version args = do
 run_command :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), secretProject :: Maybe String, env :: Maybe String, paths :: Maybe (Array String), recursive :: Maybe Boolean, command :: Array String } -> Effect Contract.ExecutionResult
 run_command args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "infisical" "run_command" json
+  Native.executeWithSetup Dependencies.ensureFor "infisical" "run_command" json

@@ -1,0 +1,10 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"../../setup/bun\"\nsdk = \"purescript\"\n",
+    "dependency::setup-flakehub-push": "path:name = \"setup-flakehub-push\"\nruntime = \"component\"\npath = \"../../setup/flakehub-push\"\nsdk = \"purescript\"\n",
+    "dependency::setup-nix": "path:name = \"setup-nix\"\nruntime = \"component\"\npath = \"../../setup/nix\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

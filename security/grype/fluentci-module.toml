@@ -1,0 +1,11 @@
+name = "grype"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-grype = { path = "../../setup/grype", sdk = "purescript", runtime = "component" }

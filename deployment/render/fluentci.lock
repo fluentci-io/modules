@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-render": "path:name = \"setup-render\"\nruntime = \"component\"\npath = \"../../setup/render\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -1,4 +1,4 @@
-module CI.Gemfury (upload, uploadFiles) where
+module CI.Gemfury (upload, uploadFiles, uploadFilesWithSetup) where
 
 import Prelude
 import Data.Array as Array
@@ -50,7 +50,10 @@ validatePath path = do
 
 -- Credentials remain environment references in argv, without shell expansion.
 publish :: Array String -> Effect Unit
-publish paths = do
+publish = publishWithSetup (pure unit)
+
+publishWithSetup :: Effect Unit -> Array String -> Effect Unit
+publishWithSetup setupDependency paths = do
   when (Array.null paths) $ throw "At least one package path is required"
   traverse_ validatePath paths
   user <- requiredEnv "FURY_USER"
@@ -65,6 +68,7 @@ publish paths = do
     run [ "test", "-f", path ]
     run [ "test", "-r", path ]
     run [ "test", "-s", path ]) paths
+  setupDependency
   traverse_ (\path -> run
     [ "curl", "--fail-with-body", "--silent", "--show-error"
     , "--variable", "%FURY_USER", "--variable", "%FURY_TOKEN"
@@ -73,6 +77,9 @@ publish paths = do
 
 uploadFiles :: Array String -> Effect Unit
 uploadFiles paths = withToken (publish paths)
+
+uploadFilesWithSetup :: Effect Unit -> Array String -> Effect Unit
+uploadFilesWithSetup setupDependency paths = withToken (publishWithSetup setupDependency paths)
 
 -- CLI input is one literal path, with FURY_PACKAGE as an environment fallback.
 upload :: Effect Unit

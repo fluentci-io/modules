@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-nix-package": "path:name = \"setup-nix-package\"\nruntime = \"component\"\npath = \"../../setup/nix-package\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "azure" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "azure" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "azure" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "azure" "version" json
 
 -- | account show
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -39,7 +40,7 @@ version args = do
 account_show :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 account_show args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "azure" "account_show" json
+  Native.executeWithSetup Dependencies.ensureFor "azure" "account_show" json
 
 -- | Deploy an ARM or Bicep template to a resource group.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -54,7 +55,7 @@ account_show args = do
 group_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), resourceGroup :: String, templateFile :: String, name :: Maybe String, parameters :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 group_deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "azure" "group_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "azure" "group_deploy" json
 
 -- | webapp deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -69,4 +70,4 @@ group_deploy args = do
 webapp_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), resourceGroup :: String, name :: String, srcPath :: String, "type" :: Maybe String } -> Effect Contract.ExecutionResult
 webapp_deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "azure" "webapp_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "azure" "webapp_deploy" json

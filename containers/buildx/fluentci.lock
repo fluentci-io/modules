@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-buildx": "path:name = \"setup-buildx\"\nruntime = \"component\"\npath = \"../../setup/buildx\"\nsdk = \"purescript\"\n",
+    "dependency::setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"../../setup/docker\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -1,0 +1,13 @@
+{
+  "module": "semgrep",
+  "requirements": [
+    {
+      "alias": "setup-semgrep",
+      "program": "semgrep",
+      "probe": [
+        "which",
+        "semgrep"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-podman": "path:name = \"setup-podman\"\nruntime = \"component\"\npath = \"../../setup/podman\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

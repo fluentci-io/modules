@@ -1,0 +1,13 @@
+{
+  "module": "actionlint",
+  "requirements": [
+    {
+      "alias": "setup-actionlint",
+      "program": "actionlint",
+      "probe": [
+        "which",
+        "actionlint"
+      ]
+    }
+  ]
+}

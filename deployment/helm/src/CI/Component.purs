@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "helm" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "helm" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "helm" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "helm" "version" json
 
 -- | lint
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), strict :: Maybe Boolean, values :: Maybe (Array String), chart :: String } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "helm" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "helm" "lint" json
 
 -- | template
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,7 +59,7 @@ lint args = do
 template :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), namespace :: Maybe String, values :: Maybe (Array String), set :: Maybe (Array String), release :: String, chart :: String } -> Effect Contract.ExecutionResult
 template args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "helm" "template" json
+  Native.executeWithSetup Dependencies.ensureFor "helm" "template" json
 
 -- | Install or upgrade a release in the configured cluster.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -77,7 +78,7 @@ template args = do
 upgrade :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), namespace :: Maybe String, values :: Maybe (Array String), set :: Maybe (Array String), createNamespace :: Maybe Boolean, wait :: Maybe Boolean, timeout :: Maybe String, release :: String, chart :: String } -> Effect Contract.ExecutionResult
 upgrade args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "helm" "upgrade" json
+  Native.executeWithSetup Dependencies.ensureFor "helm" "upgrade" json
 
 -- | uninstall
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -91,4 +92,4 @@ upgrade args = do
 uninstall :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), namespace :: Maybe String, wait :: Maybe Boolean, release :: String } -> Effect Contract.ExecutionResult
 uninstall args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "helm" "uninstall" json
+  Native.executeWithSetup Dependencies.ensureFor "helm" "uninstall" json

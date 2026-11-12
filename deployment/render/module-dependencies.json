@@ -1,0 +1,13 @@
+{
+  "module": "render",
+  "requirements": [
+    {
+      "alias": "setup-render",
+      "program": "render",
+      "probe": [
+        "which",
+        "render"
+      ]
+    }
+  ]
+}

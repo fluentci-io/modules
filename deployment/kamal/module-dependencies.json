@@ -1,0 +1,13 @@
+{
+  "module": "kamal",
+  "requirements": [
+    {
+      "alias": "setup-kamal",
+      "program": "kamal",
+      "probe": [
+        "which",
+        "kamal"
+      ]
+    }
+  ]
+}

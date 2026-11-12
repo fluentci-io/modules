@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "render" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "render" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "render" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "render" "version" json
 
 -- | services
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -39,7 +40,7 @@ version args = do
 services :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 services args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "render" "services" json
+  Native.executeWithSetup Dependencies.ensureFor "render" "services" json
 
 -- | deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -53,7 +54,7 @@ services args = do
 deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), wait :: Maybe Boolean, commit :: Maybe String, service :: String } -> Effect Contract.ExecutionResult
 deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "render" "deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "render" "deploy" json
 
 -- | deploys list
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -65,4 +66,4 @@ deploy args = do
 deploys_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), service :: String } -> Effect Contract.ExecutionResult
 deploys_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "render" "deploys_list" json
+  Native.executeWithSetup Dependencies.ensureFor "render" "deploys_list" json

@@ -1,0 +1,13 @@
+{
+  "module": "sccache",
+  "requirements": [
+    {
+      "alias": "setup-sccache",
+      "program": "sccache",
+      "probe": [
+        "which",
+        "sccache"
+      ]
+    }
+  ]
+}

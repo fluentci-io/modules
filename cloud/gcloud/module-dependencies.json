@@ -1,0 +1,13 @@
+{
+  "module": "gcloud",
+  "requirements": [
+    {
+      "alias": "setup-gcloud",
+      "program": "gcloud",
+      "probe": [
+        "which",
+        "gcloud"
+      ]
+    }
+  ]
+}

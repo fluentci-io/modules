@@ -1,6 +1,6 @@
 # Snyk
 
-Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.2+**.
+Native WebAssembly component written in PureScript. Requires **FluentCI v0.17.3+**.
 Function signatures and argument descriptions come from the compiled PureScript
 source and are embedded in the component; no raw JSON plugin input is required.
 
@@ -47,3 +47,14 @@ private regression tests and are not the published module interface.
 
 See the [component migration guide](../../docs/COMPONENTS.md) and
 [MIT License](./LICENSE).
+
+## Setup component dependency
+
+This module declares `setup-snyk` as typed native component dependencies.
+FluentCI v0.17.3+ resolves their source references while building and composes
+them into the published Wasm. Consumers need no relative source paths.
+Available tools are reused; missing prerequisites invoke setup with default
+arguments. Explicit executable overrides remain caller-managed. Configure pinned
+versions or privileged/custom installations in an earlier setup step.
+See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
+command-specific prerequisites, validation, credential skips, and CI coverage.

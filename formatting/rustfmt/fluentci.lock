@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-rustfmt": "path:name = \"setup-rustfmt\"\nruntime = \"component\"\npath = \"../../setup/rustfmt\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

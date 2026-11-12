@@ -6,6 +6,7 @@ import CI.Contract as Contract
 import Data.Either (either)
 import Effect (Effect)
 import Effect.Exception (throw)
+import CI.ModuleDependencies as Dependencies
 import CI.Cachix as Native
 import CI.Cachix.Support (unwrap)
 import FluentCI.Plugin as P
@@ -17,7 +18,7 @@ setup :: { cache :: String } -> Effect ({ enabled :: Boolean, cache :: String })
 setup args = do
   present <- P.hasEnv "CACHIX_AUTH_TOKEN" >>= unwrap
   token <- if present then P.getEnv "CACHIX_AUTH_TOKEN" >>= unwrap else pure ""
-  Native.setupWith args.cache
+  Native.setupWithSetup (Dependencies.ensureFor "nix") args.cache
   pure { enabled: trim token /= "", cache: args.cache }
 
 -- | Push the result closure to a Cachix cache using host credentials.
@@ -26,5 +27,5 @@ push :: { cache :: String } -> Effect ({ enabled :: Boolean, cache :: String })
 push args = do
   present <- P.hasEnv "CACHIX_AUTH_TOKEN" >>= unwrap
   token <- if present then P.getEnv "CACHIX_AUTH_TOKEN" >>= unwrap else pure ""
-  Native.pushResultWith args.cache
+  Native.pushResultWithSetup (Dependencies.ensureFor "nix") args.cache
   pure { enabled: trim token /= "", cache: args.cache }

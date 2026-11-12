@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-ubicloud": "path:name = \"setup-ubicloud\"\nruntime = \"component\"\npath = \"../../setup/ubicloud\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

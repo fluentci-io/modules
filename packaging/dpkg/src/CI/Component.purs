@@ -7,6 +7,7 @@ import Data.Either (either)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Exception (throw)
+import CI.ModuleDependencies as Dependencies
 import CI.Dpkg as Native
 
 -- | Build packages from a Linux dpkg package tree and target architecture.
@@ -16,7 +17,7 @@ import CI.Dpkg as Native
 build :: { directory :: String, arch :: String, output :: Maybe String } -> Effect (Array String)
 build args = do
   config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))
-  Native.buildWith config
+  Native.buildWithSetup (Dependencies.ensureFor "dpkg") config
 
 -- | Validate a Linux dpkg package tree and target architecture.
 -- | @param directory Input directory containing the package tree to validate and build.
@@ -25,5 +26,5 @@ build args = do
 validate :: { directory :: String, arch :: String, output :: Maybe String } -> Effect Boolean
 validate args = do
   config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))
-  Native.validateWith config
+  Native.validateWithSetup (Dependencies.ensureFor "dpkg") config
   pure true

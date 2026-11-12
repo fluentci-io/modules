@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "version" json
 
 -- | Build selected Bazel targets.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,7 +46,7 @@ version args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, compilationMode :: Maybe String, jobs :: Maybe Int, define :: Maybe (Array String), copt :: Maybe (Array String), targets :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "build" json
 
 -- | Build and test selected Bazel targets.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -63,7 +64,7 @@ build args = do
 test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, compilationMode :: Maybe String, jobs :: Maybe Int, define :: Maybe (Array String), copt :: Maybe (Array String), testOutput :: Maybe String, targets :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "test" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "test" json
 
 -- | Build and run a target with literal program arguments.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -81,7 +82,7 @@ test args = do
 run_target :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, compilationMode :: Maybe String, jobs :: Maybe Int, define :: Maybe (Array String), copt :: Maybe (Array String), target :: String, arguments :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 run_target args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "run_target" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "run_target" json
 
 -- | query
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -94,7 +95,7 @@ run_target args = do
 query :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), output :: Maybe String, expression :: String } -> Effect Contract.ExecutionResult
 query args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "query" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "query" json
 
 -- | clean
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -106,4 +107,4 @@ query args = do
 clean :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), expunge :: Maybe Boolean } -> Effect Contract.ExecutionResult
 clean args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "bazel" "clean" json
+  Native.executeWithSetup Dependencies.ensureFor "bazel" "clean" json

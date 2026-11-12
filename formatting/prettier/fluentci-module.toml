@@ -1,0 +1,11 @@
+name = "prettier"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-prettier = { path = "../../setup/prettier", sdk = "purescript", runtime = "component" }

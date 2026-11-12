@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-trufflehog": "path:name = \"setup-trufflehog\"\nruntime = \"component\"\npath = \"../../setup/trufflehog\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

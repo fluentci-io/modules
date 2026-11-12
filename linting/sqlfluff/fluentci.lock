@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-sqlfluff": "path:name = \"setup-sqlfluff\"\nruntime = \"component\"\npath = \"../../setup/sqlfluff\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

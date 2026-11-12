@@ -1,0 +1,13 @@
+{
+  "module": "oras",
+  "requirements": [
+    {
+      "alias": "setup-oras",
+      "program": "oras",
+      "probe": [
+        "which",
+        "oras"
+      ]
+    }
+  ]
+}

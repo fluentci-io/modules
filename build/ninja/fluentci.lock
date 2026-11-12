@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-ninja": "path:name = \"setup-ninja\"\nruntime = \"component\"\npath = \"../../setup/ninja\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

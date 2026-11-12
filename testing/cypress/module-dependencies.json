@@ -1,0 +1,21 @@
+{
+  "module": "cypress",
+  "requirements": [
+    {
+      "alias": "setup-cypress",
+      "program": "cypress",
+      "probe": [
+        "which",
+        "cypress"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    }
+  ]
+}

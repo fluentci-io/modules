@@ -1,0 +1,13 @@
+{
+  "module": "buildkit",
+  "requirements": [
+    {
+      "alias": "setup-buildkit",
+      "program": "buildctl",
+      "probe": [
+        "which",
+        "buildctl"
+      ]
+    }
+  ]
+}

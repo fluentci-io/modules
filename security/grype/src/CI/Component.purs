@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "grype" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "grype" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "grype" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "grype" "version" json
 
 -- | Scan an image, directory, or SBOM and fail on the configured severity threshold.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,7 +46,7 @@ version args = do
 scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), failOn :: Maybe String, output :: Maybe String, file :: Maybe String, config :: Maybe String, onlyFixed :: Maybe Boolean, source :: String } -> Effect Contract.ExecutionResult
 scan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "grype" "scan" json
+  Native.executeWithSetup Dependencies.ensureFor "grype" "scan" json
 
 -- | Download the current vulnerability database.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,4 +57,4 @@ scan args = do
 db_update :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 db_update args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "grype" "db_update" json
+  Native.executeWithSetup Dependencies.ensureFor "grype" "db_update" json

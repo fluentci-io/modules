@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-xata": "path:name = \"setup-xata\"\nruntime = \"component\"\npath = \"../../setup/xata\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

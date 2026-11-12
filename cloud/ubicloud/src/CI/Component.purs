@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ubicloud" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "ubicloud" "run" json
 
 -- | Request the server-provided CLI help using ubi with no arguments.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,4 +29,4 @@ run args = do
 help :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 help args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ubicloud" "help" json
+  Native.executeWithSetup Dependencies.ensureFor "ubicloud" "help" json

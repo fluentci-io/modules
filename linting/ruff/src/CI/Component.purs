@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ruff" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "ruff" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ruff" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "ruff" "version" json
 
 -- | Lint Python sources; fixes require fix=true.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,7 +46,7 @@ version args = do
 check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, select :: Maybe String, ignore :: Maybe String, outputFormat :: Maybe String, fix :: Maybe Boolean, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ruff" "check" json
+  Native.executeWithSetup Dependencies.ensureFor "ruff" "check" json
 
 -- | Format Python sources.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -59,7 +60,7 @@ check args = do
 format :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, lineLength :: Maybe Int, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 format args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ruff" "format" json
+  Native.executeWithSetup Dependencies.ensureFor "ruff" "format" json
 
 -- | Check Python formatting without writing files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -72,4 +73,4 @@ format args = do
 format_check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 format_check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ruff" "format_check" json
+  Native.executeWithSetup Dependencies.ensureFor "ruff" "format_check" json

@@ -1,7 +1,7 @@
 # Cosign
 
 Sign OCI images and release files, then enforce signature verification in CI/CD.
-Implemented in PureScript as a typed Wasm component for FluentCI v0.17.2+.
+Implemented in PureScript as a typed Wasm component for FluentCI v0.17.3+.
 Install the native CLI with [setup-cosign](../../setup/cosign/README.md).
 Blob operations target Cosign 3.x Sigstore bundles.
 
@@ -46,3 +46,14 @@ See [COMPONENT.md](./COMPONENT.md) and [OPTIONS.md](./OPTIONS.md) for named
 arguments, descriptions, and return types.
 
 [Cosign documentation](https://docs.sigstore.dev/cosign/) · [MIT License](./LICENSE).
+
+## Setup component dependency
+
+This module declares `setup-cosign` as typed native component dependencies.
+FluentCI v0.17.3+ resolves their source references while building and composes
+them into the published Wasm. Consumers need no relative source paths.
+Available tools are reused; missing prerequisites invoke setup with default
+arguments. Explicit executable overrides remain caller-managed. Configure pinned
+versions or privileged/custom installations in an earlier setup step.
+See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
+command-specific prerequisites, validation, credential skips, and CI coverage.

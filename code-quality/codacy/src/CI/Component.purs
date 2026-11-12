@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "codacy" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "codacy" "run" json
 
 -- | help
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 help :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 help args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "codacy" "help" json
+  Native.executeWithSetup Dependencies.ensureFor "codacy" "help" json
 
 -- | Upload an existing coverage report to Codacy.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,4 +45,4 @@ help args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), coverageFile :: String, language :: Maybe String, commitUuid :: Maybe String, prefix :: Maybe String, forceCoverageParser :: Maybe String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "codacy" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "codacy" "upload" json

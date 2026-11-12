@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "aws" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "aws" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "aws" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "aws" "version" json
 
 -- | Inspect the authenticated AWS principal.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 identity :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), region :: Maybe String, profile :: Maybe String, endpointUrl :: Maybe String, output :: Maybe String } -> Effect Contract.ExecutionResult
 identity args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "aws" "identity" json
+  Native.executeWithSetup Dependencies.ensureFor "aws" "identity" json
 
 -- | Copy files to, from, or between S3 locations.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -62,7 +63,7 @@ identity args = do
 s3_cp :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), region :: Maybe String, profile :: Maybe String, endpointUrl :: Maybe String, recursive :: Maybe Boolean, exclude :: Maybe (Array String), include :: Maybe (Array String), source :: String, destination :: String } -> Effect Contract.ExecutionResult
 s3_cp args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "aws" "s3_cp" json
+  Native.executeWithSetup Dependencies.ensureFor "aws" "s3_cp" json
 
 -- | Synchronize a directory or S3 prefix.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -82,7 +83,7 @@ s3_cp args = do
 s3_sync :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), region :: Maybe String, profile :: Maybe String, endpointUrl :: Maybe String, delete :: Maybe Boolean, dryrun :: Maybe Boolean, exclude :: Maybe (Array String), include :: Maybe (Array String), source :: String, destination :: String } -> Effect Contract.ExecutionResult
 s3_sync args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "aws" "s3_sync" json
+  Native.executeWithSetup Dependencies.ensureFor "aws" "s3_sync" json
 
 -- | Deploy a CloudFormation template.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -101,4 +102,4 @@ s3_sync args = do
 cloudformation_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), region :: Maybe String, profile :: Maybe String, endpointUrl :: Maybe String, templateFile :: String, stackName :: String, capabilities :: Maybe (Array String), parameterOverrides :: Maybe (Array String), noFailOnEmptyChangeset :: Maybe Boolean } -> Effect Contract.ExecutionResult
 cloudformation_deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "aws" "cloudformation_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "aws" "cloudformation_deploy" json

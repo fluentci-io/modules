@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitleaks" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "gitleaks" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitleaks" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "gitleaks" "version" json
 
 -- | Scan directory contents with findings redacted and a failing exit status on leaks.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 scan_dir :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, reportFormat :: Maybe String, reportPath :: Maybe String, directory :: Maybe String } -> Effect Contract.ExecutionResult
 scan_dir args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitleaks" "scan_dir" json
+  Native.executeWithSetup Dependencies.ensureFor "gitleaks" "scan_dir" json
 
 -- | Scan Git history, failing on detected leaks.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -59,4 +60,4 @@ scan_dir args = do
 scan_git :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, reportFormat :: Maybe String, reportPath :: Maybe String, logOpts :: Maybe String, repository :: Maybe String } -> Effect Contract.ExecutionResult
 scan_git args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitleaks" "scan_git" json
+  Native.executeWithSetup Dependencies.ensureFor "gitleaks" "scan_git" json

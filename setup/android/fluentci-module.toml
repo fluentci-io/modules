@@ -1,12 +1,12 @@
 name = "setup-android"
 version = "0.1.0"
 license = "MIT"
-description = "Install Java and a customizable Android SDK for CI/CD pipelines"
 sdk = "purescript"
 runtime = "component"
 entry = "entry.mjs"
 artifact = "dist/plugin.wasm"
 build = ["npm", "run", "build"]
+description = "Install Java and a customizable Android SDK for CI/CD pipelines"
 os = ["linux", "macos"]
 
 [dependencies]

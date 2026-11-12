@@ -1,6 +1,6 @@
 package:
   name: fluentci-cli-nix-publish
-  dependencies: [fluentci-component-contract, argonaut-core, arrays, exceptions, foldable-traversable, strings, effect, either, fluentci, fluentci-cli-common, prelude]
+  dependencies: [fluentci-component-contract, argonaut-core, argonaut-codecs, foreign-object, arrays, exceptions, foldable-traversable, strings, effect, either, fluentci, fluentci-cli-common, prelude]
 workspace:
   packageSet:
     registry: 81.11.0

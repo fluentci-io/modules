@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-nexus": "path:name = \"setup-nexus\"\nruntime = \"component\"\npath = \"../../setup/nexus\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

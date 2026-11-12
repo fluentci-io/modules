@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-tangled-artifacts": "path:name = \"setup-tangled-artifacts\"\nruntime = \"component\"\npath = \"../../setup/tangled-artifacts\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -1,7 +1,7 @@
 # PlanetScale
 
 Create preview branches, run SQL, and deploy schema changes in CI/CD pipelines.
-This PureScript Wasm component requires FluentCI v0.17.2+ and the PlanetScale
+This PureScript Wasm component requires FluentCI v0.17.3+ and the PlanetScale
 `pscale` CLI. Install it with [setup-planetscale](../../setup/planetscale/README.md).
 
 ```sh
@@ -73,3 +73,14 @@ CLI; setup package availability is documented separately.
 [COMPONENT.md](./COMPONENT.md) documents every typed argument and return;
 [OPTIONS.md](./OPTIONS.md) records native flag mappings.
 [PlanetScale CLI](https://github.com/planetscale/cli) · [MIT wrapper license](./LICENSE).
+
+## Setup component dependency
+
+This module declares `setup-planetscale` as typed native component dependencies.
+FluentCI v0.17.3+ resolves their source references while building and composes
+them into the published Wasm. Consumers need no relative source paths.
+Available tools are reused; missing prerequisites invoke setup with default
+arguments. Explicit executable overrides remain caller-managed. Configure pinned
+versions or privileged/custom installations in an earlier setup step.
+See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
+command-specific prerequisites, validation, credential skips, and CI coverage.

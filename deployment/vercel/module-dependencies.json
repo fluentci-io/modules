@@ -1,0 +1,13 @@
+{
+  "module": "vercel",
+  "requirements": [
+    {
+      "alias": "setup-vercel",
+      "program": "vercel",
+      "probe": [
+        "which",
+        "vercel"
+      ]
+    }
+  ]
+}

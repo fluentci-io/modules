@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railway" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "railway" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railway" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "railway" "version" json
 
 -- | up
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 up :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), service :: Maybe String, environment :: Maybe String, path :: Maybe String } -> Effect Contract.ExecutionResult
 up args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railway" "up" json
+  Native.executeWithSetup Dependencies.ensureFor "railway" "up" json
 
 -- | status
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -53,7 +54,7 @@ up args = do
 status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 status args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railway" "status" json
+  Native.executeWithSetup Dependencies.ensureFor "railway" "status" json
 
 -- | redeploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -65,4 +66,4 @@ status args = do
 redeploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), service :: Maybe String } -> Effect Contract.ExecutionResult
 redeploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railway" "redeploy" json
+  Native.executeWithSetup Dependencies.ensureFor "railway" "redeploy" json

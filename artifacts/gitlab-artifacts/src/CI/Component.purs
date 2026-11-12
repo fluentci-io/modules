@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitlab-artifacts" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "gitlab-artifacts" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitlab-artifacts" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "gitlab-artifacts" "version" json
 
 -- | Upload a prebuilt ZIP to the current job using GitLab job-token authentication.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), archive :: String, jobId :: String, apiUrl :: Maybe String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitlab-artifacts" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "gitlab-artifacts" "upload" json
 
 -- | download
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -57,7 +58,7 @@ upload args = do
 download :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), repo :: Maybe String, job :: String, path :: Maybe String, ref :: String } -> Effect Contract.ExecutionResult
 download args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitlab-artifacts" "download" json
+  Native.executeWithSetup Dependencies.ensureFor "gitlab-artifacts" "download" json
 
 -- | release upload
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,4 +72,4 @@ download args = do
 release_upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), repo :: Maybe String, tag :: String, files :: Array String } -> Effect Contract.ExecutionResult
 release_upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gitlab-artifacts" "release_upload" json
+  Native.executeWithSetup Dependencies.ensureFor "gitlab-artifacts" "release_upload" json

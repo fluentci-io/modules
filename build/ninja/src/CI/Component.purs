@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ninja" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "ninja" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ninja" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "ninja" "version" json
 
 -- | build
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,7 +46,7 @@ version args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), directory :: Maybe String, file :: Maybe String, jobs :: Maybe Int, verbose :: Maybe Boolean, dryRun :: Maybe Boolean, targets :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ninja" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "ninja" "build" json
 
 -- | clean
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ build args = do
 clean :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), directory :: Maybe String, file :: Maybe String, jobs :: Maybe Int, tool :: Maybe String, targets :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 clean args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ninja" "clean" json
+  Native.executeWithSetup Dependencies.ensureFor "ninja" "clean" json
 
 -- | targets
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -76,4 +77,4 @@ clean args = do
 targets :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), directory :: Maybe String, file :: Maybe String, jobs :: Maybe Int, tool :: Maybe String } -> Effect Contract.ExecutionResult
 targets args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "ninja" "targets" json
+  Native.executeWithSetup Dependencies.ensureFor "ninja" "targets" json

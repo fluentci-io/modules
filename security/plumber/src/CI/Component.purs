@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "plumber" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "plumber" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "plumber" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "plumber" "version" json
 
 -- | Audit GitHub Actions/GitLab CI with a score gate and failing provider/collection errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -50,7 +51,7 @@ version args = do
 analyze :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), provider :: Maybe String, repository :: Maybe String, config :: Maybe String, minScore :: Maybe String, minPoints :: Maybe Int, output :: Maybe String, sarif :: Maybe String, glsast :: Maybe String, pbom :: Maybe String, branch :: Maybe String, target :: Maybe String } -> Effect Contract.ExecutionResult
 analyze args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "plumber" "analyze" json
+  Native.executeWithSetup Dependencies.ensureFor "plumber" "analyze" json
 
 -- | Validate Plumber policy configuration without running a repository audit.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -62,4 +63,4 @@ analyze args = do
 validate_config :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String } -> Effect Contract.ExecutionResult
 validate_config args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "plumber" "validate_config" json
+  Native.executeWithSetup Dependencies.ensureFor "plumber" "validate_config" json

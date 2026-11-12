@@ -1,0 +1,21 @@
+{
+  "module": "gh-artifact",
+  "requirements": [
+    {
+      "alias": "setup-gh-artifact",
+      "program": "gh",
+      "probe": [
+        "which",
+        "gh"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    }
+  ]
+}

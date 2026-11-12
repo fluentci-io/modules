@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-rclone": "path:name = \"setup-rclone\"\nruntime = \"component\"\npath = \"../../setup/rclone\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

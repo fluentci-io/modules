@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "actionlint" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "actionlint" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "actionlint" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "actionlint" "version" json
 
 -- | Lint workflows, discovering .github/workflows when files is empty.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,4 +46,4 @@ version args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configFile :: Maybe String, format :: Maybe String, shellcheck :: Maybe String, pyflakes :: Maybe String, color :: Maybe Boolean, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "actionlint" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "actionlint" "lint" json

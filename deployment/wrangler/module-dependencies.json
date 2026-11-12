@@ -1,0 +1,13 @@
+{
+  "module": "wrangler",
+  "requirements": [
+    {
+      "alias": "setup-wrangler",
+      "program": "wrangler",
+      "probe": [
+        "which",
+        "wrangler"
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "tangled-artifacts" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "tangled-artifacts" "run" json
 
 -- | Upload files as assets attached to an existing annotated Tangled tag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -32,4 +33,4 @@ run args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), username :: String, tag :: String, repository :: String, files :: Array String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "tangled-artifacts" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "tangled-artifacts" "upload" json

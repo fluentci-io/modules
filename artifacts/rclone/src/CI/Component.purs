@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rclone" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "rclone" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rclone" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "rclone" "version" json
 
 -- | copy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,7 +45,7 @@ version args = do
 copy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), checksum :: Maybe Boolean, immutable :: Maybe Boolean, transfers :: Maybe Int, source :: String, destination :: String } -> Effect Contract.ExecutionResult
 copy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rclone" "copy" json
+  Native.executeWithSetup Dependencies.ensureFor "rclone" "copy" json
 
 -- | copyto
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -59,7 +60,7 @@ copy args = do
 copyto :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), checksum :: Maybe Boolean, immutable :: Maybe Boolean, source :: String, destination :: String } -> Effect Contract.ExecutionResult
 copyto args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rclone" "copyto" json
+  Native.executeWithSetup Dependencies.ensureFor "rclone" "copyto" json
 
 -- | Verify transferred artifact content against the source.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -73,7 +74,7 @@ copyto args = do
 check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), oneWay :: Maybe Boolean, source :: String, destination :: String } -> Effect Contract.ExecutionResult
 check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rclone" "check" json
+  Native.executeWithSetup Dependencies.ensureFor "rclone" "check" json
 
 -- | lsjson
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -86,4 +87,4 @@ check args = do
 lsjson :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), recursive :: Maybe Boolean, path :: String } -> Effect Contract.ExecutionResult
 lsjson args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rclone" "lsjson" json
+  Native.executeWithSetup Dependencies.ensureFor "rclone" "lsjson" json

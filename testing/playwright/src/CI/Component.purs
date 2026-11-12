@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "version" json
 
 -- | Install the test framework in project using Bun. Browser binaries are installed separately with install.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -40,7 +41,7 @@ version args = do
 setup :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), version :: Maybe String } -> Effect Contract.ExecutionResult
 setup args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "setup" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "setup" json
 
 -- | Run Playwright Test headlessly, optionally filtering projects and tests.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -64,7 +65,7 @@ setup args = do
 test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, testProject :: Maybe (Array String), grep :: Maybe String, grepInvert :: Maybe String, workers :: Maybe Int, reporter :: Maybe String, output :: Maybe String, retries :: Maybe Int, shard :: Maybe String, forbidOnly :: Maybe Boolean, failOnFlakyTests :: Maybe Boolean, updateSnapshots :: Maybe Boolean, tests :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "test" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "test" json
 
 -- | List matching tests without launching browsers.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -81,7 +82,7 @@ test args = do
 list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, testProject :: Maybe (Array String), grep :: Maybe String, grepInvert :: Maybe String, workers :: Maybe Int, tests :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "list" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "list" json
 
 -- | Install browser binaries matching the installed Playwright package.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -95,7 +96,7 @@ list args = do
 install :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), withDeps :: Maybe Boolean, onlyShell :: Maybe Boolean, browsers :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 install args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "install" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "install" json
 
 -- | Install operating-system browser dependencies; may require elevated privileges.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -107,4 +108,4 @@ install args = do
 install_deps :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), browsers :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 install_deps args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "playwright" "install_deps" json
+  Native.executeWithSetup Dependencies.ensureFor "playwright" "install_deps" json

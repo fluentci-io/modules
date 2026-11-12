@@ -1,4 +1,4 @@
-module CI.Rpmbuild (Config, decodeConfig, validateWith, buildWith, validate, build) where
+module CI.Rpmbuild (Config, decodeConfig, validateWith, buildWith, validateWithSetup, buildWithSetup, validate, build) where
 
 import Prelude
 import CI.Rpmbuild.Support as Package
@@ -57,8 +57,11 @@ packageFile arch row = case String.split (Pattern "\t") row of
   _ -> throw "Invalid RPM metadata returned by rpmspec"
 
 prepare :: Config -> Effect Prepared
-prepare config = do
-  Package.linuxTools [ "rpmbuild", "rpmspec", "rpm", "realpath" ]
+prepare = prepareWithSetup (pure unit)
+
+prepareWithSetup :: Effect Unit -> Config -> Effect Prepared
+prepareWithSetup setupDependency config = do
+  Package.linuxToolsWithSetup setupDependency [ "rpmbuild", "rpmspec", "rpm", "realpath" ]
   Package.token "arch" config.arch
   Package.path "spec" config.spec
   unless (String.endsWith (Pattern ".spec") config.spec
@@ -90,9 +93,15 @@ prepare config = do
 validateWith :: Config -> Effect Unit
 validateWith = void <<< prepare
 
+validateWithSetup :: Effect Unit -> Config -> Effect Unit
+validateWithSetup setupDependency = void <<< prepareWithSetup setupDependency
+
 buildWith :: Config -> Effect (Array String)
-buildWith config = do
-  prepared <- prepare config
+buildWith = buildWithSetup (pure unit)
+
+buildWithSetup :: Effect Unit -> Config -> Effect (Array String)
+buildWithSetup setupDependency config = do
+  prepared <- prepareWithSetup setupDependency config
   let checked = prepared.config
   Package.run ([ "mkdir", "-p", "--", checked.output ] <>
     map (\name -> checked.directory <> "/" <> name) [ "BUILD", "BUILDROOT", "SRPMS" ])

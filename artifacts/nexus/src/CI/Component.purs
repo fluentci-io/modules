@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nexus" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "nexus" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nexus" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "nexus" "version" json
 
 -- | Upload a file to a Nexus raw-repository URL.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), curlConfig :: Maybe String, file :: String, url :: String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nexus" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "nexus" "upload" json
 
 -- | Download a raw artifact, failing on HTTP errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,7 +57,7 @@ upload args = do
 download :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), curlConfig :: Maybe String, output :: String, url :: String } -> Effect Contract.ExecutionResult
 download args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nexus" "download" json
+  Native.executeWithSetup Dependencies.ensureFor "nexus" "download" json
 
 -- | head
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -69,4 +70,4 @@ download args = do
 head :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), curlConfig :: Maybe String, url :: String } -> Effect Contract.ExecutionResult
 head args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nexus" "head" json
+  Native.executeWithSetup Dependencies.ensureFor "nexus" "head" json

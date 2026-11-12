@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-gemfury": "path:name = \"setup-gemfury\"\nruntime = \"component\"\npath = \"../../setup/gemfury\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

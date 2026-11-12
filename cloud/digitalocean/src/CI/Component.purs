@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "version" json
 
 -- | account get
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -39,7 +40,7 @@ version args = do
 account_get :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 account_get args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "account_get" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "account_get" json
 
 -- | droplets list
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -50,7 +51,7 @@ account_get args = do
 droplets_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 droplets_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "droplets_list" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "droplets_list" json
 
 -- | apps create
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -62,7 +63,7 @@ droplets_list args = do
 apps_create :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), spec :: String } -> Effect Contract.ExecutionResult
 apps_create args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "apps_create" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "apps_create" json
 
 -- | apps update
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -75,7 +76,7 @@ apps_create args = do
 apps_update :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), spec :: String, app :: String } -> Effect Contract.ExecutionResult
 apps_update args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "apps_update" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "apps_update" json
 
 -- | apps deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -89,4 +90,4 @@ apps_update args = do
 apps_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), forceRebuild :: Maybe Boolean, wait :: Maybe Boolean, app :: String } -> Effect Contract.ExecutionResult
 apps_deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "digitalocean" "apps_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "digitalocean" "apps_deploy" json

@@ -1,0 +1,13 @@
+{
+  "module": "uv",
+  "requirements": [
+    {
+      "alias": "setup-uv",
+      "program": "uv",
+      "probe": [
+        "which",
+        "uv"
+      ]
+    }
+  ]
+}

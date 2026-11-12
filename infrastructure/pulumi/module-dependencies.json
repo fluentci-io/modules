@@ -1,0 +1,13 @@
+{
+  "module": "pulumi",
+  "requirements": [
+    {
+      "alias": "setup-pulumi",
+      "program": "pulumi",
+      "probe": [
+        "which",
+        "pulumi"
+      ]
+    }
+  ]
+}

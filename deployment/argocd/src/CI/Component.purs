@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "argocd" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "argocd" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "argocd" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "argocd" "version" json
 
 -- | app get
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 app_get :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), server :: Maybe String, grpcWeb :: Maybe Boolean, output :: Maybe String, application :: String } -> Effect Contract.ExecutionResult
 app_get args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "argocd" "app_get" json
+  Native.executeWithSetup Dependencies.ensureFor "argocd" "app_get" json
 
 -- | app sync
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -59,7 +60,7 @@ app_get args = do
 app_sync :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), server :: Maybe String, grpcWeb :: Maybe Boolean, revision :: Maybe String, prune :: Maybe Boolean, application :: String } -> Effect Contract.ExecutionResult
 app_sync args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "argocd" "app_sync" json
+  Native.executeWithSetup Dependencies.ensureFor "argocd" "app_sync" json
 
 -- | app wait
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -74,4 +75,4 @@ app_sync args = do
 app_wait :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), server :: Maybe String, grpcWeb :: Maybe Boolean, timeout :: Maybe Int, application :: String } -> Effect Contract.ExecutionResult
 app_wait args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "argocd" "app_wait" json
+  Native.executeWithSetup Dependencies.ensureFor "argocd" "app_wait" json

@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "version" json
 
 -- | hcl fmt
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -39,7 +40,7 @@ version args = do
 hcl_fmt :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 hcl_fmt args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "hcl_fmt" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "hcl_fmt" json
 
 -- | Run init in the current Terragrunt unit.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -50,7 +51,7 @@ hcl_fmt args = do
 init :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 init args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "init" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "init" json
 
 -- | Run plan in the current Terragrunt unit.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ init args = do
 plan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 plan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "plan" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "plan" json
 
 -- | Run apply in the current Terragrunt unit.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -73,7 +74,7 @@ plan args = do
 apply :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), autoApprove :: Maybe Boolean } -> Effect Contract.ExecutionResult
 apply args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "apply" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "apply" json
 
 -- | Run destroy in the current Terragrunt unit.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -85,7 +86,7 @@ apply args = do
 destroy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), autoApprove :: Maybe Boolean } -> Effect Contract.ExecutionResult
 destroy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "destroy" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "destroy" json
 
 -- | validate
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -96,4 +97,4 @@ destroy args = do
 validate :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 validate args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terragrunt" "validate" json
+  Native.executeWithSetup Dependencies.ensureFor "terragrunt" "validate" json

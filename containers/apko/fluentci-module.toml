@@ -1,0 +1,11 @@
+name = "apko"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-apko = { path = "../../setup/apko", sdk = "purescript", runtime = "component" }

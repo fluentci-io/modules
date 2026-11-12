@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trufflehog" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "trufflehog" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trufflehog" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "trufflehog" "version" json
 
 -- | Scan local files for secrets without verifying credentials against remote services.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 filesystem :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), includeDetectors :: Maybe String, excludeDetectors :: Maybe String, concurrency :: Maybe Int, paths :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 filesystem args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trufflehog" "filesystem" json
+  Native.executeWithSetup Dependencies.ensureFor "trufflehog" "filesystem" json
 
 -- | Scan a Git repository without credential verification.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,4 +59,4 @@ filesystem args = do
 git :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), sinceCommit :: Maybe String, branch :: Maybe String, maxDepth :: Maybe Int, repository :: String } -> Effect Contract.ExecutionResult
 git args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "trufflehog" "git" json
+  Native.executeWithSetup Dependencies.ensureFor "trufflehog" "git" json

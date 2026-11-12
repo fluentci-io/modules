@@ -1,0 +1,13 @@
+{
+  "module": "xata",
+  "requirements": [
+    {
+      "alias": "setup-xata",
+      "program": "xata",
+      "probe": [
+        "which",
+        "xata"
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "version" json
 
 -- | Upload build artifacts using a configured JFrog server.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,7 +47,7 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, flat :: Maybe Boolean, recursive :: Maybe Boolean, buildName :: Maybe String, buildNumber :: Maybe String, pattern :: String, target :: String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "upload" json
 
 -- | download
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ upload args = do
 download :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, flat :: Maybe Boolean, pattern :: String, destination :: Maybe String } -> Effect Contract.ExecutionResult
 download args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "download" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "download" json
 
 -- | search
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -74,7 +75,7 @@ download args = do
 search :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, pattern :: String } -> Effect Contract.ExecutionResult
 search args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "search" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "search" json
 
 -- | build publish
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -88,7 +89,7 @@ search args = do
 build_publish :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, buildName :: String, buildNumber :: String } -> Effect Contract.ExecutionResult
 build_publish args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "build_publish" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "build_publish" json
 
 -- | build promote
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -105,4 +106,4 @@ build_publish args = do
 build_promote :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, copy :: Maybe Boolean, status :: Maybe String, buildName :: String, buildNumber :: String, targetRepository :: String } -> Effect Contract.ExecutionResult
 build_promote args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "jfrog-cli" "build_promote" json
+  Native.executeWithSetup Dependencies.ensureFor "jfrog-cli" "build_promote" json

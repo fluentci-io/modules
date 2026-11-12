@@ -1,0 +1,13 @@
+{
+  "module": "syft",
+  "requirements": [
+    {
+      "alias": "setup-syft",
+      "program": "syft",
+      "probe": [
+        "which",
+        "syft"
+      ]
+    }
+  ]
+}

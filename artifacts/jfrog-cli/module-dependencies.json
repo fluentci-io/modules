@@ -1,0 +1,13 @@
+{
+  "module": "jfrog-cli",
+  "requirements": [
+    {
+      "alias": "setup-jfrog-cli",
+      "program": "jf",
+      "probe": [
+        "which",
+        "jf"
+      ]
+    }
+  ]
+}

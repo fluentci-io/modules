@@ -1,4 +1,4 @@
-module CI.Dpkg (Config, decodeConfig, validateWith, buildWith, validate, build) where
+module CI.Dpkg (Config, decodeConfig, validateWith, buildWith, validateWithSetup, buildWithSetup, validate, build) where
 
 import Prelude
 import CI.Dpkg.Support as Package
@@ -44,8 +44,11 @@ controlField name contents = do
 
 -- Return canonical paths and architecture after checking layout and metadata.
 prepare :: Config -> Effect Config
-prepare config = do
-  Package.linuxTools [ "dpkg-deb", "dpkg", "realpath" ]
+prepare = prepareWithSetup (pure unit)
+
+prepareWithSetup :: Effect Unit -> Config -> Effect Config
+prepareWithSetup setupDependency config = do
+  Package.linuxToolsWithSetup setupDependency [ "dpkg-deb", "dpkg", "realpath" ]
   Package.token "arch" config.arch
   Package.path "output" config.output
   unless (String.endsWith (Pattern ".deb") config.output) $ throw "output must be a .deb file path"
@@ -71,9 +74,15 @@ prepare config = do
 validateWith :: Config -> Effect Unit
 validateWith = void <<< prepare
 
+validateWithSetup :: Effect Unit -> Config -> Effect Unit
+validateWithSetup setupDependency = void <<< prepareWithSetup setupDependency
+
 buildWith :: Config -> Effect (Array String)
-buildWith config = do
-  checked <- prepare config
+buildWith = buildWithSetup (pure unit)
+
+buildWithSetup :: Effect Unit -> Config -> Effect (Array String)
+buildWithSetup setupDependency config = do
+  checked <- prepareWithSetup setupDependency config
   parent <- trim <$> Package.capture [ "dirname", "--", checked.output ]
   Package.run [ "mkdir", "-p", "--", parent ]
   -- Keep dpkg-deb's own control syntax and maintainer-script permission checks.

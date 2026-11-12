@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run a native command with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railpack" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "railpack" "run" json
 
 -- | Print the installed tool version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railpack" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "railpack" "version" json
 
 -- | Generate a build plan and metadata, failing when the project cannot be prepared.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -47,7 +48,7 @@ version args = do
 prepare :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), envNames :: Maybe (Array String), configFile :: Maybe String, buildCmd :: Maybe String, startCmd :: Maybe String, previous :: Maybe (Array String), directory :: Maybe String, planOut :: Maybe String, infoOut :: Maybe String } -> Effect Contract.ExecutionResult
 prepare args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railpack" "prepare" json
+  Native.executeWithSetup Dependencies.ensureFor "railpack" "prepare" json
 
 -- | Build a project into an image through a configured BuildKit daemon.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,7 +72,7 @@ prepare args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), envNames :: Maybe (Array String), configFile :: Maybe String, buildCmd :: Maybe String, startCmd :: Maybe String, previous :: Maybe (Array String), directory :: Maybe String, name :: String, platform :: Maybe String, progress :: Maybe String, output :: Maybe String, cacheFrom :: Maybe (Array String), cacheTo :: Maybe (Array String), noCache :: Maybe Boolean } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railpack" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "railpack" "build" json
 
 -- | Inspect detected runtimes, dependencies, and build requirements.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -85,7 +86,7 @@ build args = do
 info :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), format :: Maybe String, out :: Maybe String, directory :: Maybe String } -> Effect Contract.ExecutionResult
 info args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railpack" "info" json
+  Native.executeWithSetup Dependencies.ensureFor "railpack" "info" json
 
 -- | Print the Railpack configuration JSON schema.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -96,4 +97,4 @@ info args = do
 schema :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 schema args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "railpack" "schema" json
+  Native.executeWithSetup Dependencies.ensureFor "railpack" "schema" json

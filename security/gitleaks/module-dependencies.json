@@ -1,0 +1,13 @@
+{
+  "module": "gitleaks",
+  "requirements": [
+    {
+      "alias": "setup-gitleaks",
+      "program": "gitleaks",
+      "probe": [
+        "which",
+        "gitleaks"
+      ]
+    }
+  ]
+}

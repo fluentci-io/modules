@@ -1,10 +1,15 @@
 # FluentCI Modules
 
 Reusable CI/CD modules written in PureScript and compiled to native WebAssembly
-components for FluentCI **v0.17.2+**. Version 0.2.0 uses named typed arguments
+components for FluentCI **v0.17.3+**. Version 0.2.0 uses named typed arguments
 and native return values; see the [migration guide](./docs/COMPONENTS.md). Build containers, package Linux applications, publish artifacts, and
 cache Nix build outputs, format and lint sources, manage infrastructure, and
 deploy applications using independently configured modules.
+
+Operation modules declare their matching `setup-*` components as typed dependencies.
+Missing tools are installed on demand; existing tools and explicit executable overrides
+are preserved. See [module dependencies](./docs/MODULE_DEPENDENCIES.md) for publishing
+and runtime behavior.
 
 ## Modules
 

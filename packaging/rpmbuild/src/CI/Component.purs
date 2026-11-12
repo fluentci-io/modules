@@ -7,6 +7,7 @@ import Data.Either (either)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Exception (throw)
+import CI.ModuleDependencies as Dependencies
 import CI.Rpmbuild as Native
 
 -- | Build packages from a Linux rpmbuild package tree and target architecture.
@@ -17,7 +18,7 @@ import CI.Rpmbuild as Native
 build :: { directory :: String, arch :: String, output :: Maybe String, spec :: String } -> Effect (Array String)
 build args = do
   config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))
-  Native.buildWith config
+  Native.buildWithSetup (Dependencies.ensureFor "rpmbuild") config
 
 -- | Validate a Linux rpmbuild package tree and target architecture.
 -- | @param directory Input directory containing the package tree to validate and build.
@@ -27,5 +28,5 @@ build args = do
 validate :: { directory :: String, arch :: String, output :: Maybe String, spec :: String } -> Effect Boolean
 validate args = do
   config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))
-  Native.validateWith config
+  Native.validateWithSetup (Dependencies.ensureFor "rpmbuild") config
   pure true

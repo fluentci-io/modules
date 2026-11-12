@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-plumber": "path:name = \"setup-plumber\"\nruntime = \"component\"\npath = \"../../setup/plumber\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

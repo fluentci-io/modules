@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute any PlanetScale CLI feature with literal CSV arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "run" json
 
 -- | Print the installed pscale CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String } -> Effect Contract.ExecutionResult
 version args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "version" json
 
 -- | Run the complete pscale agents command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -41,7 +42,7 @@ version args = do
 agents :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 agents args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "agents" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "agents" json
 
 -- | Run the complete pscale login command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -54,7 +55,7 @@ agents args = do
 login :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 login args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "login" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "login" json
 
 -- | Run the complete pscale logout command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -67,7 +68,7 @@ login args = do
 logout :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 logout args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "logout" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "logout" json
 
 -- | Run the complete pscale agent-guide command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -80,7 +81,7 @@ logout args = do
 agent_guide :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 agent_guide args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "agent_guide" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "agent_guide" json
 
 -- | Run the complete pscale api command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -93,7 +94,7 @@ agent_guide args = do
 api :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 api args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "api" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "api" json
 
 -- | Run the complete pscale audit-log command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -106,7 +107,7 @@ api args = do
 audit_log :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 audit_log args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "audit_log" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "audit_log" json
 
 -- | Run the complete pscale auth command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -119,7 +120,7 @@ audit_log args = do
 auth :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 auth args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "auth" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "auth" json
 
 -- | Run the complete pscale billing command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -132,7 +133,7 @@ auth args = do
 billing :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 billing args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "billing" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "billing" json
 
 -- | Run the complete pscale completion command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -145,7 +146,7 @@ billing args = do
 completion :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 completion args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "completion" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "completion" json
 
 -- | Run the complete pscale org command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -158,7 +159,7 @@ completion args = do
 org :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 org args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "org" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "org" json
 
 -- | Run the complete pscale ping command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -171,7 +172,7 @@ org args = do
 ping :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 ping args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "ping" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "ping" json
 
 -- | Run the complete pscale region command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -184,7 +185,7 @@ ping args = do
 region :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 region args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "region" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "region" json
 
 -- | Run the complete pscale signup command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -197,7 +198,7 @@ region args = do
 signup :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 signup args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "signup" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "signup" json
 
 -- | Run the complete pscale size command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -210,7 +211,7 @@ signup args = do
 size :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 size args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "size" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "size" json
 
 -- | Run the complete pscale service-token command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -223,7 +224,7 @@ size args = do
 service_token :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 service_token args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "service_token" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "service_token" json
 
 -- | Run the complete pscale backup command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -236,7 +237,7 @@ service_token args = do
 backup :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 backup args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "backup" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "backup" json
 
 -- | Run the complete pscale branch command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -249,7 +250,7 @@ backup args = do
 branch :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "branch" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "branch" json
 
 -- | Run the complete pscale database command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -262,7 +263,7 @@ branch args = do
 database :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 database args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "database" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "database" json
 
 -- | Run the complete pscale insights command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -275,7 +276,7 @@ database args = do
 insights :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 insights args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "insights" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "insights" json
 
 -- | Run the complete pscale inspect command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -288,7 +289,7 @@ insights args = do
 inspect :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 inspect args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "inspect" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "inspect" json
 
 -- | Run the complete pscale logs command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -301,7 +302,7 @@ inspect args = do
 logs :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 logs args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "logs" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "logs" json
 
 -- | Run the complete pscale metrics command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -314,7 +315,7 @@ logs args = do
 metrics :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 metrics args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "metrics" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "metrics" json
 
 -- | Run the complete pscale webhook command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -327,7 +328,7 @@ metrics args = do
 webhook :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 webhook args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "webhook" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "webhook" json
 
 -- | Run the complete pscale connect command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -340,7 +341,7 @@ webhook args = do
 connect :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 connect args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "connect" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "connect" json
 
 -- | Run the complete pscale deploy-request command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -353,7 +354,7 @@ connect args = do
 deploy_request :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 deploy_request args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "deploy_request" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "deploy_request" json
 
 -- | Run the complete pscale keyspace command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -366,7 +367,7 @@ deploy_request args = do
 keyspace :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 keyspace args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "keyspace" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "keyspace" json
 
 -- | Run the complete pscale maintenance command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -379,7 +380,7 @@ keyspace args = do
 maintenance :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 maintenance args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "maintenance" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "maintenance" json
 
 -- | Run the complete pscale password command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -392,7 +393,7 @@ maintenance args = do
 password :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 password args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "password" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "password" json
 
 -- | Run the complete pscale shell command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -405,7 +406,7 @@ password args = do
 shell :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 shell args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "shell" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "shell" json
 
 -- | Run the complete pscale import command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -418,7 +419,7 @@ shell args = do
 import_command :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 import_command args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "import_command" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "import_command" json
 
 -- | Run the complete pscale sql command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -431,7 +432,7 @@ import_command args = do
 sql :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 sql args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "sql" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "sql" json
 
 -- | Run the complete pscale workflow command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -444,7 +445,7 @@ sql args = do
 workflow :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 workflow args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "workflow" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "workflow" json
 
 -- | Run the complete pscale role command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -457,7 +458,7 @@ workflow args = do
 role_command :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 role_command args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "role_command" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "role_command" json
 
 -- | Run the complete pscale pgbouncer command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -470,7 +471,7 @@ role_command args = do
 pgbouncer :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 pgbouncer args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "pgbouncer" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "pgbouncer" json
 
 -- | Run the complete pscale dedicated-read-replica command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -483,7 +484,7 @@ pgbouncer args = do
 dedicated_read_replica :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 dedicated_read_replica args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "dedicated_read_replica" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "dedicated_read_replica" json
 
 -- | Run the complete pscale read-only-replica command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -496,7 +497,7 @@ dedicated_read_replica args = do
 read_only_replica :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 read_only_replica args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "read_only_replica" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "read_only_replica" json
 
 -- | Run the complete pscale traffic-control command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -509,7 +510,7 @@ read_only_replica args = do
 traffic_control :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 traffic_control args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "traffic_control" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "traffic_control" json
 
 -- | Create a preview branch and wait for readiness by default.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -529,7 +530,7 @@ traffic_control args = do
 branch_create :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, branch :: String, organization :: Maybe String, outputFormat :: Maybe String, fromBranch :: Maybe String, region :: Maybe String, clusterSize :: Maybe String, wait :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_create args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "branch_create" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "branch_create" json
 
 -- | List database branches for preview environment discovery.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -544,7 +545,7 @@ branch_create args = do
 branch_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, organization :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_list args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "branch_list" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "branch_list" json
 
 -- | Inspect a database branch and its readiness information.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -560,7 +561,7 @@ branch_list args = do
 branch_show :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, branch :: String, organization :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_show args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "branch_show" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "branch_show" json
 
 -- | Delete a preview branch during pipeline cleanup.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -578,7 +579,7 @@ branch_show args = do
 branch_delete :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, branch :: String, organization :: Maybe String, outputFormat :: Maybe String, force :: Maybe Boolean, deleteDescendants :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_delete args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "branch_delete" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "branch_delete" json
 
 -- | Retrieve a branch schema for inspection or artifact collection.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -594,7 +595,7 @@ branch_delete args = do
 branch_schema :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, branch :: String, organization :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_schema args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "branch_schema" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "branch_schema" json
 
 -- | List databases visible to the pipeline credentials.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -608,7 +609,7 @@ branch_schema args = do
 database_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organization :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 database_list args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "database_list" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "database_list" json
 
 -- | Open a schema deploy request from a branch.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -627,7 +628,7 @@ database_list args = do
 deploy_request_create :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, branch :: String, organization :: Maybe String, outputFormat :: Maybe String, into :: Maybe String, notes :: Maybe String, autoDeleteBranch :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 deploy_request_create args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "deploy_request_create" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "deploy_request_create" json
 
 -- | Inspect a deploy request before applying schema changes.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -643,7 +644,7 @@ deploy_request_create args = do
 deploy_request_show :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, request :: String, organization :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 deploy_request_show args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "deploy_request_show" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "deploy_request_show" json
 
 -- | Inspect schema changes in a deploy request.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -659,7 +660,7 @@ deploy_request_show args = do
 deploy_request_diff :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, requestNumber :: Int, organization :: Maybe String, outputFormat :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 deploy_request_diff args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "deploy_request_diff" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "deploy_request_diff" json
 
 -- | Deploy a schema request and wait for completion by default.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -677,7 +678,7 @@ deploy_request_diff args = do
 deploy_request_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, request :: String, organization :: Maybe String, outputFormat :: Maybe String, wait :: Maybe Boolean, strategy :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 deploy_request_deploy args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "deploy_request_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "deploy_request_deploy" json
 
 -- | Execute a noninteractive SQL query and propagate query failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -699,4 +700,4 @@ deploy_request_deploy args = do
 sql_query :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, database :: String, branch :: String, organization :: Maybe String, outputFormat :: Maybe String, query :: String, role :: Maybe String, dbname :: Maybe String, keyspace :: Maybe String, replica :: Maybe Boolean, force :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 sql_query args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "planetscale" "sql_query" json
+  Native.executeWithSetup Dependencies.ensureFor "planetscale" "sql_query" json

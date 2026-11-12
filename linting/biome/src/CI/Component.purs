@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "biome" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "biome" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "biome" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "biome" "version" json
 
 -- | Run formatter, linter, and import checks.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configPath :: Maybe String, write :: Maybe Boolean, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "biome" "check" json
+  Native.executeWithSetup Dependencies.ensureFor "biome" "check" json
 
 -- | Lint supported source files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,7 +57,7 @@ check args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configPath :: Maybe String, write :: Maybe Boolean, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "biome" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "biome" "lint" json
 
 -- | Format supported sources in place.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -69,7 +70,7 @@ lint args = do
 format :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configPath :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 format args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "biome" "format" json
+  Native.executeWithSetup Dependencies.ensureFor "biome" "format" json
 
 -- | Run read-only CI checks.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -82,4 +83,4 @@ format args = do
 ci :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configPath :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 ci args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "biome" "ci" json
+  Native.executeWithSetup Dependencies.ensureFor "biome" "ci" json

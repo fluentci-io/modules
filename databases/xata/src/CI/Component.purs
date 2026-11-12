@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute any Xata CLI feature with literal CSV arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "run" json
 
 -- | Print the installed Xata CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String } -> Effect Contract.ExecutionResult
 version args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "version" json
 
 -- | Run the complete xata skill command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 skill :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 skill args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "skill" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "skill" json
 
 -- | Run the complete xata init command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,7 +57,7 @@ skill args = do
 init :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 init args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "init" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "init" json
 
 -- | Run the complete xata onboard command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -70,7 +71,7 @@ init args = do
 onboard :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 onboard args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "onboard" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "onboard" json
 
 -- | Run the complete xata auth command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -84,7 +85,7 @@ onboard args = do
 auth :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 auth args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "auth" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "auth" json
 
 -- | Run the complete xata organization command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -98,7 +99,7 @@ auth args = do
 organization :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 organization args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "organization" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "organization" json
 
 -- | Run the complete xata project command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -112,7 +113,7 @@ organization args = do
 project :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 project args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "project" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "project" json
 
 -- | Run the complete xata branch command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -126,7 +127,7 @@ project args = do
 branch :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch" json
 
 -- | Run the complete xata keys command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -140,7 +141,7 @@ branch args = do
 keys :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 keys args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "keys" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "keys" json
 
 -- | Run the complete xata roll command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -154,7 +155,7 @@ keys args = do
 roll :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 roll args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "roll" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "roll" json
 
 -- | Run the complete xata clone command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -168,7 +169,7 @@ roll args = do
 clone :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 clone args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "clone" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "clone" json
 
 -- | Run the complete xata stream command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -182,7 +183,7 @@ clone args = do
 stream :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 stream args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "stream" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "stream" json
 
 -- | Run the complete xata status command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -196,7 +197,7 @@ stream args = do
 status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 status args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "status" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "status" json
 
 -- | Run the complete xata licenses command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -210,7 +211,7 @@ status args = do
 licenses :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 licenses args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "licenses" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "licenses" json
 
 -- | Run the complete xata checkout command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -224,7 +225,7 @@ licenses args = do
 checkout :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 checkout args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "checkout" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "checkout" json
 
 -- | Run the complete xata scratch command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -238,7 +239,7 @@ checkout args = do
 scratch :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 scratch args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "scratch" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "scratch" json
 
 -- | Run the complete xata console command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -252,7 +253,7 @@ scratch args = do
 console :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 console args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "console" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "console" json
 
 -- | Run the complete xata upgrade command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -266,7 +267,7 @@ console args = do
 upgrade :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 upgrade args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "upgrade" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "upgrade" json
 
 -- | Run the complete xata completions command surface, including every nested subcommand and native flag.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -280,7 +281,7 @@ upgrade args = do
 completions :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 completions args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "completions" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "completions" json
 
 -- | Create a preview database branch; use branch-wait-ready before running tests.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -303,7 +304,7 @@ completions args = do
 branch_create :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, name :: String, parentBranch :: Maybe String, noParent :: Maybe Boolean, region :: Maybe String, instanceType :: Maybe String, postgresVersion :: Maybe String, description :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_create args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch_create" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch_create" json
 
 -- | Delete a database branch during pipeline cleanup.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -321,7 +322,7 @@ branch_create args = do
 branch_delete :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: String, yes :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_delete args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch_delete" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch_delete" json
 
 -- | List database branches for the selected project.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -337,7 +338,7 @@ branch_delete args = do
 branch_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_list args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch_list" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch_list" json
 
 -- | Inspect a database branch and its current state.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -354,7 +355,7 @@ branch_list args = do
 branch_describe :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_describe args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch_describe" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch_describe" json
 
 -- | Block the pipeline until a branch is healthy; task timeoutMs bounds the wait.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -372,7 +373,7 @@ branch_describe args = do
 branch_wait_ready :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: String, wake :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_wait_ready args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch_wait_ready" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch_wait_ready" json
 
 -- | Write the selected branch connection string to the task stdout file.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -391,7 +392,7 @@ branch_wait_ready args = do
 branch_url :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: String, database :: Maybe String, connectionType :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 branch_url args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "branch_url" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "branch_url" json
 
 -- | Create a Xata project and its initial branch using explicit CI configuration.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -410,7 +411,7 @@ branch_url args = do
 project_create :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, name :: String, region :: Maybe String, instanceType :: Maybe String, postgresVersion :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 project_create args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "project_create" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "project_create" json
 
 -- | Run pgroll init for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -427,7 +428,7 @@ project_create args = do
 migration_init :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_init args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_init" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_init" json
 
 -- | Run pgroll start for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -445,7 +446,7 @@ migration_init args = do
 migration_start :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, migrationFile :: String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_start args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_start" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_start" json
 
 -- | Run pgroll complete for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -462,7 +463,7 @@ migration_start args = do
 migration_complete :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_complete args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_complete" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_complete" json
 
 -- | Run pgroll rollback for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -479,7 +480,7 @@ migration_complete args = do
 migration_rollback :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_rollback args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_rollback" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_rollback" json
 
 -- | Run pgroll status for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -496,7 +497,7 @@ migration_rollback args = do
 migration_status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_status args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_status" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_status" json
 
 -- | Run pgroll migrate for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -513,7 +514,7 @@ migration_status args = do
 migration_migrate :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_migrate args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_migrate" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_migrate" json
 
 -- | Run pgroll pull for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -530,7 +531,7 @@ migration_migrate args = do
 migration_pull :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_pull args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_pull" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_pull" json
 
 -- | Run pgroll baseline for the selected database branch and propagate migration failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -547,4 +548,4 @@ migration_pull args = do
 migration_baseline :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, organizationId :: Maybe String, projectId :: Maybe String, profile :: Maybe String, json :: Maybe Boolean, branch :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migration_baseline args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "xata" "migration_baseline" json
+  Native.executeWithSetup Dependencies.ensureFor "xata" "migration_baseline" json

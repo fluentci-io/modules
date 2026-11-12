@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run a native command with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "protolint" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "protolint" "run" json
 
 -- | Print the installed tool version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "protolint" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "protolint" "version" json
 
 -- | Lint Protocol Buffer style and fail on findings or parser errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configPath :: Maybe String, configDirPath :: Maybe String, reporter :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "protolint" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "protolint" "lint" json
 
 -- | Apply supported Protocol Buffer style fixes to the selected files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,4 +59,4 @@ lint args = do
 fix :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), configPath :: Maybe String, configDirPath :: Maybe String, reporter :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 fix args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "protolint" "fix" json
+  Native.executeWithSetup Dependencies.ensureFor "protolint" "fix" json

@@ -1,0 +1,11 @@
+name = "syft"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-syft = { path = "../../setup/syft", sdk = "purescript", runtime = "component" }

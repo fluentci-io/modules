@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-sqruff": "path:name = \"setup-sqruff\"\nruntime = \"component\"\npath = \"../../setup/sqruff\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

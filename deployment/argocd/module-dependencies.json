@@ -1,0 +1,13 @@
+{
+  "module": "argocd",
+  "requirements": [
+    {
+      "alias": "setup-argocd",
+      "program": "argocd",
+      "probe": [
+        "which",
+        "argocd"
+      ]
+    }
+  ]
+}

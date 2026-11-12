@@ -1,0 +1,13 @@
+{
+  "module": "checkov",
+  "requirements": [
+    {
+      "alias": "setup-checkov",
+      "program": "checkov",
+      "probe": [
+        "which",
+        "checkov"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-railway": "path:name = \"setup-railway\"\nruntime = \"component\"\npath = \"../../setup/railway\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

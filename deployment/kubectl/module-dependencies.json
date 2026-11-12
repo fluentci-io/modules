@@ -1,0 +1,13 @@
+{
+  "module": "kubectl",
+  "requirements": [
+    {
+      "alias": "setup-kubectl",
+      "program": "kubectl",
+      "probe": [
+        "which",
+        "kubectl"
+      ]
+    }
+  ]
+}

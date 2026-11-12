@@ -50,9 +50,13 @@ run = void <<< capture
 
 -- Check the host first, then actually execute each tool to check availability.
 linuxTools :: Array String -> Effect Unit
-linuxTools tools = do
+linuxTools = linuxToolsWithSetup (pure unit)
+
+linuxToolsWithSetup :: Effect Unit -> Array String -> Effect Unit
+linuxToolsWithSetup setupDependency tools = do
   os <- P.getOS >>= unwrap
   unless (os == "linux") $ throw "Linux packaging modules require a Linux host"
+  setupDependency
   traverse_ (\tool -> catchException
     (\error -> throw ("Required packaging tool is unavailable: " <> tool <> ". " <> message error))
     (run [ tool, "--version" ])) tools

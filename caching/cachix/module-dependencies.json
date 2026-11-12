@@ -1,0 +1,21 @@
+{
+  "module": "cachix",
+  "requirements": [
+    {
+      "alias": "setup-nix",
+      "program": "nix",
+      "probe": [
+        "which",
+        "nix"
+      ]
+    },
+    {
+      "alias": "setup-cachix",
+      "program": "cachix",
+      "probe": [
+        "which",
+        "cachix"
+      ]
+    }
+  ]
+}

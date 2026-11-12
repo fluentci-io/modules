@@ -1,0 +1,13 @@
+{
+  "module": "shellcheck",
+  "requirements": [
+    {
+      "alias": "setup-shellcheck",
+      "program": "shellcheck",
+      "probe": [
+        "which",
+        "shellcheck"
+      ]
+    }
+  ]
+}

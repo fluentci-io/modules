@@ -1,0 +1,13 @@
+{
+  "module": "biome",
+  "requirements": [
+    {
+      "alias": "setup-biome",
+      "program": "biome",
+      "probe": [
+        "which",
+        "biome"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"../../setup/bun\"\nsdk = \"purescript\"\n",
+    "dependency::setup-snyk": "path:name = \"setup-snyk\"\nruntime = \"component\"\npath = \"../../setup/snyk\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

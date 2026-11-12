@@ -1,0 +1,13 @@
+{
+  "module": "pgroll",
+  "requirements": [
+    {
+      "alias": "setup-pgroll",
+      "program": "pgroll",
+      "probe": [
+        "which",
+        "pgroll"
+      ]
+    }
+  ]
+}

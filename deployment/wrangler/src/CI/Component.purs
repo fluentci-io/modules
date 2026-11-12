@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run a Wrangler operation with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "run" json
 
 -- | Report the installed Wrangler version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "version" json
 
 -- | Deploy a Worker using existing Cloudflare credentials.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,7 +46,7 @@ version args = do
 deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, env :: Maybe String, name :: Maybe String, outdir :: Maybe String, minify :: Maybe Boolean, script :: Maybe String } -> Effect Contract.ExecutionResult
 deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "deploy" json
 
 -- | Bundle a Worker locally without deploying it.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -62,7 +63,7 @@ deploy args = do
 dry_run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, env :: Maybe String, name :: Maybe String, outdir :: Maybe String, minify :: Maybe Boolean, script :: Maybe String } -> Effect Contract.ExecutionResult
 dry_run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "dry_run" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "dry_run" json
 
 -- | Upload a Worker version without deploying it to traffic.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -79,7 +80,7 @@ dry_run args = do
 versions_upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, env :: Maybe String, name :: Maybe String, outdir :: Maybe String, minify :: Maybe Boolean, script :: Maybe String } -> Effect Contract.ExecutionResult
 versions_upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "versions_upload" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "versions_upload" json
 
 -- | Deploy a built site to an existing Cloudflare Pages project.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -94,7 +95,7 @@ versions_upload args = do
 pages_deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), projectName :: String, branch :: Maybe String, commitHash :: Maybe String, directory :: String } -> Effect Contract.ExecutionResult
 pages_deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "pages_deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "pages_deploy" json
 
 -- | List Cloudflare Pages projects available to the authenticated account.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -105,4 +106,4 @@ pages_deploy args = do
 pages_projects :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 pages_projects args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "wrangler" "pages_projects" json
+  Native.executeWithSetup Dependencies.ensureFor "wrangler" "pages_projects" json

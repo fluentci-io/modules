@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-terraform": "path:name = \"setup-terraform\"\nruntime = \"component\"\npath = \"../../setup/terraform\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

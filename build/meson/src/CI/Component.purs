@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "meson" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "meson" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "meson" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "meson" "version" json
 
 -- | configure
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,7 +47,7 @@ version args = do
 configure :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildtype :: Maybe String, prefix :: Maybe String, backend :: Maybe String, reconfigure :: Maybe Boolean, definitions :: Maybe (Array String), buildDir :: Maybe String, sourceDir :: Maybe String } -> Effect Contract.ExecutionResult
 configure args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "meson" "configure" json
+  Native.executeWithSetup Dependencies.ensureFor "meson" "configure" json
 
 -- | compile
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ configure args = do
 compile :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildDir :: Maybe String, jobs :: Maybe Int, verbose :: Maybe Boolean, targets :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 compile args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "meson" "compile" json
+  Native.executeWithSetup Dependencies.ensureFor "meson" "compile" json
 
 -- | test
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -76,7 +77,7 @@ compile args = do
 test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildDir :: Maybe String, jobs :: Maybe Int, suite :: Maybe (Array String), names :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "meson" "test" json
+  Native.executeWithSetup Dependencies.ensureFor "meson" "test" json
 
 -- | install
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -90,4 +91,4 @@ test args = do
 install :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildDir :: Maybe String, destdir :: Maybe String, noRebuild :: Maybe Boolean } -> Effect Contract.ExecutionResult
 install args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "meson" "install" json
+  Native.executeWithSetup Dependencies.ensureFor "meson" "install" json

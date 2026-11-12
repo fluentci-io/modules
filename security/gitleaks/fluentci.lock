@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-gitleaks": "path:name = \"setup-gitleaks\"\nruntime = \"component\"\npath = \"../../setup/gitleaks\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

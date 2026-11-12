@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run arbitrary Cosign commands with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "run" json
 
 -- | Report the installed Cosign version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "version" json
 
 -- | Sign an OCI image using a key or ambient CI OIDC credentials; publish the signature to its registry.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -41,7 +42,7 @@ version args = do
 sign :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), key :: Maybe String, image :: String } -> Effect Contract.ExecutionResult
 sign args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "sign" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "sign" json
 
 -- | Sign a local release artifact and write its Sigstore verification bundle.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -55,7 +56,7 @@ sign args = do
 sign_blob :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), key :: Maybe String, bundle :: String, file :: String } -> Effect Contract.ExecutionResult
 sign_blob args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "sign_blob" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "sign_blob" json
 
 -- | Verify an OCI image signature against an exact keyless identity and issuer; fail the pipeline on verification errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -69,7 +70,7 @@ sign_blob args = do
 verify :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), certificateIdentity :: String, certificateOidcIssuer :: String, image :: String } -> Effect Contract.ExecutionResult
 verify args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "verify" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "verify" json
 
 -- | Verify an OCI image signature against an explicit public key or KMS key.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -82,7 +83,7 @@ verify args = do
 verify_key :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), key :: String, image :: String } -> Effect Contract.ExecutionResult
 verify_key args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "verify_key" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "verify_key" json
 
 -- | Verify a release artifact and Sigstore bundle against an exact keyless identity and issuer.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -97,7 +98,7 @@ verify_key args = do
 verify_blob :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), certificateIdentity :: String, certificateOidcIssuer :: String, bundle :: String, file :: String } -> Effect Contract.ExecutionResult
 verify_blob args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "verify_blob" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "verify_blob" json
 
 -- | Verify a release artifact and Sigstore bundle against an explicit public key or KMS key.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -111,4 +112,4 @@ verify_blob args = do
 verify_blob_key :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), key :: String, bundle :: String, file :: String } -> Effect Contract.ExecutionResult
 verify_blob_key args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cosign" "verify_blob_key" json
+  Native.executeWithSetup Dependencies.ensureFor "cosign" "verify_blob_key" json

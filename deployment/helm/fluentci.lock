@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-helm": "path:name = \"setup-helm\"\nruntime = \"component\"\npath = \"../../setup/helm\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

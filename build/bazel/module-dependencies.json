@@ -1,0 +1,13 @@
+{
+  "module": "bazel",
+  "requirements": [
+    {
+      "alias": "setup-bazel",
+      "program": "bazel",
+      "probe": [
+        "which",
+        "bazel"
+      ]
+    }
+  ]
+}

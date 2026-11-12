@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-protolint": "path:name = \"setup-protolint\"\nruntime = \"component\"\npath = \"../../setup/protolint\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

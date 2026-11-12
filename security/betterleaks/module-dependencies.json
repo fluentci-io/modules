@@ -1,0 +1,13 @@
+{
+  "module": "betterleaks",
+  "requirements": [
+    {
+      "alias": "setup-betterleaks",
+      "program": "betterleaks",
+      "probe": [
+        "which",
+        "betterleaks"
+      ]
+    }
+  ]
+}

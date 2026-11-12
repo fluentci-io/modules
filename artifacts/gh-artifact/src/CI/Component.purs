@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gh-artifact" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "gh-artifact" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gh-artifact" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "gh-artifact" "version" json
 
 -- | Upload job artifacts using GitHub Actions runtime credentials and the official artifact client.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), name :: String, rootDirectory :: Maybe String, retentionDays :: Maybe Int, files :: Array String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gh-artifact" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "gh-artifact" "upload" json
 
 -- | download
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,7 +59,7 @@ upload args = do
 download :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), repo :: Maybe String, dir :: Maybe String, name :: Maybe (Array String), runId :: String } -> Effect Contract.ExecutionResult
 download args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gh-artifact" "download" json
+  Native.executeWithSetup Dependencies.ensureFor "gh-artifact" "download" json
 
 -- | release upload
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -73,7 +74,7 @@ download args = do
 release_upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), repo :: Maybe String, clobber :: Maybe Boolean, tag :: String, files :: Array String } -> Effect Contract.ExecutionResult
 release_upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gh-artifact" "release_upload" json
+  Native.executeWithSetup Dependencies.ensureFor "gh-artifact" "release_upload" json
 
 -- | release download
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -88,4 +89,4 @@ release_upload args = do
 release_download :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), repo :: Maybe String, dir :: Maybe String, pattern :: Maybe (Array String), tag :: String } -> Effect Contract.ExecutionResult
 release_download args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "gh-artifact" "release_download" json
+  Native.executeWithSetup Dependencies.ensureFor "gh-artifact" "release_download" json

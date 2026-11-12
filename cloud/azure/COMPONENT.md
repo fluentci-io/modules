@@ -1,6 +1,6 @@
 # azure component functions
 
-Requires FluentCI v0.17.2 or newer. The compiler derives native WIT signatures
+Requires FluentCI v0.17.3 or newer. The compiler derives native WIT signatures
 and embedded help from these typed PureScript functions. Optional arguments may be omitted.
 
 ## `run`

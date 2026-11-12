@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-pulumi": "path:name = \"setup-pulumi\"\nruntime = \"component\"\npath = \"../../setup/pulumi\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

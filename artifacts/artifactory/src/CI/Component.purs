@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "artifactory" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "artifactory" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "artifactory" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "artifactory" "version" json
 
 -- | Upload build artifacts using a configured JFrog server.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,7 +47,7 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, flat :: Maybe Boolean, recursive :: Maybe Boolean, buildName :: Maybe String, buildNumber :: Maybe String, pattern :: String, target :: String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "artifactory" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "artifactory" "upload" json
 
 -- | download
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ upload args = do
 download :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, flat :: Maybe Boolean, pattern :: String, destination :: Maybe String } -> Effect Contract.ExecutionResult
 download args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "artifactory" "download" json
+  Native.executeWithSetup Dependencies.ensureFor "artifactory" "download" json
 
 -- | search
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -74,4 +75,4 @@ download args = do
 search :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), serverId :: Maybe String, pattern :: String } -> Effect Contract.ExecutionResult
 search args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "artifactory" "search" json
+  Native.executeWithSetup Dependencies.ensureFor "artifactory" "search" json

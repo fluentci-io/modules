@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "version" json
 
 -- | Initialize providers and the configured backend noninteractively.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 init :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), backend :: Maybe Boolean, backendConfig :: Maybe (Array String), upgrade :: Maybe Boolean, reconfigure :: Maybe Boolean } -> Effect Contract.ExecutionResult
 init args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "init" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "init" json
 
 -- | Validate the initialized configuration.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -55,7 +56,7 @@ init args = do
 validate :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), json :: Maybe Boolean } -> Effect Contract.ExecutionResult
 validate args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "validate" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "validate" json
 
 -- | Format configuration, or check when check=true.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -69,7 +70,7 @@ validate args = do
 fmt :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), check :: Maybe Boolean, diff :: Maybe Boolean, recursive :: Maybe Boolean } -> Effect Contract.ExecutionResult
 fmt args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "fmt" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "fmt" json
 
 -- | Create an infrastructure plan without applying it.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -86,7 +87,7 @@ fmt args = do
 plan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), out :: Maybe String, refresh :: Maybe Boolean, lock :: Maybe Boolean, var :: Maybe (Array String), varFile :: Maybe (Array String), target :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 plan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "plan" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "plan" json
 
 -- | Apply changes; use a saved plan or autoApprove=true.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -102,7 +103,7 @@ plan args = do
 apply :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), autoApprove :: Maybe Boolean, var :: Maybe (Array String), varFile :: Maybe (Array String), target :: Maybe (Array String), planFile :: Maybe String } -> Effect Contract.ExecutionResult
 apply args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "apply" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "apply" json
 
 -- | Destroy managed infrastructure; autoApprove=true is required for unattended runs.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -117,7 +118,7 @@ apply args = do
 destroy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), autoApprove :: Maybe Boolean, var :: Maybe (Array String), varFile :: Maybe (Array String), target :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 destroy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "destroy" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "destroy" json
 
 -- | Read state output values.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -131,4 +132,4 @@ destroy args = do
 output :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), json :: Maybe Boolean, raw :: Maybe Boolean, name :: Maybe String } -> Effect Contract.ExecutionResult
 output args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "terraform" "output" json
+  Native.executeWithSetup Dependencies.ensureFor "terraform" "output" json

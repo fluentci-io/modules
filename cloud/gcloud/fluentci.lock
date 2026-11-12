@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-gcloud": "path:name = \"setup-gcloud\"\nruntime = \"component\"\npath = \"../../setup/gcloud\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

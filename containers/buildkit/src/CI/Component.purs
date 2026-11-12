@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "buildkit" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "buildkit" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "buildkit" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "buildkit" "version" json
 
 -- | Build a Dockerfile with named local context and dockerfile directories.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -50,7 +51,7 @@ version args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), addr :: Maybe String, context :: Maybe String, dockerfileDir :: Maybe String, opt :: Maybe (Array String), output :: Maybe (Array String), importCache :: Maybe (Array String), exportCache :: Maybe (Array String), secret :: Maybe (Array String), ssh :: Maybe (Array String), noCache :: Maybe Boolean, progress :: Maybe String } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "buildkit" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "buildkit" "build" json
 
 -- | Prune the selected BuildKit daemon cache.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -64,7 +65,7 @@ build args = do
 prune :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), addr :: Maybe String, all :: Maybe Boolean, filter :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 prune args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "buildkit" "prune" json
+  Native.executeWithSetup Dependencies.ensureFor "buildkit" "prune" json
 
 -- | Inspect BuildKit cache usage.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -78,4 +79,4 @@ prune args = do
 du :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), addr :: Maybe String, verbose :: Maybe Boolean, filter :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 du args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "buildkit" "du" json
+  Native.executeWithSetup Dependencies.ensureFor "buildkit" "du" json

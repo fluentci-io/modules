@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "oras" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "oras" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "oras" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "oras" "version" json
 
 -- | Publish typed artifacts to an OCI registry.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 push :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), artifactType :: Maybe String, annotation :: Maybe (Array String), reference :: String, files :: Array String } -> Effect Contract.ExecutionResult
 push args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "oras" "push" json
+  Native.executeWithSetup Dependencies.ensureFor "oras" "push" json
 
 -- | pull
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,7 +57,7 @@ push args = do
 pull :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), output :: Maybe String, reference :: String } -> Effect Contract.ExecutionResult
 pull args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "oras" "pull" json
+  Native.executeWithSetup Dependencies.ensureFor "oras" "pull" json
 
 -- | copy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -70,7 +71,7 @@ pull args = do
 copy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), recursive :: Maybe Boolean, source :: String, destination :: String } -> Effect Contract.ExecutionResult
 copy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "oras" "copy" json
+  Native.executeWithSetup Dependencies.ensureFor "oras" "copy" json
 
 -- | discover
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -83,4 +84,4 @@ copy args = do
 discover :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), format :: Maybe String, reference :: String } -> Effect Contract.ExecutionResult
 discover args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "oras" "discover" json
+  Native.executeWithSetup Dependencies.ensureFor "oras" "discover" json

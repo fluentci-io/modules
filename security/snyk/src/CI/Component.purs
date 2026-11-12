@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "version" json
 
 -- | Install a selected Snyk CLI release in project using Bun.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -40,7 +41,7 @@ version args = do
 setup :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), version :: Maybe String } -> Effect Contract.ExecutionResult
 setup args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "setup" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "setup" json
 
 -- | Test application dependencies and fail on vulnerabilities selected by policy.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -57,7 +58,7 @@ setup args = do
 test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), org :: Maybe String, severityThreshold :: Maybe String, file :: Maybe String, allProjects :: Maybe Boolean, exclude :: Maybe String, path :: Maybe String } -> Effect Contract.ExecutionResult
 test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "test" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "test" json
 
 -- | Run Snyk Code analysis using the configured Snyk service.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,7 +72,7 @@ test args = do
 code_test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), org :: Maybe String, severityThreshold :: Maybe String, path :: Maybe String } -> Effect Contract.ExecutionResult
 code_test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "code_test" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "code_test" json
 
 -- | Scan infrastructure-as-code configuration.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -85,7 +86,7 @@ code_test args = do
 iac_test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), org :: Maybe String, severityThreshold :: Maybe String, path :: Maybe String } -> Effect Contract.ExecutionResult
 iac_test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "iac_test" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "iac_test" json
 
 -- | Test a container image for vulnerabilities.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -100,7 +101,7 @@ iac_test args = do
 container_test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), org :: Maybe String, severityThreshold :: Maybe String, file :: Maybe String, image :: String } -> Effect Contract.ExecutionResult
 container_test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "container_test" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "container_test" json
 
 -- | Publish a dependency snapshot for ongoing monitoring.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -115,4 +116,4 @@ container_test args = do
 monitor :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), org :: Maybe String, file :: Maybe String, allProjects :: Maybe Boolean, path :: Maybe String } -> Effect Contract.ExecutionResult
 monitor args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "snyk" "monitor" json
+  Native.executeWithSetup Dependencies.ensureFor "snyk" "monitor" json

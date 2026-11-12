@@ -1,0 +1,13 @@
+{
+  "module": "protolint",
+  "requirements": [
+    {
+      "alias": "setup-protolint",
+      "program": "protolint",
+      "probe": [
+        "which",
+        "protolint"
+      ]
+    }
+  ]
+}

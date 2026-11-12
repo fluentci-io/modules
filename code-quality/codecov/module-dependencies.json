@@ -1,0 +1,13 @@
+{
+  "module": "codecov",
+  "requirements": [
+    {
+      "alias": "setup-codecov",
+      "program": "codecovcli",
+      "probe": [
+        "which",
+        "codecovcli"
+      ]
+    }
+  ]
+}

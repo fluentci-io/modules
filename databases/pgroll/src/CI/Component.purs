@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute any pgroll feature with literal CSV arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "run" json
 
 -- | Print the installed pgroll version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String } -> Effect Contract.ExecutionResult
 version args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "version" json
 
 -- | Initialize pgroll state in the target database; no migration file is required.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -47,7 +48,7 @@ version args = do
 init :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 init args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "init" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "init" json
 
 -- | Validate a migration file against the target database before application.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -67,7 +68,7 @@ init args = do
 validate :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, file :: String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 validate args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "validate" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "validate" json
 
 -- | Start a migration, backfill data, and optionally complete it.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -91,7 +92,7 @@ validate args = do
 start :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, file :: String, backfillBatchDelay :: Maybe String, backfillBatchSize :: Maybe Int, complete :: Maybe Boolean, skipValidation :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 start args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "start" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "start" json
 
 -- | Complete the currently active migration in the database; no migration file is required.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -110,7 +111,7 @@ start args = do
 complete :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 complete args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "complete" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "complete" json
 
 -- | Roll back the currently active migration; completed migrations retain native rollback limitations.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -129,7 +130,7 @@ complete args = do
 rollback :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 rollback args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "rollback" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "rollback" json
 
 -- | Apply outstanding migrations from a directory and propagate native failures.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -153,7 +154,7 @@ rollback args = do
 migrate :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, directory :: String, backfillBatchDelay :: Maybe String, backfillBatchSize :: Maybe Int, complete :: Maybe Boolean, expectOne :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 migrate args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "migrate" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "migrate" json
 
 -- | Report active migration and schema state in the target database.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -172,7 +173,7 @@ migrate args = do
 status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 status args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "status" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "status" json
 
 -- | Analyze the target database SQL schema using the native hidden diagnostic command.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -191,7 +192,7 @@ status args = do
 analyze :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 analyze args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "analyze" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "analyze" json
 
 -- | Reset migration history to a baseline and write its placeholder file without a confirmation prompt.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -213,7 +214,7 @@ analyze args = do
 baseline :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, baselineVersion :: String, directory :: String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 baseline args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "baseline" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "baseline" json
 
 -- | Pull missing migration history from the database into local files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -234,7 +235,7 @@ baseline args = do
 pull :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, directory :: String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 pull args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "pull" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "pull" json
 
 -- | Convert SQL statements from a file to a pgroll migration using native conversion rules.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -255,7 +256,7 @@ pull args = do
 convert :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, file :: String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 convert args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "convert" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "convert" json
 
 -- | Rewrite outdated migration files in place; review changes before committing them.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -276,7 +277,7 @@ convert args = do
 update :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, directory :: String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 update args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "update" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "update" json
 
 -- | Create an empty named migration file noninteractively in the working directory.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -297,7 +298,7 @@ update args = do
 create :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, name :: String, json :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 create args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "create" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "create" json
 
 -- | Access native latest subcommands through the CSV arguments string.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -316,7 +317,7 @@ create args = do
 latest :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 latest args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "latest" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "latest" json
 
 -- | Print the latest migration from the target database or local migration directory.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -336,7 +337,7 @@ latest args = do
 latest_migration :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, local :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 latest_migration args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "latest_migration" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "latest_migration" json
 
 -- | Print the latest schema from the target database or local migration directory.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -356,7 +357,7 @@ latest_migration args = do
 latest_schema :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, local :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 latest_schema args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "latest_schema" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "latest_schema" json
 
 -- | Print the latest connection URL with version schema search_path from the target database or local migration directory.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -377,7 +378,7 @@ latest_schema args = do
 latest_url :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, postgresUrl :: Maybe String, schema :: Maybe String, stateSchema :: Maybe String, lockTimeout :: Maybe Int, role :: Maybe String, useVersionSchema :: Maybe Boolean, verbose :: Maybe Boolean, local :: Maybe String, connectionString :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 latest_url args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "latest_url" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "latest_url" json
 
 -- | Generate shell completion scripts through literal native CSV arguments.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -389,4 +390,4 @@ latest_url args = do
 completion :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: Maybe String } -> Effect Contract.ExecutionResult
 completion args = do
   json <- Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput
-  Native.execute "pgroll" "completion" json
+  Native.executeWithSetup Dependencies.ensureFor "pgroll" "completion" json

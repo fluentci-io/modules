@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vercel" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "vercel" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vercel" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "vercel" "version" json
 
 -- | deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -42,7 +43,7 @@ version args = do
 deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), prod :: Maybe Boolean, prebuilt :: Maybe Boolean, path :: Maybe String } -> Effect Contract.ExecutionResult
 deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vercel" "deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "vercel" "deploy" json
 
 -- | build
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -54,7 +55,7 @@ deploy args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), prod :: Maybe Boolean } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vercel" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "vercel" "build" json
 
 -- | pull
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -66,4 +67,4 @@ build args = do
 pull :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), environment :: Maybe String } -> Effect Contract.ExecutionResult
 pull args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vercel" "pull" json
+  Native.executeWithSetup Dependencies.ensureFor "vercel" "pull" json

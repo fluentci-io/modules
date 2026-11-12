@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-meson": "path:name = \"setup-meson\"\nruntime = \"component\"\npath = \"../../setup/meson\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

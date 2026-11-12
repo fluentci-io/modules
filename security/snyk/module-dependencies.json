@@ -1,0 +1,21 @@
+{
+  "module": "snyk",
+  "requirements": [
+    {
+      "alias": "setup-snyk",
+      "program": "snyk",
+      "probe": [
+        "which",
+        "snyk"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    }
+  ]
+}

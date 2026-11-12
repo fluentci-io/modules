@@ -1,0 +1,13 @@
+{
+  "module": "rustfmt",
+  "requirements": [
+    {
+      "alias": "setup-rustfmt",
+      "program": "rustfmt",
+      "probe": [
+        "which",
+        "rustfmt"
+      ]
+    }
+  ]
+}

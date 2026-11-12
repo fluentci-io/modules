@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "version" json
 
 -- | start server
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -39,7 +40,7 @@ version args = do
 start_server :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 start_server args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "start_server" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "start_server" json
 
 -- | stop server
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -50,7 +51,7 @@ start_server args = do
 stop_server :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 stop_server args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "stop_server" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "stop_server" json
 
 -- | stats
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -62,7 +63,7 @@ stop_server args = do
 stats :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), statsFormat :: Maybe String } -> Effect Contract.ExecutionResult
 stats args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "stats" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "stats" json
 
 -- | zero stats
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -73,7 +74,7 @@ stats args = do
 zero_stats :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 zero_stats args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "zero_stats" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "zero_stats" json
 
 -- | Compile through sccache using a native compiler and literal arguments.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -86,4 +87,4 @@ zero_stats args = do
 compile :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), compiler :: String, arguments :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 compile args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sccache" "compile" json
+  Native.executeWithSetup Dependencies.ensureFor "sccache" "compile" json

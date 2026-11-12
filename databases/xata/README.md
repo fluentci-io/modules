@@ -1,7 +1,7 @@
 # Xata
 
 Manage preview database branches and schema migrations from CI/CD pipelines.
-This PureScript Wasm component requires FluentCI v0.17.2+ and the current Xata
+This PureScript Wasm component requires FluentCI v0.17.3+ and the current Xata
 Postgres platform CLI. Install it with [setup-xata](../../setup/xata/README.md).
 
 ```sh
@@ -75,3 +75,14 @@ setup availability and native database-client requirements still apply.
 [COMPONENT.md](./COMPONENT.md) lists every named argument and return type;
 [OPTIONS.md](./OPTIONS.md) records native flag mappings.
 [Xata CLI](https://github.com/xataio/cli) · [MIT wrapper license](./LICENSE).
+
+## Setup component dependency
+
+This module declares `setup-xata` as typed native component dependencies.
+FluentCI v0.17.3+ resolves their source references while building and composes
+them into the published Wasm. Consumers need no relative source paths.
+Available tools are reused; missing prerequisites invoke setup with default
+arguments. Explicit executable overrides remain caller-managed. Configure pinned
+versions or privileged/custom installations in an earlier setup step.
+See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
+command-specific prerequisites, validation, credential skips, and CI coverage.

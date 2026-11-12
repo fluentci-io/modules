@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-uv": "path:name = \"setup-uv\"\nruntime = \"component\"\npath = \"../../setup/uv\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

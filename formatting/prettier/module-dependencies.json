@@ -1,0 +1,13 @@
+{
+  "module": "prettier",
+  "requirements": [
+    {
+      "alias": "setup-prettier",
+      "program": "prettier",
+      "probe": [
+        "which",
+        "prettier"
+      ]
+    }
+  ]
+}

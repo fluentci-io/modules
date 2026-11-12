@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-netlify": "path:name = \"setup-netlify\"\nruntime = \"component\"\npath = \"../../setup/netlify\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

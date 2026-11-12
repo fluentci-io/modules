@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "version" json
 
 -- | Preview a stack update.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 preview :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), stack :: Maybe String, diff :: Maybe Boolean, refresh :: Maybe Boolean, target :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 preview args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "preview" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "preview" json
 
 -- | Apply a stack update without prompting.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,7 +59,7 @@ preview args = do
 up :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), stack :: Maybe String, diff :: Maybe Boolean, refresh :: Maybe Boolean, target :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 up args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "up" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "up" json
 
 -- | Destroy a stack without prompting.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,7 +72,7 @@ up args = do
 destroy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), stack :: Maybe String, target :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 destroy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "destroy" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "destroy" json
 
 -- | Select an existing stack.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -83,7 +84,7 @@ destroy args = do
 stack_select :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), name :: String } -> Effect Contract.ExecutionResult
 stack_select args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "stack_select" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "stack_select" json
 
 -- | Read stack outputs without revealing secret values.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -97,7 +98,7 @@ stack_select args = do
 stack_output :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), stack :: Maybe String, json :: Maybe Boolean, name :: Maybe String } -> Effect Contract.ExecutionResult
 stack_output args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "stack_output" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "stack_output" json
 
 -- | Select a backend; cloud credentials are read from the host environment.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -109,4 +110,4 @@ stack_output args = do
 login :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), backend :: Maybe String } -> Effect Contract.ExecutionResult
 login args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "pulumi" "login" json
+  Native.executeWithSetup Dependencies.ensureFor "pulumi" "login" json

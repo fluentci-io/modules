@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-syft": "path:name = \"setup-syft\"\nruntime = \"component\"\npath = \"../../setup/syft\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -1,0 +1,11 @@
+name = "gemfury"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-gemfury = { path = "../../setup/gemfury", sdk = "purescript", runtime = "component" }

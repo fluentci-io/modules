@@ -1,0 +1,13 @@
+{
+  "module": "trufflehog",
+  "requirements": [
+    {
+      "alias": "setup-trufflehog",
+      "program": "trufflehog",
+      "probe": [
+        "which",
+        "trufflehog"
+      ]
+    }
+  ]
+}

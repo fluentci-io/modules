@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-cachix": "path:name = \"setup-cachix\"\nruntime = \"component\"\npath = \"../../setup/cachix\"\nsdk = \"purescript\"\n",
+    "dependency::setup-nix": "path:name = \"setup-nix\"\nruntime = \"component\"\npath = \"../../setup/nix\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -1,0 +1,21 @@
+{
+  "module": "gitlab-artifacts",
+  "requirements": [
+    {
+      "alias": "setup-gitlab-artifacts",
+      "program": "glab",
+      "probe": [
+        "which",
+        "glab"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    }
+  ]
+}

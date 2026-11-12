@@ -1,0 +1,13 @@
+{
+  "module": "terragrunt",
+  "requirements": [
+    {
+      "alias": "setup-terragrunt",
+      "program": "terragrunt",
+      "probe": [
+        "which",
+        "terragrunt"
+      ]
+    }
+  ]
+}

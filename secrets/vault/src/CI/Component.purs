@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "version" json
 
 -- | Check server initialization and seal status; sealed servers return a failing exit code.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -39,7 +40,7 @@ version args = do
 status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 status args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "status" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "status" json
 
 -- | List key names without reading secret data.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -52,7 +53,7 @@ status args = do
 kv_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), mount :: Maybe String, path :: String } -> Effect Contract.ExecutionResult
 kv_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "kv_list" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "kv_list" json
 
 -- | Read KV v2 version metadata without reading secret values.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -65,7 +66,7 @@ kv_list args = do
 kv_metadata :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), mount :: Maybe String, path :: String } -> Effect Contract.ExecutionResult
 kv_metadata args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "kv_metadata" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "kv_metadata" json
 
 -- | Write secret data from a JSON file, reporting metadata only.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -79,7 +80,7 @@ kv_metadata args = do
 kv_put :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), mount :: Maybe String, path :: String, dataFile :: String } -> Effect Contract.ExecutionResult
 kv_put args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "kv_put" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "kv_put" json
 
 -- | Delete the latest version of a KV secret.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -92,4 +93,4 @@ kv_put args = do
 kv_delete :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), mount :: Maybe String, path :: String } -> Effect Contract.ExecutionResult
 kv_delete args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "vault" "kv_delete" json
+  Native.executeWithSetup Dependencies.ensureFor "vault" "kv_delete" json

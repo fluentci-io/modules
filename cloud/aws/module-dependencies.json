@@ -1,0 +1,13 @@
+{
+  "module": "aws",
+  "requirements": [
+    {
+      "alias": "setup-aws",
+      "program": "aws",
+      "probe": [
+        "which",
+        "aws"
+      ]
+    }
+  ]
+}

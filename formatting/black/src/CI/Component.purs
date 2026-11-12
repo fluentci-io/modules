@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "black" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "black" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "black" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "black" "version" json
 
 -- | Format Python files in place.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 format :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, lineLength :: Maybe Int, targetVersion :: Maybe (Array String), files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 format args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "black" "format" json
+  Native.executeWithSetup Dependencies.ensureFor "black" "format" json
 
 -- | Check Python formatting without writing files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -59,4 +60,4 @@ format args = do
 check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), diff :: Maybe Boolean, config :: Maybe String, lineLength :: Maybe Int, targetVersion :: Maybe (Array String), files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "black" "check" json
+  Native.executeWithSetup Dependencies.ensureFor "black" "check" json

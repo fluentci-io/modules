@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "version" json
 
 -- | Build one or more flake installables.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,7 +45,7 @@ version args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), outLink :: Maybe String, noLink :: Maybe Boolean, printOutPaths :: Maybe Boolean, noWriteLockFile :: Maybe Boolean, installables :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "build" json
 
 -- | Evaluate a Nix installable.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,7 +59,7 @@ build args = do
 eval :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), json :: Maybe Boolean, raw :: Maybe Boolean, installable :: String } -> Effect Contract.ExecutionResult
 eval args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "eval" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "eval" json
 
 -- | Evaluate and optionally build flake checks.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -73,7 +74,7 @@ eval args = do
 flake_check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), noBuild :: Maybe Boolean, keepGoing :: Maybe Boolean, noWriteLockFile :: Maybe Boolean, flake :: Maybe String } -> Effect Contract.ExecutionResult
 flake_check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "flake_check" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "flake_check" json
 
 -- | Update flake lock inputs in the project directory.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -85,7 +86,7 @@ flake_check args = do
 flake_update :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), inputs :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 flake_update args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "flake_update" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "flake_update" json
 
 -- | Install packages into a Nix profile.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -98,7 +99,7 @@ flake_update args = do
 profile_install :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), profile :: Maybe String, installables :: Array String } -> Effect Contract.ExecutionResult
 profile_install args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "profile_install" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "profile_install" json
 
 -- | Garbage-collect unreferenced Nix store paths.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -109,4 +110,4 @@ profile_install args = do
 store_gc :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 store_gc args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-package" "store_gc" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-package" "store_gc" json

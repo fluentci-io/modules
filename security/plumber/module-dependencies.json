@@ -1,0 +1,13 @@
+{
+  "module": "plumber",
+  "requirements": [
+    {
+      "alias": "setup-plumber",
+      "program": "plumber",
+      "probe": [
+        "which",
+        "plumber"
+      ]
+    }
+  ]
+}

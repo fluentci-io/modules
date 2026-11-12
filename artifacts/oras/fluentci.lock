@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-oras": "path:name = \"setup-oras\"\nruntime = \"component\"\npath = \"../../setup/oras\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

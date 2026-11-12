@@ -1,0 +1,13 @@
+{
+  "module": "apko",
+  "requirements": [
+    {
+      "alias": "setup-apko",
+      "program": "apko",
+      "probe": [
+        "which",
+        "apko"
+      ]
+    }
+  ]
+}

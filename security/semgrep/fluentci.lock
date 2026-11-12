@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-semgrep": "path:name = \"setup-semgrep\"\nruntime = \"component\"\npath = \"../../setup/semgrep\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

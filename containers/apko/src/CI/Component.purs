@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run a native command with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "apko" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "apko" "run" json
 
 -- | Print the installed tool version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "apko" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "apko" "version" json
 
 -- | Build an OCI image and SBOM from an APK package configuration.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -48,7 +49,7 @@ version args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arch :: Maybe (Array String), lockfile :: Maybe String, cacheDir :: Maybe String, offline :: Maybe Boolean, sbomPath :: Maybe String, buildDate :: Maybe String, config :: String, tag :: String, output :: String } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "apko" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "apko" "build" json
 
 -- | Build and publish an OCI image using native registry credentials.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -67,4 +68,4 @@ build args = do
 publish :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arch :: Maybe (Array String), lockfile :: Maybe String, cacheDir :: Maybe String, offline :: Maybe Boolean, sbomPath :: Maybe String, buildDate :: Maybe String, config :: String, tags :: Array String } -> Effect Contract.ExecutionResult
 publish args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "apko" "publish" json
+  Native.executeWithSetup Dependencies.ensureFor "apko" "publish" json

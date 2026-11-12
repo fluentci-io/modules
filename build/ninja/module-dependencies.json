@@ -1,0 +1,13 @@
+{
+  "module": "ninja",
+  "requirements": [
+    {
+      "alias": "setup-ninja",
+      "program": "ninja",
+      "probe": [
+        "which",
+        "ninja"
+      ]
+    }
+  ]
+}

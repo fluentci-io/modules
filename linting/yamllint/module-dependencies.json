@@ -1,0 +1,13 @@
+{
+  "module": "yamllint",
+  "requirements": [
+    {
+      "alias": "setup-yamllint",
+      "program": "yamllint",
+      "probe": [
+        "which",
+        "yamllint"
+      ]
+    }
+  ]
+}

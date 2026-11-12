@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "coveralls" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "coveralls" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "coveralls" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "coveralls" "version" json
 
 -- | Upload coverage reports using the universal Coveralls reporter.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,7 +47,7 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), format :: Maybe String, basePath :: Maybe String, jobFlag :: Maybe String, buildNumber :: Maybe String, parallel :: Maybe Boolean, dryRun :: Maybe Boolean, files :: Array String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "coveralls" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "coveralls" "upload" json
 
 -- | Close a parallel coverage build.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -60,4 +61,4 @@ upload args = do
 done :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildNumber :: String, carryforward :: Maybe String, dryRun :: Maybe Boolean } -> Effect Contract.ExecutionResult
 done args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "coveralls" "done" json
+  Native.executeWithSetup Dependencies.ensureFor "coveralls" "done" json

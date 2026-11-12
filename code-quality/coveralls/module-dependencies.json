@@ -1,0 +1,13 @@
+{
+  "module": "coveralls",
+  "requirements": [
+    {
+      "alias": "setup-coveralls",
+      "program": "coveralls",
+      "probe": [
+        "which",
+        "coveralls"
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "doppler" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "doppler" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "doppler" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "doppler" "version" json
 
 -- | Run a child process with secrets injected into its environment.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 run_command :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), dopplerProject :: Maybe String, config :: Maybe String, noCache :: Maybe Boolean, command :: Array String } -> Effect Contract.ExecutionResult
 run_command args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "doppler" "run_command" json
+  Native.executeWithSetup Dependencies.ensureFor "doppler" "run_command" json
 
 -- | List secret names without retrieving their values.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,7 +57,7 @@ run_command args = do
 names :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), dopplerProject :: Maybe String, config :: Maybe String } -> Effect Contract.ExecutionResult
 names args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "doppler" "names" json
+  Native.executeWithSetup Dependencies.ensureFor "doppler" "names" json
 
 -- | Upload a JSON or dotenv file without printing its secret values.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -70,4 +71,4 @@ names args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), dopplerProject :: Maybe String, config :: Maybe String, file :: String } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "doppler" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "doppler" "upload" json

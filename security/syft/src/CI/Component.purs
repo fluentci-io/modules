@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "syft" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "syft" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "syft" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "syft" "version" json
 
 -- | Generate an SBOM for a directory, image, or archive.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), output :: Maybe (Array String), config :: Maybe String, exclude :: Maybe (Array String), source :: String } -> Effect Contract.ExecutionResult
 scan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "syft" "scan" json
+  Native.executeWithSetup Dependencies.ensureFor "syft" "scan" json
 
 -- | Convert an existing SBOM to a supported output format.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,4 +57,4 @@ scan args = do
 convert :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), output :: Maybe (Array String), file :: String } -> Effect Contract.ExecutionResult
 convert args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "syft" "convert" json
+  Native.executeWithSetup Dependencies.ensureFor "syft" "convert" json

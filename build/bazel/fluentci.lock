@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-bazel": "path:name = \"setup-bazel\"\nruntime = \"component\"\npath = \"../../setup/bazel\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

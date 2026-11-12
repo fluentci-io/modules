@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sonarqube" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "sonarqube" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sonarqube" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "sonarqube" "version" json
 
 -- | Analyze the configured project and submit results to SonarQube.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,4 +46,4 @@ version args = do
 scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), projectKey :: Maybe String, sources :: Maybe String, hostUrl :: Maybe String, organization :: Maybe String, qualityGateWait :: Maybe Boolean, properties :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 scan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sonarqube" "scan" json
+  Native.executeWithSetup Dependencies.ensureFor "sonarqube" "scan" json

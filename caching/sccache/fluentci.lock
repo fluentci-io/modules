@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-sccache": "path:name = \"setup-sccache\"\nruntime = \"component\"\npath = \"../../setup/sccache\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-cosign": "path:name = \"setup-cosign\"\nruntime = \"component\"\npath = \"../../setup/cosign\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

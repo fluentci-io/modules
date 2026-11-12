@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "checkov" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "checkov" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "checkov" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "checkov" "version" json
 
 -- | Scan infrastructure code, failing when policy checks fail.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,4 +47,4 @@ version args = do
 scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), directory :: Maybe String, framework :: Maybe (Array String), configFile :: Maybe String, check :: Maybe String, skipCheck :: Maybe String, output :: Maybe String, outputFilePath :: Maybe String } -> Effect Contract.ExecutionResult
 scan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "checkov" "scan" json
+  Native.executeWithSetup Dependencies.ensureFor "checkov" "scan" json

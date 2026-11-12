@@ -1,0 +1,13 @@
+{
+  "module": "nexus",
+  "requirements": [
+    {
+      "alias": "setup-nexus",
+      "program": "curl",
+      "probe": [
+        "which",
+        "curl"
+      ]
+    }
+  ]
+}

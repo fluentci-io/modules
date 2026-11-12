@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-opentofu": "path:name = \"setup-opentofu\"\nruntime = \"component\"\npath = \"../../setup/opentofu\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

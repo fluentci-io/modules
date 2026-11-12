@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rustfmt" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "rustfmt" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rustfmt" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "rustfmt" "version" json
 
 -- | Format explicit Rust source files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 format :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), edition :: Maybe String, configPath :: Maybe String, config :: Maybe String, files :: Array String } -> Effect Contract.ExecutionResult
 format args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rustfmt" "format" json
+  Native.executeWithSetup Dependencies.ensureFor "rustfmt" "format" json
 
 -- | Check explicit Rust source files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -57,7 +58,7 @@ format args = do
 check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), edition :: Maybe String, configPath :: Maybe String, files :: Array String } -> Effect Contract.ExecutionResult
 check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rustfmt" "check" json
+  Native.executeWithSetup Dependencies.ensureFor "rustfmt" "check" json
 
 -- | Format a Cargo package or workspace.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,4 +72,4 @@ check args = do
 cargo_fmt :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), all :: Maybe Boolean, check :: Maybe Boolean, manifestPath :: Maybe String } -> Effect Contract.ExecutionResult
 cargo_fmt args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "rustfmt" "cargo_fmt" json
+  Native.executeWithSetup Dependencies.ensureFor "rustfmt" "cargo_fmt" json

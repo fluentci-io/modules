@@ -1,0 +1,8 @@
+name = "setup-gh"
+version = "0.2.1"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]

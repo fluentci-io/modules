@@ -1,0 +1,13 @@
+{
+  "module": "podman",
+  "requirements": [
+    {
+      "alias": "setup-podman",
+      "program": "podman",
+      "probe": [
+        "which",
+        "podman"
+      ]
+    }
+  ]
+}

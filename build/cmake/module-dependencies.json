@@ -1,0 +1,13 @@
+{
+  "module": "cmake",
+  "requirements": [
+    {
+      "alias": "setup-cmake",
+      "program": "cmake",
+      "probe": [
+        "which",
+        "cmake"
+      ]
+    }
+  ]
+}

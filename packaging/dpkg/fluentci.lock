@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-dpkg": "path:name = \"setup-dpkg\"\nruntime = \"component\"\npath = \"../../setup/dpkg\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

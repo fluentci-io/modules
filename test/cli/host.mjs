@@ -4,8 +4,8 @@ import { join } from "node:path";
 
 // Minimal host that can execute plans locally without cloud credentials.
 export function fixture(options = {}) {
-  const calls = [], plans = [], output = [];
-  const environment = { UBI_TOKEN: "fixture-token", ...options.env };
+  const calls = [], plans = [], output = [], updates = [];
+  const environment = { UBI_TOKEN: "fixture-token", FLUENTCI_GH_ARTIFACT_CLIENT: "/fixture/artifact-client.mjs", ...options.env };
   let pending = [];
   function command(args) {
     calls.push(args);
@@ -26,6 +26,11 @@ export function fixture(options = {}) {
       if (name === "get_os") return options.os ?? "linux";
       if (name === "get_env") return environment[value] ?? "";
       if (name === "has_env") return JSON.stringify(Object.hasOwn(environment, value));
+      if (name === "set_envs") {
+        const pairs=JSON.parse(value);updates.push(pairs);
+        for(const [key,data] of pairs)environment[key]=data;
+        return "";
+      }
       if (name === "execute_plan") {
         const request = JSON.parse(value);
         plans.push(request);
@@ -59,5 +64,5 @@ export function fixture(options = {}) {
       return "";
     } }),
   };
-  return { calls, plans, output };
+  return { calls, plans, output, environment, updates };
 }

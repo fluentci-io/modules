@@ -1,0 +1,13 @@
+{
+  "module": "netlify",
+  "requirements": [
+    {
+      "alias": "setup-netlify",
+      "program": "netlify",
+      "probe": [
+        "which",
+        "netlify"
+      ]
+    }
+  ]
+}

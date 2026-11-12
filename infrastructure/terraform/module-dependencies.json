@@ -1,0 +1,13 @@
+{
+  "module": "terraform",
+  "requirements": [
+    {
+      "alias": "setup-terraform",
+      "program": "terraform",
+      "probe": [
+        "which",
+        "terraform"
+      ]
+    }
+  ]
+}

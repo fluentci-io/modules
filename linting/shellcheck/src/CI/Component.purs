@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "shellcheck" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "shellcheck" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "shellcheck" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "shellcheck" "version" json
 
 -- | Check explicit shell scripts.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,4 +46,4 @@ version args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), shell :: Maybe String, severity :: Maybe String, exclude :: Maybe String, format :: Maybe String, externalSources :: Maybe Boolean, files :: Array String } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "shellcheck" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "shellcheck" "lint" json

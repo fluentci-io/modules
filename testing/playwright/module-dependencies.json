@@ -1,0 +1,21 @@
+{
+  "module": "playwright",
+  "requirements": [
+    {
+      "alias": "setup-playwright",
+      "program": "playwright",
+      "probe": [
+        "which",
+        "playwright"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    }
+  ]
+}

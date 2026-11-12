@@ -1,0 +1,13 @@
+{
+  "module": "cosign",
+  "requirements": [
+    {
+      "alias": "setup-cosign",
+      "program": "cosign",
+      "probe": [
+        "which",
+        "cosign"
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kamal" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "kamal" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kamal" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "kamal" "version" json
 
 -- | deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -41,7 +42,7 @@ version args = do
 deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), destination :: Maybe String, configFile :: Maybe String } -> Effect Contract.ExecutionResult
 deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kamal" "deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "kamal" "deploy" json
 
 -- | setup
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -54,7 +55,7 @@ deploy args = do
 setup :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), destination :: Maybe String, configFile :: Maybe String } -> Effect Contract.ExecutionResult
 setup args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kamal" "setup" json
+  Native.executeWithSetup Dependencies.ensureFor "kamal" "setup" json
 
 -- | details
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -67,7 +68,7 @@ setup args = do
 details :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), destination :: Maybe String, configFile :: Maybe String } -> Effect Contract.ExecutionResult
 details args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kamal" "details" json
+  Native.executeWithSetup Dependencies.ensureFor "kamal" "details" json
 
 -- | rollback
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -81,4 +82,4 @@ details args = do
 rollback :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), destination :: Maybe String, configFile :: Maybe String, version :: String } -> Effect Contract.ExecutionResult
 rollback args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "kamal" "rollback" json
+  Native.executeWithSetup Dependencies.ensureFor "kamal" "rollback" json

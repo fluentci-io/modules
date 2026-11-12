@@ -4,9 +4,10 @@ module CI.Component (buildx, dap, debug, history, imagetools, policy, bake, buil
 import Prelude
 import CI.Contract as Contract
 import Data.Either (either)
-import Data.Maybe (Maybe)
+import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Exception (throw)
+import CI.ModuleDependencies as Dependencies
 import Buildx as B
 import Buildx.Commands as C
 
@@ -24,6 +25,9 @@ buildx args = do
   config <- either throw pure (C.decodeBuildxArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.buildx config)
   let runtime = C.runtimeBuildx config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -41,6 +45,9 @@ dap args = do
   config <- either throw pure (C.decodeDapArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.dap config)
   let runtime = C.runtimeDap config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -60,6 +67,9 @@ debug args = do
   config <- either throw pure (C.decodeDebugArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.debug config)
   let runtime = C.runtimeDebug config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -77,6 +87,9 @@ history args = do
   config <- either throw pure (C.decodeHistoryArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.history config)
   let runtime = C.runtimeHistory config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -94,6 +107,9 @@ imagetools args = do
   config <- either throw pure (C.decodeImagetoolsArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.imagetools config)
   let runtime = C.runtimeImagetools config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -111,6 +127,9 @@ policy args = do
   config <- either throw pure (C.decodePolicyArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.policy config)
   let runtime = C.runtimePolicy config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -145,6 +164,9 @@ bake args = do
   config <- either throw pure (C.decodeBakeArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.bake config)
   let runtime = C.runtimeBake config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -197,6 +219,9 @@ build args = do
   config <- either throw pure (C.decodeBuildArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.build config)
   let runtime = C.runtimeBuild config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -226,6 +251,9 @@ create args = do
   config <- either throw pure (C.decodeCreateArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.create config)
   let runtime = C.runtimeCreate config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -244,6 +272,9 @@ dial_stdio args = do
   config <- either throw pure (C.decodeDialStdioArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.dialStdio config)
   let runtime = C.runtimeDialStdio config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -264,6 +295,9 @@ du args = do
   config <- either throw pure (C.decodeDuArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.du config)
   let runtime = C.runtimeDu config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -283,6 +317,9 @@ inspect args = do
   config <- either throw pure (C.decodeInspectArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.inspect config)
   let runtime = C.runtimeInspect config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -302,6 +339,9 @@ ls args = do
   config <- either throw pure (C.decodeLsArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.ls config)
   let runtime = C.runtimeLs config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -326,6 +366,9 @@ prune args = do
   config <- either throw pure (C.decodePruneArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.prune config)
   let runtime = C.runtimePrune config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -348,6 +391,9 @@ rm args = do
   config <- either throw pure (C.decodeRmArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.rm config)
   let runtime = C.runtimeRm config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -365,6 +411,9 @@ stop args = do
   config <- either throw pure (C.decodeStopArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.stop config)
   let runtime = C.runtimeStop config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -384,6 +433,9 @@ use args = do
   config <- either throw pure (C.decodeUseArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.use config)
   let runtime = C.runtimeUse config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -400,6 +452,9 @@ version args = do
   config <- either throw pure (C.decodeVersionArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.version config)
   let runtime = C.runtimeVersion config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -452,6 +507,9 @@ dap_build args = do
   config <- either throw pure (C.decodeDapBuildArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.dapBuild config)
   let runtime = C.runtimeDapBuild config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -506,6 +564,9 @@ debug_build args = do
   config <- either throw pure (C.decodeDebugBuildArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.debugBuild config)
   let runtime = C.runtimeDebugBuild config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -524,6 +585,9 @@ history_inspect args = do
   config <- either throw pure (C.decodeHistoryInspectArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyInspect config)
   let runtime = C.runtimeHistoryInspect config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -544,6 +608,9 @@ history_export args = do
   config <- either throw pure (C.decodeHistoryExportArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyExport config)
   let runtime = C.runtimeHistoryExport config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -562,6 +629,9 @@ history_import args = do
   config <- either throw pure (C.decodeHistoryImportArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyImport config)
   let runtime = C.runtimeHistoryImport config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -580,6 +650,9 @@ history_logs args = do
   config <- either throw pure (C.decodeHistoryLogsArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyLogs config)
   let runtime = C.runtimeHistoryLogs config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -600,6 +673,9 @@ history_ls args = do
   config <- either throw pure (C.decodeHistoryLsArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyLs config)
   let runtime = C.runtimeHistoryLs config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -617,6 +693,9 @@ history_open args = do
   config <- either throw pure (C.decodeHistoryOpenArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyOpen config)
   let runtime = C.runtimeHistoryOpen config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -635,6 +714,9 @@ history_rm args = do
   config <- either throw pure (C.decodeHistoryRmArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyRm config)
   let runtime = C.runtimeHistoryRm config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -654,6 +736,9 @@ history_trace args = do
   config <- either throw pure (C.decodeHistoryTraceArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyTrace config)
   let runtime = C.runtimeHistoryTrace config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -680,6 +765,9 @@ imagetools_create args = do
   config <- either throw pure (C.decodeImagetoolsCreateArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.imagetoolsCreate config)
   let runtime = C.runtimeImagetoolsCreate config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -699,6 +787,9 @@ imagetools_inspect args = do
   config <- either throw pure (C.decodeImagetoolsInspectArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.imagetoolsInspect config)
   let runtime = C.runtimeImagetoolsInspect config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -720,6 +811,9 @@ policy_eval args = do
   config <- either throw pure (C.decodePolicyEvalArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.policyEval config)
   let runtime = C.runtimePolicyEval config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -739,6 +833,9 @@ policy_test args = do
   config <- either throw pure (C.decodePolicyTestArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.policyTest config)
   let runtime = C.runtimePolicyTest config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }
 
@@ -759,5 +856,8 @@ history_inspect_attachment args = do
   config <- either throw pure (C.decodeHistoryInspectAttachmentArgs (Contract.buildxInput (Contract.encodeInput args)))
   plan <- either throw pure (C.historyInspectAttachment config)
   let runtime = C.runtimeHistoryInspectAttachment config
+  case args.docker of
+    Nothing -> Dependencies.ensureFor "docker"
+    Just _ -> pure unit
   void (B.execute runtime plan)
   pure { outcome: "succeeded", runDir: runtime.runDir, reportPath: runtime.runDir <> "/result.json", stdoutPath: runtime.runDir <> "/buildx.stdout", stderrPath: runtime.runDir <> "/buildx.stderr" }

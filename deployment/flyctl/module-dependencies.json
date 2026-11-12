@@ -1,0 +1,13 @@
+{
+  "module": "flyctl",
+  "requirements": [
+    {
+      "alias": "setup-flyctl",
+      "program": "flyctl",
+      "probe": [
+        "which",
+        "flyctl"
+      ]
+    }
+  ]
+}

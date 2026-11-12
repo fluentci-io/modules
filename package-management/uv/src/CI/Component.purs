@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "version" json
 
 -- | Create or synchronize a project environment from pyproject.toml and uv.lock.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,7 +45,7 @@ version args = do
 sync :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), locked :: Maybe Boolean, frozen :: Maybe Boolean, noDev :: Maybe Boolean, group :: Maybe String, python :: Maybe String } -> Effect Contract.ExecutionResult
 sync args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "sync" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "sync" json
 
 -- | Resolve project dependencies or check the existing lockfile.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,7 +59,7 @@ sync args = do
 lock :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), check :: Maybe Boolean, upgrade :: Maybe Boolean, python :: Maybe String } -> Effect Contract.ExecutionResult
 lock args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "lock" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "lock" json
 
 -- | Run a command in the project environment.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -74,7 +75,7 @@ lock args = do
 run_command :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), locked :: Maybe Boolean, frozen :: Maybe Boolean, noSync :: Maybe Boolean, python :: Maybe String, command :: Array String } -> Effect Contract.ExecutionResult
 run_command args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "run_command" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "run_command" json
 
 -- | Build Python source and wheel distributions.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -89,7 +90,7 @@ run_command args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), outDir :: Maybe String, wheel :: Maybe Boolean, sdist :: Maybe Boolean, python :: Maybe String } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "build" json
 
 -- | Publish distributions to a configured Python package index.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -103,7 +104,7 @@ build args = do
 publish :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), publishUrl :: Maybe String, index :: Maybe String, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 publish args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "publish" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "publish" json
 
 -- | Create a Python virtual environment.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -116,7 +117,7 @@ publish args = do
 venv :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), python :: Maybe String, path :: Maybe String } -> Effect Contract.ExecutionResult
 venv args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "venv" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "venv" json
 
 -- | Add project dependencies and update the lockfile.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -130,7 +131,7 @@ venv args = do
 add :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), dev :: Maybe Boolean, group :: Maybe String, packages :: Array String } -> Effect Contract.ExecutionResult
 add args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "add" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "add" json
 
 -- | Install packages into a selected virtual environment or interpreter.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -144,4 +145,4 @@ add args = do
 pip_install :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), python :: Maybe String, system :: Maybe Boolean, packages :: Array String } -> Effect Contract.ExecutionResult
 pip_install args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "uv" "pip_install" json
+  Native.executeWithSetup Dependencies.ensureFor "uv" "pip_install" json

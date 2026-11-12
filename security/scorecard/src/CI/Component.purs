@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "scorecard" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "scorecard" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "scorecard" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "scorecard" "version" json
 
 -- | Evaluate an upstream repository against OpenSSF Scorecard checks.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), format :: Maybe String, checks :: Maybe String, showDetails :: Maybe Boolean, repo :: String } -> Effect Contract.ExecutionResult
 scan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "scorecard" "scan" json
+  Native.executeWithSetup Dependencies.ensureFor "scorecard" "scan" json
 
 -- | Run supported checks against a local repository.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -58,7 +59,7 @@ scan args = do
 scan_local :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), format :: Maybe String, checks :: Maybe String, showDetails :: Maybe Boolean, local :: Maybe String } -> Effect Contract.ExecutionResult
 scan_local args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "scorecard" "scan_local" json
+  Native.executeWithSetup Dependencies.ensureFor "scorecard" "scan_local" json
 
 -- | Fail CI when any reported check is unscored or below the requested minimum.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,4 +72,4 @@ scan_local args = do
 gate :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), report :: String, minimum :: Maybe Int } -> Effect Contract.ExecutionResult
 gate args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "scorecard" "gate" json
+  Native.executeWithSetup Dependencies.ensureFor "scorecard" "gate" json

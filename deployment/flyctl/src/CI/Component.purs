@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "flyctl" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "flyctl" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "flyctl" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "flyctl" "version" json
 
 -- | deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), app :: Maybe String, config :: Maybe String, image :: Maybe String, region :: Maybe String } -> Effect Contract.ExecutionResult
 deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "flyctl" "deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "flyctl" "deploy" json
 
 -- | status
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -56,7 +57,7 @@ deploy args = do
 status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), app :: Maybe String, json :: Maybe Boolean } -> Effect Contract.ExecutionResult
 status args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "flyctl" "status" json
+  Native.executeWithSetup Dependencies.ensureFor "flyctl" "status" json
 
 -- | logs
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -68,4 +69,4 @@ status args = do
 logs :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), app :: Maybe String } -> Effect Contract.ExecutionResult
 logs args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "flyctl" "logs" json
+  Native.executeWithSetup Dependencies.ensureFor "flyctl" "logs" json

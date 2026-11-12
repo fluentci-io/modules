@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-pgroll": "path:name = \"setup-pgroll\"\nruntime = \"component\"\npath = \"../../setup/pgroll\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

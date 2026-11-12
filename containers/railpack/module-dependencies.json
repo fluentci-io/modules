@@ -1,0 +1,13 @@
+{
+  "module": "railpack",
+  "requirements": [
+    {
+      "alias": "setup-railpack",
+      "program": "railpack",
+      "probe": [
+        "which",
+        "railpack"
+      ]
+    }
+  ]
+}

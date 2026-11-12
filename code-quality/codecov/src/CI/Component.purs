@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "codecov" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "codecov" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "codecov" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "codecov" "version" json
 
 -- | Create a Codecov report and upload existing coverage files, failing on upload errors.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -44,4 +45,4 @@ version args = do
 upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), files :: Array String, flags :: Maybe (Array String), name :: Maybe String, commit :: Maybe String, disableSearch :: Maybe Boolean } -> Effect Contract.ExecutionResult
 upload args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "codecov" "upload" json
+  Native.executeWithSetup Dependencies.ensureFor "codecov" "upload" json

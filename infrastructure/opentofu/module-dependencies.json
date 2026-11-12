@@ -1,0 +1,13 @@
+{
+  "module": "opentofu",
+  "requirements": [
+    {
+      "alias": "setup-opentofu",
+      "program": "tofu",
+      "probe": [
+        "which",
+        "tofu"
+      ]
+    }
+  ]
+}

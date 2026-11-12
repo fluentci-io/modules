@@ -1,0 +1,13 @@
+{
+  "module": "meson",
+  "requirements": [
+    {
+      "alias": "setup-meson",
+      "program": "meson",
+      "probe": [
+        "which",
+        "meson"
+      ]
+    }
+  ]
+}

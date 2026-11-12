@@ -1,0 +1,13 @@
+{
+  "module": "codacy",
+  "requirements": [
+    {
+      "alias": "setup-codacy",
+      "program": "codacy-coverage-reporter",
+      "probe": [
+        "which",
+        "codacy-coverage-reporter"
+      ]
+    }
+  ]
+}

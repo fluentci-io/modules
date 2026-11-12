@@ -1,7 +1,7 @@
 # pgroll
 
 Run PostgreSQL schema migrations through typed PureScript Wasm functions in
-CI/CD pipelines. Requires FluentCI v0.17.2+ and an installed `pgroll` CLI.
+CI/CD pipelines. Requires FluentCI v0.17.3+ and an installed `pgroll` CLI.
 Use [setup-pgroll](../../setup/pgroll/README.md) to install it.
 
 ```sh
@@ -78,3 +78,14 @@ See [COMPONENT.md](./COMPONENT.md) for typed arguments and results,
 [OPTIONS.md](./OPTIONS.md) for native mappings, and
 [COMMANDS.md](./COMMANDS.md) for reviewed command coverage.
 [Upstream pgroll](https://github.com/xataio/pgroll) · [MIT wrapper license](./LICENSE).
+
+## Setup component dependency
+
+This module declares `setup-pgroll` as typed native component dependencies.
+FluentCI v0.17.3+ resolves their source references while building and composes
+them into the published Wasm. Consumers need no relative source paths.
+Available tools are reused; missing prerequisites invoke setup with default
+arguments. Explicit executable overrides remain caller-managed. Configure pinned
+versions or privileged/custom installations in an earlier setup step.
+See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
+command-specific prerequisites, validation, credential skips, and CI coverage.

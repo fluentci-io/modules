@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.NixPublish as Native
 
 -- | Evaluate and build flake checks without modifying flake.lock.
@@ -17,7 +18,7 @@ import CI.NixPublish as Native
 check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), flake :: Maybe String } -> Effect Contract.ExecutionResult
 check args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-publish" "check" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-publish" "check" json
 
 -- | Inspect locked flake metadata as JSON without modifying flake.lock.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -29,7 +30,7 @@ check args = do
 metadata :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), flake :: Maybe String } -> Effect Contract.ExecutionResult
 metadata args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-publish" "metadata" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-publish" "metadata" json
 
 -- | Inspect flake outputs for every supported system as JSON.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -41,7 +42,7 @@ metadata args = do
 outputs :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), flake :: Maybe String } -> Effect Contract.ExecutionResult
 outputs args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-publish" "outputs" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-publish" "outputs" json
 
 -- | Publish the checked-out flake release to FlakeHub using GitHub OIDC.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -55,7 +56,7 @@ outputs args = do
 flakehub :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), name :: String, version :: String, visibility :: Maybe String } -> Effect Contract.ExecutionResult
 flakehub args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-publish" "flakehub" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-publish" "flakehub" json
 
 -- | Publish locked flake metadata and outputs to Flakestry using GitHub OIDC.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -71,4 +72,4 @@ flakehub args = do
 flakestry :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), version :: String, ref :: String, readme :: Maybe String, url :: Maybe String, ignoreConflicts :: Maybe Boolean } -> Effect Contract.ExecutionResult
 flakestry args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "nix-publish" "flakestry" json
+  Native.executeWithSetup Dependencies.ensureFor "nix-publish" "flakestry" json

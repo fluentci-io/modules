@@ -6,6 +6,7 @@ import CI.Contract as Contract
 import Data.Either (either)
 import Effect (Effect)
 import Effect.Exception (throw)
+import CI.ModuleDependencies as Dependencies
 import CI.Gemfury as Native
 import FluentCI.Plugin as P
 import Data.String.Common (trim)
@@ -16,7 +17,7 @@ upload :: { files :: Array String } -> Effect ({ uploaded :: Boolean, files :: A
 upload args = do
   present <- P.hasEnv "FURY_TOKEN" >>= unwrap
   token <- if present then P.getEnv "FURY_TOKEN" >>= unwrap else pure ""
-  Native.uploadFiles args.files
+  Native.uploadFilesWithSetup (Dependencies.ensureFor "curl") args.files
   pure { uploaded: trim token /= "", files: args.files }
 
 unwrap :: forall a. P.Result a -> Effect a

@@ -1,0 +1,29 @@
+{
+  "module": "nix-publish",
+  "requirements": [
+    {
+      "alias": "setup-nix",
+      "program": "nix",
+      "probe": [
+        "which",
+        "nix"
+      ]
+    },
+    {
+      "alias": "setup-bun",
+      "program": "bun",
+      "probe": [
+        "which",
+        "bun"
+      ]
+    },
+    {
+      "alias": "setup-flakehub-push",
+      "program": "flakehub-push",
+      "probe": [
+        "which",
+        "flakehub-push"
+      ]
+    }
+  ]
+}

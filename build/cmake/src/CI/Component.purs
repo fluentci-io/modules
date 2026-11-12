@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cmake" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "cmake" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cmake" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "cmake" "version" json
 
 -- | Configure a CMake build tree.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -45,7 +46,7 @@ version args = do
 configure :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), sourceDir :: Maybe String, buildDir :: Maybe String, generator :: Maybe String, preset :: Maybe String, buildType :: Maybe String, definitions :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 configure args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cmake" "configure" json
+  Native.executeWithSetup Dependencies.ensureFor "cmake" "configure" json
 
 -- | Build an existing CMake build tree.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -61,7 +62,7 @@ configure args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildDir :: Maybe String, config :: Maybe String, parallel :: Maybe Int, target :: Maybe (Array String), cleanFirst :: Maybe Boolean } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cmake" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "cmake" "build" json
 
 -- | Install build artifacts into the selected prefix.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -76,7 +77,7 @@ build args = do
 install :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildDir :: Maybe String, config :: Maybe String, prefix :: Maybe String, component :: Maybe String } -> Effect Contract.ExecutionResult
 install args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cmake" "install" json
+  Native.executeWithSetup Dependencies.ensureFor "cmake" "install" json
 
 -- | Run CTest tests in a configured build tree.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -91,4 +92,4 @@ install args = do
 test :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), buildDir :: Maybe String, config :: Maybe String, parallel :: Maybe Int, outputOnFailure :: Maybe Boolean } -> Effect Contract.ExecutionResult
 test args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "cmake" "test" json
+  Native.executeWithSetup Dependencies.ensureFor "cmake" "test" json

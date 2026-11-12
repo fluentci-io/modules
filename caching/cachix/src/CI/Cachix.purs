@@ -1,4 +1,4 @@
-module CI.Cachix (setup, setupWith, push, pushResultWith, runWithCache) where
+module CI.Cachix (setup, setupWith, setupWithSetup, push, pushResultWith, pushResultWithSetup, runWithCache) where
 
 import Prelude
 import CI.Cachix.Support (run, unwrap, requiredEnv)
@@ -40,13 +40,20 @@ cachix :: Array String
 cachix = [ "nix", "run", "--no-write-lock-file", "--inputs-from", ".", "nixpkgs#cachix", "--" ]
 
 configure :: String -> Effect Unit
-configure cache = do
+configure = configureWithSetup (pure unit)
+
+configureWithSetup :: Effect Unit -> String -> Effect Unit
+configureWithSetup setupDependency cache = do
   validateCache cache
+  setupDependency
   run "cachix-setup" [ cachix <> [ "use", cache ] ]
 
 -- Composable PureScript function for callers that already have the cache name.
 setupWith :: String -> Effect Unit
 setupWith cache = withToken (configure cache)
+
+setupWithSetup :: Effect Unit -> String -> Effect Unit
+setupWithSetup setupDependency cache = withToken (configureWithSetup setupDependency cache)
 
 -- CLI: fluentci run cachix setup CACHE_NAME; CACHIX_CACHE is a fallback.
 setup :: Effect Unit
@@ -65,8 +72,12 @@ runWithCache cache command = do
 -- Explicitly push the final runtime closure too, even when no new paths were
 -- built. Cachix propagates upload/authentication failures to the CI job.
 pushResultWith :: String -> Effect Unit
-pushResultWith cache = withToken do
+pushResultWith = pushResultWithSetup (pure unit)
+
+pushResultWithSetup :: Effect Unit -> String -> Effect Unit
+pushResultWithSetup setupDependency cache = withToken do
   validateCache cache
+  setupDependency
   run "cachix-push" [ cachix <> [ "push", cache, "./result" ] ]
 
 push :: Effect Unit

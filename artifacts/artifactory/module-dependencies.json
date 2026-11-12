@@ -1,0 +1,13 @@
+{
+  "module": "artifactory",
+  "requirements": [
+    {
+      "alias": "setup-artifactory",
+      "program": "jf",
+      "probe": [
+        "which",
+        "jf"
+      ]
+    }
+  ]
+}

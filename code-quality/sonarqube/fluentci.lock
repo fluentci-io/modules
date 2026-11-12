@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-sonarqube": "path:name = \"setup-sonarqube\"\nruntime = \"component\"\npath = \"../../setup/sonarqube\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

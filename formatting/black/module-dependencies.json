@@ -1,0 +1,13 @@
+{
+  "module": "black",
+  "requirements": [
+    {
+      "alias": "setup-black",
+      "program": "black",
+      "probe": [
+        "which",
+        "black"
+      ]
+    }
+  ]
+}

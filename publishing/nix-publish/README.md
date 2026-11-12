@@ -1,7 +1,7 @@
 # Nix publishing
 
 Publish a checked-out Nix flake to **FlakeHub** or **Flakestry** from a CI release
-job. This PureScript module is a native Wasm component for FluentCI v0.17.2+.
+job. This PureScript module is a native Wasm component for FluentCI v0.17.3+.
 It generalizes the pipeline in FluentCI's `.fluentci/nix` without hardcoding a
 repository name. Every function has named typed arguments and returns an
 execution result with report and log paths.
@@ -126,3 +126,14 @@ testing. See the [component guide](../../docs/COMPONENTS.md) and [MIT License](.
 
 Protocol references: [Flakestry's publishing action](https://github.com/flakestry/flakestry-publish/blob/main/action.yaml)
 and [FlakeHub publishing](https://docs.determinate.systems/flakehub/publishing/).
+
+## Setup component dependency
+
+This module declares `setup-nix`, `setup-bun`, and `setup-flakehub-push` as typed native component dependencies.
+FluentCI v0.17.3+ resolves their source references while building and composes
+them into the published Wasm. Consumers need no relative source paths.
+Available tools are reused; missing prerequisites invoke setup with default
+arguments. Explicit executable overrides remain caller-managed. Configure pinned
+versions or privileged/custom installations in an earlier setup step.
+See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
+command-specific prerequisites, validation, credential skips, and CI coverage.

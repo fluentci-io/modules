@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "semgrep" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "semgrep" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "semgrep" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "semgrep" "version" json
 
 -- | Scan with explicit rule configurations and fail when findings are present.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -46,7 +47,7 @@ version args = do
 scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Array String, output :: Maybe String, json :: Maybe Boolean, sarif :: Maybe Boolean, exclude :: Maybe (Array String), jobs :: Maybe Int, paths :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 scan args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "semgrep" "scan" json
+  Native.executeWithSetup Dependencies.ensureFor "semgrep" "scan" json
 
 -- | Run Semgrep platform CI using the configured project policy.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -59,4 +60,4 @@ scan args = do
 ci :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), json :: Maybe Boolean, output :: Maybe String } -> Effect Contract.ExecutionResult
 ci args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "semgrep" "ci" json
+  Native.executeWithSetup Dependencies.ensureFor "semgrep" "ci" json

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-checkov": "path:name = \"setup-checkov\"\nruntime = \"component\"\npath = \"../../setup/checkov\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

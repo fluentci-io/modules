@@ -1,0 +1,13 @@
+{
+  "module": "dpkg",
+  "requirements": [
+    {
+      "alias": "setup-dpkg",
+      "program": "dpkg-deb",
+      "probe": [
+        "which",
+        "dpkg-deb"
+      ]
+    }
+  ]
+}

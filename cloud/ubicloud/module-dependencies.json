@@ -1,0 +1,13 @@
+{
+  "module": "ubicloud",
+  "requirements": [
+    {
+      "alias": "setup-ubicloud",
+      "program": "ubi",
+      "probe": [
+        "which",
+        "ubi"
+      ]
+    }
+  ]
+}

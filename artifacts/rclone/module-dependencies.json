@@ -1,0 +1,13 @@
+{
+  "module": "rclone",
+  "requirements": [
+    {
+      "alias": "setup-rclone",
+      "program": "rclone",
+      "probe": [
+        "which",
+        "rclone"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-black": "path:name = \"setup-black\"\nruntime = \"component\"\npath = \"../../setup/black\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

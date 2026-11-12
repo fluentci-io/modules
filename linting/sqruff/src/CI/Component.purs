@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Run a native command with literal arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqruff" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "sqruff" "run" json
 
 -- | Print the installed tool version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqruff" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "sqruff" "version" json
 
 -- | Lint SQL without modifying files and fail the pipeline on violations.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -48,7 +49,7 @@ version args = do
 lint :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, dialect :: Maybe String, format :: Maybe String, ignoreLocalConfig :: Maybe Boolean, parsingErrors :: Maybe Boolean, disableNoqa :: Maybe Boolean, files :: Maybe (Array String), writeOutput :: Maybe String, annotationLevel :: Maybe String } -> Effect Contract.ExecutionResult
 lint args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqruff" "lint" json
+  Native.executeWithSetup Dependencies.ensureFor "sqruff" "lint" json
 
 -- | Apply SQL formatting and fixable lint rules to the selected project files.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -66,4 +67,4 @@ lint args = do
 fix :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Maybe String, dialect :: Maybe String, format :: Maybe String, ignoreLocalConfig :: Maybe Boolean, parsingErrors :: Maybe Boolean, disableNoqa :: Maybe Boolean, files :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 fix args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "sqruff" "fix" json
+  Native.executeWithSetup Dependencies.ensureFor "sqruff" "fix" json

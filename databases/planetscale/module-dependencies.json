@@ -1,0 +1,13 @@
+{
+  "module": "planetscale",
+  "requirements": [
+    {
+      "alias": "setup-planetscale",
+      "program": "pscale",
+      "probe": [
+        "which",
+        "pscale"
+      ]
+    }
+  ]
+}

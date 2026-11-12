@@ -1,0 +1,11 @@
+name = "railpack"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-railpack = { path = "../../setup/railpack", sdk = "purescript", runtime = "component" }

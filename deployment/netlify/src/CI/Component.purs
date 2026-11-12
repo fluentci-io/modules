@@ -5,6 +5,7 @@ import Prelude
 import CI.Contract as Contract
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import CI.ModuleDependencies as Dependencies
 import CI.CLI as Native
 
 -- | Execute arbitrary literal CLI arguments.
@@ -17,7 +18,7 @@ import CI.CLI as Native
 run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
 run args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "netlify" "run" json
+  Native.executeWithSetup Dependencies.ensureFor "netlify" "run" json
 
 -- | Print the CLI version.
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -28,7 +29,7 @@ run args = do
 version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 version args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "netlify" "version" json
+  Native.executeWithSetup Dependencies.ensureFor "netlify" "version" json
 
 -- | deploy
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -43,7 +44,7 @@ version args = do
 deploy :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), dir :: String, site :: Maybe String, prod :: Maybe Boolean, message :: Maybe String } -> Effect Contract.ExecutionResult
 deploy args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "netlify" "deploy" json
+  Native.executeWithSetup Dependencies.ensureFor "netlify" "deploy" json
 
 -- | build
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -55,7 +56,7 @@ deploy args = do
 build :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), context :: Maybe String } -> Effect Contract.ExecutionResult
 build args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "netlify" "build" json
+  Native.executeWithSetup Dependencies.ensureFor "netlify" "build" json
 
 -- | status
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -66,7 +67,7 @@ build args = do
 status :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 status args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "netlify" "status" json
+  Native.executeWithSetup Dependencies.ensureFor "netlify" "status" json
 
 -- | sites list
 -- | @param project Working directory containing the source checkout; defaults to the current directory. Default: ".".
@@ -77,4 +78,4 @@ status args = do
 sites_list :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
 sites_list args = do
   json <- Contract.cliInput (Contract.encodeInput args)
-  Native.execute "netlify" "sites_list" json
+  Native.executeWithSetup Dependencies.ensureFor "netlify" "sites_list" json
