@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import tomllib
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -20,6 +21,10 @@ def run(modules, log_dir):
             raise ValueError('Invalid module name')
         commands=([['bun','install','--frozen-lockfile']] if module['path'].startswith('testing/') else [['npm','ci']])+[
             ['npm','run','build'],['npm','test'],['node',str(ROOT/'scripts/validate_wasm.mjs'),str(directory)]]
+        manifest=directory/'fluentci-module.toml'
+        if manifest.exists() and tomllib.loads(manifest.read_text()).get('dependencies'):
+            # Resolve/type-check/compose the real components without running installers.
+            commands.append(['fluentci','run','.','--help'])
         logfile=log_dir/(name+'.log')
         print('Testing '+name,flush=True)
         with logfile.open('w') as output:
