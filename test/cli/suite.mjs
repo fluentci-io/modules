@@ -89,12 +89,25 @@ export async function suite(directory) {
       }
     });
   }
-  test('declares output artifacts and checks upload inputs before executing', () => {
-    const command=tool.commands.find(c=>c.fields.some(f=>['file','file-separate'].includes(f.style)));
-    if(command){
-      const f=fixture({input:inputFor(command),fail:args=>args[0]==='test'&&args[1]==='-f'});
-      assert.throws(plugin[command.name]); assert.equal(f.plans.length,0);
-    }
+  for (const command of tool.commands) {
+    const files=command.fields.filter(field=>['file','file-separate'].includes(field.style));
+    if (!files.length) continue;
+    test(command.name+': supplied input files are checked before executing', () => {
+      // Optional config files are absent from inputFor. Supply every file field
+      // explicitly so the missing-file assertion exercises a real preflight.
+      const input={...inputFor(command),...Object.fromEntries(files.map(field=>[field.key,sample(field)]))};
+      const existing=fixture({input});
+      plugin[command.name]();
+      assert.ok(existing.calls.some(args=>args[0]==='test'&&args[1]==='-f'));
+      assert.equal(existing.plans.length,1);
+      const missing=fixture({input,fail:args=>args[0]==='test'&&args[1]==='-f'});
+      assert.throws(plugin[command.name]);
+      assert.ok(missing.calls.some(args=>args[0]==='test'&&args[1]==='-f'));
+      assert.equal(missing.plans.length,0);
+      assert.equal(missing.output.length,0);
+    });
+  }
+  test('declares output artifacts', () => {
     const base=inputFor(tool.commands[0]);
     const task=plan(tool.commands[0].name,{...base,artifacts:{report:'output.json'}}).tasks[0];
     assert.ok(JSON.stringify(task).includes('output.json'));
