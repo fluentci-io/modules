@@ -96,7 +96,11 @@ test('typed component forwards named SDK options and returns SDK and Java inform
  const schema=JSON.parse(readFileSync(new URL('../schema.json',import.meta.url)));
  const input=Object.fromEntries(Object.keys(schema.exports.setup.input.properties).map(k=>[k,Nothing.value]));
  input.javaVersion=new Just('25');input.apiLevels=new Just('36');
- const f=host({javaVersion:'25.0.1'});const result=native.setup(input)();
+ const f=host({javaVersion:'25.0.1',input:{apiLevels:'36'}});const result=native.setup(input)();
  assert.deepEqual(f.javaCalls,[{version:'25'}]);assert.equal(result.javaVersion,'25.0.1');assert.ok(result.sdkRoot.startsWith('/'));
+ assert.ok(f.calls.some(a=>a.includes('--install')&&a.includes('platforms;android-36')));
  assert.ok(result.environment.some(v=>v.name==='ANDROID_HOME'&&v.value===result.sdkRoot));assert.equal(f.output.length,0);
+ const missing=host({javaVersion:'25.0.1',installedPackages:'platform-tools | 1 | fixture'});
+ assert.throws(()=>native.setup(input)(),/SDK package missing after installation.*platforms;android-36/);
+ assert.equal(missing.updates.length,0);assert.equal(missing.output.length,0);
 });
