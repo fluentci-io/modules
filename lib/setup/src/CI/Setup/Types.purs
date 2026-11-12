@@ -68,6 +68,7 @@ hostSupported :: String -> Host -> Either String Unit
 hostSupported name host
   | not (Array.elem name names) = Left ("Unknown setup tool: " <> name)
   | not (Array.elem host.os [ "linux", "macos", "freebsd", "openbsd", "netbsd" ]) = Left ("Unsupported setup OS: " <> host.os)
+  | name == "prisma" && isBSD host.os = Left "prisma supports Linux and macOS only; upstream Prisma engines do not support BSD"
   | isNix name && isBSD host.os = Left (name <> " supports Linux and macOS only")
   | not (isBSD host.os) && not (Array.elem host.arch [ "x86_64", "aarch64" ]) = Left ("No upstream installer configured for architecture: " <> host.arch)
   | otherwise = Right unit

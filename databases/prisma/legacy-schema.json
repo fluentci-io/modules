@@ -1,0 +1,1082 @@
+{
+  "name": "prisma",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "init": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "datasourceProvider": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "postgresql",
+              "sqlite",
+              "mysql",
+              "sqlserver",
+              "mongodb",
+              "cockroachdb"
+            ],
+            "description": "Database provider for the generated schema."
+          },
+          "generatorProvider": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Generator provider for the initial schema."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output path for generated client code."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "generate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "generators": {
+            "type": "string",
+            "description": "Comma-separated generator names; omitted runs all configured generators."
+          },
+          "noHints": {
+            "type": "boolean",
+            "description": "Suppress usage hints in CI logs."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "validate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "format": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "check": {
+            "type": "boolean",
+            "description": "Fail when schema files need formatting."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "db_pull": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "print": {
+            "type": "boolean",
+            "description": "Print the introspected schema instead of writing it."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Explicitly overwrite manual schema changes."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "db_push": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "acceptDataLoss": {
+            "type": "boolean",
+            "description": "Approve potentially destructive changes."
+          },
+          "forceReset": {
+            "type": "boolean",
+            "description": "Explicitly reset the database before pushing; destroys data."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "db_seed": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "db_execute": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing SQL script to execute."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate_deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate_dev": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name for a new migration."
+          },
+          "createOnly": {
+            "type": "boolean",
+            "description": "Create a migration without applying it."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate_reset": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Explicitly skip reset confirmation; destroys all database data."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate_resolve": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "applied": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Migration directory name to mark as applied."
+          },
+          "rolledBack": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Migration directory name to mark as rolled back."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate_diff": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "fromEmpty": {
+            "type": "boolean",
+            "description": "Compare from an empty schema."
+          },
+          "fromSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing source Prisma schema file."
+          },
+          "fromMigrations": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing source migrations directory."
+          },
+          "fromConfigDatasource": {
+            "type": "boolean",
+            "description": "Use the configured database as the source."
+          },
+          "toEmpty": {
+            "type": "boolean",
+            "description": "Compare to an empty schema."
+          },
+          "toSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing target Prisma schema file."
+          },
+          "toMigrations": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing target migrations directory."
+          },
+          "toConfigDatasource": {
+            "type": "boolean",
+            "description": "Use the configured database as the target."
+          },
+          "script": {
+            "type": "boolean",
+            "description": "Print SQL instead of a human-readable summary."
+          },
+          "exitCode": {
+            "type": "boolean",
+            "description": "Fail on nonempty differences (native exit code 2)."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Write the diff to this output file."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "debug": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prisma schema file or schema directory; otherwise use project configuration."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "studio": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to an existing project configuration file; otherwise use native discovery."
+          },
+          "port": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Studio listening port."
+          },
+          "browser": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Browser to launch; use none on a headless runner."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

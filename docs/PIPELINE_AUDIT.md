@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 199 modules. This inventory covers every public
+The registry contains 203 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -80,6 +80,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [docker](../containers/docker/README.md) | Build, tag, publish, or inspect container images and build caches. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `pull` (pipeline operation), `push` (pipeline operation), `tag` (pipeline operation), `container-run` (pipeline operation), `compose` (pipeline operation) |
 | [doppler](../secrets/doppler/README.md) | Inject secrets into child commands or manage secret metadata and files. | `run` (escape hatch), `version` (diagnostic), `run-command` (pipeline operation), `names` (pipeline operation), `upload` (pipeline operation) |
 | [dpkg](../packaging/dpkg/README.md) | Validate a Linux package tree and produce an architecture-specific package. | `build` (pipeline operation), `validate` (pipeline operation) |
+| [drizzlekit](../databases/drizzlekit/README.md) | Manage preview databases, migrations, schema deployments, queries, and database access. | `run` (escape hatch), `version` (diagnostic), `generate` (pipeline operation), `migrate` (pipeline operation), `push` (pipeline operation), `pull` (pipeline operation), `check` (pipeline operation), `up` (pipeline operation), `export-sql` (pipeline operation), `studio` (pipeline operation) |
 | [flyctl](../deployment/flyctl/README.md) | Deploy an application and inspect its rollout or service state. | `run` (escape hatch), `version` (diagnostic), `deploy` (pipeline operation), `status` (pipeline operation), `logs` (pipeline operation) |
 | [gcloud](../cloud/gcloud/README.md) | Inspect accounts, provision resources, or transfer deployment outputs. | `run` (escape hatch), `version` (diagnostic), `config-list` (pipeline operation), `run-deploy` (pipeline operation), `storage-cp` (pipeline operation), `instances-list` (pipeline operation) |
 | [gemfury](../publishing/gemfury/README.md) | Publish built packages to a package repository. | `upload` (pipeline operation) |
@@ -107,6 +108,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [plumber](../security/plumber/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `analyze` (pipeline operation), `validate-config` (pipeline operation) |
 | [podman](../containers/podman/README.md) | Build, tag, publish, or inspect container images and build caches. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `pull` (pipeline operation), `push` (pipeline operation), `tag` (pipeline operation), `container-run` (pipeline operation), `compose` (pipeline operation) |
 | [prettier](../formatting/prettier/README.md) | Format source files or fail CI when formatting differs. | `run` (escape hatch), `version` (diagnostic), `format` (pipeline operation), `check` (pipeline operation) |
+| [prisma](../databases/prisma/README.md) | Manage preview databases, migrations, schema deployments, queries, and database access. | `run` (escape hatch), `version` (diagnostic), `init` (pipeline operation), `generate` (pipeline operation), `validate` (pipeline operation), `format` (pipeline operation), `db-pull` (pipeline operation), `db-push` (pipeline operation), `db-seed` (pipeline operation), `db-execute` (pipeline operation), `migrate-deploy` (pipeline operation), `migrate-status` (pipeline operation), `migrate-dev` (pipeline operation), `migrate-reset` (pipeline operation), `migrate-resolve` (pipeline operation), `migrate-diff` (pipeline operation), `debug` (pipeline operation), `studio` (pipeline operation) |
 | [protolint](../linting/protolint/README.md) | Check source or configuration and fail on lint violations. | `run` (escape hatch), `version` (diagnostic), `lint` (pipeline operation), `fix` (pipeline operation) |
 | [pulumi](../infrastructure/pulumi/README.md) | Validate, preview, apply, or inspect infrastructure changes. | `run` (escape hatch), `version` (diagnostic), `preview` (pipeline operation), `up` (pipeline operation), `destroy` (pipeline operation), `stack-select` (pipeline operation), `stack-output` (pipeline operation), `login` (pipeline operation) |
 | [railpack](../containers/railpack/README.md) | Build, tag, publish, or inspect container images and build caches. | `run` (escape hatch), `version` (diagnostic), `prepare` (pipeline operation), `build` (pipeline operation), `info` (pipeline operation), `schema` (pipeline operation) |
@@ -154,6 +156,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-docker](../setup/docker/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-doppler](../setup/doppler/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-dpkg](../setup/dpkg/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-drizzlekit](../setup/drizzlekit/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-elixir](../setup/elixir/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-erlang](../setup/erlang/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-expo](../setup/expo/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
@@ -201,6 +204,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-plumber](../setup/plumber/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-podman](../setup/podman/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-prettier](../setup/prettier/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-prisma](../setup/prisma/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-protolint](../setup/protolint/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-pulumi](../setup/pulumi/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-purescript](../setup/purescript/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |

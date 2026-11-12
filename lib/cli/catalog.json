@@ -5308,6 +5308,435 @@
     ]
   },
   {
+    "name": "drizzlekit",
+    "path": "databases/drizzlekit",
+    "program": "drizzle-kit",
+    "title": "Drizzle Kit",
+    "docs": "https://orm.drizzle.team/docs/kit-overview",
+    "notes": "Use the project config and install its ORM/client, adapter and driver dependencies before invoking commands. Database credentials remain in inherited environment variables. Pin a compatible CLI version with the setup module.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Execute literal Drizzle Kit arguments for additional upstream features.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the Drizzle Kit version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "generate",
+        "args": [
+          "generate"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Name for the generated migration.",
+            "choices": []
+          },
+          {
+            "key": "custom",
+            "kind": "boolean",
+            "flag": "--custom",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Generate an empty custom SQL migration.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Generate SQL migrations; custom creates an empty migration for handwritten SQL.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate",
+        "args": [
+          "migrate"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Apply committed SQL migrations using the project database configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "push",
+        "args": [
+          "push"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve data loss statements; may truncate tables.",
+            "choices": []
+          },
+          {
+            "key": "strict",
+            "kind": "boolean",
+            "flag": "--strict",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Require confirmation for every schema change; avoid unattended pipelines.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Print SQL statements before applying changes.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Apply schema changes directly; destructive approval is opt-in through force.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pull",
+        "args": [
+          "pull"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Introspect the configured database into Drizzle schema files.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "check",
+        "args": [
+          "check"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Check generated migrations for collisions before merging.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "up",
+        "args": [
+          "up"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Upgrade existing migration snapshots to the installed Kit format.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "export_sql",
+        "args": [
+          "export"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Print SQL DDL from the configured TypeScript schema.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "studio",
+        "args": [
+          "studio"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "host",
+            "kind": "string",
+            "flag": "--host",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Listening address; bind locally on shared runners.",
+            "choices": []
+          },
+          {
+            "key": "port",
+            "kind": "integer",
+            "flag": "--port",
+            "default": null,
+            "required": false,
+            "sample": 4983,
+            "style": "value",
+            "scope": "option",
+            "description": "Studio listening port.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Print Studio SQL statements.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Start the long-running Studio server; use a bounded timeout and scoped service lifecycle.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
     "name": "flyctl",
     "path": "deployment/flyctl",
     "program": "flyctl",
@@ -16387,6 +16816,1112 @@
         "example": {}
       }
     ]
+  },
+  {
+    "name": "prisma",
+    "path": "databases/prisma",
+    "program": "prisma",
+    "title": "Prisma",
+    "docs": "https://www.prisma.io/docs/orm/v7/reference/prisma-cli-reference",
+    "notes": "Use the project config and install its ORM/client, adapter and driver dependencies before invoking commands. Database credentials remain in inherited environment variables. Pin a compatible CLI version with the setup module.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Execute literal Prisma CLI arguments, including version-specific features.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the Prisma CLI and engine versions.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "init",
+        "args": [
+          "init"
+        ],
+        "fields": [
+          {
+            "key": "datasourceProvider",
+            "kind": "string",
+            "flag": "--datasource-provider",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Database provider for the generated schema.",
+            "choices": [
+              "postgresql",
+              "sqlite",
+              "mysql",
+              "sqlserver",
+              "mongodb",
+              "cockroachdb"
+            ]
+          },
+          {
+            "key": "generatorProvider",
+            "kind": "string",
+            "flag": "--generator-provider",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Generator provider for the initial schema.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Output path for generated client code.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Initialize a Prisma project; configure the datasource explicitly for unattended jobs.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "generate",
+        "args": [
+          "generate"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "generators",
+            "kind": "csv",
+            "flag": "--generator",
+            "default": null,
+            "required": false,
+            "sample": "client",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated generator names; omitted runs all configured generators.",
+            "choices": []
+          },
+          {
+            "key": "noHints",
+            "kind": "boolean",
+            "flag": "--no-hints",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Suppress usage hints in CI logs.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Generate project clients from the Prisma schema without applying migrations.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "validate",
+        "args": [
+          "validate"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Validate the project Prisma schema.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "format",
+        "args": [
+          "format"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "check",
+            "kind": "boolean",
+            "flag": "--check",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Fail when schema files need formatting.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Format schemas or fail a formatting check without writing changes.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "db_pull",
+        "args": [
+          "db",
+          "pull"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "print",
+            "kind": "boolean",
+            "flag": "--print",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Print the introspected schema instead of writing it.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly overwrite manual schema changes.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Introspect the database; print avoids rewriting the project schema.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "db_push",
+        "args": [
+          "db",
+          "push"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "acceptDataLoss",
+            "kind": "boolean",
+            "flag": "--accept-data-loss",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Approve potentially destructive changes.",
+            "choices": []
+          },
+          {
+            "key": "forceReset",
+            "kind": "boolean",
+            "flag": "--force-reset",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly reset the database before pushing; destroys data.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Synchronize schema without migrations; data loss and reset flags are explicit.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "db_seed",
+        "args": [
+          "db",
+          "seed"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Run the project seed command configured in Prisma config.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "db_execute",
+        "args": [
+          "db",
+          "execute"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": true,
+            "sample": "migration.sql",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Existing SQL script to execute.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Execute an existing SQL script using the configured datasource.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate_deploy",
+        "args": [
+          "migrate",
+          "deploy"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Apply pending committed migrations noninteractively in deployment pipelines.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate_status",
+        "args": [
+          "migrate",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Report migration status; propagate divergence and pending-migration failures.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate_dev",
+        "args": [
+          "migrate",
+          "dev"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Name for a new migration.",
+            "choices": []
+          },
+          {
+            "key": "createOnly",
+            "kind": "boolean",
+            "flag": "--create-only",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Create a migration without applying it.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Create and apply development migrations; use migrate-deploy for production.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate_reset",
+        "args": [
+          "migrate",
+          "reset"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly skip reset confirmation; destroys all database data.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Reset a disposable development database; destructive confirmation is explicit.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate_resolve",
+        "args": [
+          "migrate",
+          "resolve"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "applied",
+            "kind": "string",
+            "flag": "--applied",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Migration directory name to mark as applied.",
+            "choices": []
+          },
+          {
+            "key": "rolledBack",
+            "kind": "string",
+            "flag": "--rolled-back",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Migration directory name to mark as rolled back.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Record a migration as applied or rolled back; choose exactly one in Prisma.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate_diff",
+        "args": [
+          "migrate",
+          "diff"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "fromEmpty",
+            "kind": "boolean",
+            "flag": "--from-empty",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Compare from an empty schema.",
+            "choices": []
+          },
+          {
+            "key": "fromSchema",
+            "kind": "string",
+            "flag": "--from-schema",
+            "default": null,
+            "required": false,
+            "sample": "before.prisma",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Existing source Prisma schema file.",
+            "choices": []
+          },
+          {
+            "key": "fromMigrations",
+            "kind": "string",
+            "flag": "--from-migrations",
+            "default": null,
+            "required": false,
+            "sample": "migrations",
+            "style": "directory-separate",
+            "scope": "option",
+            "description": "Existing source migrations directory.",
+            "choices": []
+          },
+          {
+            "key": "fromConfigDatasource",
+            "kind": "boolean",
+            "flag": "--from-config-datasource",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Use the configured database as the source.",
+            "choices": []
+          },
+          {
+            "key": "toEmpty",
+            "kind": "boolean",
+            "flag": "--to-empty",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Compare to an empty schema.",
+            "choices": []
+          },
+          {
+            "key": "toSchema",
+            "kind": "string",
+            "flag": "--to-schema",
+            "default": null,
+            "required": false,
+            "sample": "after.prisma",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Existing target Prisma schema file.",
+            "choices": []
+          },
+          {
+            "key": "toMigrations",
+            "kind": "string",
+            "flag": "--to-migrations",
+            "default": null,
+            "required": false,
+            "sample": "migrations",
+            "style": "directory-separate",
+            "scope": "option",
+            "description": "Existing target migrations directory.",
+            "choices": []
+          },
+          {
+            "key": "toConfigDatasource",
+            "kind": "boolean",
+            "flag": "--to-config-datasource",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Use the configured database as the target.",
+            "choices": []
+          },
+          {
+            "key": "script",
+            "kind": "boolean",
+            "flag": "--script",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Print SQL instead of a human-readable summary.",
+            "choices": []
+          },
+          {
+            "key": "exitCode",
+            "kind": "boolean",
+            "flag": "--exit-code",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Fail on nonempty differences (native exit code 2).",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Write the diff to this output file.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Compare schema sources; native Prisma requires exactly one from and one to source.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "debug",
+        "args": [
+          "debug"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "schema",
+            "kind": "string",
+            "flag": "--schema",
+            "default": null,
+            "required": false,
+            "sample": "prisma/schema.prisma",
+            "style": "separate",
+            "scope": "option",
+            "description": "Prisma schema file or schema directory; otherwise use project configuration.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Print Prisma diagnostic information for troubleshooting.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "studio",
+        "args": [
+          "studio"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "sample": "project.config.ts",
+            "style": "file-separate",
+            "scope": "option",
+            "description": "Path to an existing project configuration file; otherwise use native discovery.",
+            "choices": []
+          },
+          {
+            "key": "port",
+            "kind": "integer",
+            "flag": "--port",
+            "default": null,
+            "required": false,
+            "sample": 5555,
+            "style": "value",
+            "scope": "option",
+            "description": "Studio listening port.",
+            "choices": []
+          },
+          {
+            "key": "browser",
+            "kind": "string",
+            "flag": "--browser",
+            "default": null,
+            "required": false,
+            "sample": "none",
+            "style": "value",
+            "scope": "option",
+            "description": "Browser to launch; use none on a headless runner.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional literal CLI tokens as a comma-separated string. Quote a token containing a comma using CSV quotes.",
+            "choices": []
+          }
+        ],
+        "description": "Run the long-lived Studio server within a scoped service lifecycle.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
   },
   {
     "name": "protolint",

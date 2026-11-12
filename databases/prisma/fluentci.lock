@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-prisma": "path:name = \"setup-prisma\"\nruntime = \"component\"\npath = \"../../setup/prisma\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

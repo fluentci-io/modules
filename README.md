@@ -42,6 +42,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [docker](./containers/docker/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/docker/COMPONENT.md) |
 | [doppler](./secrets/doppler/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/doppler/COMPONENT.md) |
 | [dpkg](./packaging/dpkg/README.md) | Build packages from a Linux dpkg package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/dpkg/COMPONENT.md) |
+| [drizzlekit](./databases/drizzlekit/README.md) | Generate, check and apply SQL migrations. | `run`, `version`, `migrate`, [typed contract](./databases/drizzlekit/COMPONENT.md) |
 | [flyctl](./deployment/flyctl/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/flyctl/COMPONENT.md) |
 | [gcloud](./cloud/gcloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `config-list`, [typed contract](./cloud/gcloud/COMPONENT.md) |
 | [gemfury](./publishing/gemfury/README.md) | Upload Linux packages to Gemfury using credentials from the host environment. | `upload`, [typed contract](./publishing/gemfury/COMPONENT.md) |
@@ -69,6 +70,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [plumber](./security/plumber/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `analyze`, [typed contract](./security/plumber/COMPONENT.md) |
 | [podman](./containers/podman/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/podman/COMPONENT.md) |
 | [prettier](./formatting/prettier/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/prettier/COMPONENT.md) |
+| [prisma](./databases/prisma/README.md) | Validate schemas, generate clients and deploy migrations. | `run`, `version`, `migrate-deploy`, [typed contract](./databases/prisma/COMPONENT.md) |
 | [protolint](./linting/protolint/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/protolint/COMPONENT.md) |
 | [pulumi](./infrastructure/pulumi/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `preview`, [typed contract](./infrastructure/pulumi/COMPONENT.md) |
 | [railpack](./containers/railpack/README.md) | Run a native command with literal arguments. | `run`, `version`, `prepare`, [typed contract](./containers/railpack/COMPONENT.md) |
@@ -116,6 +118,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-docker](./setup/docker/README.md) | Install and verify docker, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/docker/COMPONENT.md) |
 | [setup-doppler](./setup/doppler/README.md) | Install and verify doppler, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/doppler/COMPONENT.md) |
 | [setup-dpkg](./setup/dpkg/README.md) | Install and verify dpkg, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/dpkg/COMPONENT.md) |
+| [setup-drizzlekit](./setup/drizzlekit/README.md) | Install and verify a versioned Drizzle Kit CLI. | `setup`, [typed contract](./setup/drizzlekit/COMPONENT.md) |
 | [setup-elixir](./setup/elixir/README.md) | Install and verify elixir, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/elixir/COMPONENT.md) |
 | [setup-erlang](./setup/erlang/README.md) | Install Erlang/OTP with archive or native-package setup and version verification. | `setup`, [typed contract](./setup/erlang/COMPONENT.md) |
 | [setup-expo](./setup/expo/README.md) | Install and verify expo, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/expo/COMPONENT.md) |
@@ -163,6 +166,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-plumber](./setup/plumber/README.md) | Install and verify plumber, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/plumber/COMPONENT.md) |
 | [setup-podman](./setup/podman/README.md) | Install and verify podman, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/podman/COMPONENT.md) |
 | [setup-prettier](./setup/prettier/README.md) | Install and verify prettier, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/prettier/COMPONENT.md) |
+| [setup-prisma](./setup/prisma/README.md) | Install and verify a versioned Prisma ORM CLI. | `setup`, [typed contract](./setup/prisma/COMPONENT.md) |
 | [setup-protolint](./setup/protolint/README.md) | Install and verify protolint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/protolint/COMPONENT.md) |
 | [setup-pulumi](./setup/pulumi/README.md) | Install and verify pulumi, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pulumi/COMPONENT.md) |
 | [setup-purescript](./setup/purescript/README.md) | Install and verify purescript, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/purescript/COMPONENT.md) |

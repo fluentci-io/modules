@@ -52,6 +52,7 @@ export async function suite(name,directory){
   for(const os of ['freebsd','openbsd','netbsd']){
    const f=fixture({os});
    if(name==='macports-rs'){assert.throws(plugin.setup,/macOS-only/);assert.equal(f.calls.length,0);continue;}
+   if(name==='prisma'){assert.throws(plugin.setup,/Linux and macOS only/);assert.equal(f.calls.length,0);continue;}
    if(['dpkg','rpmbuild','nix-package'].includes(name)){assert.throws(plugin.setup,/Linux/);continue;}
    plugin.setup();assert.ok(f.calls.some(a=>['pkg','pkg_add','pkgin'].includes(a[0])));
    assert.ok(!f.calls.some(a=>a[0]==='curl'));

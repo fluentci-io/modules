@@ -36,7 +36,7 @@ def generated():
             for field in command['fields']:
                 kind = 'string' if field['kind']=='csv' else field['kind']
                 prop = {'type':'array','items':{'type':'string','minLength':1}} if kind == 'strings' else {'type':kind}
-                if kind == 'string': prop['minLength'] = 1
+                if kind == 'string' and (field['kind'] != 'csv' or field['required']): prop['minLength'] = 1
                 if kind == 'integer' and field['style'] != 'signed': prop['minimum'] = 0 if field['style'] == 'nonnegative' else 1
                 if kind == 'strings' and field['required']: prop['minItems'] = 1
                 if field['default'] is not None: prop['default'] = field['default']

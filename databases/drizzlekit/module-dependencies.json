@@ -1,0 +1,13 @@
+{
+  "module": "drizzlekit",
+  "requirements": [
+    {
+      "alias": "setup-drizzlekit",
+      "program": "drizzle-kit",
+      "probe": [
+        "which",
+        "drizzle-kit"
+      ]
+    }
+  ]
+}

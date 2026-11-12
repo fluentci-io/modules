@@ -74,6 +74,9 @@
   "dpkg": [
     "setup-dpkg"
   ],
+  "drizzlekit": [
+    "setup-drizzlekit"
+  ],
   "flyctl": [
     "setup-flyctl"
   ],
@@ -159,6 +162,9 @@
   ],
   "prettier": [
     "setup-prettier"
+  ],
+  "prisma": [
+    "setup-prisma"
   ],
   "protolint": [
     "setup-protolint"

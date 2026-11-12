@@ -167,6 +167,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "drizzlekit"
+version = "0.1.0"
+path = "databases/drizzlekit"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "flyctl"
 version = "0.1.0"
 path = "deployment/flyctl"
@@ -352,6 +359,13 @@ runtime = "component"
 name = "prettier"
 version = "0.1.0"
 path = "formatting/prettier"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "prisma"
+version = "0.1.0"
+path = "databases/prisma"
 sdk = "purescript"
 runtime = "component"
 
@@ -685,6 +699,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-drizzlekit"
+version = "0.1.0"
+path = "setup/drizzlekit"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-elixir"
 version = "0.2.1"
 path = "setup/elixir"
@@ -1010,6 +1031,13 @@ runtime = "component"
 name = "setup-prettier"
 version = "0.1.0"
 path = "setup/prettier"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-prisma"
+version = "0.1.0"
+path = "setup/prisma"
 sdk = "purescript"
 runtime = "component"
 

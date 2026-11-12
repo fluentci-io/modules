@@ -714,6 +714,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "drizzlekit",
+    "title": "Drizzle Kit",
+    "program": "drizzle-kit",
+    "backend": "bun",
+    "package": "drizzle-kit",
+    "repository": "",
+    "asset": "",
+    "format": "",
+    "member": "drizzle-kit",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "0.31.11",
+    "linuxPackage": "drizzle-kit",
+    "macPackage": "drizzle-kit",
+    "freebsdPackage": "drizzle-kit",
+    "openbsdPackage": "drizzle-kit",
+    "netbsdPackage": "drizzle-kit",
+    "notes": "Install the CLI with Bun in a per-user prefix; project ORM/client and database drivers are separate dependencies.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "erlang",
     "title": "Erlang/OTP",
     "program": "erl",
@@ -1608,6 +1631,29 @@
     "openbsdPackage": "prettier",
     "netbsdPackage": "prettier",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "prisma",
+    "title": "Prisma",
+    "program": "prisma",
+    "backend": "bun",
+    "package": "prisma",
+    "repository": "",
+    "asset": "",
+    "format": "",
+    "member": "prisma",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "7.8.0",
+    "linuxPackage": "prisma",
+    "macPackage": "prisma",
+    "freebsdPackage": "prisma",
+    "openbsdPackage": "prisma",
+    "netbsdPackage": "prisma",
+    "notes": "Install the CLI with Bun in a per-user prefix; project ORM/client and database drivers are separate dependencies.",
     "tagPrefix": "v"
   },
   {
