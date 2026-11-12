@@ -26,7 +26,7 @@ export async function suite(name,directory){
     if(url.includes('api.github.com')){
      const selected=tools.find(t=>t.repository&&url.includes('/repos/'+t.repository+'/'))??tool;
      const releaseVersion=selected.name==='binaryen'?'125':actual;
-     return JSON.stringify({tag_name:selected.tagPrefix+releaseVersion,assets:[{name:substitute(normalized)(releaseVersion)(selected.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:options.digest??(name==='macports-rs'?'sha256:'+'a'.repeat(64):null)}]});
+     return JSON.stringify({tag_name:selected.tagPrefix+releaseVersion,assets:[{name:substitute(normalized)(releaseVersion)(selected.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:options.digest??(['macports-rs','garden'].includes(selected.name)?'sha256:'+'a'.repeat(64):null)}]});
     }
     if(url.includes('xata-cli-versions.s3.amazonaws.com'))return JSON.stringify({version:actual,targets:{[`${normalized.os==='macos'?'darwin':'linux'}-${normalized.arch==='aarch64'?'arm64':'x64'}`]:{url:'https://xata-cli-versions.s3.amazonaws.com/versions/'+actual+'-latest/xata',sha256sum:options.digest??'a'.repeat(64)}}});
     if(url.includes('clojure')||url.includes('stable.txt'))return actual;

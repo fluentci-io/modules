@@ -1,9 +1,11 @@
+import '../../../test/dependencies/loader.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {fixture} from '../../../test/cli/host.mjs';
-import * as component from '../output/CI.Component/index.js';
 import {Just,Nothing} from '../output/Data.Maybe/index.js';
+// Load the component after the test loader has registered fluentci: imports.
+const component=await import('../output/CI.Component/index.js');
 const schema=JSON.parse(readFileSync(new URL('../schema.json',import.meta.url)));
 const environment={GH_TOKEN:'github-sentinel',FLAKEHUB_PUSH_GITHUB_TOKEN:'flakehub-sentinel',ACTIONS_ID_TOKEN_REQUEST_TOKEN:'request-sentinel',ACTIONS_ID_TOKEN_REQUEST_URL:'https://example.invalid/token?request=1'};
 function args(name,overrides={}) {
