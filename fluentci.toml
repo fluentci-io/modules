@@ -447,6 +447,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-android"
+version = "0.1.0"
+path = "setup/android"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-apko"
 version = "0.1.0"
 path = "setup/apko"

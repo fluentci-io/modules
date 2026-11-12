@@ -77,6 +77,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [scorecard](./security/scorecard/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/scorecard/COMPONENT.md) |
 | [semgrep](./security/semgrep/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/semgrep/COMPONENT.md) |
 | [setup-actionlint](./setup/actionlint/README.md) | Install and verify actionlint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/actionlint/COMPONENT.md) |
+| [setup-android](./setup/android/README.md) | Install Java and a customizable Android SDK for Linux/macOS CI. | `setup`, [typed contract](./setup/android/COMPONENT.md) |
 | [setup-apko](./setup/apko/README.md) | Install and verify apko, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/apko/COMPONENT.md) |
 | [setup-argocd](./setup/argocd/README.md) | Install and verify argocd, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/argocd/COMPONENT.md) |
 | [setup-artifactory](./setup/artifactory/README.md) | Install and verify artifactory, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/artifactory/COMPONENT.md) |

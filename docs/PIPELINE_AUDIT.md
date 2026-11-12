@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 198 modules. This inventory covers every public
+The registry contains 199 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -120,6 +120,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [scorecard](../security/scorecard/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `scan` (pipeline operation), `scan-local` (pipeline operation), `gate` (pipeline operation) |
 | [semgrep](../security/semgrep/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `scan` (pipeline operation), `ci` (pipeline operation) |
 | [setup-actionlint](../setup/actionlint/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-android](../setup/android/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-apko](../setup/apko/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-argocd](../setup/argocd/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-artifactory](../setup/artifactory/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |

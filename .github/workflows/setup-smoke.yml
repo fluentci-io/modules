@@ -16,7 +16,7 @@ jobs:
   upstream:
     name: Live runtime installs / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 40
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -34,7 +34,7 @@ jobs:
       - name: Build runtime setup modules
         shell: bash
         run: |
-          for runtime in bun deno elixir erlang gh gleam go java node pkl purescript rust zig; do
+          for runtime in bun deno elixir erlang gh gleam go java android node pkl purescript rust zig; do
             directory="setup/$runtime"
             npm ci --prefix "$directory"
             npm run build --prefix "$directory"
@@ -44,6 +44,11 @@ jobs:
         run: python3 scripts/setup_ci_toolchain.py --file setup/erlang/dist/plugin.wasm -- --version 27.3.4
       - name: Verify Erlang and GitHub CLI setup modules
         run: node --test setup/erlang/test/*.test.mjs setup/gh/test/*.test.mjs
+      - name: Verify real Android SDK and Java component dependency
+        shell: bash
+        env:
+          FLUENTCI_ANDROID_E2E: '1'
+        run: node --test setup/android/test/e2e.test.mjs 2>&1 | tee "$RUNNER_TEMP/android-e2e.log"
       - name: Install and execute real upstream runtimes in temporary directories
         shell: bash
         env:
@@ -61,6 +66,8 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: setup-smoke-${{ matrix.os }}
-          path: ${{ runner.temp }}/setup-smoke.log
+          path: |
+            ${{ runner.temp }}/setup-smoke.log
+            ${{ runner.temp }}/android-e2e.log
           if-no-files-found: warn
           retention-days: 7

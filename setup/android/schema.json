@@ -1,0 +1,145 @@
+{
+  "name": "setup-android",
+  "runtime": "component",
+  "exports": {
+    "setup": {
+      "description": "Install Java (21 by default) through setup-java, verify Android command-line tools, install selected SDK packages, and publish their environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Pinned Google command-line tools archive build ID; nondefault builds require archiveUrl and archiveSha256. Default: \"15859902\".",
+            "default": "15859902"
+          },
+          "javaVersion": {
+            "type": "string",
+            "description": "Java release or supported selector forwarded to the typed setup-java dependency; defaults to Java 21. Default: \"21\".",
+            "default": "21"
+          },
+          "sdkRoot": {
+            "type": "string",
+            "description": "Absolute SDK root; defaults to a per-user directory keyed by the command-line tools build."
+          },
+          "packages": {
+            "type": "string",
+            "description": "Comma-separated native Android SDK package IDs, such as platform-tools,platforms;android-36,build-tools;36.0.0. Blank installs no packages through this field. Default: \"platform-tools\".",
+            "default": "platform-tools"
+          },
+          "apiLevels": {
+            "type": "string",
+            "description": "Comma-separated API levels or preview names; installs platforms;android-VALUE for each entry."
+          },
+          "buildToolsVersions": {
+            "type": "string",
+            "description": "Comma-separated Android build-tools revisions to install and add to PATH."
+          },
+          "ndkVersions": {
+            "type": "string",
+            "description": "Comma-separated side-by-side NDK revisions to install; ANDROID_NDK_HOME selects the first."
+          },
+          "cmakeVersions": {
+            "type": "string",
+            "description": "Comma-separated SDK CMake revisions to install and add to PATH."
+          },
+          "systemImages": {
+            "type": "string",
+            "description": "Comma-separated complete system-image package IDs; no emulator or virtual device is started."
+          },
+          "packageFile": {
+            "type": "string",
+            "description": "Existing file of newline-separated SDK package IDs, passed to sdkmanager."
+          },
+          "channel": {
+            "type": "integer",
+            "description": "Highest SDK repository channel to include: 0 stable, 1 beta, 2 dev, or 3 canary. Default: 0.",
+            "default": 0
+          },
+          "acceptLicenses": {
+            "type": "boolean",
+            "description": "Accept SDK licenses noninteractively. False uses existing licenses and closed stdin; missing licenses fail installation. Default: true.",
+            "default": true
+          },
+          "proxyType": {
+            "type": "string",
+            "description": "SDK proxy protocol: http or socks; requires proxyHost and proxyPort."
+          },
+          "proxyHost": {
+            "type": "string",
+            "description": "SDK repository proxy hostname or IP address."
+          },
+          "proxyPort": {
+            "type": "integer",
+            "description": "SDK proxy port from 1 to 65535 when a proxy is enabled."
+          },
+          "sdkManagerArgs": {
+            "type": "string",
+            "description": "Additional literal sdkmanager option/value tokens as comma-separated text; cannot change the managed operation or SDK root."
+          },
+          "archiveUrl": {
+            "type": "string",
+            "description": "Optional HTTPS command-line tools ZIP URL for mirrors or alternate builds; requires archiveSha256."
+          },
+          "archiveSha256": {
+            "type": "string",
+            "description": "Lowercase SHA-256 of the alternate ZIP. Default Google downloads use pinned platform checksums."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment",
+          "sdkRoot",
+          "javaVersion",
+          "commandLineToolsBuild"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "sdkRoot": {
+            "type": "string"
+          },
+          "javaVersion": {
+            "type": "string"
+          },
+          "commandLineToolsBuild": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

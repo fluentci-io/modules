@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-java": "path:name = \"setup-java\"\nruntime = \"component\"\npath = \"../java\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}
