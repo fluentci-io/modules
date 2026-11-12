@@ -6,6 +6,7 @@ const {setup}=createRequire(import.meta.url)('../dist/plugin.cjs');
 function host(options={}){
  return fixture('uv',{os:options.os??'linux',input:{version:'0.11.0',...options.input},command:(args)=>{
   if(options.fail?.(args))throw Error('Injected uv environment failure');
+  if(args[0]==='which'&&args[1]==='uv')return options.uvPath??(options.os==='netbsd'?'/usr/pkg/bin/uv':'/usr/local/bin/uv');
   if(args[0].endsWith('/uv')&&args[1]==='--version')return 'uv 0.11.0';
   if(args[0].endsWith('/uv')&&args[1]==='python'&&args[2]==='find')return options.pythonPath??'/fixture/python/bin/python3.13';
   if(args[0]==='/fixture/python/bin/python3.13'&&args[1]==='--version')return 'Python 3.13.5';
@@ -43,9 +44,19 @@ test('invalid Python and tool fields fail before host commands',()=>{
 test('BSD selects an existing matching Python and disables downloads for tools',()=>{
  for(const os of ['freebsd','openbsd','netbsd']){
   const f=host({os,input:{pythonVersion:'3.13',tools:'ruff'}});setup();
+  const uv=(os==='netbsd'?'/usr/pkg':'/usr/local')+'/bin/uv';
+  assert.ok(f.calls.some(a=>a[0]==='which'&&a[1]==='uv'));
+  assert.ok(f.calls.some(a=>a[0]===uv&&a[1]==='python'&&a[2]==='find'));
   assert.ok(!f.calls.some(a=>a[1]==='python'&&a[2]==='install'));
   for(const a of f.calls.filter(a=>a[1]==='tool'||(a[1]==='python'&&a[2]==='find')))assert.ok(a.includes('--no-python-downloads'));
   assert.equal(f.updates.length,1);
+ }
+});
+test('BSD packages without an absolute uv executable path fail without publishing setup',()=>{
+ for(const os of ['freebsd','openbsd','netbsd']){
+  const f=host({os,uvPath:'uv',input:{pythonVersion:'3.13',tools:'ruff'}});
+  assert.throws(setup,/Installed package did not provide uv on PATH/);
+  assert.equal(f.updates.length,0);assert.equal(f.output.length,0);
  }
 });
 test('Python and tool failures never publish a successful setup',()=>{

@@ -11,7 +11,7 @@ import Data.Argonaut.Parser (jsonParser)
 import Data.Array as Array
 import Data.Either (Either(..), either)
 import Data.Foldable (traverse_)
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (fromMaybe)
 import Data.String as String
 import Data.String.Common (trim)
 import Data.String.Pattern (Pattern(..))
