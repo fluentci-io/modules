@@ -3,6 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {fixture} from '../cli/host.mjs';
+import {dependencyOperation} from './operation.mjs';
 
 export async function dependencySuite(directory){
  const spec=JSON.parse(readFileSync(new URL('module-dependencies.json',directory)));
@@ -61,23 +62,24 @@ export async function dependencySuite(directory){
   const component=await import(new URL('output/CI.Component/index.js',directory));
   const {Just,Nothing}=await import(new URL('output/Data.Maybe/index.js',directory));
   const schema=JSON.parse(readFileSync(new URL('schema.json',directory)));
-  const versionArgs=()=>Object.fromEntries(Object.keys(schema.exports.version.input.properties).map(key=>[key,key==='runDir'?'/tmp/setup-dependency-run':Nothing.value]));
+  const operation=dependencyOperation(cli,schema,Nothing.value);
+  const operationArgs=()=>({...operation.input});
   test(spec.module+': the typed operation installs its missing prerequisite before executing the plan',()=>{
    let available=false;const invoked=[];const first=spec.requirements[0];
    globalThis.fluentciSetupDependencies=Object.fromEntries(spec.requirements.map(d=>[d.alias,()=>{invoked.push(d.alias);available=true;}]));
    const f=fixture({fail:args=>!available&&JSON.stringify(args)===JSON.stringify(first.probe)});
-   const result=component.version(versionArgs())();
+   const result=component[operation.name](operationArgs())();
    assert.ok(invoked.includes(first.alias));assert.equal(result.outcome,'succeeded');assert.equal(f.plans.length,1);
   });
   test(spec.module+': explicit executable overrides bypass setup dependencies',()=>{
    globalThis.fluentciSetupDependencies=Object.fromEntries(spec.requirements.map(d=>[d.alias,()=>{throw Error('Unexpected setup');}]));
-   const f=fixture();const input={...versionArgs(),executable:new Just('/fixture/custom-tool')};
-   component.version(input)();assert.equal(f.plans[0].plan.tasks[0].program,'/fixture/custom-tool');
+   const f=fixture();const input={...operationArgs(),executable:new Just('/fixture/custom-tool')};
+   component[operation.name](input)();assert.equal(f.plans[0].plan.tasks[0].program,'/fixture/custom-tool');
    assert.ok(!f.calls.some(args=>args[0]==='which'));
   });
   test(spec.module+': malformed typed operations cannot trigger setup',()=>{
    let invoked=false;globalThis.fluentciSetupDependencies=Object.fromEntries(spec.requirements.map(d=>[d.alias,()=>{invoked=true;}]));
-   const f=fixture();assert.throws(()=>component.version({...versionArgs(),runDir:''})());
+   const f=fixture();assert.throws(()=>component[operation.name]({...operationArgs(),runDir:''})());
    assert.equal(invoked,false);assert.equal(f.calls.length,0);assert.equal(f.plans.length,0);
   });
  }
