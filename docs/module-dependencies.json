@@ -80,6 +80,9 @@
   "flyctl": [
     "setup-flyctl"
   ],
+  "garden": [
+    "setup-garden"
+  ],
   "gcloud": [
     "setup-gcloud"
   ],

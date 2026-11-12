@@ -942,6 +942,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "garden",
+    "title": "Garden",
+    "program": "garden",
+    "backend": "github",
+    "package": "",
+    "repository": "garden-io/garden",
+    "asset": "garden-{version}-{hostos}-{goarch}.tar.gz",
+    "format": "tar",
+    "member": "garden",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "0.14.20",
+    "linuxPackage": "garden-cli",
+    "macPackage": "garden-cli",
+    "freebsdPackage": "garden-cli",
+    "openbsdPackage": "garden-cli",
+    "netbsdPackage": "garden-cli",
+    "notes": "Install the complete official Garden Cedar archive with verified SHA-256. Alpine uses its own amd64 archive; unavailable architecture assets fail clearly. BSD requires a native repository package when available.",
+    "tagPrefix": ""
+  },
+  {
     "name": "gcloud",
     "title": "Google Cloud",
     "program": "gcloud",

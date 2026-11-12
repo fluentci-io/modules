@@ -5905,6 +5905,1723 @@
     ]
   },
   {
+    "name": "garden",
+    "path": "deployment/garden",
+    "title": "Garden",
+    "program": "garden",
+    "docs": "https://docs.garden.io/reference/commands",
+    "notes": "Targets Garden Cedar 0.14. Run in a Garden project with its provider credentials and external build/cluster prerequisites. Authentication stays in inherited environment variables. Confirmation and destructive force flags are opt-in. Native structured outputs are written to the returned stdout log.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Execute arbitrary Garden commands with literal CSV arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the installed Garden version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [
+          "build"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rebuild even when an existing build can be reused.",
+            "choices": []
+          },
+          {
+            "key": "withDependants",
+            "kind": "boolean",
+            "flag": "--with-dependants",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Also rebuild downstream dependants.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Build selected actions and their build dependencies.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy",
+        "args": [
+          "deploy"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Force redeployment.",
+            "choices": []
+          },
+          {
+            "key": "forceBuild",
+            "kind": "boolean",
+            "flag": "--force-build",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rebuild dependencies before deployment.",
+            "choices": []
+          },
+          {
+            "key": "plan",
+            "kind": "boolean",
+            "flag": "--plan",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Show planned changes without deploying; experimental upstream behavior.",
+            "choices": []
+          },
+          {
+            "key": "skip",
+            "kind": "csv",
+            "flag": "--skip",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated deployments to skip.",
+            "choices": []
+          },
+          {
+            "key": "skipDependencies",
+            "kind": "boolean",
+            "flag": "--skip-dependencies",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip runtime dependencies; caller must ensure they are current.",
+            "choices": []
+          },
+          {
+            "key": "withDependants",
+            "kind": "boolean",
+            "flag": "--with-dependants",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Also deploy downstream dependants.",
+            "choices": []
+          },
+          {
+            "key": "disablePortForwards",
+            "kind": "boolean",
+            "flag": "--disable-port-forwards",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Disable automatic port forwards.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Deploy selected actions using the Garden dependency graph.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "test",
+        "args": [
+          "test"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rerun tests even when successful cached results exist.",
+            "choices": []
+          },
+          {
+            "key": "forceBuild",
+            "kind": "boolean",
+            "flag": "--force-build",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rebuild dependencies before testing.",
+            "choices": []
+          },
+          {
+            "key": "modules",
+            "kind": "csv",
+            "flag": "--module",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated modules to select tests from.",
+            "choices": []
+          },
+          {
+            "key": "skip",
+            "kind": "csv",
+            "flag": "--skip",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated tests or native globs to skip.",
+            "choices": []
+          },
+          {
+            "key": "skipDependencies",
+            "kind": "boolean",
+            "flag": "--skip-dependencies",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip runtime dependencies only when already prepared.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Run selected Test actions, including required build and runtime dependencies.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_actions",
+        "args": [
+          "run"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Execute disabled or cached successful actions.",
+            "choices": []
+          },
+          {
+            "key": "forceBuild",
+            "kind": "boolean",
+            "flag": "--force-build",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rebuild dependencies first.",
+            "choices": []
+          },
+          {
+            "key": "modules",
+            "kind": "csv",
+            "flag": "--module",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated modules to select Run actions from.",
+            "choices": []
+          },
+          {
+            "key": "skip",
+            "kind": "csv",
+            "flag": "--skip",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Comma-separated Run names or globs to skip.",
+            "choices": []
+          },
+          {
+            "key": "skipDependencies",
+            "kind": "boolean",
+            "flag": "--skip-dependencies",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip runtime dependencies only when already prepared.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Execute named Run actions and dependencies for migrations, seed jobs or integration tasks.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "workflow",
+        "args": [
+          "workflow"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "ci",
+            "style": "value",
+            "scope": "positional",
+            "description": "Garden workflow name.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Execute a project-defined workflow in the selected environment.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "status",
+        "args": [
+          "get",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "skipDetail",
+            "kind": "boolean",
+            "flag": "--skip-detail",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Omit provider-specific details from structured results.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect provider and action status for the selected environment.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "outputs",
+        "args": [
+          "get",
+          "outputs"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Resolve project outputs, including configured runtime output references.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "graph",
+        "args": [
+          "get",
+          "graph"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect the project dependency graph.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config",
+        "args": [
+          "get",
+          "config"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Inspect resolved project configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "publish",
+        "args": [
+          "publish"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "forceBuild",
+            "kind": "boolean",
+            "flag": "--force-build",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Rebuild before publishing.",
+            "choices": []
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "--tag",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Registry tag or Garden native template string; passed literally.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Build and publish selected artifacts to configured registries.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "logs",
+        "args": [
+          "logs"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "since",
+            "kind": "string",
+            "flag": "--since",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "option",
+            "description": "Relative duration such as 10m.",
+            "choices": []
+          },
+          {
+            "key": "tail",
+            "kind": "integer",
+            "flag": "--tail",
+            "default": null,
+            "required": false,
+            "sample": 100,
+            "style": "value",
+            "scope": "option",
+            "description": "Maximum log lines per deployment.",
+            "choices": []
+          },
+          {
+            "key": "follow",
+            "kind": "boolean",
+            "flag": "--follow",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Stream continuously; bound with timeout-ms and a scoped lifecycle.",
+            "choices": []
+          },
+          {
+            "key": "timestamps",
+            "kind": "boolean",
+            "flag": "--timestamps",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Include native log timestamps.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Collect deployment logs without following by default.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "cleanup_deploy",
+        "args": [
+          "cleanup",
+          "deploy"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "names",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "api",
+            "style": "value",
+            "scope": "positional",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions.",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Also remove deployments with removeOnCleanup disabled.",
+            "choices": []
+          },
+          {
+            "key": "dependantsFirst",
+            "kind": "boolean",
+            "flag": "--dependants-first",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Clean in reverse dependency order.",
+            "choices": []
+          },
+          {
+            "key": "withDependants",
+            "kind": "boolean",
+            "flag": "--with-dependants",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Also remove downstream dependants.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Remove selected deployments; omitted names targets all eligible deployments in this project environment.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "cleanup_namespace",
+        "args": [
+          "cleanup",
+          "namespace"
+        ],
+        "fields": [
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--env",
+            "default": null,
+            "required": false,
+            "sample": "pr-123.ci",
+            "style": "value",
+            "scope": "global",
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci).",
+            "choices": []
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--var",
+            "default": null,
+            "required": false,
+            "sample": "imageTag=abc123",
+            "style": "assignments",
+            "scope": "global",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration.",
+            "choices": []
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native structured result format; read it from the returned stdout path.",
+            "choices": [
+              "json",
+              "yaml"
+            ]
+          },
+          {
+            "key": "logLevel",
+            "kind": "string",
+            "flag": "--log-level",
+            "default": null,
+            "required": false,
+            "sample": null,
+            "style": "value",
+            "scope": "global",
+            "description": "Native log verbosity.",
+            "choices": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ]
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves.",
+            "choices": []
+          },
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Clean the project environment namespace; explicitly select the intended environment.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
     "name": "gcloud",
     "path": "cloud/gcloud",
     "program": "gcloud",

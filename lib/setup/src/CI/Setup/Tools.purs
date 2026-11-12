@@ -202,21 +202,26 @@ githubRelease tool host requested = do
   let version = fromMaybe tagName (String.stripPrefix (Pattern tool.tagPrefix) tagName)
   unless (versionToken version) $ throw "Upstream returned an invalid release version"
   assets <- H.field "assets" json :: Effect (Array { name :: String, browser_download_url :: String, digest :: Maybe String })
-  let wanted = substitute host version tool.asset
+  alpine <- if tool.name == "garden" && host.os == "linux" then H.exists "/etc/alpine-release" else pure false
+  let platform = if alpine then host { os = "alpine" } else host
+      wanted = substitute platform version tool.asset
   asset <- case Array.find (\asset -> asset.name == wanted) assets of
     Nothing -> throw ("No official " <> tool.name <> " asset for " <> host.os <> "/" <> host.arch <> ": " <> wanted)
     Just asset -> pure asset
   digest <- case asset.digest >>= String.stripPrefix (Pattern "sha256:") of
-    Nothing -> if tool.name == "macports-rs" then do
+    Nothing -> if Array.elem tool.name [ "macports-rs", "garden" ] then do
       checksum <- case Array.find (\entry -> entry.name == wanted <> ".sha256") assets of
-        Nothing -> throw "macports-rs release has no SHA-256 checksum"
+        Nothing -> throw (tool.name <> " release has no SHA-256 checksum")
         Just entry -> pure entry
       text <- trim <$> H.fetch checksum.browser_download_url
       case Array.head (String.split (Pattern " ") text) of
         Just value | value /= "" -> pure value
-        _ -> throw "Invalid macports-rs release checksum"
+        _ -> throw ("Invalid " <> tool.name <> " release checksum")
       else pure ""
     Just value -> pure value
+  when (tool.name == "garden") $
+    unless (CU.length digest == 64 && all (\c -> (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) (CU.toCharArray digest)) $
+      throw "Garden release must provide a valid SHA-256 checksum"
   pure { version, url: asset.browser_download_url, sha256: digest }
 
 extract :: Tool -> String -> String -> String -> Effect Unit

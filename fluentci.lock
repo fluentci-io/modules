@@ -41,6 +41,7 @@
     "dependency:databases/xata:setup-xata": "path:name = \"setup-xata\"\nruntime = \"component\"\npath = \"databases/xata/../../setup/xata\"\nsdk = \"purescript\"\n",
     "dependency:deployment/argocd:setup-argocd": "path:name = \"setup-argocd\"\nruntime = \"component\"\npath = \"deployment/argocd/../../setup/argocd\"\nsdk = \"purescript\"\n",
     "dependency:deployment/flyctl:setup-flyctl": "path:name = \"setup-flyctl\"\nruntime = \"component\"\npath = \"deployment/flyctl/../../setup/flyctl\"\nsdk = \"purescript\"\n",
+    "dependency:deployment/garden:setup-garden": "path:name = \"setup-garden\"\nruntime = \"component\"\npath = \"deployment/garden/../../setup/garden\"\nsdk = \"purescript\"\n",
     "dependency:deployment/helm:setup-helm": "path:name = \"setup-helm\"\nruntime = \"component\"\npath = \"deployment/helm/../../setup/helm\"\nsdk = \"purescript\"\n",
     "dependency:deployment/kamal:setup-kamal": "path:name = \"setup-kamal\"\nruntime = \"component\"\npath = \"deployment/kamal/../../setup/kamal\"\nsdk = \"purescript\"\n",
     "dependency:deployment/kubectl:setup-kubectl": "path:name = \"setup-kubectl\"\nruntime = \"component\"\npath = \"deployment/kubectl/../../setup/kubectl\"\nsdk = \"purescript\"\n",

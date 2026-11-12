@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 203 modules. This inventory covers every public
+The registry contains 205 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -82,6 +82,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [dpkg](../packaging/dpkg/README.md) | Validate a Linux package tree and produce an architecture-specific package. | `build` (pipeline operation), `validate` (pipeline operation) |
 | [drizzlekit](../databases/drizzlekit/README.md) | Manage preview databases, migrations, schema deployments, queries, and database access. | `run` (escape hatch), `version` (diagnostic), `generate` (pipeline operation), `migrate` (pipeline operation), `push` (pipeline operation), `pull` (pipeline operation), `check` (pipeline operation), `up` (pipeline operation), `export-sql` (pipeline operation), `studio` (pipeline operation) |
 | [flyctl](../deployment/flyctl/README.md) | Deploy an application and inspect its rollout or service state. | `run` (escape hatch), `version` (diagnostic), `deploy` (pipeline operation), `status` (pipeline operation), `logs` (pipeline operation) |
+| [garden](../deployment/garden/README.md) | Deploy an application and inspect its rollout or service state. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `deploy` (pipeline operation), `test` (pipeline operation), `run-actions` (pipeline operation), `workflow` (pipeline operation), `status` (pipeline operation), `outputs` (pipeline operation), `graph` (pipeline operation), `config` (pipeline operation), `publish` (pipeline operation), `logs` (pipeline operation), `cleanup-deploy` (pipeline operation), `cleanup-namespace` (pipeline operation) |
 | [gcloud](../cloud/gcloud/README.md) | Inspect accounts, provision resources, or transfer deployment outputs. | `run` (escape hatch), `version` (diagnostic), `config-list` (pipeline operation), `run-deploy` (pipeline operation), `storage-cp` (pipeline operation), `instances-list` (pipeline operation) |
 | [gemfury](../publishing/gemfury/README.md) | Publish built packages to a package repository. | `upload` (pipeline operation) |
 | [gh-artifact](../artifacts/gh-artifact/README.md) | Publish or retrieve build outputs and release assets. | `run` (escape hatch), `version` (diagnostic), `upload` (pipeline operation), `download` (pipeline operation), `release-upload` (pipeline operation), `release-download` (pipeline operation) |
@@ -167,6 +168,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-flakehub-push](../setup/flakehub-push/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-flox](../setup/flox/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-flyctl](../setup/flyctl/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-garden](../setup/garden/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gcloud](../setup/gcloud/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gemfury](../setup/gemfury/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-gh](../setup/gh/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |

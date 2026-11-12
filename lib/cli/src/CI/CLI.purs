@@ -13,6 +13,7 @@ import Data.Foldable (all, foldl, traverse_)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as String
 import Data.String.Common (trim)
+import Data.String.CodeUnits as CU
 import Data.String.Pattern (Pattern(..))
 import Data.Traversable (traverse)
 import Effect (Effect)
@@ -80,6 +81,10 @@ valueTokens field value = do
       values <- CSV.parse text
       when (field.required && Array.null values) $ Left (field.key <> " must not be empty")
       unless (all validText values) $ Left (field.key <> " must not contain NUL")
+      when (field.style == "assignments") $ traverse_ (\value -> do
+        let key = fromMaybe "" (Array.head (String.split (Pattern "=") value))
+        unless (key /= "" && String.contains (Pattern "=") value && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ]) (CU.toCharArray key)) $
+          Left (field.key <> " entries must be KEY=VALUE with alphanumeric, underscore, dash or dot keys")) values
       pure values
     "strings" -> do
       values <- jsonValue value

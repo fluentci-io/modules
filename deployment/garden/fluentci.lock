@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-garden": "path:name = \"setup-garden\"\nruntime = \"component\"\npath = \"../../setup/garden\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

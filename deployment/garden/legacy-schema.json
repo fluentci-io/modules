@@ -1,0 +1,1286 @@
+{
+  "name": "garden",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "build": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Rebuild even when an existing build can be reused."
+          },
+          "withDependants": {
+            "type": "boolean",
+            "description": "Also rebuild downstream dependants."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Force redeployment."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild dependencies before deployment."
+          },
+          "plan": {
+            "type": "boolean",
+            "description": "Show planned changes without deploying; experimental upstream behavior."
+          },
+          "skip": {
+            "type": "string",
+            "description": "Comma-separated deployments to skip."
+          },
+          "skipDependencies": {
+            "type": "boolean",
+            "description": "Skip runtime dependencies; caller must ensure they are current."
+          },
+          "withDependants": {
+            "type": "boolean",
+            "description": "Also deploy downstream dependants."
+          },
+          "disablePortForwards": {
+            "type": "boolean",
+            "description": "Disable automatic port forwards."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "test": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Rerun tests even when successful cached results exist."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild dependencies before testing."
+          },
+          "modules": {
+            "type": "string",
+            "description": "Comma-separated modules to select tests from."
+          },
+          "skip": {
+            "type": "string",
+            "description": "Comma-separated tests or native globs to skip."
+          },
+          "skipDependencies": {
+            "type": "boolean",
+            "description": "Skip runtime dependencies only when already prepared."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "run_actions": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Execute disabled or cached successful actions."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild dependencies first."
+          },
+          "modules": {
+            "type": "string",
+            "description": "Comma-separated modules to select Run actions from."
+          },
+          "skip": {
+            "type": "string",
+            "description": "Comma-separated Run names or globs to skip."
+          },
+          "skipDependencies": {
+            "type": "boolean",
+            "description": "Skip runtime dependencies only when already prepared."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "workflow": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden workflow name."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "skipDetail": {
+            "type": "boolean",
+            "description": "Omit provider-specific details from structured results."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "outputs": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "graph": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "publish": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild before publishing."
+          },
+          "tag": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Registry tag or Garden native template string; passed literally."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "logs": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "since": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative duration such as 10m."
+          },
+          "tail": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum log lines per deployment."
+          },
+          "follow": {
+            "type": "boolean",
+            "description": "Stream continuously; bound with timeout-ms and a scoped lifecycle."
+          },
+          "timestamps": {
+            "type": "boolean",
+            "description": "Include native log timestamps."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "cleanup_deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Also remove deployments with removeOnCleanup disabled."
+          },
+          "dependantsFirst": {
+            "type": "boolean",
+            "description": "Clean in reverse dependency order."
+          },
+          "withDependants": {
+            "type": "boolean",
+            "description": "Also remove downstream dependants."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "cleanup_namespace": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

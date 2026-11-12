@@ -181,6 +181,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "garden"
+version = "0.1.0"
+path = "deployment/garden"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "gcloud"
 version = "0.1.0"
 path = "cloud/gcloud"
@@ -772,6 +779,13 @@ runtime = "component"
 name = "setup-flyctl"
 version = "0.1.0"
 path = "setup/flyctl"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-garden"
+version = "0.1.0"
+path = "setup/garden"
 sdk = "purescript"
 runtime = "component"
 

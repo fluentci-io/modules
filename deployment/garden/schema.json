@@ -1,0 +1,1662 @@
+{
+  "name": "garden",
+  "runtime": "component",
+  "exports": {
+    "run": {
+      "description": "Execute arbitrary Garden commands with literal CSV arguments.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Print the installed Garden version.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "build": {
+      "description": "Build selected actions and their build dependencies.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Rebuild even when an existing build can be reused."
+          },
+          "withDependants": {
+            "type": "boolean",
+            "description": "Also rebuild downstream dependants."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "deploy": {
+      "description": "Deploy selected actions using the Garden dependency graph.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Force redeployment."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild dependencies before deployment."
+          },
+          "plan": {
+            "type": "boolean",
+            "description": "Show planned changes without deploying; experimental upstream behavior."
+          },
+          "skip": {
+            "type": "string",
+            "description": "Comma-separated deployments to skip."
+          },
+          "skipDependencies": {
+            "type": "boolean",
+            "description": "Skip runtime dependencies; caller must ensure they are current."
+          },
+          "withDependants": {
+            "type": "boolean",
+            "description": "Also deploy downstream dependants."
+          },
+          "disablePortForwards": {
+            "type": "boolean",
+            "description": "Disable automatic port forwards."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "test": {
+      "description": "Run selected Test actions, including required build and runtime dependencies.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Rerun tests even when successful cached results exist."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild dependencies before testing."
+          },
+          "modules": {
+            "type": "string",
+            "description": "Comma-separated modules to select tests from."
+          },
+          "skip": {
+            "type": "string",
+            "description": "Comma-separated tests or native globs to skip."
+          },
+          "skipDependencies": {
+            "type": "boolean",
+            "description": "Skip runtime dependencies only when already prepared."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "run_actions": {
+      "description": "Execute named Run actions and dependencies for migrations, seed jobs or integration tasks.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Execute disabled or cached successful actions."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild dependencies first."
+          },
+          "modules": {
+            "type": "string",
+            "description": "Comma-separated modules to select Run actions from."
+          },
+          "skip": {
+            "type": "string",
+            "description": "Comma-separated Run names or globs to skip."
+          },
+          "skipDependencies": {
+            "type": "boolean",
+            "description": "Skip runtime dependencies only when already prepared."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "workflow": {
+      "description": "Execute a project-defined workflow in the selected environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden workflow name."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "status": {
+      "description": "Inspect provider and action status for the selected environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "skipDetail": {
+            "type": "boolean",
+            "description": "Omit provider-specific details from structured results."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "outputs": {
+      "description": "Resolve project outputs, including configured runtime output references.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "graph": {
+      "description": "Inspect the project dependency graph.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "config": {
+      "description": "Inspect resolved project configuration.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "publish": {
+      "description": "Build and publish selected artifacts to configured registries.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "forceBuild": {
+            "type": "boolean",
+            "description": "Rebuild before publishing."
+          },
+          "tag": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Registry tag or Garden native template string; passed literally."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "logs": {
+      "description": "Collect deployment logs without following by default.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "since": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative duration such as 10m."
+          },
+          "tail": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum log lines per deployment."
+          },
+          "follow": {
+            "type": "boolean",
+            "description": "Stream continuously; bound with timeout-ms and a scoped lifecycle."
+          },
+          "timestamps": {
+            "type": "boolean",
+            "description": "Include native log timestamps."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cleanup_deploy": {
+      "description": "Remove selected deployments; omitted names targets all eligible deployments in this project environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "names": {
+            "type": "string",
+            "description": "Comma-separated action names or native glob selectors; omitted or blank selects all eligible actions."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Also remove deployments with removeOnCleanup disabled."
+          },
+          "dependantsFirst": {
+            "type": "boolean",
+            "description": "Clean in reverse dependency order."
+          },
+          "withDependants": {
+            "type": "boolean",
+            "description": "Also remove downstream dependants."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cleanup_namespace": {
+      "description": "Clean the project environment namespace; explicitly select the intended environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Garden environment, optionally prefixed with a namespace (for example pr-123.ci)."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE variable overrides. For secrets use native environment-backed Garden configuration."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "json",
+              "yaml"
+            ],
+            "description": "Native structured result format; read it from the returned stdout path. Allowed values: json, yaml."
+          },
+          "logLevel": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "error",
+              "warn",
+              "info",
+              "verbose",
+              "debug",
+              "silly"
+            ],
+            "description": "Native log verbosity. Allowed values: error, warn, info, verbose, debug, silly."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve prompts and protected production commands; omitted never auto-approves."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Literal extra tokens as a comma-separated string; CSV quotes preserve commas inside tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
