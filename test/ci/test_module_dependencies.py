@@ -39,12 +39,16 @@ class ModuleDependencies(unittest.TestCase):
                 self.assertFalse(schema['exports']['setup']['input'].get('required'))
                 self.assertEqual(definition['runtime'], 'component')
             lock = json.loads((directory / 'fluentci.lock').read_text())
-            self.assertEqual({key.split('::', 1)[1] for key in lock['modules']}, set(dependencies))
+            self.assertEqual({key.split('::', 1)[1] for key in lock['modules'] if key.startswith('dependency::')}, set(dependencies))
             for key, value in lock['modules'].items():
                 self.assertTrue(value.startswith('path:'))
                 locked = tomllib.loads(value.removeprefix('path:'))
-                self.assertEqual(locked['name'], key.split('::', 1)[1])
-                self.assertEqual(locked['path'], dependencies[locked['name']]['path'])
+                source, alias = key.removeprefix('dependency:').rsplit(':', 1)
+                self.assertEqual(locked['name'], alias)
+                source_manifest = tomllib.loads((directory / source / 'fluentci-module.toml').read_text())
+                definition = source_manifest['dependencies'][alias]
+                expected_path = source + '/' + definition['path'] if source else definition['path']
+                self.assertEqual(locked['path'], expected_path)
         def visit(node, stack):
             self.assertNotIn(node, stack, 'Cyclic setup dependency graph')
             for child in graph[node]:

@@ -599,6 +599,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "depot",
+    "title": "Depot",
+    "program": "depot",
+    "backend": "github",
+    "package": "",
+    "repository": "depot/cli",
+    "asset": "depot_{version}_{os}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "depot",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "depot",
+    "macPackage": "depot",
+    "freebsdPackage": "depot",
+    "openbsdPackage": "depot",
+    "netbsdPackage": "depot",
+    "notes": "Linux/macOS official releases. Credentials use DEPOT_TOKEN or native CI OIDC; no Docker daemon is needed for remote builds.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "devbox",
     "title": "Devbox",
     "program": "devbox",
@@ -916,6 +939,29 @@
     "openbsdPackage": "flakehub-push",
     "netbsdPackage": "flakehub-push",
     "notes": "Requires an existing Nix installation with flakes support. Version selects an upstream release tag (for example 7 or v7), not the publisher Cargo version. Installs that pinned flake in a private profile and checks executability without invoking authenticated publishing commands. The returned version is the selected release. GitHub OIDC credentials are required only when publishing.",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "flipt",
+    "title": "Flipt",
+    "program": "flipt",
+    "backend": "github",
+    "package": "",
+    "repository": "flipt-io/flipt",
+    "asset": "flipt_{os}_{bazelarch}.tar.gz",
+    "format": "tar",
+    "member": "flipt",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "flipt",
+    "macPackage": "flipt",
+    "freebsdPackage": "flipt",
+    "openbsdPackage": "flipt",
+    "netbsdPackage": "flipt",
+    "notes": "Official Linux/macOS releases. Typed pipeline commands target Flipt v2; v1 remains accessible via run.",
     "tagPrefix": "v"
   },
   {

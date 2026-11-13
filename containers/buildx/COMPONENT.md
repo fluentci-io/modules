@@ -3,6 +3,19 @@
 Requires FluentCI v0.17.3 or newer. The compiler derives native WIT signatures
 and embedded help from these typed PureScript functions. Optional arguments may be omitted.
 
+## `setup`
+
+Ensure buildx is installed and verified, reusing an available matching version, and publish its environment.
+
+| Argument | Type | Required | Description |
+| --- | --- | --- | --- |
+| `version` | `string` | no | Tool release or supported channel to install; omitted values use the documented default. |
+| `install-dir` | `string` | no | Absolute per-user installation prefix; omit for native package installations. |
+| `package-name` | `string` | no | Native package or port selector overriding the default repository package name. |
+| `sudo` | `boolean` | no | Use noninteractive sudo for native package or system installation; defaults to false. |
+
+Returns `Contract.SetupResult`.
+
 ## `buildx`
 
 Run Docker Buildx buildx and return execution report paths.
@@ -14,7 +27,7 @@ Run Docker Buildx buildx and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 
@@ -31,7 +44,7 @@ Run Docker Buildx dap and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 
@@ -48,7 +61,7 @@ Run Docker Buildx debug and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `invoke` | `string` | no | --invoke: Launch a monitor with executing specified |
@@ -67,7 +80,7 @@ Run Docker Buildx history and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 
@@ -84,7 +97,7 @@ Run Docker Buildx imagetools and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 
@@ -101,7 +114,7 @@ Run Docker Buildx policy and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 
@@ -118,26 +131,26 @@ Run Docker Buildx bake and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `targets` | `array` | no | Bake targets. Default: []. |
+| `targets` | `string` | no | Bake targets. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `allow` | `array` | no | --allow: Allow build to access specified resources |
+| `allow` | `string` | no | --allow: Allow build to access specified resources Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `call` | `string` | no | --call: Set method for evaluating build ("check", |
 | `check` | `boolean` | no | --check: Shorthand for "--call=check" |
-| `file` | `array` | no | --file: Build definition file |
+| `file` | `string` | no | --file: Build definition file Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `list` | `string` | no | --list: List targets or variables |
 | `load` | `boolean` | no | --load: Shorthand for |
 | `metadata-file` | `string` | no | --metadata-file: Write build result metadata to a file |
 | `no-cache` | `boolean` | no | --no-cache: Do not use cache when building the image |
-| `policy` | `array` | no | --policy: Global policy evaluation options (format: |
+| `policy` | `string` | no | --policy: Global policy evaluation options (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `print` | `boolean` | no | --print: Print the options without building |
 | `progress` | `string` | no | --progress: Set type of progress output ("auto", |
 | `provenance` | `string` | no | --provenance: Shorthand for "--set=*.attest=type=provenance" |
 | `pull` | `boolean` | no | --pull: Always attempt to pull all referenced images |
 | `push` | `boolean` | no | --push: Shorthand for |
 | `sbom` | `string` | no | --sbom: Shorthand for "--set=*.attest=type=sbom" |
-| `set` | `array` | no | --set: Override target value (e.g., |
-| `var` | `array` | no | --var: Set a variable value (e.g., "name=value") |
+| `set` | `string` | no | --set: Override target value (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `var` | `string` | no | --var: Set a variable value (e.g., "name=value") Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -155,41 +168,41 @@ Run Docker Buildx build and return execution report paths.
 | `context` | `string` | no | Build context: path, URL or '-' (stdin is not forwarded by the guest). Default: ".". |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `add-host` | `array` | no | --add-host: Add a custom host-to-IP mapping |
-| `allow` | `array` | no | --allow: Allow extra privileged entitlement |
-| `annotation` | `array` | no | --annotation: Add annotation to the image |
-| `attest` | `array` | no | --attest: Attestation parameters (format: |
-| `build-arg` | `array` | no | --build-arg: Set build-time variables |
-| `build-context` | `array` | no | --build-context: Additional build contexts (e.g., |
-| `cache-from` | `array` | no | --cache-from: External cache sources (e.g., |
-| `cache-to` | `array` | no | --cache-to: Cache export destinations (e.g., |
+| `add-host` | `string` | no | --add-host: Add a custom host-to-IP mapping Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `allow` | `string` | no | --allow: Allow extra privileged entitlement Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `annotation` | `string` | no | --annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `attest` | `string` | no | --attest: Attestation parameters (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `build-arg` | `string` | no | --build-arg: Set build-time variables Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `build-context` | `string` | no | --build-context: Additional build contexts (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `cache-from` | `string` | no | --cache-from: External cache sources (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `cache-to` | `string` | no | --cache-to: Cache export destinations (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `call` | `string` | no | --call: Set method for evaluating build |
 | `cgroup-parent` | `string` | no | --cgroup-parent: Set the parent cgroup for the "RUN" |
 | `check` | `boolean` | no | --check: Shorthand for "--call=check" |
 | `file` | `string` | no | --file: Name of the Dockerfile (default: |
 | `iidfile` | `string` | no | --iidfile: Write the image ID to a file |
-| `label` | `array` | no | --label: Set metadata for an image |
+| `label` | `string` | no | --label: Set metadata for an image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `load` | `boolean` | no | --load: Shorthand for "--output=type=docker" |
 | `metadata-file` | `string` | no | --metadata-file: Write build result metadata to a file |
 | `network` | `string` | no | --network: Set the networking mode for the |
 | `no-cache` | `boolean` | no | --no-cache: Do not use cache when building the image |
-| `no-cache-filter` | `array` | no | --no-cache-filter: Do not cache specified stages |
-| `output` | `array` | no | --output: Output destination (format: |
-| `platform` | `array` | no | --platform: Set target platform for build |
-| `policy` | `array` | no | --policy: Policy configuration (format: |
+| `no-cache-filter` | `string` | no | --no-cache-filter: Do not cache specified stages Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `output` | `string` | no | --output: Output destination (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `platform` | `string` | no | --platform: Set target platform for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `policy` | `string` | no | --policy: Policy configuration (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `progress` | `string` | no | --progress: Set type of progress output |
 | `provenance` | `string` | no | --provenance: Shorthand for "--attest=type=provenance" |
 | `pull` | `boolean` | no | --pull: Always attempt to pull all |
 | `push` | `boolean` | no | --push: Shorthand for |
 | `quiet` | `boolean` | no | --quiet: Suppress the build output and print |
-| `resource` | `array` | no | --resource: Resource limits for build |
+| `resource` | `string` | no | --resource: Resource limits for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `sbom` | `string` | no | --sbom: Shorthand for "--attest=type=sbom" |
-| `secret` | `array` | no | --secret: Secret to expose to the build |
+| `secret` | `string` | no | --secret: Secret to expose to the build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `shm-size` | `string` | no | --shm-size: Shared memory size for build containers |
-| `ssh` | `array` | no | --ssh: SSH agent socket or keys to expose |
-| `tag` | `array` | no | --tag: Image identifier (format: |
+| `ssh` | `string` | no | --ssh: SSH agent socket or keys to expose Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `tag` | `string` | no | --tag: Image identifier (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `target` | `string` | no | --target: Set the target build stage to build |
-| `ulimit` | `array` | no | --ulimit: Ulimit options (default []) |
+| `ulimit` | `string` | no | --ulimit: Ulimit options (default: none) Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -212,11 +225,11 @@ Run Docker Buildx create and return execution report paths.
 | `buildkitd-config` | `string` | no | --buildkitd-config: BuildKit daemon config file |
 | `buildkitd-flags` | `string` | no | --buildkitd-flags: BuildKit daemon flags |
 | `driver` | `string` | no | --driver: Driver to use (available: "cloud", |
-| `driver-opt` | `array` | no | --driver-opt: Options for the driver |
+| `driver-opt` | `string` | no | --driver-opt: Options for the driver Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `leave` | `boolean` | no | --leave: Remove a node from builder instead of |
 | `name` | `string` | no | --name: Builder instance name |
 | `node` | `string` | no | --node: Create/modify node with given name |
-| `platform` | `array` | no | --platform: Fixed platforms for current node |
+| `platform` | `string` | no | --platform: Fixed platforms for current node Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `timeout` | `string` | no | --timeout: Override the default timeout for |
 | `use` | `boolean` | no | --use: Set the current builder instance |
 
@@ -253,7 +266,7 @@ Run Docker Buildx du and return execution report paths.
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `filter` | `array` | no | --filter: Provide filter values |
+| `filter` | `string` | no | --filter: Provide filter values Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `format` | `string` | no | --format: Format the output |
 | `timeout` | `string` | no | --timeout: Override the default timeout for loading |
 | `verbose` | `boolean` | no | --verbose: Shorthand for "--format=pretty" |
@@ -312,7 +325,7 @@ Run Docker Buildx prune and return execution report paths.
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `all` | `boolean` | no | --all: Include internal/frontend images |
-| `filter` | `array` | no | --filter: Provide filter values |
+| `filter` | `string` | no | --filter: Provide filter values Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `force` | `boolean` | no | --force: Do not prompt for confirmation |
 | `max-used-space` | `string` | no | --max-used-space: Maximum amount of disk space allowed to |
 | `min-free-space` | `string` | no | --min-free-space: Target amount of free disk space after pruning |
@@ -333,7 +346,7 @@ Run Docker Buildx rm and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `names` | `array` | no | Builder instance names. Default: []. |
+| `names` | `string` | no | Builder instance names. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `all-inactive` | `boolean` | no | --all-inactive: Remove all inactive builders |
@@ -410,41 +423,41 @@ Run Docker Buildx dap build and return execution report paths.
 | `context` | `string` | no | Build context: path, URL or '-' (stdin is not forwarded by the guest). Default: ".". |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `add-host` | `array` | no | --add-host: Add a custom host-to-IP mapping |
-| `allow` | `array` | no | --allow: Allow extra privileged entitlement |
-| `annotation` | `array` | no | --annotation: Add annotation to the image |
-| `attest` | `array` | no | --attest: Attestation parameters (format: |
-| `build-arg` | `array` | no | --build-arg: Set build-time variables |
-| `build-context` | `array` | no | --build-context: Additional build contexts (e.g., |
-| `cache-from` | `array` | no | --cache-from: External cache sources (e.g., |
-| `cache-to` | `array` | no | --cache-to: Cache export destinations (e.g., |
+| `add-host` | `string` | no | --add-host: Add a custom host-to-IP mapping Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `allow` | `string` | no | --allow: Allow extra privileged entitlement Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `annotation` | `string` | no | --annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `attest` | `string` | no | --attest: Attestation parameters (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `build-arg` | `string` | no | --build-arg: Set build-time variables Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `build-context` | `string` | no | --build-context: Additional build contexts (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `cache-from` | `string` | no | --cache-from: External cache sources (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `cache-to` | `string` | no | --cache-to: Cache export destinations (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `call` | `string` | no | --call: Set method for evaluating build |
 | `cgroup-parent` | `string` | no | --cgroup-parent: Set the parent cgroup for the "RUN" |
 | `check` | `boolean` | no | --check: Shorthand for "--call=check" |
 | `file` | `string` | no | --file: Name of the Dockerfile (default: |
 | `iidfile` | `string` | no | --iidfile: Write the image ID to a file |
-| `label` | `array` | no | --label: Set metadata for an image |
+| `label` | `string` | no | --label: Set metadata for an image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `load` | `boolean` | no | --load: Shorthand for "--output=type=docker" |
 | `metadata-file` | `string` | no | --metadata-file: Write build result metadata to a file |
 | `network` | `string` | no | --network: Set the networking mode for the |
 | `no-cache` | `boolean` | no | --no-cache: Do not use cache when building the image |
-| `no-cache-filter` | `array` | no | --no-cache-filter: Do not cache specified stages |
-| `output` | `array` | no | --output: Output destination (format: |
-| `platform` | `array` | no | --platform: Set target platform for build |
-| `policy` | `array` | no | --policy: Policy configuration (format: |
+| `no-cache-filter` | `string` | no | --no-cache-filter: Do not cache specified stages Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `output` | `string` | no | --output: Output destination (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `platform` | `string` | no | --platform: Set target platform for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `policy` | `string` | no | --policy: Policy configuration (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `progress` | `string` | no | --progress: Set type of progress output |
 | `provenance` | `string` | no | --provenance: Shorthand for "--attest=type=provenance" |
 | `pull` | `boolean` | no | --pull: Always attempt to pull all |
 | `push` | `boolean` | no | --push: Shorthand for |
 | `quiet` | `boolean` | no | --quiet: Suppress the build output and print |
-| `resource` | `array` | no | --resource: Resource limits for build |
+| `resource` | `string` | no | --resource: Resource limits for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `sbom` | `string` | no | --sbom: Shorthand for "--attest=type=sbom" |
-| `secret` | `array` | no | --secret: Secret to expose to the build |
+| `secret` | `string` | no | --secret: Secret to expose to the build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `shm-size` | `string` | no | --shm-size: Shared memory size for build containers |
-| `ssh` | `array` | no | --ssh: SSH agent socket or keys to expose |
-| `tag` | `array` | no | --tag: Image identifier (format: |
+| `ssh` | `string` | no | --ssh: SSH agent socket or keys to expose Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `tag` | `string` | no | --tag: Image identifier (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `target` | `string` | no | --target: Set the target build stage to build |
-| `ulimit` | `array` | no | --ulimit: Ulimit options (default []) |
+| `ulimit` | `string` | no | --ulimit: Ulimit options (default: none) Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -464,41 +477,41 @@ Run Docker Buildx debug build and return execution report paths.
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `invoke` | `string` | no | --invoke: Launch a monitor with executing specified |
 | `on` | `string` | no | --on: When to launch the monitor ([always, error]) |
-| `add-host` | `array` | no | --add-host: Add a custom host-to-IP mapping |
-| `allow` | `array` | no | --allow: Allow extra privileged entitlement |
-| `annotation` | `array` | no | --annotation: Add annotation to the image |
-| `attest` | `array` | no | --attest: Attestation parameters (format: |
-| `build-arg` | `array` | no | --build-arg: Set build-time variables |
-| `build-context` | `array` | no | --build-context: Additional build contexts (e.g., |
-| `cache-from` | `array` | no | --cache-from: External cache sources (e.g., |
-| `cache-to` | `array` | no | --cache-to: Cache export destinations (e.g., |
+| `add-host` | `string` | no | --add-host: Add a custom host-to-IP mapping Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `allow` | `string` | no | --allow: Allow extra privileged entitlement Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `annotation` | `string` | no | --annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `attest` | `string` | no | --attest: Attestation parameters (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `build-arg` | `string` | no | --build-arg: Set build-time variables Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `build-context` | `string` | no | --build-context: Additional build contexts (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `cache-from` | `string` | no | --cache-from: External cache sources (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `cache-to` | `string` | no | --cache-to: Cache export destinations (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `call` | `string` | no | --call: Set method for evaluating build |
 | `cgroup-parent` | `string` | no | --cgroup-parent: Set the parent cgroup for the "RUN" |
 | `check` | `boolean` | no | --check: Shorthand for "--call=check" |
 | `file` | `string` | no | --file: Name of the Dockerfile (default: |
 | `iidfile` | `string` | no | --iidfile: Write the image ID to a file |
-| `label` | `array` | no | --label: Set metadata for an image |
+| `label` | `string` | no | --label: Set metadata for an image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `load` | `boolean` | no | --load: Shorthand for "--output=type=docker" |
 | `metadata-file` | `string` | no | --metadata-file: Write build result metadata to a file |
 | `network` | `string` | no | --network: Set the networking mode for the |
 | `no-cache` | `boolean` | no | --no-cache: Do not use cache when building the image |
-| `no-cache-filter` | `array` | no | --no-cache-filter: Do not cache specified stages |
-| `output` | `array` | no | --output: Output destination (format: |
-| `platform` | `array` | no | --platform: Set target platform for build |
-| `policy` | `array` | no | --policy: Policy configuration (format: |
+| `no-cache-filter` | `string` | no | --no-cache-filter: Do not cache specified stages Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `output` | `string` | no | --output: Output destination (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `platform` | `string` | no | --platform: Set target platform for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `policy` | `string` | no | --policy: Policy configuration (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `progress` | `string` | no | --progress: Set type of progress output |
 | `provenance` | `string` | no | --provenance: Shorthand for "--attest=type=provenance" |
 | `pull` | `boolean` | no | --pull: Always attempt to pull all |
 | `push` | `boolean` | no | --push: Shorthand for |
 | `quiet` | `boolean` | no | --quiet: Suppress the build output and print |
-| `resource` | `array` | no | --resource: Resource limits for build |
+| `resource` | `string` | no | --resource: Resource limits for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `sbom` | `string` | no | --sbom: Shorthand for "--attest=type=sbom" |
-| `secret` | `array` | no | --secret: Secret to expose to the build |
+| `secret` | `string` | no | --secret: Secret to expose to the build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `shm-size` | `string` | no | --shm-size: Shared memory size for build containers |
-| `ssh` | `array` | no | --ssh: SSH agent socket or keys to expose |
-| `tag` | `array` | no | --tag: Image identifier (format: |
+| `ssh` | `string` | no | --ssh: SSH agent socket or keys to expose Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
+| `tag` | `string` | no | --tag: Image identifier (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `target` | `string` | no | --target: Set the target build stage to build |
-| `ulimit` | `array` | no | --ulimit: Ulimit options (default []) |
+| `ulimit` | `string` | no | --ulimit: Ulimit options (default: none) Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -513,7 +526,7 @@ Run Docker Buildx history inspect and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Subcommand positional arguments; prefer the corresponding named export. Default: []. |
+| `arguments` | `string` | no | Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `format` | `string` | no | --format: Format the output (default "pretty") |
@@ -531,7 +544,7 @@ Run Docker Buildx history export and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `refs` | `array` | no | Build record references. Default: []. |
+| `refs` | `string` | no | Build record references. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `all` | `boolean` | no | --all: Export all build records for the builder |
@@ -551,10 +564,10 @@ Run Docker Buildx history import and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `arguments` | `array` | no | Import positional arguments; use the file option instead of interactive stdin. Default: []. |
+| `arguments` | `string` | no | Import positional arguments; use the file option instead of interactive stdin. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `file` | `array` | no | --file: Import from a file path |
+| `file` | `string` | no | --file: Import from a file path Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -589,7 +602,7 @@ Run Docker Buildx history ls and return execution report paths.
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `filter` | `array` | no | --filter: Provide filter values (e.g., "status=error") |
+| `filter` | `string` | no | --filter: Provide filter values (e.g., "status=error") Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `format` | `string` | no | --format: Format the output (default "table") |
 | `local` | `boolean` | no | --local: List records for current repository only |
 | `no-trunc` | `boolean` | no | --no-trunc: Don't truncate output |
@@ -624,7 +637,7 @@ Run Docker Buildx history rm and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `refs` | `array` | no | Build record references. Default: []. |
+| `refs` | `string` | no | Build record references. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `all` | `boolean` | no | --all: Remove all build records |
@@ -661,18 +674,18 @@ Run Docker Buildx imagetools create and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `sources` | `array` | no | Image source references. Default: []. |
+| `sources` | `string` | no | Image source references. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `annotation` | `array` | no | --annotation: Add annotation to the image |
+| `annotation` | `string` | no | --annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `append` | `boolean` | no | --append: Append to existing manifest |
 | `dry-run` | `boolean` | no | --dry-run: Show final image instead of pushing |
-| `file` | `array` | no | --file: Read source descriptor from file |
+| `file` | `string` | no | --file: Read source descriptor from file Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `metadata-file` | `string` | no | --metadata-file: Write create result metadata to a file |
-| `platform` | `array` | no | --platform: Filter specified platforms of target image |
+| `platform` | `string` | no | --platform: Filter specified platforms of target image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `prefer-index` | `boolean` | no | --prefer-index: When only a single source is specified, |
 | `progress` | `string` | no | --progress: Set type of progress output ("auto", |
-| `tag` | `array` | no | --tag: Set reference for new image |
+| `tag` | `string` | no | --tag: Set reference for new image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -709,7 +722,7 @@ Run Docker Buildx policy eval and return execution report paths.
 | `source` | `string` | no | Required policy evaluation source. Default: "". |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
-| `fields` | `array` | no | --fields: Fields to evaluate |
+| `fields` | `string` | no | --fields: Fields to evaluate Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `file` | `string` | no | --file: Policy filename to evaluate (default "Dockerfile") |
 | `platform` | `string` | no | --platform: Target platform for policy evaluation |
 | `print` | `boolean` | no | --print: Print policy output |
@@ -746,7 +759,7 @@ Run Docker Buildx history inspect attachment and return execution report paths.
 | `docker` | `string` | no | Docker executable name or absolute path. Default: "docker". |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
 | `experimental` | `boolean` | no | Enable experimental Docker Buildx features. Default: false. |
-| `references` | `array` | no | Optional REF and DIGEST positional arguments. Default: []. |
+| `references` | `string` | no | Optional REF and DIGEST positional arguments. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments. |
 | `builder` | `string` | no | --builder: Override the configured builder instance |
 | `debug` | `boolean` | no | --debug: Enable debug logging |
 | `format` | `string` | no | --format: Format the output (default "pretty") |

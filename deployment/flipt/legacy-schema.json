@@ -1,0 +1,348 @@
+{
+  "name": "flipt",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native Flipt command and argument tokens as comma-separated text; never JSON objects or arrays."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "validate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated YAML flag-state paths, relative to workDir; omitted or blank validates the configured state tree."
+          },
+          "workDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing directory used as the flag-state filesystem root."
+          },
+          "extraSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing schema extension file with additional validation constraints."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "text"
+            ],
+            "description": "Validation output format."
+          },
+          "issueExitCode": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Positive exit code for validation findings; zero is deliberately disallowed so this function remains a CI gate."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "migrate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Flipt server configuration file; credentials can remain in native server configuration or environment."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "license_check": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Flipt server configuration file; credentials can remain in native server configuration or environment."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "evaluate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "flagKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Feature flag key to evaluate once."
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1,
+            "description": "HTTP or gRPC address of the Flipt instance; defaults to the native localhost endpoint."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Flipt environment key."
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Flipt namespace key."
+          },
+          "entityId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Stable evaluation entity ID for reproducible pipeline checks."
+          },
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Evaluation request correlation ID."
+          },
+          "context": {
+            "type": "string",
+            "description": "Comma-separated evaluation KEY=VALUE context entries; no JSON object is accepted."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir",
+          "flagKey"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "module": "flipt",
+  "requirements": [
+    {
+      "alias": "setup-flipt",
+      "program": "flipt",
+      "probe": [
+        "flipt",
+        "--version"
+      ]
+    }
+  ]
+}

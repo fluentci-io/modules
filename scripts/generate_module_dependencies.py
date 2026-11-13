@@ -20,7 +20,7 @@ def definitions():
     for module in registry:
         name = module['name']
         if module['path'].startswith('setup/'):
-            result[name] = [{'alias': 'setup-java', 'program': 'java', 'probe': ['which', 'java']}] if name == 'setup-android' else []
+            result[name] = [{'alias': 'setup-java', 'program': 'java', 'probe': ['which', 'java']}] if name == 'setup-android' else [{'alias': 'setup-docker', 'program': 'docker', 'probe': ['which', 'docker']}] if name == 'setup-buildx' else []
             continue
         primary = tools.get(name, {}).get('program') or catalog.get(name, {}).get('program')
         if module['path'].startswith('notifications/'):
@@ -35,6 +35,8 @@ def definitions():
                 dependencies.insert(0, {'alias': 'setup-nix', 'program': 'nix', 'probe': ['which', 'nix']})
             if any(c.get('program') == 'bun' for c in catalog.get(name, {}).get('commands', [])):
                 dependencies.append({'alias': 'setup-bun', 'program': 'bun', 'probe': ['which', 'bun']})
+        if name == 'depot':dependencies[0]['probe'] = ['depot', 'version']
+        if name == 'flipt':dependencies[0]['probe'] = ['flipt', '--version']
         for d in dependencies:
             if d['alias'] not in modules or not d['program']:
                 raise ValueError(f'{name}: missing setup dependency {d}')
@@ -113,6 +115,22 @@ def generated():
             lines.append(d['alias'] + ' = { path = ' + json.dumps(relative) + ', sdk = "purescript", runtime = "component" }')
             declaration = f'name = "{d["alias"]}"\nruntime = "component"\npath = "{relative}"\nsdk = "purescript"\n'
             lock['modules']['dependency::' + d['alias']] = 'path:' + declaration
+        # A companion may itself depend on another installer. Frozen locks must
+        # include those declarations under the companion's source directory.
+        def nested(owner, seen):
+            for requirement in dependencies[owner]:
+                alias = requirement['alias']
+                if alias in seen:
+                    continue
+                seen.add(alias)
+                source = ROOT / modules[alias]['path']
+                source_relative = Path(os.path.relpath(source, path)).as_posix()
+                for child in dependencies[alias]:
+                    target = Path(os.path.relpath(ROOT / modules[child['alias']]['path'], source)).as_posix()
+                    declaration = f'name = "{child["alias"]}"\nruntime = "component"\npath = "{source_relative}/{target}"\nsdk = "purescript"\n'
+                    lock['modules'][f'dependency:{source_relative}:{child["alias"]}'] = 'path:' + declaration
+                nested(alias, seen)
+        nested(name, {name})
         lock['modules'] = dict(sorted(lock['modules'].items()))
         yield manifest_file, '\n'.join(lines) + '\n'
         yield path / 'fluentci.lock', json.dumps(lock, indent=2) + '\n'
@@ -121,7 +139,7 @@ def generated():
             if item not in ignore.splitlines():
                 ignore = ignore.rstrip('\n') + '\n' + item + '\n'
         yield path / '.gitignore', ignore
-        if not setup:
+        if not setup or name == "setup-buildx":
             yield path / 'module-dependencies.json', json.dumps({'module': name, 'requirements': dependencies[name]}, indent=2) + '\n'
             yield path / 'src/CI/ModuleDependencies.purs', source(name, dependencies[name])
             imports = [f'import {{ setup as setup{i} }} from "fluentci:dependency/{d["alias"]}";' for i, d in enumerate(dependencies[name])]

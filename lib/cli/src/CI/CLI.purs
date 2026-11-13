@@ -177,10 +177,11 @@ executeWithSetup = executePrepared true
 executePrepared :: Boolean -> (String -> Effect Unit) -> String -> String -> Json -> Effect { outcome :: String, runDir :: String, reportPath :: String, stdoutPath :: String, stderrPath :: String }
 executePrepared allowSetup setupDependency name commandName json = do
   prepared <- either throw pure (prepare name commandName json)
-  let automaticSetup = allowSetup && prepared.automaticSetup
+  let automaticSetup = allowSetup && (prepared.automaticSetup || Array.elem name [ "depot", "flipt" ])
   os <- P.getOS >>= unwrap
   unless (Array.elem os [ "linux", "macos", "freebsd", "openbsd", "netbsd" ]) $
     throw ("Unsupported CLI host OS: " <> os)
+  when (Array.elem name [ "depot", "flipt" ] && os /= "linux" && os /= "macos") $ throw (name <> " supports Linux and macOS only")
   when (name == "ubicloud") $ do
     present <- P.hasEnv "UBI_TOKEN" >>= unwrap
     token <- if present then P.getEnv "UBI_TOKEN" >>= unwrap else pure ""

@@ -1,6 +1,8 @@
 module CI.Contract where
 
 import Prelude
+import CI.Contract.CSV as CSV
+import Data.Traversable (traverse)
 import Data.Argonaut.Core (Json, isNull)
 import Data.Argonaut.Decode (decodeJson)
 import Data.Argonaut.Encode (encodeJson)
@@ -59,3 +61,17 @@ buildxInput json = case decodeJson (input json) of
   Right object -> case Object.lookup "type" object of
     Nothing -> encodeJson (object :: Object.Object Json)
     Just value -> encodeJson (Object.insert "type_" value (Object.delete "type" object))
+
+-- Convert only declared public CSV fields; scalars and native ordering survive.
+csvFields :: Array String -> Json -> Effect Json
+csvFields keys json = do
+  object <- either (throw <<< show) pure (decodeJson (input json))
+  pairs <- traverse (\key -> case Object.lookup key object of
+    Nothing -> pure Nothing
+    Just value -> do
+      text <- either (throw <<< show) pure (decodeJson value)
+      values <- either throw pure (CSV.parse text)
+      pure (Just { key, value: encodeJson values })) keys
+  pure (encodeJson (foldl (\current pair -> case pair of
+    Nothing -> current
+    Just entry -> Object.insert entry.key entry.value current) (object :: Object.Object Json) pairs))

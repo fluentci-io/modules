@@ -1,6 +1,8 @@
 {
   "lockfileVersion": 1,
-  "modules": {},
+  "modules": {
+    "dependency::setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"../docker\"\nsdk = \"purescript\"\n"
+  },
   "packages": {},
   "git": {}
 }

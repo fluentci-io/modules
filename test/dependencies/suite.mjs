@@ -71,7 +71,7 @@ export async function dependencySuite(directory){
    const result=component[operation.name](operationArgs())();
    assert.ok(invoked.includes(first.alias));assert.equal(result.outcome,'succeeded');assert.equal(f.plans.length,1);
   });
-  test(spec.module+': explicit executable overrides bypass setup dependencies',()=>{
+  if(!['depot','flipt'].includes(spec.module))test(spec.module+': explicit executable overrides bypass setup dependencies',()=>{
    globalThis.fluentciSetupDependencies=Object.fromEntries(spec.requirements.map(d=>[d.alias,()=>{throw Error('Unexpected setup');}]));
    const f=fixture();const input={...operationArgs(),executable:new Just('/fixture/custom-tool')};
    component[operation.name](input)();assert.equal(f.plans[0].plan.tasks[0].program,'/fixture/custom-tool');

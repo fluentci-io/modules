@@ -75,7 +75,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [biome](./linting/biome/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `check`, [typed contract](./linting/biome/COMPONENT.md) |
 | [black](./formatting/black/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/black/COMPONENT.md) |
 | [buildkit](./containers/buildkit/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/buildkit/COMPONENT.md) |
-| [buildx](./containers/buildx/README.md) | Run Docker Buildx buildx and return execution report paths. | `buildx`, `dap`, `debug`, [typed contract](./containers/buildx/COMPONENT.md) |
+| [buildx](./containers/buildx/README.md) | Run Docker Buildx buildx and return execution report paths. | `setup`, `buildx`, `dap`, `debug`, [typed contract](./containers/buildx/COMPONENT.md) |
 | [cachix](./caching/cachix/README.md) | Configure a Cachix cache using host credentials. | `setup`, `push`, [typed contract](./caching/cachix/COMPONENT.md) |
 | [checkov](./security/checkov/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/checkov/COMPONENT.md) |
 | [cmake](./build/cmake/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `configure`, [typed contract](./build/cmake/COMPONENT.md) |
@@ -84,12 +84,14 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [cosign](./security/cosign/README.md) | Sign images and release files; enforce key or keyless signature verification. | `sign`, `sign-blob`, `verify`, `verify-key`, `verify-blob`, `verify-blob-key`, `run`, `version`, [typed contract](./security/cosign/COMPONENT.md) |
 | [coveralls](./code-quality/coveralls/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/coveralls/COMPONENT.md) |
 | [cypress](./testing/cypress/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/cypress/COMPONENT.md) |
+| [depot](./containers/depot/README.md) | Build container images with Depot remote builders. | `setup`, `build`, `bake`, [typed contract](./containers/depot/COMPONENT.md) |
 | [digitalocean](./cloud/digitalocean/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `account-get`, [typed contract](./cloud/digitalocean/COMPONENT.md) |
 | [discord](./notifications/discord/README.md) | Send typed Discord webhook notifications and verify delivery. | `send`, [typed contract](./notifications/discord/COMPONENT.md) |
 | [docker](./containers/docker/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/docker/COMPONENT.md) |
 | [doppler](./secrets/doppler/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/doppler/COMPONENT.md) |
 | [dpkg](./packaging/dpkg/README.md) | Build packages from a Linux dpkg package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/dpkg/COMPONENT.md) |
 | [drizzlekit](./databases/drizzlekit/README.md) | Generate, check and apply SQL migrations. | `run`, `version`, `migrate`, [typed contract](./databases/drizzlekit/COMPONENT.md) |
+| [flipt](./deployment/flipt/README.md) | Validate feature flags, evaluate flags, and run Flipt migrations. | `setup`, `validate`, `evaluate`, [typed contract](./deployment/flipt/COMPONENT.md) |
 | [flyctl](./deployment/flyctl/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/flyctl/COMPONENT.md) |
 | [garden](./deployment/garden/README.md) | Build, deploy, test and clean up Garden project environments. | `run`, `build`, `deploy`, `test`, [typed contract](./deployment/garden/COMPONENT.md) |
 | [gcloud](./cloud/gcloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `config-list`, [typed contract](./cloud/gcloud/COMPONENT.md) |
@@ -161,6 +163,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-cypress](./setup/cypress/README.md) | Install and verify cypress, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cypress/COMPONENT.md) |
 | [setup-dagger](./setup/dagger/README.md) | Install and verify Dagger and publish PATH. | `setup`, [typed contract](./setup/dagger/COMPONENT.md) |
 | [setup-deno](./setup/deno/README.md) | Install and verify deno, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/deno/COMPONENT.md) |
+| [setup-depot](./setup/depot/README.md) | Install or reuse a verified Depot CLI. | `setup`, [typed contract](./setup/depot/COMPONENT.md) |
 | [setup-determinate-nix](./setup/determinate-nix/README.md) | Install and verify determinate-nix, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/determinate-nix/COMPONENT.md) |
 | [setup-devbox](./setup/devbox/README.md) | Install devbox, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/devbox/COMPONENT.md) |
 | [setup-devenv](./setup/devenv/README.md) | Install and verify devenv, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/devenv/COMPONENT.md) |
@@ -177,6 +180,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-extism-js](./setup/extism-js/README.md) | Install and verify extism-js, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-js/COMPONENT.md) |
 | [setup-extism-py](./setup/extism-py/README.md) | Install and verify extism-py, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/extism-py/COMPONENT.md) |
 | [setup-flakehub-push](./setup/flakehub-push/README.md) | Install and verify flakehub-push, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flakehub-push/COMPONENT.md) |
+| [setup-flipt](./setup/flipt/README.md) | Install or reuse a verified Flipt CLI. | `setup`, [typed contract](./setup/flipt/COMPONENT.md) |
 | [setup-flox](./setup/flox/README.md) | Install flox, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/flox/COMPONENT.md) |
 | [setup-flyctl](./setup/flyctl/README.md) | Install and verify flyctl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/flyctl/COMPONENT.md) |
 | [setup-garden](./setup/garden/README.md) | Install and verify a versioned Garden CLI. | `setup`, [typed contract](./setup/garden/COMPONENT.md) |

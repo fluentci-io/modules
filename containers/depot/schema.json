@@ -1,0 +1,1092 @@
+{
+  "name": "depot",
+  "runtime": "component",
+  "exports": {
+    "setup": {
+      "description": "Ensure depot is installed and verified, reusing an available matching version, and publish its environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Tool release or supported channel to install; omitted values use the documented default."
+          },
+          "installDir": {
+            "type": "string",
+            "description": "Absolute per-user installation prefix; omit for native package installations."
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Native package or port selector overriding the default repository package name."
+          },
+          "sudo": {
+            "type": "boolean",
+            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "run": {
+      "description": "Run any Depot CLI command using literal comma-separated tokens.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native Depot command and argument tokens as comma-separated text; never JSON."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Report the installed Depot CLI version.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "build": {
+      "description": "Build container images on Depot remote builders, optionally pushing, loading, or saving the result.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Dockerfile path relative to the project directory."
+          },
+          "tags": {
+            "type": "string",
+            "description": "Comma-separated image names and tags."
+          },
+          "platforms": {
+            "type": "string",
+            "description": "Comma-separated target platforms, for example linux/amd64,linux/arm64."
+          },
+          "buildArgs": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE build arguments. Use native secret mounts for sensitive values."
+          },
+          "labels": {
+            "type": "string",
+            "description": "Comma-separated image metadata KEY=VALUE entries."
+          },
+          "secrets": {
+            "type": "string",
+            "description": "Comma-separated BuildKit secret specifications; CSV-quote specifications containing commas. Values should reference files or environment variable names."
+          },
+          "ssh": {
+            "type": "string",
+            "description": "Comma-separated SSH agent specifications."
+          },
+          "cacheFrom": {
+            "type": "string",
+            "description": "Comma-separated external cache specifications; CSV-quote entries containing commas."
+          },
+          "cacheTo": {
+            "type": "string",
+            "description": "Comma-separated cache export specifications; CSV-quote entries containing commas."
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Dockerfile build stage."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native output specification, for example type=local,dest=dist."
+          },
+          "metadataFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for build result metadata."
+          },
+          "progress": {
+            "type": "string",
+            "minLength": 1,
+            "default": "plain",
+            "enum": [
+              "auto",
+              "plain",
+              "tty",
+              "rawjson"
+            ],
+            "description": "Build progress output mode. Default: \"plain\". Allowed values: auto, plain, tty, rawjson."
+          },
+          "buildPlatform": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "dynamic",
+              "linux/amd64",
+              "linux/arm64"
+            ],
+            "description": "Depot builder architecture. Allowed values: dynamic, linux/amd64, linux/arm64."
+          },
+          "push": {
+            "type": "boolean",
+            "description": "Push the resulting image to its registry."
+          },
+          "load": {
+            "type": "boolean",
+            "description": "Load the image into the local Docker daemon; requires Docker."
+          },
+          "save": {
+            "type": "boolean",
+            "description": "Save the image in the Depot Registry."
+          },
+          "pull": {
+            "type": "boolean",
+            "description": "Always pull referenced base images."
+          },
+          "noCache": {
+            "type": "boolean",
+            "description": "Build without reading cached layers."
+          },
+          "lint": {
+            "type": "boolean",
+            "description": "Lint Dockerfiles before building."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Build context directory or URL. Default: \".\"."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "bake": {
+      "description": "Build multiple targets from Bake or Compose definitions.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated existing Bake HCL, JSON, or Compose files."
+          },
+          "set": {
+            "type": "string",
+            "description": "Comma-separated targetpattern.key=value overrides; CSV-quote values containing commas."
+          },
+          "targets": {
+            "type": "string",
+            "description": "Comma-separated Bake targets; blank selects native defaults."
+          },
+          "push": {
+            "type": "boolean",
+            "description": "Push built target images."
+          },
+          "load": {
+            "type": "boolean",
+            "description": "Load images into the local Docker daemon."
+          },
+          "print": {
+            "type": "boolean",
+            "description": "Print the resolved build definition without building."
+          },
+          "noCache": {
+            "type": "boolean",
+            "description": "Disable layer cache reads."
+          },
+          "metadataFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for build metadata."
+          },
+          "progress": {
+            "type": "string",
+            "minLength": 1,
+            "default": "plain",
+            "description": "Build progress mode. Default: \"plain\"."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "cache_reset": {
+      "description": "Reset the selected project build cache.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "list_builds": {
+      "description": "List recent builds with machine-readable output.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "csv"
+            ],
+            "description": "Noninteractive result format. Default: \"json\". Allowed values: json, csv."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "projects_list": {
+      "description": "List accessible projects without opening an interactive selector.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "csv"
+            ],
+            "description": "Noninteractive result format. Default: \"json\". Allowed values: json, csv."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "projects_get": {
+      "description": "Read project configuration using an organization token.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project ID; otherwise native project configuration is used."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json"
+            ],
+            "description": "Machine-readable result format. Default: \"json\". Allowed values: json."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "projects_create": {
+      "description": "Create a Depot project with explicit organization and build storage settings.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "New project name."
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot organization ID."
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Build data region."
+          },
+          "cacheStoragePolicy": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Cache storage in GB; upstream validates supported limits."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "build_cancel": {
+      "description": "Cancel selected builds or explicitly preview/bulk-cancel running project builds. Requires an organization API token.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "buildIds": {
+            "type": "string",
+            "description": "Comma-separated build IDs; native bulk selection requires allRunning and projectId."
+          },
+          "allRunning": {
+            "type": "boolean",
+            "description": "Select all running builds in the explicitly selected project."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Preview cancellation without changing builds."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve bulk cancellation without prompting."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json"
+            ],
+            "description": "Machine-readable output. Default: \"json\". Allowed values: json."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "configure_docker": {
+      "description": "Configure or remove Depot Docker integration; requires Docker.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "uninstall": {
+            "type": "boolean",
+            "description": "Remove the Depot Docker integration instead of configuring it."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

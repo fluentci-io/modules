@@ -6,3 +6,6 @@ runtime = "component"
 entry = "entry.mjs"
 artifact = "dist/plugin.wasm"
 build = ["npm", "run", "build"]
+
+[dependencies]
+setup-docker = { path = "../docker", sdk = "purescript", runtime = "component" }

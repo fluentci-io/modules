@@ -1,0 +1,565 @@
+{
+  "name": "flipt",
+  "runtime": "component",
+  "exports": {
+    "setup": {
+      "description": "Ensure flipt is installed and verified, reusing an available matching version, and publish its environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Tool release or supported channel to install; omitted values use the documented default."
+          },
+          "installDir": {
+            "type": "string",
+            "description": "Absolute per-user installation prefix; omit for native package installations."
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Native package or port selector overriding the default repository package name."
+          },
+          "sudo": {
+            "type": "boolean",
+            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "run": {
+      "description": "Run any Flipt CLI command as literal native arguments.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native Flipt command and argument tokens as comma-separated text; never JSON objects or arrays."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "version": {
+      "description": "Report the installed Flipt version.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "validate": {
+      "description": "Validate flag-state YAML and fail the pipeline on validation issues.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated YAML flag-state paths, relative to workDir; omitted or blank validates the configured state tree."
+          },
+          "workDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing directory used as the flag-state filesystem root."
+          },
+          "extraSchema": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing schema extension file with additional validation constraints."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "text"
+            ],
+            "description": "Validation output format. Default: \"json\". Allowed values: json, text."
+          },
+          "issueExitCode": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Positive exit code for validation findings; zero is deliberately disallowed so this function remains a CI gate. Default: 1."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "migrate": {
+      "description": "Run pending Flipt v2 analytics database migrations with the selected server configuration.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Flipt server configuration file; credentials can remain in native server configuration or environment."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "license_check": {
+      "description": "Check the configured Flipt Pro license status with the native licensing service.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "config": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Flipt server configuration file; credentials can remain in native server configuration or environment."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "evaluate": {
+      "description": "Evaluate a feature flag once without watch mode; upstream evaluation failures propagate.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1,
+            "description": "Working directory containing the source checkout; defaults to the current directory. Default: \".\"."
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000,
+            "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
+          },
+          "artifacts": {
+            "type": "string",
+            "description": "Comma-separated NAME=PATH output artifacts; use CSV double quotes around entries containing commas."
+          },
+          "flagKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Feature flag key to evaluate once."
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1,
+            "description": "HTTP or gRPC address of the Flipt instance; defaults to the native localhost endpoint."
+          },
+          "environment": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Flipt environment key."
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Flipt namespace key."
+          },
+          "entityId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Stable evaluation entity ID for reproducible pipeline checks."
+          },
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Evaluation request correlation ID."
+          },
+          "context": {
+            "type": "string",
+            "description": "Comma-separated evaluation KEY=VALUE context entries; no JSON object is accepted."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        },
+        "required": [
+          "runDir",
+          "flagKey"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "runDir",
+          "reportPath",
+          "stdoutPath",
+          "stderrPath"
+        ],
+        "properties": {
+          "outcome": {
+            "type": "string"
+          },
+          "runDir": {
+            "type": "string"
+          },
+          "reportPath": {
+            "type": "string"
+          },
+          "stdoutPath": {
+            "type": "string"
+          },
+          "stderrPath": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "module": "depot",
+  "requirements": [
+    {
+      "alias": "setup-depot",
+      "program": "depot",
+      "probe": [
+        "depot",
+        "version"
+      ]
+    }
+  ]
+}

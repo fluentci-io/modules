@@ -1,0 +1,750 @@
+{
+  "name": "depot",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native Depot command and argument tokens as comma-separated text; never JSON."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "build": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing Dockerfile path relative to the project directory."
+          },
+          "tags": {
+            "type": "string",
+            "description": "Comma-separated image names and tags."
+          },
+          "platforms": {
+            "type": "string",
+            "description": "Comma-separated target platforms, for example linux/amd64,linux/arm64."
+          },
+          "buildArgs": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE build arguments. Use native secret mounts for sensitive values."
+          },
+          "labels": {
+            "type": "string",
+            "description": "Comma-separated image metadata KEY=VALUE entries."
+          },
+          "secrets": {
+            "type": "string",
+            "description": "Comma-separated BuildKit secret specifications; CSV-quote specifications containing commas. Values should reference files or environment variable names."
+          },
+          "ssh": {
+            "type": "string",
+            "description": "Comma-separated SSH agent specifications."
+          },
+          "cacheFrom": {
+            "type": "string",
+            "description": "Comma-separated external cache specifications; CSV-quote entries containing commas."
+          },
+          "cacheTo": {
+            "type": "string",
+            "description": "Comma-separated cache export specifications; CSV-quote entries containing commas."
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target Dockerfile build stage."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native output specification, for example type=local,dest=dist."
+          },
+          "metadataFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for build result metadata."
+          },
+          "progress": {
+            "type": "string",
+            "minLength": 1,
+            "default": "plain",
+            "enum": [
+              "auto",
+              "plain",
+              "tty",
+              "rawjson"
+            ],
+            "description": "Build progress output mode."
+          },
+          "buildPlatform": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "dynamic",
+              "linux/amd64",
+              "linux/arm64"
+            ],
+            "description": "Depot builder architecture."
+          },
+          "push": {
+            "type": "boolean",
+            "description": "Push the resulting image to its registry."
+          },
+          "load": {
+            "type": "boolean",
+            "description": "Load the image into the local Docker daemon; requires Docker."
+          },
+          "save": {
+            "type": "boolean",
+            "description": "Save the image in the Depot Registry."
+          },
+          "pull": {
+            "type": "boolean",
+            "description": "Always pull referenced base images."
+          },
+          "noCache": {
+            "type": "boolean",
+            "description": "Build without reading cached layers."
+          },
+          "lint": {
+            "type": "boolean",
+            "description": "Lint Dockerfiles before building."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 1,
+            "default": ".",
+            "description": "Build context directory or URL."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "bake": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "files": {
+            "type": "string",
+            "description": "Comma-separated existing Bake HCL, JSON, or Compose files."
+          },
+          "set": {
+            "type": "string",
+            "description": "Comma-separated targetpattern.key=value overrides; CSV-quote values containing commas."
+          },
+          "targets": {
+            "type": "string",
+            "description": "Comma-separated Bake targets; blank selects native defaults."
+          },
+          "push": {
+            "type": "boolean",
+            "description": "Push built target images."
+          },
+          "load": {
+            "type": "boolean",
+            "description": "Load images into the local Docker daemon."
+          },
+          "print": {
+            "type": "boolean",
+            "description": "Print the resolved build definition without building."
+          },
+          "noCache": {
+            "type": "boolean",
+            "description": "Disable layer cache reads."
+          },
+          "metadataFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination for build metadata."
+          },
+          "progress": {
+            "type": "string",
+            "minLength": 1,
+            "default": "plain",
+            "description": "Build progress mode."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "cache_reset": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "list_builds": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "csv"
+            ],
+            "description": "Noninteractive result format."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "projects_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "csv"
+            ],
+            "description": "Noninteractive result format."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "projects_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project ID; otherwise native project configuration is used."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json"
+            ],
+            "description": "Machine-readable result format."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "projects_create": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "New project name."
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot organization ID."
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Build data region."
+          },
+          "cacheStoragePolicy": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Cache storage in GB; upstream validates supported limits."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "build_cancel": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          "buildIds": {
+            "type": "string",
+            "description": "Comma-separated build IDs; native bulk selection requires allRunning and projectId."
+          },
+          "allRunning": {
+            "type": "boolean",
+            "description": "Select all running builds in the explicitly selected project."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Preview cancellation without changing builds."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly approve bulk cancellation without prompting."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json"
+            ],
+            "description": "Machine-readable output."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "configure_docker": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "uninstall": {
+            "type": "boolean",
+            "description": "Remove the Depot Docker integration instead of configuring it."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

@@ -28,7 +28,7 @@ export async function suite(directory) {
   artifactSuite(tool, plugin);
   test('private regression exports agree with the command catalog', () => {
     assert.deepEqual(Object.keys(plugin).sort(), tool.commands.map(c => c.name).sort());
-    assert.deepEqual(Object.keys(schema.exports).sort(), Object.keys(plugin).sort());
+    assert.deepEqual(Object.keys(schema.exports).filter(name=>name!=='setup'||tool.commands.some(command=>command.name==='setup')).sort(), Object.keys(plugin).sort());
   });
   for (const command of tool.commands) {
     test(command.name + ': defaults and native command prefix', () => {

@@ -1,0 +1,13 @@
+{
+  "module": "setup-buildx",
+  "requirements": [
+    {
+      "alias": "setup-docker",
+      "program": "docker",
+      "probe": [
+        "which",
+        "docker"
+      ]
+    }
+  ]
+}

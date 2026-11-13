@@ -2,6 +2,72 @@
   "name": "buildx",
   "runtime": "component",
   "exports": {
+    "setup": {
+      "description": "Ensure buildx is installed and verified, reusing an available matching version, and publish its environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Tool release or supported channel to install; omitted values use the documented default."
+          },
+          "installDir": {
+            "type": "string",
+            "description": "Absolute per-user installation prefix; omit for native package installations."
+          },
+          "packageName": {
+            "type": "string",
+            "description": "Native package or port selector overriding the default repository package name."
+          },
+          "sudo": {
+            "type": "boolean",
+            "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "tool",
+          "version",
+          "binDir",
+          "environment"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
     "buildx": {
       "description": "Run Docker Buildx buildx and return execution report paths.",
       "input": {
@@ -36,12 +102,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -120,12 +182,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -204,12 +262,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -296,12 +350,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -380,12 +430,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -464,12 +510,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -548,12 +590,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "targets": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Bake targets. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Bake targets. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -564,11 +602,8 @@
             "description": "--debug: Enable debug logging"
           },
           "allow": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--allow: Allow build to access specified resources"
+            "type": "string",
+            "description": "--allow: Allow build to access specified resources Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "call": {
             "type": "string",
@@ -579,11 +614,8 @@
             "description": "--check: Shorthand for \"--call=check\""
           },
           "file": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--file: Build definition file"
+            "type": "string",
+            "description": "--file: Build definition file Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "list": {
             "type": "string",
@@ -602,11 +634,8 @@
             "description": "--no-cache: Do not use cache when building the image"
           },
           "policy": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--policy: Global policy evaluation options (format:"
+            "type": "string",
+            "description": "--policy: Global policy evaluation options (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "print": {
             "type": "boolean",
@@ -633,18 +662,12 @@
             "description": "--sbom: Shorthand for \"--set=*.attest=type=sbom\""
           },
           "set": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--set: Override target value (e.g.,"
+            "type": "string",
+            "description": "--set: Override target value (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "var": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--var: Set a variable value (e.g., \"name=value\")"
+            "type": "string",
+            "description": "--var: Set a variable value (e.g., \"name=value\") Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           }
         },
         "required": [
@@ -728,60 +751,36 @@
             "description": "--debug: Enable debug logging"
           },
           "addHost": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--add-host: Add a custom host-to-IP mapping"
+            "type": "string",
+            "description": "--add-host: Add a custom host-to-IP mapping Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "allow": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--allow: Allow extra privileged entitlement"
+            "type": "string",
+            "description": "--allow: Allow extra privileged entitlement Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "annotation": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--annotation: Add annotation to the image"
+            "type": "string",
+            "description": "--annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "attest": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--attest: Attestation parameters (format:"
+            "type": "string",
+            "description": "--attest: Attestation parameters (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "buildArg": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--build-arg: Set build-time variables"
+            "type": "string",
+            "description": "--build-arg: Set build-time variables Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "buildContext": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--build-context: Additional build contexts (e.g.,"
+            "type": "string",
+            "description": "--build-context: Additional build contexts (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "cacheFrom": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--cache-from: External cache sources (e.g.,"
+            "type": "string",
+            "description": "--cache-from: External cache sources (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "cacheTo": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--cache-to: Cache export destinations (e.g.,"
+            "type": "string",
+            "description": "--cache-to: Cache export destinations (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "call": {
             "type": "string",
@@ -804,11 +803,8 @@
             "description": "--iidfile: Write the image ID to a file"
           },
           "label": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--label: Set metadata for an image"
+            "type": "string",
+            "description": "--label: Set metadata for an image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "load": {
             "type": "boolean",
@@ -827,32 +823,20 @@
             "description": "--no-cache: Do not use cache when building the image"
           },
           "noCacheFilter": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--no-cache-filter: Do not cache specified stages"
+            "type": "string",
+            "description": "--no-cache-filter: Do not cache specified stages Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "output": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--output: Output destination (format:"
+            "type": "string",
+            "description": "--output: Output destination (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "platform": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--platform: Set target platform for build"
+            "type": "string",
+            "description": "--platform: Set target platform for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "policy": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--policy: Policy configuration (format:"
+            "type": "string",
+            "description": "--policy: Policy configuration (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "progress": {
             "type": "string",
@@ -875,51 +859,36 @@
             "description": "--quiet: Suppress the build output and print"
           },
           "resource": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--resource: Resource limits for build"
+            "type": "string",
+            "description": "--resource: Resource limits for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "sbom": {
             "type": "string",
             "description": "--sbom: Shorthand for \"--attest=type=sbom\""
           },
           "secret": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--secret: Secret to expose to the build"
+            "type": "string",
+            "description": "--secret: Secret to expose to the build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "shmSize": {
             "type": "string",
             "description": "--shm-size: Shared memory size for build containers"
           },
           "ssh": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--ssh: SSH agent socket or keys to expose"
+            "type": "string",
+            "description": "--ssh: SSH agent socket or keys to expose Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "tag": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--tag: Image identifier (format:"
+            "type": "string",
+            "description": "--tag: Image identifier (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "target": {
             "type": "string",
             "description": "--target: Set the target build stage to build"
           },
           "ulimit": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--ulimit: Ulimit options (default [])"
+            "type": "string",
+            "description": "--ulimit: Ulimit options (default: none) Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           }
         },
         "required": [
@@ -1022,11 +991,8 @@
             "description": "--driver: Driver to use (available: \"cloud\","
           },
           "driverOpt": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--driver-opt: Options for the driver"
+            "type": "string",
+            "description": "--driver-opt: Options for the driver Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "leave": {
             "type": "boolean",
@@ -1041,11 +1007,8 @@
             "description": "--node: Create/modify node with given name"
           },
           "platform": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--platform: Fixed platforms for current node"
+            "type": "string",
+            "description": "--platform: Fixed platforms for current node Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "timeout": {
             "type": "string",
@@ -1216,11 +1179,8 @@
             "description": "--debug: Enable debug logging"
           },
           "filter": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--filter: Provide filter values"
+            "type": "string",
+            "description": "--filter: Provide filter values Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "format": {
             "type": "string",
@@ -1491,11 +1451,8 @@
             "description": "--all: Include internal/frontend images"
           },
           "filter": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--filter: Provide filter values"
+            "type": "string",
+            "description": "--filter: Provide filter values Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "force": {
             "type": "boolean",
@@ -1590,12 +1547,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "names": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Builder instance names. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Builder instance names. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -1952,60 +1905,36 @@
             "description": "--debug: Enable debug logging"
           },
           "addHost": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--add-host: Add a custom host-to-IP mapping"
+            "type": "string",
+            "description": "--add-host: Add a custom host-to-IP mapping Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "allow": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--allow: Allow extra privileged entitlement"
+            "type": "string",
+            "description": "--allow: Allow extra privileged entitlement Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "annotation": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--annotation: Add annotation to the image"
+            "type": "string",
+            "description": "--annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "attest": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--attest: Attestation parameters (format:"
+            "type": "string",
+            "description": "--attest: Attestation parameters (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "buildArg": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--build-arg: Set build-time variables"
+            "type": "string",
+            "description": "--build-arg: Set build-time variables Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "buildContext": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--build-context: Additional build contexts (e.g.,"
+            "type": "string",
+            "description": "--build-context: Additional build contexts (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "cacheFrom": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--cache-from: External cache sources (e.g.,"
+            "type": "string",
+            "description": "--cache-from: External cache sources (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "cacheTo": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--cache-to: Cache export destinations (e.g.,"
+            "type": "string",
+            "description": "--cache-to: Cache export destinations (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "call": {
             "type": "string",
@@ -2028,11 +1957,8 @@
             "description": "--iidfile: Write the image ID to a file"
           },
           "label": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--label: Set metadata for an image"
+            "type": "string",
+            "description": "--label: Set metadata for an image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "load": {
             "type": "boolean",
@@ -2051,32 +1977,20 @@
             "description": "--no-cache: Do not use cache when building the image"
           },
           "noCacheFilter": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--no-cache-filter: Do not cache specified stages"
+            "type": "string",
+            "description": "--no-cache-filter: Do not cache specified stages Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "output": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--output: Output destination (format:"
+            "type": "string",
+            "description": "--output: Output destination (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "platform": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--platform: Set target platform for build"
+            "type": "string",
+            "description": "--platform: Set target platform for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "policy": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--policy: Policy configuration (format:"
+            "type": "string",
+            "description": "--policy: Policy configuration (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "progress": {
             "type": "string",
@@ -2099,51 +2013,36 @@
             "description": "--quiet: Suppress the build output and print"
           },
           "resource": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--resource: Resource limits for build"
+            "type": "string",
+            "description": "--resource: Resource limits for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "sbom": {
             "type": "string",
             "description": "--sbom: Shorthand for \"--attest=type=sbom\""
           },
           "secret": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--secret: Secret to expose to the build"
+            "type": "string",
+            "description": "--secret: Secret to expose to the build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "shmSize": {
             "type": "string",
             "description": "--shm-size: Shared memory size for build containers"
           },
           "ssh": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--ssh: SSH agent socket or keys to expose"
+            "type": "string",
+            "description": "--ssh: SSH agent socket or keys to expose Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "tag": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--tag: Image identifier (format:"
+            "type": "string",
+            "description": "--tag: Image identifier (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "target": {
             "type": "string",
             "description": "--target: Set the target build stage to build"
           },
           "ulimit": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--ulimit: Ulimit options (default [])"
+            "type": "string",
+            "description": "--ulimit: Ulimit options (default: none) Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           }
         },
         "required": [
@@ -2235,60 +2134,36 @@
             "description": "--on: When to launch the monitor ([always, error])"
           },
           "addHost": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--add-host: Add a custom host-to-IP mapping"
+            "type": "string",
+            "description": "--add-host: Add a custom host-to-IP mapping Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "allow": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--allow: Allow extra privileged entitlement"
+            "type": "string",
+            "description": "--allow: Allow extra privileged entitlement Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "annotation": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--annotation: Add annotation to the image"
+            "type": "string",
+            "description": "--annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "attest": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--attest: Attestation parameters (format:"
+            "type": "string",
+            "description": "--attest: Attestation parameters (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "buildArg": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--build-arg: Set build-time variables"
+            "type": "string",
+            "description": "--build-arg: Set build-time variables Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "buildContext": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--build-context: Additional build contexts (e.g.,"
+            "type": "string",
+            "description": "--build-context: Additional build contexts (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "cacheFrom": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--cache-from: External cache sources (e.g.,"
+            "type": "string",
+            "description": "--cache-from: External cache sources (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "cacheTo": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--cache-to: Cache export destinations (e.g.,"
+            "type": "string",
+            "description": "--cache-to: Cache export destinations (e.g., Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "call": {
             "type": "string",
@@ -2311,11 +2186,8 @@
             "description": "--iidfile: Write the image ID to a file"
           },
           "label": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--label: Set metadata for an image"
+            "type": "string",
+            "description": "--label: Set metadata for an image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "load": {
             "type": "boolean",
@@ -2334,32 +2206,20 @@
             "description": "--no-cache: Do not use cache when building the image"
           },
           "noCacheFilter": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--no-cache-filter: Do not cache specified stages"
+            "type": "string",
+            "description": "--no-cache-filter: Do not cache specified stages Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "output": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--output: Output destination (format:"
+            "type": "string",
+            "description": "--output: Output destination (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "platform": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--platform: Set target platform for build"
+            "type": "string",
+            "description": "--platform: Set target platform for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "policy": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--policy: Policy configuration (format:"
+            "type": "string",
+            "description": "--policy: Policy configuration (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "progress": {
             "type": "string",
@@ -2382,51 +2242,36 @@
             "description": "--quiet: Suppress the build output and print"
           },
           "resource": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--resource: Resource limits for build"
+            "type": "string",
+            "description": "--resource: Resource limits for build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "sbom": {
             "type": "string",
             "description": "--sbom: Shorthand for \"--attest=type=sbom\""
           },
           "secret": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--secret: Secret to expose to the build"
+            "type": "string",
+            "description": "--secret: Secret to expose to the build Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "shmSize": {
             "type": "string",
             "description": "--shm-size: Shared memory size for build containers"
           },
           "ssh": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--ssh: SSH agent socket or keys to expose"
+            "type": "string",
+            "description": "--ssh: SSH agent socket or keys to expose Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "tag": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--tag: Image identifier (format:"
+            "type": "string",
+            "description": "--tag: Image identifier (format: Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "target": {
             "type": "string",
             "description": "--target: Set the target build stage to build"
           },
           "ulimit": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--ulimit: Ulimit options (default [])"
+            "type": "string",
+            "description": "--ulimit: Ulimit options (default: none) Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           }
         },
         "required": [
@@ -2497,12 +2342,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Subcommand positional arguments; prefer the corresponding named export. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Subcommand positional arguments; prefer the corresponding named export. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -2585,12 +2426,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "refs": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Build record references. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Build record references. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -2681,12 +2518,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Import positional arguments; use the file option instead of interactive stdin. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Import positional arguments; use the file option instead of interactive stdin. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -2697,11 +2530,8 @@
             "description": "--debug: Enable debug logging"
           },
           "file": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--file: Import from a file path"
+            "type": "string",
+            "description": "--file: Import from a file path Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           }
         },
         "required": [
@@ -2864,11 +2694,8 @@
             "description": "--debug: Enable debug logging"
           },
           "filter": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--filter: Provide filter values (e.g., \"status=error\")"
+            "type": "string",
+            "description": "--filter: Provide filter values (e.g., \"status=error\") Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "format": {
             "type": "string",
@@ -3031,12 +2858,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "refs": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Build record references. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Build record references. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -3207,12 +3030,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "sources": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Image source references. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Image source references. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",
@@ -3223,11 +3042,8 @@
             "description": "--debug: Enable debug logging"
           },
           "annotation": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--annotation: Add annotation to the image"
+            "type": "string",
+            "description": "--annotation: Add annotation to the image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "append": {
             "type": "boolean",
@@ -3238,22 +3054,16 @@
             "description": "--dry-run: Show final image instead of pushing"
           },
           "file": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--file: Read source descriptor from file"
+            "type": "string",
+            "description": "--file: Read source descriptor from file Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "metadataFile": {
             "type": "string",
             "description": "--metadata-file: Write create result metadata to a file"
           },
           "platform": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--platform: Filter specified platforms of target image"
+            "type": "string",
+            "description": "--platform: Filter specified platforms of target image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "preferIndex": {
             "type": "boolean",
@@ -3264,11 +3074,8 @@
             "description": "--progress: Set type of progress output (\"auto\","
           },
           "tag": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--tag: Set reference for new image"
+            "type": "string",
+            "description": "--tag: Set reference for new image Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           }
         },
         "required": [
@@ -3441,11 +3248,8 @@
             "description": "--debug: Enable debug logging"
           },
           "fields": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "--fields: Fields to evaluate"
+            "type": "string",
+            "description": "--fields: Fields to evaluate Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "file": {
             "type": "string",
@@ -3617,12 +3421,8 @@
             "description": "Enable experimental Docker Buildx features. Default: false."
           },
           "references": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Optional REF and DIGEST positional arguments. Default: [].",
-            "default": []
+            "type": "string",
+            "description": "Optional REF and DIGEST positional arguments. Comma-separated values; CSV quotes preserve literal commas. Blank optional lists add no arguments."
           },
           "builder": {
             "type": "string",

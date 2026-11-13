@@ -20,7 +20,7 @@ import Data.String.Common (trim)
 import Data.String.CodeUnits as CU
 import Data.String.Pattern (Pattern(..), Replacement(..))
 import Effect (Effect)
-import Effect.Exception (catchException, message, throw, try)
+import Effect.Exception (catchException, error, message, throw, try)
 import FluentCI.Plugin as P
 import Foreign.Object as Object
 
@@ -225,19 +225,30 @@ githubRelease tool host requested = do
     Nothing -> throw ("No official " <> tool.name <> " asset for " <> host.os <> "/" <> host.arch <> ": " <> wanted)
     Just asset -> pure asset
   digest <- case asset.digest >>= String.stripPrefix (Pattern "sha256:") of
-    Nothing -> if Array.elem tool.name [ "macports-rs", "garden" ] then do
-      checksum <- case Array.find (\entry -> entry.name == wanted <> ".sha256") assets of
-        Nothing -> throw (tool.name <> " release has no SHA-256 checksum")
-        Just entry -> pure entry
-      text <- trim <$> H.fetch checksum.browser_download_url
-      case Array.head (String.split (Pattern " ") text) of
-        Just value | value /= "" -> pure value
-        _ -> throw ("Invalid " <> tool.name <> " release checksum")
+    Nothing ->
+      if Array.elem tool.name [ "depot", "flipt" ] then do
+        checksum <- case Array.find (\entry -> entry.name == (if tool.name == "flipt" then "checksums.txt" else "depot_" <> version <> "_checksums.txt")) assets of
+          Nothing -> throw (tool.name <> " release has no SHA-256 checksum")
+          Just entry -> pure entry
+        text <- H.fetch checksum.browser_download_url
+        let rows = map (Array.filter (_ /= "") <<< String.split (Pattern " ") <<< trim) (String.split (Pattern "\n") text)
+            matches = Array.filter (\row -> Array.index row 1 == Just wanted || Array.index row 1 == Just ("*" <> wanted)) rows
+        case matches of
+          [ row ] -> maybe (throw (tool.name <> " has an invalid archive checksum")) pure (Array.head row)
+          _ -> throw (tool.name <> " has a missing or ambiguous archive checksum")
+      else if Array.elem tool.name [ "macports-rs", "garden" ] then do
+        checksum <- case Array.find (\entry -> entry.name == wanted <> ".sha256") assets of
+          Nothing -> throw (tool.name <> " release has no SHA-256 checksum")
+          Just entry -> pure entry
+        text <- trim <$> H.fetch checksum.browser_download_url
+        case Array.head (String.split (Pattern " ") text) of
+          Just value | value /= "" -> pure value
+          _ -> throw ("Invalid " <> tool.name <> " release checksum")
       else pure ""
     Just value -> pure value
-  when (tool.name == "garden") $
+  when (Array.elem tool.name [ "garden", "depot", "flipt" ]) $
     unless (CU.length digest == 64 && all (\c -> (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) (CU.toCharArray digest)) $
-      throw "Garden release must provide a valid SHA-256 checksum"
+      throw (tool.name <> " release must provide a valid SHA-256 checksum")
   pure { version, url: asset.browser_download_url, sha256: digest }
 
 extract :: Tool -> String -> String -> String -> Effect Unit
@@ -291,6 +302,24 @@ ensureRuntime tool host = do
 
 install :: String -> Host -> Config -> Effect Result
 install name host config = do
+  tool <- lookup name
+  when (Array.elem name [ "depot", "flipt" ] && host.os /= "linux" && host.os /= "macos") $ throw (name <> " supports Linux and macOS only")
+  reusable <- if Array.elem name [ "depot", "buildx", "flipt" ] && config.installDir == "" && config.packageName == "" && not config.sudo then try do
+    executable <- H.findExecutable (if name == "buildx" then "docker" else tool.program)
+    unless (String.startsWith (Pattern "/") executable) $ throw "Executable not found"
+    text <- H.capture (if name == "buildx" then [ executable, "buildx", "version" ] else [ executable, if name == "flipt" then "--version" else "version" ])
+    actual <- H.versionFrom name text
+    let wanted = stripV config.version
+    unless (wanted == "latest" || wanted == actual) $ throw "Existing version does not match"
+    bin <- trim <$> H.capture [ "dirname", executable ]
+    H.result name actual bin Object.empty
+    else pure (Left (error "Explicit installation requested"))
+  case reusable of
+    Right result -> pure result
+    Left _ -> installFresh name host config
+
+installFresh :: String -> Host -> Config -> Effect Result
+installFresh name host config = do
   tool <- lookup name
   when (name == "sonarqube" && not (host.os == "linux" || host.os == "macos")) $
     throw "SonarQube CLI supports Linux and macOS only"

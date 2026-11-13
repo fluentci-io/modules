@@ -13,6 +13,7 @@
             "exceptions",
             "fluentci",
             "fluentci-component-contract",
+            "fluentci-setup-common",
             "foreign-object",
             "maybe",
             "prelude",
@@ -694,6 +695,9 @@
       },
       "fluentci-component-contract": {
         "path": "../../lib/component"
+      },
+      "fluentci-setup-common": {
+        "path": "../../lib/setup"
       }
     }
   },
@@ -1351,6 +1355,25 @@
       "version": "6.0.1",
       "integrity": "sha256-EWQVn1FKBk8WggRQhs+5oYkj5r9BNmb2j1gDITxhH6o=",
       "dependencies": []
+    },
+    "fluentci-setup-common": {
+      "type": "local",
+      "path": "../../lib/setup",
+      "dependencies": [
+        "argonaut-codecs",
+        "argonaut-core",
+        "arrays",
+        "effect",
+        "either",
+        "exceptions",
+        "fluentci",
+        "foldable-traversable",
+        "foreign-object",
+        "integers",
+        "maybe",
+        "prelude",
+        "strings"
+      ]
     }
   }
 }

@@ -147,7 +147,7 @@ def generated():
             "`" + snapshot["version"] + "`. Includes inherited and experimental options.",
             "Option fields are camelCase versions of Docker's long flags; `type` is named",
             "`type_` in PureScript. Missing flags retain Docker defaults, including default-true",
-            "booleans. Explicit `false` is emitted as `--flag=false`. Array values repeat the flag.",
+            "booleans. Explicit `false` is emitted as `--flag=false`. Comma-separated list values repeat the flag; CSV quotes preserve literal commas.",
             "Docker byte sizes and durations are strings (for example `2g`, `30s`).", ""]
     for node in nodes:
         path = node["path"]
@@ -224,9 +224,9 @@ def generated():
                  "`docker` (executable, default `docker`), `timeoutMs` (default 900000),",
                  "`experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).", ""]
         if position:
-            docs += [f'Positional parameter: `{position[0]} :: {position[1]}` — {position[4]}', ""]
+            docs += [f'Positional parameter: `{position[0]} :: {position[1].replace("Array String", "String (CSV)")}` — {position[4]}', ""]
         docs += ["| Module argument | Docker option | Type |", "| --- | --- | --- |"]
-        docs += [f'| `{key}` | `--{field["flag"]}` | `{field["ps"]}` |' for key, field in fields.items()]
+        docs += [f'| `{key}` | `--{field["flag"]}` | `{field["ps"].replace("Array String", "String (CSV)")}` |' for key, field in fields.items()]
         docs.append("")
     yield HERE / "src/Buildx/Commands.purs", shallow_decoders("\n".join(source))
     yield HERE / "src/Main.purs", "\n".join(main)

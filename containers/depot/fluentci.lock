@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-depot": "path:name = \"setup-depot\"\nruntime = \"component\"\npath = \"../../setup/depot\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

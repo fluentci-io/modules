@@ -41158,5 +41158,1121 @@
       }
     ],
     "csvLists": true
+  },
+  {
+    "name": "depot",
+    "path": "containers/depot",
+    "program": "depot",
+    "title": "Depot",
+    "docs": "https://railpack.com/reference/cli",
+    "notes": "Use setup-railpack or provide railpack on PATH. prepare is the CI-oriented planning command; it creates plan/info JSON files and propagates planning errors. build requires a reachable BuildKit daemon (BUILDKIT_HOST) and uses native Docker registry credentials. Use envNames to forward selected host environment variables by name; values remain outside the generated command arguments. Build commands in configuration are trusted project code.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Native Depot command and argument tokens as comma-separated text; never JSON."
+          }
+        ],
+        "description": "Run any Depot CLI command using literal comma-separated tokens.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Report the installed Depot CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [
+          "build"
+        ],
+        "fields": [
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing Dockerfile path relative to the project directory."
+          },
+          {
+            "key": "tags",
+            "kind": "csv",
+            "flag": "--tag",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated image names and tags."
+          },
+          {
+            "key": "platforms",
+            "kind": "csv",
+            "flag": "--platform",
+            "default": null,
+            "required": false,
+            "style": "comma-list",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated target platforms, for example linux/amd64,linux/arm64."
+          },
+          {
+            "key": "buildArgs",
+            "kind": "csv",
+            "flag": "--build-arg",
+            "default": null,
+            "required": false,
+            "style": "assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated KEY=VALUE build arguments. Use native secret mounts for sensitive values.",
+            "sample": "KEY=literal value"
+          },
+          {
+            "key": "labels",
+            "kind": "csv",
+            "flag": "--label",
+            "default": null,
+            "required": false,
+            "style": "assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated image metadata KEY=VALUE entries.",
+            "sample": "KEY=literal value"
+          },
+          {
+            "key": "secrets",
+            "kind": "csv",
+            "flag": "--secret",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated BuildKit secret specifications; CSV-quote specifications containing commas. Values should reference files or environment variable names."
+          },
+          {
+            "key": "ssh",
+            "kind": "csv",
+            "flag": "--ssh",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated SSH agent specifications."
+          },
+          {
+            "key": "cacheFrom",
+            "kind": "csv",
+            "flag": "--cache-from",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated external cache specifications; CSV-quote entries containing commas."
+          },
+          {
+            "key": "cacheTo",
+            "kind": "csv",
+            "flag": "--cache-to",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated cache export specifications; CSV-quote entries containing commas."
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "--target",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target Dockerfile build stage."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Native output specification, for example type=local,dest=dist."
+          },
+          {
+            "key": "metadataFile",
+            "kind": "string",
+            "flag": "--metadata-file",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination for build result metadata."
+          },
+          {
+            "key": "progress",
+            "kind": "string",
+            "flag": "--progress",
+            "default": "plain",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "auto",
+              "plain",
+              "tty",
+              "rawjson"
+            ],
+            "description": "Build progress output mode."
+          },
+          {
+            "key": "buildPlatform",
+            "kind": "string",
+            "flag": "--build-platform",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "dynamic",
+              "linux/amd64",
+              "linux/arm64"
+            ],
+            "description": "Depot builder architecture."
+          },
+          {
+            "key": "push",
+            "kind": "boolean",
+            "flag": "--push",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Push the resulting image to its registry."
+          },
+          {
+            "key": "load",
+            "kind": "boolean",
+            "flag": "--load",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Load the image into the local Docker daemon; requires Docker."
+          },
+          {
+            "key": "save",
+            "kind": "boolean",
+            "flag": "--save",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Save the image in the Depot Registry."
+          },
+          {
+            "key": "pull",
+            "kind": "boolean",
+            "flag": "--pull",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Always pull referenced base images."
+          },
+          {
+            "key": "noCache",
+            "kind": "boolean",
+            "flag": "--no-cache",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Build without reading cached layers."
+          },
+          {
+            "key": "lint",
+            "kind": "boolean",
+            "flag": "--lint",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Lint Dockerfiles before building."
+          },
+          {
+            "key": "context",
+            "kind": "string",
+            "flag": "",
+            "default": ".",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Build context directory or URL."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Build container images on Depot remote builders, optionally pushing, loading, or saving the result.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "bake",
+        "args": [
+          "bake"
+        ],
+        "fields": [
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated existing Bake HCL, JSON, or Compose files."
+          },
+          {
+            "key": "set",
+            "kind": "csv",
+            "flag": "--set",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated targetpattern.key=value overrides; CSV-quote values containing commas."
+          },
+          {
+            "key": "targets",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Comma-separated Bake targets; blank selects native defaults."
+          },
+          {
+            "key": "push",
+            "kind": "boolean",
+            "flag": "--push",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Push built target images."
+          },
+          {
+            "key": "load",
+            "kind": "boolean",
+            "flag": "--load",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Load images into the local Docker daemon."
+          },
+          {
+            "key": "print",
+            "kind": "boolean",
+            "flag": "--print",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Print the resolved build definition without building."
+          },
+          {
+            "key": "noCache",
+            "kind": "boolean",
+            "flag": "--no-cache",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Disable layer cache reads."
+          },
+          {
+            "key": "metadataFile",
+            "kind": "string",
+            "flag": "--metadata-file",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination for build metadata."
+          },
+          {
+            "key": "progress",
+            "kind": "string",
+            "flag": "--progress",
+            "default": "plain",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Build progress mode."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Build multiple targets from Bake or Compose definitions.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "cache_reset",
+        "args": [
+          "cache",
+          "reset"
+        ],
+        "fields": [
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Reset the selected project build cache.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "list_builds",
+        "args": [
+          "list",
+          "builds"
+        ],
+        "fields": [
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json",
+              "csv"
+            ],
+            "description": "Noninteractive result format."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "List recent builds with machine-readable output.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "projects_list",
+        "args": [
+          "list",
+          "projects"
+        ],
+        "fields": [
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json",
+              "csv"
+            ],
+            "description": "Noninteractive result format."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "List accessible projects without opening an interactive selector.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "projects_get",
+        "args": [
+          "projects",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project-id",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Project ID; otherwise native project configuration is used."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json"
+            ],
+            "description": "Machine-readable result format."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Read project configuration using an organization token.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "projects_create",
+        "args": [
+          "projects",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "New project name."
+          },
+          {
+            "key": "organization",
+            "kind": "string",
+            "flag": "--organization",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Depot organization ID."
+          },
+          {
+            "key": "region",
+            "kind": "string",
+            "flag": "--region",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Build data region."
+          },
+          {
+            "key": "cacheStoragePolicy",
+            "kind": "integer",
+            "flag": "--cache-storage-policy",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Cache storage in GB; upstream validates supported limits."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Create a Depot project with explicit organization and build storage settings.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build_cancel",
+        "args": [
+          "build",
+          "cancel"
+        ],
+        "fields": [
+          {
+            "key": "projectId",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Depot project ID; otherwise native DEPOT_PROJECT_ID or depot.json is used."
+          },
+          {
+            "key": "buildIds",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Comma-separated build IDs; native bulk selection requires allRunning and projectId."
+          },
+          {
+            "key": "allRunning",
+            "kind": "boolean",
+            "flag": "--all-running",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Select all running builds in the explicitly selected project."
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "--dry-run",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Preview cancellation without changing builds."
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicitly approve bulk cancellation without prompting."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json"
+            ],
+            "description": "Machine-readable output."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Cancel selected builds or explicitly preview/bulk-cancel running project builds. Requires an organization API token.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "configure_docker",
+        "args": [
+          "configure-docker"
+        ],
+        "fields": [
+          {
+            "key": "uninstall",
+            "kind": "boolean",
+            "flag": "--uninstall",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Remove the Depot Docker integration instead of configuring it."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native argument tokens as comma-separated text. Quote CSV entries that contain commas; no shell expansion."
+          }
+        ],
+        "description": "Configure or remove Depot Docker integration; requires Docker.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
+    "name": "flipt",
+    "path": "deployment/flipt",
+    "program": "flipt",
+    "title": "Flipt",
+    "docs": "https://railpack.com/reference/cli",
+    "notes": "Use setup-railpack or provide railpack on PATH. prepare is the CI-oriented planning command; it creates plan/info JSON files and propagates planning errors. build requires a reachable BuildKit daemon (BUILDKIT_HOST) and uses native Docker registry credentials. Use envNames to forward selected host environment variables by name; values remain outside the generated command arguments. Build commands in configuration are trusted project code.",
+    "environment": {
+      "CI": "true"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Native Flipt command and argument tokens as comma-separated text; never JSON objects or arrays."
+          }
+        ],
+        "description": "Run any Flipt CLI command as literal native arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Report the installed Flipt version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "validate",
+        "args": [
+          "validate"
+        ],
+        "fields": [
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Comma-separated YAML flag-state paths, relative to workDir; omitted or blank validates the configured state tree."
+          },
+          {
+            "key": "workDir",
+            "kind": "string",
+            "flag": "--work-dir",
+            "default": null,
+            "required": false,
+            "style": "directory",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing directory used as the flag-state filesystem root."
+          },
+          {
+            "key": "extraSchema",
+            "kind": "string",
+            "flag": "--extra-schema",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing schema extension file with additional validation constraints."
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json",
+              "text"
+            ],
+            "description": "Validation output format."
+          },
+          {
+            "key": "issueExitCode",
+            "kind": "integer",
+            "flag": "--issue-exit-code",
+            "default": 1,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Positive exit code for validation findings; zero is deliberately disallowed so this function remains a CI gate."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        ],
+        "description": "Validate flag-state YAML and fail the pipeline on validation issues.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "migrate",
+        "args": [
+          "migrate"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing Flipt server configuration file; credentials can remain in native server configuration or environment."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        ],
+        "description": "Run pending Flipt v2 analytics database migrations with the selected server configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "license_check",
+        "args": [
+          "license",
+          "check"
+        ],
+        "fields": [
+          {
+            "key": "config",
+            "kind": "string",
+            "flag": "--config",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing Flipt server configuration file; credentials can remain in native server configuration or environment."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        ],
+        "description": "Check the configured Flipt Pro license status with the native licensing service.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "evaluate",
+        "args": [
+          "evaluate"
+        ],
+        "fields": [
+          {
+            "key": "flagKey",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Feature flag key to evaluate once."
+          },
+          {
+            "key": "address",
+            "kind": "string",
+            "flag": "--address",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "HTTP or gRPC address of the Flipt instance; defaults to the native localhost endpoint."
+          },
+          {
+            "key": "environment",
+            "kind": "string",
+            "flag": "--environment",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Flipt environment key."
+          },
+          {
+            "key": "namespace",
+            "kind": "string",
+            "flag": "--namespace",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Flipt namespace key."
+          },
+          {
+            "key": "entityId",
+            "kind": "string",
+            "flag": "--entity-id",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Stable evaluation entity ID for reproducible pipeline checks."
+          },
+          {
+            "key": "requestId",
+            "kind": "string",
+            "flag": "--request-id",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Evaluation request correlation ID."
+          },
+          {
+            "key": "context",
+            "kind": "csv",
+            "flag": "--context",
+            "default": null,
+            "required": false,
+            "style": "assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated evaluation KEY=VALUE context entries; no JSON object is accepted.",
+            "sample": "KEY=value"
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Additional literal native tokens as comma-separated text; CSV quotes preserve commas. Do not include secrets, since command arguments are recorded in reports."
+          }
+        ],
+        "description": "Evaluate a feature flag once without watch mode; upstream evaluation failures propagate.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
   }
 ]

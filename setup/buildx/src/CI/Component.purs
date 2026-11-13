@@ -7,6 +7,7 @@ import Data.Either (either)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Exception (throw)
+import CI.ModuleDependencies as Dependencies
 import CI.Setup as Setup
 import CI.Setup.Types as Types
 
@@ -18,4 +19,5 @@ import CI.Setup.Types as Types
 setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean } -> Effect Contract.SetupResult
 setup args = do
   config <- either throw pure (Types.decodeConfig "buildx" (Contract.input (Contract.encodeInput args)))
+  Dependencies.ensureFor "docker"
   Contract.setupResult <$> Setup.install "buildx" config

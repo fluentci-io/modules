@@ -1,6 +1,7 @@
 package:
   name: buildx-example
   dependencies:
+    - fluentci-setup-common
     - fluentci-component-contract
     - argonaut-codecs
     - argonaut-core
@@ -22,3 +23,5 @@ workspace:
       ref: 82da1d0f551b05ecae0ce2d5ebe26e23d61f4a10
     fluentci-component-contract:
       path: ../../lib/component
+    fluentci-setup-common:
+      path: ../../lib/setup

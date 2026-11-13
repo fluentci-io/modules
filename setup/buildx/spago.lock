@@ -6,6 +6,9 @@
         "core": {
           "dependencies": [
             "effect",
+            "either",
+            "exceptions",
+            "fluentci",
             "fluentci-component-contract",
             "fluentci-setup-common",
             "prelude"

@@ -4,7 +4,7 @@ Generated from the committed option snapshot:
 `github.com/docker/buildx v0.36.1-desktop.1 83d819cf8237b52ef45a2a9857eeb83a7b10977f`. Includes inherited and experimental options.
 Option fields are camelCase versions of Docker's long flags; `type` is named
 `type_` in PureScript. Missing flags retain Docker defaults, including default-true
-booleans. Explicit `false` is emitted as `--flag=false`. Array values repeat the flag.
+booleans. Explicit `false` is emitted as `--flag=false`. Comma-separated list values repeat the flag; CSV quotes preserve literal commas.
 Docker byte sizes and durations are strings (for example `2g`, `30s`).
 
 ## `buildx`
@@ -17,7 +17,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -35,7 +35,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -53,7 +53,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -73,7 +73,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -91,7 +91,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -109,7 +109,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -127,29 +127,29 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `targets :: Array String` — Bake targets.
+Positional parameter: `targets :: String (CSV)` — Bake targets.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `allow` | `--allow` | `Array String` |
+| `allow` | `--allow` | `String (CSV)` |
 | `call` | `--call` | `String` |
 | `check` | `--check` | `Boolean` |
-| `file` | `--file` | `Array String` |
+| `file` | `--file` | `String (CSV)` |
 | `list` | `--list` | `String` |
 | `load` | `--load` | `Boolean` |
 | `metadataFile` | `--metadata-file` | `String` |
 | `noCache` | `--no-cache` | `Boolean` |
-| `policy` | `--policy` | `Array String` |
+| `policy` | `--policy` | `String (CSV)` |
 | `print` | `--print` | `Boolean` |
 | `progress` | `--progress` | `String` |
 | `provenance` | `--provenance` | `String` |
 | `pull` | `--pull` | `Boolean` |
 | `push` | `--push` | `Boolean` |
 | `sbom` | `--sbom` | `String` |
-| `set` | `--set` | `Array String` |
-| `var` | `--var` | `Array String` |
+| `set` | `--set` | `String (CSV)` |
+| `var` | `--var` | `String (CSV)` |
 | `help` | `--help` | `Boolean` |
 
 ## `build`
@@ -168,41 +168,41 @@ Positional parameter: `context :: String` — Build context: path, URL or '-' (s
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `addHost` | `--add-host` | `Array String` |
-| `allow` | `--allow` | `Array String` |
-| `annotation` | `--annotation` | `Array String` |
-| `attest` | `--attest` | `Array String` |
-| `buildArg` | `--build-arg` | `Array String` |
-| `buildContext` | `--build-context` | `Array String` |
-| `cacheFrom` | `--cache-from` | `Array String` |
-| `cacheTo` | `--cache-to` | `Array String` |
+| `addHost` | `--add-host` | `String (CSV)` |
+| `allow` | `--allow` | `String (CSV)` |
+| `annotation` | `--annotation` | `String (CSV)` |
+| `attest` | `--attest` | `String (CSV)` |
+| `buildArg` | `--build-arg` | `String (CSV)` |
+| `buildContext` | `--build-context` | `String (CSV)` |
+| `cacheFrom` | `--cache-from` | `String (CSV)` |
+| `cacheTo` | `--cache-to` | `String (CSV)` |
 | `call` | `--call` | `String` |
 | `cgroupParent` | `--cgroup-parent` | `String` |
 | `check` | `--check` | `Boolean` |
 | `file` | `--file` | `String` |
 | `iidfile` | `--iidfile` | `String` |
-| `label` | `--label` | `Array String` |
+| `label` | `--label` | `String (CSV)` |
 | `load` | `--load` | `Boolean` |
 | `metadataFile` | `--metadata-file` | `String` |
 | `network` | `--network` | `String` |
 | `noCache` | `--no-cache` | `Boolean` |
-| `noCacheFilter` | `--no-cache-filter` | `Array String` |
-| `output` | `--output` | `Array String` |
-| `platform` | `--platform` | `Array String` |
-| `policy` | `--policy` | `Array String` |
+| `noCacheFilter` | `--no-cache-filter` | `String (CSV)` |
+| `output` | `--output` | `String (CSV)` |
+| `platform` | `--platform` | `String (CSV)` |
+| `policy` | `--policy` | `String (CSV)` |
 | `progress` | `--progress` | `String` |
 | `provenance` | `--provenance` | `String` |
 | `pull` | `--pull` | `Boolean` |
 | `push` | `--push` | `Boolean` |
 | `quiet` | `--quiet` | `Boolean` |
-| `resource` | `--resource` | `Array String` |
+| `resource` | `--resource` | `String (CSV)` |
 | `sbom` | `--sbom` | `String` |
-| `secret` | `--secret` | `Array String` |
+| `secret` | `--secret` | `String (CSV)` |
 | `shmSize` | `--shm-size` | `String` |
-| `ssh` | `--ssh` | `Array String` |
-| `tag` | `--tag` | `Array String` |
+| `ssh` | `--ssh` | `String (CSV)` |
+| `tag` | `--tag` | `String (CSV)` |
 | `target` | `--target` | `String` |
-| `ulimit` | `--ulimit` | `Array String` |
+| `ulimit` | `--ulimit` | `String (CSV)` |
 | `help` | `--help` | `Boolean` |
 
 ## `create`
@@ -226,11 +226,11 @@ Positional parameter: `endpoint :: Maybe String` — Builder context or endpoint
 | `buildkitdConfig` | `--buildkitd-config` | `String` |
 | `buildkitdFlags` | `--buildkitd-flags` | `String` |
 | `driver` | `--driver` | `String` |
-| `driverOpt` | `--driver-opt` | `Array String` |
+| `driverOpt` | `--driver-opt` | `String (CSV)` |
 | `leave` | `--leave` | `Boolean` |
 | `name` | `--name` | `String` |
 | `node` | `--node` | `String` |
-| `platform` | `--platform` | `Array String` |
+| `platform` | `--platform` | `String (CSV)` |
 | `timeout` | `--timeout` | `String` |
 | `use` | `--use` | `Boolean` |
 | `help` | `--help` | `Boolean` |
@@ -267,7 +267,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `filter` | `--filter` | `Array String` |
+| `filter` | `--filter` | `String (CSV)` |
 | `format` | `--format` | `String` |
 | `timeout` | `--timeout` | `String` |
 | `verbose` | `--verbose` | `Boolean` |
@@ -327,7 +327,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
 | `all` | `--all` | `Boolean` |
-| `filter` | `--filter` | `Array String` |
+| `filter` | `--filter` | `String (CSV)` |
 | `force` | `--force` | `Boolean` |
 | `maxUsedSpace` | `--max-used-space` | `String` |
 | `minFreeSpace` | `--min-free-space` | `String` |
@@ -346,7 +346,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `names :: Array String` — Builder instance names.
+Positional parameter: `names :: String (CSV)` — Builder instance names.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -429,41 +429,41 @@ Positional parameter: `context :: String` — Build context: path, URL or '-' (s
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `addHost` | `--add-host` | `Array String` |
-| `allow` | `--allow` | `Array String` |
-| `annotation` | `--annotation` | `Array String` |
-| `attest` | `--attest` | `Array String` |
-| `buildArg` | `--build-arg` | `Array String` |
-| `buildContext` | `--build-context` | `Array String` |
-| `cacheFrom` | `--cache-from` | `Array String` |
-| `cacheTo` | `--cache-to` | `Array String` |
+| `addHost` | `--add-host` | `String (CSV)` |
+| `allow` | `--allow` | `String (CSV)` |
+| `annotation` | `--annotation` | `String (CSV)` |
+| `attest` | `--attest` | `String (CSV)` |
+| `buildArg` | `--build-arg` | `String (CSV)` |
+| `buildContext` | `--build-context` | `String (CSV)` |
+| `cacheFrom` | `--cache-from` | `String (CSV)` |
+| `cacheTo` | `--cache-to` | `String (CSV)` |
 | `call` | `--call` | `String` |
 | `cgroupParent` | `--cgroup-parent` | `String` |
 | `check` | `--check` | `Boolean` |
 | `file` | `--file` | `String` |
 | `iidfile` | `--iidfile` | `String` |
-| `label` | `--label` | `Array String` |
+| `label` | `--label` | `String (CSV)` |
 | `load` | `--load` | `Boolean` |
 | `metadataFile` | `--metadata-file` | `String` |
 | `network` | `--network` | `String` |
 | `noCache` | `--no-cache` | `Boolean` |
-| `noCacheFilter` | `--no-cache-filter` | `Array String` |
-| `output` | `--output` | `Array String` |
-| `platform` | `--platform` | `Array String` |
-| `policy` | `--policy` | `Array String` |
+| `noCacheFilter` | `--no-cache-filter` | `String (CSV)` |
+| `output` | `--output` | `String (CSV)` |
+| `platform` | `--platform` | `String (CSV)` |
+| `policy` | `--policy` | `String (CSV)` |
 | `progress` | `--progress` | `String` |
 | `provenance` | `--provenance` | `String` |
 | `pull` | `--pull` | `Boolean` |
 | `push` | `--push` | `Boolean` |
 | `quiet` | `--quiet` | `Boolean` |
-| `resource` | `--resource` | `Array String` |
+| `resource` | `--resource` | `String (CSV)` |
 | `sbom` | `--sbom` | `String` |
-| `secret` | `--secret` | `Array String` |
+| `secret` | `--secret` | `String (CSV)` |
 | `shmSize` | `--shm-size` | `String` |
-| `ssh` | `--ssh` | `Array String` |
-| `tag` | `--tag` | `Array String` |
+| `ssh` | `--ssh` | `String (CSV)` |
+| `tag` | `--tag` | `String (CSV)` |
 | `target` | `--target` | `String` |
-| `ulimit` | `--ulimit` | `Array String` |
+| `ulimit` | `--ulimit` | `String (CSV)` |
 | `help` | `--help` | `Boolean` |
 
 ## `debug_build`
@@ -484,41 +484,41 @@ Positional parameter: `context :: String` — Build context: path, URL or '-' (s
 | `debug` | `--debug` | `Boolean` |
 | `invoke` | `--invoke` | `String` |
 | `on` | `--on` | `String` |
-| `addHost` | `--add-host` | `Array String` |
-| `allow` | `--allow` | `Array String` |
-| `annotation` | `--annotation` | `Array String` |
-| `attest` | `--attest` | `Array String` |
-| `buildArg` | `--build-arg` | `Array String` |
-| `buildContext` | `--build-context` | `Array String` |
-| `cacheFrom` | `--cache-from` | `Array String` |
-| `cacheTo` | `--cache-to` | `Array String` |
+| `addHost` | `--add-host` | `String (CSV)` |
+| `allow` | `--allow` | `String (CSV)` |
+| `annotation` | `--annotation` | `String (CSV)` |
+| `attest` | `--attest` | `String (CSV)` |
+| `buildArg` | `--build-arg` | `String (CSV)` |
+| `buildContext` | `--build-context` | `String (CSV)` |
+| `cacheFrom` | `--cache-from` | `String (CSV)` |
+| `cacheTo` | `--cache-to` | `String (CSV)` |
 | `call` | `--call` | `String` |
 | `cgroupParent` | `--cgroup-parent` | `String` |
 | `check` | `--check` | `Boolean` |
 | `file` | `--file` | `String` |
 | `iidfile` | `--iidfile` | `String` |
-| `label` | `--label` | `Array String` |
+| `label` | `--label` | `String (CSV)` |
 | `load` | `--load` | `Boolean` |
 | `metadataFile` | `--metadata-file` | `String` |
 | `network` | `--network` | `String` |
 | `noCache` | `--no-cache` | `Boolean` |
-| `noCacheFilter` | `--no-cache-filter` | `Array String` |
-| `output` | `--output` | `Array String` |
-| `platform` | `--platform` | `Array String` |
-| `policy` | `--policy` | `Array String` |
+| `noCacheFilter` | `--no-cache-filter` | `String (CSV)` |
+| `output` | `--output` | `String (CSV)` |
+| `platform` | `--platform` | `String (CSV)` |
+| `policy` | `--policy` | `String (CSV)` |
 | `progress` | `--progress` | `String` |
 | `provenance` | `--provenance` | `String` |
 | `pull` | `--pull` | `Boolean` |
 | `push` | `--push` | `Boolean` |
 | `quiet` | `--quiet` | `Boolean` |
-| `resource` | `--resource` | `Array String` |
+| `resource` | `--resource` | `String (CSV)` |
 | `sbom` | `--sbom` | `String` |
-| `secret` | `--secret` | `Array String` |
+| `secret` | `--secret` | `String (CSV)` |
 | `shmSize` | `--shm-size` | `String` |
-| `ssh` | `--ssh` | `Array String` |
-| `tag` | `--tag` | `Array String` |
+| `ssh` | `--ssh` | `String (CSV)` |
+| `tag` | `--tag` | `String (CSV)` |
 | `target` | `--target` | `String` |
-| `ulimit` | `--ulimit` | `Array String` |
+| `ulimit` | `--ulimit` | `String (CSV)` |
 | `help` | `--help` | `Boolean` |
 
 ## `history_inspect`
@@ -531,7 +531,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Subcommand positional arguments; prefer the corresponding named export.
+Positional parameter: `arguments :: String (CSV)` — Subcommand positional arguments; prefer the corresponding named export.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -550,7 +550,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `refs :: Array String` — Build record references.
+Positional parameter: `refs :: String (CSV)` — Build record references.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -571,13 +571,13 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `arguments :: Array String` — Import positional arguments; use the file option instead of interactive stdin.
+Positional parameter: `arguments :: String (CSV)` — Import positional arguments; use the file option instead of interactive stdin.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `file` | `--file` | `Array String` |
+| `file` | `--file` | `String (CSV)` |
 | `help` | `--help` | `Boolean` |
 
 ## `history_logs`
@@ -613,7 +613,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `filter` | `--filter` | `Array String` |
+| `filter` | `--filter` | `String (CSV)` |
 | `format` | `--format` | `String` |
 | `local` | `--local` | `Boolean` |
 | `noTrunc` | `--no-trunc` | `Boolean` |
@@ -647,7 +647,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `refs :: Array String` — Build record references.
+Positional parameter: `refs :: String (CSV)` — Build record references.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
@@ -686,21 +686,21 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `sources :: Array String` — Image source references.
+Positional parameter: `sources :: String (CSV)` — Image source references.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `annotation` | `--annotation` | `Array String` |
+| `annotation` | `--annotation` | `String (CSV)` |
 | `append` | `--append` | `Boolean` |
 | `dryRun` | `--dry-run` | `Boolean` |
-| `file` | `--file` | `Array String` |
+| `file` | `--file` | `String (CSV)` |
 | `metadataFile` | `--metadata-file` | `String` |
-| `platform` | `--platform` | `Array String` |
+| `platform` | `--platform` | `String (CSV)` |
 | `preferIndex` | `--prefer-index` | `Boolean` |
 | `progress` | `--progress` | `String` |
-| `tag` | `--tag` | `Array String` |
+| `tag` | `--tag` | `String (CSV)` |
 | `help` | `--help` | `Boolean` |
 
 ## `imagetools_inspect`
@@ -739,7 +739,7 @@ Positional parameter: `source :: String` — Required policy evaluation source.
 | --- | --- | --- |
 | `builder` | `--builder` | `String` |
 | `debug` | `--debug` | `Boolean` |
-| `fields` | `--fields` | `Array String` |
+| `fields` | `--fields` | `String (CSV)` |
 | `file` | `--file` | `String` |
 | `platform` | `--platform` | `String` |
 | `print` | `--print` | `Boolean` |
@@ -775,7 +775,7 @@ Common module parameters: `project` (default `.`), `runDir` (required, fresh),
 `docker` (executable, default `docker`), `timeoutMs` (default 900000),
 `experimental` (default false, enables `BUILDX_EXPERIMENTAL=1`).
 
-Positional parameter: `references :: Array String` — Optional REF and DIGEST positional arguments.
+Positional parameter: `references :: String (CSV)` — Optional REF and DIGEST positional arguments.
 
 | Module argument | Docker option | Type |
 | --- | --- | --- |

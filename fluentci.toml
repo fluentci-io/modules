@@ -139,6 +139,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "depot"
+version = "0.1.0"
+path = "containers/depot"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "digitalocean"
 version = "0.1.0"
 path = "cloud/digitalocean"
@@ -177,6 +184,13 @@ runtime = "component"
 name = "drizzlekit"
 version = "0.1.0"
 path = "databases/drizzlekit"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "flipt"
+version = "0.1.0"
+path = "deployment/flipt"
 sdk = "purescript"
 runtime = "component"
 
@@ -678,6 +692,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-depot"
+version = "0.1.0"
+path = "setup/depot"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-determinate-nix"
 version = "0.2.1"
 path = "setup/determinate-nix"
@@ -786,6 +807,13 @@ runtime = "component"
 name = "setup-flakehub-push"
 version = "0.2.1"
 path = "setup/flakehub-push"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-flipt"
+version = "0.1.0"
+path = "setup/flipt"
 sdk = "purescript"
 runtime = "component"
 

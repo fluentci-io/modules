@@ -1,6 +1,6 @@
 package:
   name: fluentci-setup-buildx
-  dependencies: [fluentci-component-contract, effect, prelude, fluentci-setup-common]
+  dependencies: [either, exceptions, fluentci, fluentci-component-contract, effect, prelude, fluentci-setup-common]
 workspace:
   packageSet:
     registry: 81.11.0

@@ -57,12 +57,12 @@ def inventory():
                 if not (ROOT / 'setup' / prerequisite / 'entry.mjs').exists():
                     raise ValueError(f'{path}: missing setup companion for {prerequisite}')
         commands = {c['name']: c for c in catalog.get(path, {}).get('commands', [])}
-        if commands and set(commands) != set(exports):
+        if commands and (set(commands) | ({"setup"} if tool in {"depot", "flipt"} else set())) != set(exports):
             raise ValueError(f'{path}: exported functions differ from reviewed catalog')
         functions = []
         for name in exports:
             role = 'escape hatch' if name == 'run' else 'diagnostic' if name in DIAGNOSTICS else 'pipeline operation'
-            description = commands.get(name, {}).get('description', '')
+            description = 'Install or reuse the native CLI before pipeline operations.' if name == 'setup' else commands.get(name, {}).get('description', '')
             if commands and not description.strip():
                 raise ValueError(f'{path}/{name}: missing function purpose')
             wit_name=re.sub(r'([a-z0-9])([A-Z])',r'\1-\2',name).replace('_','-').lower()
