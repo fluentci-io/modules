@@ -2,8 +2,8 @@
   "lockfileVersion": 1,
   "modules": {
     "dependency:artifacts/artifactory:setup-artifactory": "path:name = \"setup-artifactory\"\nruntime = \"component\"\npath = \"artifacts/artifactory/../../setup/artifactory\"\nsdk = \"purescript\"\n",
-    "dependency:artifacts/gh-artifact:setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"artifacts/gh-artifact/../../setup/bun\"\nsdk = \"purescript\"\n",
-    "dependency:artifacts/gh-artifact:setup-gh-artifact": "path:name = \"setup-gh-artifact\"\nruntime = \"component\"\npath = \"artifacts/gh-artifact/../../setup/gh-artifact\"\nsdk = \"purescript\"\n",
+    "dependency:artifacts/gh-artifacts:setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"artifacts/gh-artifacts/../../setup/bun\"\nsdk = \"purescript\"\n",
+    "dependency:artifacts/gh-artifacts:setup-gh-artifacts": "path:name = \"setup-gh-artifacts\"\nruntime = \"component\"\npath = \"artifacts/gh-artifacts/../../setup/gh-artifacts\"\nsdk = \"purescript\"\n",
     "dependency:artifacts/gitlab-artifacts:setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"artifacts/gitlab-artifacts/../../setup/bun\"\nsdk = \"purescript\"\n",
     "dependency:artifacts/gitlab-artifacts:setup-gitlab-artifacts": "path:name = \"setup-gitlab-artifacts\"\nruntime = \"component\"\npath = \"artifacts/gitlab-artifacts/../../setup/gitlab-artifacts\"\nsdk = \"purescript\"\n",
     "dependency:artifacts/jfrog-cli:setup-jfrog-cli": "path:name = \"setup-jfrog-cli\"\nruntime = \"component\"\npath = \"artifacts/jfrog-cli/../../setup/jfrog-cli\"\nsdk = \"purescript\"\n",

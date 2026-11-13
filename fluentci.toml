@@ -202,9 +202,9 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
-name = "gh-artifact"
+name = "gh-artifacts"
 version = "0.1.0"
-path = "artifacts/gh-artifact"
+path = "artifacts/gh-artifacts"
 sdk = "purescript"
 runtime = "component"
 
@@ -818,9 +818,9 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
-name = "setup-gh-artifact"
+name = "setup-gh-artifacts"
 version = "0.1.0"
-path = "setup/gh-artifact"
+path = "setup/gh-artifacts"
 sdk = "purescript"
 runtime = "component"
 

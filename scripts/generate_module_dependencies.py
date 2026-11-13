@@ -45,7 +45,7 @@ def source(name, requirements):
       'module CI.ModuleDependencies (ensureFor) where', '', 'import Prelude',
       'import Data.Either (Either(..))', 'import Effect (Effect)',
       'import Effect.Exception (throw, try)', 'import FluentCI.Plugin as P']
-    if name == 'gh-artifact':
+    if name == 'gh-artifacts':
         lines += ['import Data.String.Common (trim)']
     lines += ['', 'foreign import installDependency :: String -> Effect Unit', '',
       'probe :: Array String -> Effect Unit', 'probe args = do',
@@ -73,13 +73,13 @@ def source(name, requirements):
             lines += ['  ' + call(main)]
         for d in requirements[1:]:
             lines += ['  when (executable == ' + json.dumps(d['program']) + ') $ ' + call(d)]
-        if name == 'gh-artifact':
+        if name == 'gh-artifacts':
             lines += ['  when (executable == "bun") $ do',
               '    available <- P.hasEnv "FLUENTCI_GH_ARTIFACT_CLIENT" >>= case _ of',
               '      Left error -> throw (P.errorMessage error)', '      Right value -> pure value',
               '    location <-', '      if available then do', '        result <- P.getEnv "FLUENTCI_GH_ARTIFACT_CLIENT"',
               '        case result of', '          Left error -> throw (P.errorMessage error)', '          Right value -> pure value',
-              '      else pure ""', '    when (trim location == "") $ do', '      installDependency "setup-gh-artifact"', '      configured <- P.getEnv "FLUENTCI_GH_ARTIFACT_CLIENT"', '      case configured of', '        Right value | trim value /= "" -> pure unit', '        _ -> throw "setup-gh-artifact did not configure the artifact client SDK"']
+              '      else pure ""', '    when (trim location == "") $ do', '      installDependency "setup-gh-artifacts"', '      configured <- P.getEnv "FLUENTCI_GH_ARTIFACT_CLIENT"', '      case configured of', '        Right value | trim value /= "" -> pure unit', '        _ -> throw "setup-gh-artifacts did not configure the artifact client SDK"']
         alternatives = {'cmake': ['ctest'], 'rustfmt': ['cargo']}.get(name, [])
         for program in alternatives:
             lines += ['  when (executable == ' + json.dumps(program) + ') $ ensure ' + json.dumps(main['alias']) + ' [ "which", ' + json.dumps(program) + ' ]']

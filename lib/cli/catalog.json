@@ -7892,12 +7892,12 @@
     ]
   },
   {
-    "name": "gh-artifact",
-    "path": "artifacts/gh-artifact",
+    "name": "gh-artifacts",
+    "path": "artifacts/gh-artifacts",
     "program": "gh",
     "title": "GitHub artifacts",
     "docs": "https://github.com/actions/toolkit/tree/main/packages/artifact",
-    "notes": "Use setup-gh-artifact to install gh and the official @actions/artifact client. Job-artifact upload is GitHub Actions-only and needs ACTIONS_RUNTIME_TOKEN/ACTIONS_RESULTS_URL; outside Actions, use release_upload or another artifact backend. GH_TOKEN authenticates gh operations. FLUENTCI_GH_ARTIFACT_CLIENT selects the installed client module. Uploaded job artifacts are immutable; choose unique names per producer. Download by run ID or release tag for downstream stages.",
+    "notes": "Use setup-gh-artifacts to install gh and the official @actions/artifact client. Job-artifact upload is GitHub Actions-only and needs ACTIONS_RUNTIME_TOKEN/ACTIONS_RESULTS_URL; outside Actions, use release_upload or another artifact backend. GH_TOKEN authenticates gh operations. FLUENTCI_GH_ARTIFACT_CLIENT selects the installed client module. Uploaded job artifacts are immutable; choose unique names per producer. Download by run ID or release tag for downstream stages.",
     "environment": {},
     "commands": [
       {
@@ -7906,16 +7906,14 @@
         "fields": [
           {
             "key": "arguments",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "",
             "default": null,
             "required": true,
-            "sample": [
-              "--help"
-            ],
+            "sample": "--help",
             "style": "value",
             "scope": "raw",
-            "description": "arguments",
+            "description": "Comma-separated arguments; whitespace is trimmed and values are passed as literal native tokens.",
             "choices": []
           }
         ],
@@ -7981,16 +7979,14 @@
           },
           {
             "key": "files",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "",
             "default": null,
             "required": true,
-            "sample": [
-              "dist/app.zip"
-            ],
+            "sample": "dist/app.zip",
             "style": "file",
             "scope": "raw",
-            "description": "files",
+            "description": "Comma-separated files; whitespace is trimmed and values are passed as literal native tokens.",
             "choices": []
           }
         ],
@@ -8032,16 +8028,14 @@
           },
           {
             "key": "name",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "--name",
             "default": null,
             "required": false,
-            "sample": [
-              "example=value"
-            ],
+            "sample": "example=value",
             "style": "value",
             "scope": "option",
-            "description": "name",
+            "description": "Comma-separated name; whitespace is trimmed and values are passed as literal native tokens.",
             "choices": []
           },
           {
@@ -8107,16 +8101,14 @@
           },
           {
             "key": "files",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "",
             "default": null,
             "required": true,
-            "sample": [
-              "dist/app.zip"
-            ],
+            "sample": "dist/app.zip",
             "style": "file",
             "scope": "positional",
-            "description": "files",
+            "description": "Comma-separated files; whitespace is trimmed and values are passed as literal native tokens.",
             "choices": []
           }
         ],
@@ -8158,16 +8150,14 @@
           },
           {
             "key": "pattern",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "--pattern",
             "default": null,
             "required": false,
-            "sample": [
-              "example=value"
-            ],
+            "sample": "example=value",
             "style": "value",
             "scope": "option",
-            "description": "pattern",
+            "description": "Comma-separated pattern; whitespace is trimmed and values are passed as literal native tokens.",
             "choices": []
           },
           {
@@ -8188,7 +8178,8 @@
         "environment": {},
         "example": {}
       }
-    ]
+    ],
+    "csvLists": true
   },
   {
     "name": "gitlab-artifacts",

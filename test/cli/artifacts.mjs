@@ -55,7 +55,7 @@ export function artifactSuite(tool, plugin) {
     });
     return;
   }
-  if (!['gh-artifact', 'gitlab-artifacts'].includes(tool.name)) return;
+  if (!['gh-artifacts', 'gitlab-artifacts'].includes(tool.name)) return;
   test(tool.name + ': upload adapter validates credentials, request, and remote failures', t => {
     if (spawnSync('bun', ['--version']).status !== 0) {
       if (process.env.FLUENTCI_REQUIRE_ARTIFACT_TESTS) assert.fail('Bun is required');
@@ -69,13 +69,13 @@ export function artifactSuite(tool, plugin) {
       const sdk = join(directory, 'sdk.mjs');
       writeFileSync(sdk, 'export class DefaultArtifactClient { async uploadArtifact(name,files,root,options) { if(process.env.TEST_FAIL)throw Error("upload failed"); return {id:123,name,files,root,options}; } }');
       const env = { ...process.env, ACTIONS_RUNTIME_TOKEN:'synthetic-token', ACTIONS_RESULTS_URL:'https://example.invalid', CI_JOB_TOKEN:'synthetic-token', FLUENTCI_GH_ARTIFACT_CLIENT:sdk };
-      const args = tool.name === 'gh-artifact' ? ['release', directory, '7', archive] : [archive, '42', 'https://gitlab.example/api/v4/'];
+      const args = tool.name === 'gh-artifacts' ? ['release', directory, '7', archive] : [archive, '42', 'https://gitlab.example/api/v4/'];
       const mock = tool.name === 'gitlab-artifacts' ? `globalThis.fetch=async(url,options)=>{if(url!=="https://gitlab.example/api/v4/jobs/42/artifacts?artifact_format=zip&artifact_type=archive")throw Error("wrong upload URL: "+url);if(options.method!=="POST"||options.headers["JOB-TOKEN"]!=="synthetic-token"||await options.body.get("file").text()!=="synthetic archive")throw Error("invalid request");return {ok:!process.env.TEST_FAIL,status:process.env.TEST_FAIL?403:201,text:async()=>"created"};};` : '';
       const run = changes => spawnSync('bun', ['-e', mock + command.args[1], '--', ...args], {encoding:'utf8',env:{...env,...changes}});
       const success = run({});
       assert.equal(success.status, 0, success.stderr);
       const output = JSON.parse(success.stdout);
-      if (tool.name === 'gh-artifact') {
+      if (tool.name === 'gh-artifacts') {
         assert.equal(output.id,123); assert.deepEqual(output.files,[archive]);
         assert.equal(output.root,directory); assert.equal(output.options.retentionDays,7);
       } else assert.equal(output.status,201);

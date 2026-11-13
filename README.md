@@ -93,7 +93,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [garden](./deployment/garden/README.md) | Build, deploy, test and clean up Garden project environments. | `run`, `build`, `deploy`, `test`, [typed contract](./deployment/garden/COMPONENT.md) |
 | [gcloud](./cloud/gcloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `config-list`, [typed contract](./cloud/gcloud/COMPONENT.md) |
 | [gemfury](./publishing/gemfury/README.md) | Upload Linux packages to Gemfury using credentials from the host environment. | `upload`, [typed contract](./publishing/gemfury/COMPONENT.md) |
-| [gh-artifact](./artifacts/gh-artifact/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gh-artifact/COMPONENT.md) |
+| [gh-artifacts](./artifacts/gh-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gh-artifacts/COMPONENT.md) |
 | [gitlab-artifacts](./artifacts/gitlab-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gitlab-artifacts/COMPONENT.md) |
 | [gitleaks](./security/gitleaks/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan-dir`, [typed contract](./security/gitleaks/COMPONENT.md) |
 | [grype](./security/grype/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/grype/COMPONENT.md) |
@@ -181,7 +181,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-gcloud](./setup/gcloud/README.md) | Install and verify gcloud, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gcloud/COMPONENT.md) |
 | [setup-gemfury](./setup/gemfury/README.md) | Install and verify gemfury, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gemfury/COMPONENT.md) |
 | [setup-gh](./setup/gh/README.md) | Install the GitHub CLI and publish its executable directory to PATH. | `setup`, [typed contract](./setup/gh/COMPONENT.md) |
-| [setup-gh-artifact](./setup/gh-artifact/README.md) | Install and verify gh-artifact, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gh-artifact/COMPONENT.md) |
+| [setup-gh-artifacts](./setup/gh-artifacts/README.md) | Install and verify gh-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gh-artifacts/COMPONENT.md) |
 | [setup-gitlab-artifacts](./setup/gitlab-artifacts/README.md) | Install and verify gitlab-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitlab-artifacts/COMPONENT.md) |
 | [setup-gitleaks](./setup/gitleaks/README.md) | Install and verify gitleaks, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitleaks/COMPONENT.md) |
 | [setup-gleam](./setup/gleam/README.md) | Install and verify gleam, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gleam/COMPONENT.md) |

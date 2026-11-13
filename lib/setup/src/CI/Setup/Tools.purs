@@ -241,7 +241,7 @@ extract tool url digest destination = do
       H.run [ "mkdir", "-p", destination <> "/bin" ]
       H.run [ "cp", temp <> "/archive", destination <> "/bin/" <> tool.program ]
     else do
-      if tool.format == "zip" || (Array.elem tool.name [ "gh", "gh-artifact" ] && String.contains (Pattern "macOS") url) then H.run [ "unzip", "-q", temp <> "/archive", "-d", destination <> "/payload" ]
+      if tool.format == "zip" || (Array.elem tool.name [ "gh", "gh-artifacts" ] && String.contains (Pattern "macOS") url) then H.run [ "unzip", "-q", temp <> "/archive", "-d", destination <> "/payload" ]
       else H.run [ "tar", "-xf", temp <> "/archive", "-C", destination <> "/payload" ]
       -- Preserve adjacent resources and helper programs. Locate exactly one main executable.
       matches <- trim <$> H.capture [ "find", destination <> "/payload", "-type", "f", "-name", tool.program ]
@@ -305,10 +305,10 @@ install name host config = do
     H.result name cli.version cli.binDir (foldl (\env entry -> Object.insert entry.variable entry.result.version (Object.union entry.result.environment env)) Object.empty installed)
   else if isBSD host.os || tool.backend == "native" || (Array.elem name [ "aws", "clojure", "coveralls" ] && host.os == "macos") then do
     installed <- native tool host config
-    when (Array.elem name [ "gh-artifact", "gitlab-artifacts", "scorecard" ]) $ do
+    when (Array.elem name [ "gh-artifacts", "gitlab-artifacts", "scorecard" ]) $ do
       ensureRuntime "node" host
       ensureRuntime "bun" host
-    extra <- if name == "gh-artifact" then do
+    extra <- if name == "gh-artifacts" then do
       home <- H.userHome
       let sdk = home <> "/.local/share/fluentci/github-artifact-client/2.3.2"
       H.run [ "mkdir", "-p", sdk ]
@@ -452,13 +452,13 @@ install name host config = do
           H.run [ "rm", "-rf", "--", destination ]
           throw (message error)
         Right value -> pure value
-    when (Array.elem name [ "gh-artifact", "gitlab-artifacts", "scorecard" ]) $ do
+    when (Array.elem name [ "gh-artifacts", "gitlab-artifacts", "scorecard" ]) $ do
       ensureRuntime "node" host
       ensureRuntime "bun" host
-    when (name == "gh-artifact") $ do
+    when (name == "gh-artifacts") $ do
       H.run [ "bun", "add", "--cwd", destination, "--exact", "@actions/artifact@2.3.2" ]
     extra <- if name == "extism-py" then pure (Object.singleton "EXTISM_PYTHON_WASI_DEPS_DIR" (destination <> "/payload/extism-py/share/extism-py"))
-      else if name == "gh-artifact" then pure (Object.singleton "FLUENTCI_GH_ARTIFACT_CLIENT" (destination <> "/node_modules/@actions/artifact/lib/artifact.js"))
+      else if name == "gh-artifacts" then pure (Object.singleton "FLUENTCI_GH_ARTIFACT_CLIENT" (destination <> "/node_modules/@actions/artifact/lib/artifact.js"))
       else if name == "sccache" then pure (Object.singleton "RUSTC_WRAPPER" executable)
       else if tool.backend == "gem" then pure (Object.singleton "GEM_HOME" (destination <> "/gems"))
       else pure Object.empty

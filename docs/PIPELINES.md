@@ -49,11 +49,11 @@ steps:
 ```
 
 These snippets assume the tool executables and build directory already exist.
-For job uploads, `gh-artifact.upload` needs the Actions runtime token and results
+For job uploads, `gh-artifacts.upload` needs the Actions runtime token and results
 URL made available to the process; a repository `GITHUB_TOKEN` alone is insufficient.
-`setup-gh-artifact` installs its official artifact client through Bun. A normal
+`setup-gh-artifacts` installs its official artifact client through Bun. A normal
 Actions artifact action can also collect the output paths and run directories.
-Use `gh-artifact.release-upload` for release assets from another CI provider.
+Use `gh-artifacts.release-upload` for release assets from another CI provider.
 
 ## Jenkins
 

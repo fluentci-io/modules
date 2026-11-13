@@ -198,7 +198,7 @@ upgrade. Failed owned installations are removed; existing prefixes are verified
 before reuse. Native installers reuse an already available matching executable.
 
 `setup-sccache` also publishes `RUSTC_WRAPPER`. `setup-buildx` registers the Docker
-CLI plugin and requires Docker. `setup-gh-artifact` installs the Actions artifact
+CLI plugin and requires Docker. `setup-gh-artifacts` installs the Actions artifact
 client with Bun; job uploads need the Actions runtime. `setup-extism` installs
 Extism CLI, JS/Python PDK compilers, XTP, and Binaryen with separate version fields.
 The Python compiler publishes its private WASI dependency directory. XTP historical

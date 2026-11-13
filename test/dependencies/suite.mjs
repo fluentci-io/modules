@@ -42,12 +42,12 @@ export async function dependencySuite(directory){
   fixture({fail:args=>args[0]==='which'&&args[1]===program&&!available});
   native.ensureFor(program)();assert.equal(invoked,true);
  });
- if(spec.module==='gh-artifact')test('GitHub uploads configure a missing client SDK and reject incomplete setup',()=>{
+ if(spec.module==='gh-artifacts')test('GitHub uploads configure a missing client SDK and reject incomplete setup',()=>{
   let f;
-  globalThis.fluentciSetupDependencies={'setup-gh-artifact':()=>{f.environment.FLUENTCI_GH_ARTIFACT_CLIENT='/fixture/installed-client.mjs';}};
+  globalThis.fluentciSetupDependencies={'setup-gh-artifacts':()=>{f.environment.FLUENTCI_GH_ARTIFACT_CLIENT='/fixture/installed-client.mjs';}};
   f=fixture({env:{FLUENTCI_GH_ARTIFACT_CLIENT:''}});native.ensureFor('bun')();
   assert.equal(f.environment.FLUENTCI_GH_ARTIFACT_CLIENT,'/fixture/installed-client.mjs');
-  globalThis.fluentciSetupDependencies={'setup-gh-artifact':()=>{}};
+  globalThis.fluentciSetupDependencies={'setup-gh-artifacts':()=>{}};
   fixture({env:{FLUENTCI_GH_ARTIFACT_CLIENT:''}});assert.throws(()=>native.ensureFor('bun')(),/did not configure/);
  });
  test(spec.module+': unsupported hosts cannot trigger setup',()=>{

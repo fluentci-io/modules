@@ -89,8 +89,8 @@
   "gemfury": [
     "setup-gemfury"
   ],
-  "gh-artifact": [
-    "setup-gh-artifact",
+  "gh-artifacts": [
+    "setup-gh-artifacts",
     "setup-bun"
   ],
   "gitlab-artifacts": [

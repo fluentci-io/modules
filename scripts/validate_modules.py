@@ -114,7 +114,7 @@ def batches(modules, shards=4):
             names = {module["name"] for module in bucket}
             result.append({"os": os_name, "shard": index + 1, "modules": bucket,
                            "browser": bool(names & {"cypress", "playwright"}),
-                           "bun": bool(names & {"cypress", "playwright", "gh-artifact", "gitlab-artifacts", "scorecard", "nix-publish", "black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint", "sqlfluff", "protolint", "sqruff"}),
+                           "bun": bool(names & {"cypress", "playwright", "gh-artifacts", "gitlab-artifacts", "scorecard", "nix-publish", "black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint", "sqlfluff", "protolint", "sqruff"}),
                            "build": bool(names & {"cmake", "meson", "ninja", "sccache"}),
                            "formatters": bool(names & {"black", "prettier", "rustfmt", "ruff", "biome", "shellcheck", "yamllint", "sqlfluff", "protolint", "sqruff"}),
                            "uv": "uv" in names,

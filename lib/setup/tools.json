@@ -1034,8 +1034,8 @@
     "tagPrefix": "v"
   },
   {
-    "name": "gh-artifact",
-    "title": "Gh-Artifact",
+    "name": "gh-artifacts",
+    "title": "GitHub artifacts",
     "program": "gh",
     "backend": "github",
     "package": "",
@@ -1048,11 +1048,11 @@
     ],
     "checkVersion": true,
     "defaultVersion": "latest",
-    "linuxPackage": "gh-artifact",
-    "macPackage": "gh-artifact",
-    "freebsdPackage": "gh-artifact",
-    "openbsdPackage": "gh-artifact",
-    "netbsdPackage": "gh-artifact",
+    "linuxPackage": "gh",
+    "macPackage": "gh",
+    "freebsdPackage": "gh",
+    "openbsdPackage": "gh",
+    "netbsdPackage": "gh",
     "notes": "Installs gh for artifact/release downloads; Actions job-artifact uploads additionally use the GitHub artifact client installed by this setup module.",
     "tagPrefix": "v"
   },

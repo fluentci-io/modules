@@ -1,0 +1,12 @@
+name = "gh-artifacts"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-gh-artifacts = { path = "../../setup/gh-artifacts", sdk = "purescript", runtime = "component" }
+setup-bun = { path = "../../setup/bun", sdk = "purescript", runtime = "component" }

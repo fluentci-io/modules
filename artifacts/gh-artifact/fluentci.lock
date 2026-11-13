@@ -1,9 +1,0 @@
-{
-  "lockfileVersion": 1,
-  "modules": {
-    "dependency::setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"../../setup/bun\"\nsdk = \"purescript\"\n",
-    "dependency::setup-gh-artifact": "path:name = \"setup-gh-artifact\"\nruntime = \"component\"\npath = \"../../setup/gh-artifact\"\nsdk = \"purescript\"\n"
-  },
-  "packages": {},
-  "git": {}
-}
