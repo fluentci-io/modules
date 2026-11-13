@@ -12,13 +12,14 @@ import FluentCI.Plugin as P
 import Data.String.Common (trim)
 
 -- | Upload Linux packages to Gemfury using credentials from the host environment.
--- | @param files Files selected for the native operation; paths are passed literally without shell expansion.
-upload :: { files :: Array String } -> Effect ({ uploaded :: Boolean, files :: Array String })
+-- | @param files Required comma-separated package paths. Whitespace is trimmed; CSV quotes preserve commas inside a filename. Empty lists and malformed entries are rejected.
+upload :: { files :: String } -> Effect ({ uploaded :: Boolean, files :: Array String })
 upload args = do
+  files <- Native.decodeFiles args.files
   present <- P.hasEnv "FURY_TOKEN" >>= unwrap
   token <- if present then P.getEnv "FURY_TOKEN" >>= unwrap else pure ""
-  Native.uploadFilesWithSetup (Dependencies.ensureFor "curl") args.files
-  pure { uploaded: trim token /= "", files: args.files }
+  Native.uploadFilesWithSetup (Dependencies.ensureFor "curl") files
+  pure { uploaded: trim token /= "", files }
 
 unwrap :: forall a. P.Result a -> Effect a
 unwrap = either (throw <<< P.errorMessage) pure

@@ -1,8 +1,9 @@
-module CI.Gemfury (upload, uploadFiles, uploadFilesWithSetup) where
+module CI.Gemfury (upload, uploadFiles, uploadFilesWithSetup, decodeFiles) where
 
 import Prelude
+import CI.CLI.CSV as CSV
 import Data.Array as Array
-import Data.Either (Either(..))
+import Data.Either (Either(..), either)
 import Data.Foldable (all, traverse_)
 import Data.String.CodeUnits as CU
 import Data.String.Common (replaceAll, trim)
@@ -47,6 +48,15 @@ validatePath :: String -> Effect Unit
 validatePath path = do
   unless (trim path /= "" && all (\c -> c /= '\x0000' && c /= '\n' && c /= '\r') (CU.toCharArray path)) $
     throw "Package paths must be nonempty and cannot contain NUL or line breaks"
+
+-- Decode the public CSV list before credentials, setup or filesystem operations.
+-- The internal upload APIs retain arrays so PureScript callers can compose them.
+decodeFiles :: String -> Effect (Array String)
+decodeFiles input = do
+  paths <- either throw pure (CSV.parse input)
+  when (Array.null paths) $ throw "At least one package path is required"
+  traverse_ validatePath paths
+  pure paths
 
 -- Credentials remain environment references in argv, without shell expansion.
 publish :: Array String -> Effect Unit

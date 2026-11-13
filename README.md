@@ -27,7 +27,7 @@ runtime = "component"
 Build packages first, configure credentials in the CI environment, then upload:
 
 ```sh
-fluentci run gemfury upload --files '["dist/app.deb","dist/app.rpm"]'
+fluentci run gemfury upload --files dist/app.deb,dist/app.rpm
 fluentci run dpkg build --directory package --arch arm64 --output dist/app.deb
 fluentci run setup-node setup --version 22.14.0
 fluentci run cmake build --run-dir .fluentci/build --build-dir build --parallel 2

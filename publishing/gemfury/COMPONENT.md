@@ -9,6 +9,6 @@ Upload Linux packages to Gemfury using credentials from the host environment.
 
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
-| `files` | `array` | yes | Files selected for the native operation; paths are passed literally without shell expansion. |
+| `files` | `string` | yes | Required comma-separated package paths. Whitespace is trimmed; CSV quotes preserve commas inside a filename. Empty lists and malformed entries are rejected. |
 
 Returns `{ uploaded :: Boolean, files :: Array String }`.

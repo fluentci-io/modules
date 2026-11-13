@@ -8,11 +8,9 @@
         "type": "object",
         "properties": {
           "files": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Files selected for the native operation; paths are passed literally without shell expansion."
+            "type": "string",
+            "minLength": 1,
+            "description": "Required comma-separated package paths. Whitespace is trimmed; CSV quotes preserve commas inside a filename. Empty lists and malformed entries are rejected."
           }
         },
         "required": [
