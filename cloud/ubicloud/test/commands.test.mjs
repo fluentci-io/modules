@@ -43,6 +43,7 @@ test('VM creation, listing and lifecycle use named arguments without approving d
  assert.deepEqual(argv('vm_destroy',{resource:'eu-central-h1/build'}),['vm','eu-central-h1/build','destroy']);
  assert.deepEqual(argv('vm_destroy',{resource:'eu-central-h1/build',confirm:'build'}),['--confirm=build','vm','eu-central-h1/build','destroy']);
  assert.deepEqual(argv('vm_destroy',{resource:'eu-central-h1/build',force:true}),['vm','eu-central-h1/build','destroy','--force']);
+ assert.deepEqual(argv('vm_set_maintenance_window',{resource:'eu-central-h1/build',startHour:0}),['vm','eu-central-h1/build','set-maintenance-window','0']);
 });
 test('firewall, load balancer, nodepool and private-subnet operands preserve native ordering',()=>{
  assert.deepEqual(argv('fw_add_rule',{resource:'eu-central-h1/fw',cidr:'10.0.0.0/8',startPort:0,endPort:443,protocol:'tcp'}),['fw','eu-central-h1/fw','add-rule','--start-port=0','--end-port=443','--protocol=tcp','10.0.0.0/8']);

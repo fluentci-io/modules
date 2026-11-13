@@ -11,6 +11,10 @@ import { artifactSuite } from "./artifacts.mjs";
 const catalog = JSON.parse(readFileSync(new URL('../../lib/cli/catalog.json', import.meta.url)));
 const right = result => { assert.equal(result.constructor.name, "Right", result.value0); return result.value0; };
 const sample = field => field.choices.length ? field.choices[0] : field.sample ?? (field.kind === 'boolean' ? true : field.kind === 'integer' ? 3 : field.kind === 'strings' ? ['literal value'] : 'literal value');
+const scalarToken = (field, value) => {
+  const token = (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + String(value);
+  return !field.flag || ['space-list','separate','file-separate','directory-separate'].includes(field.style) ? token : field.flag + '=' + token;
+};
 export async function suite(directory) {
   const schema = JSON.parse(readFileSync(new URL('schema.json', directory)));
   const tool = catalog.find(tool => tool.name === schema.name);
@@ -28,7 +32,7 @@ export async function suite(directory) {
   });
   for (const command of tool.commands) {
     test(command.name + ': defaults and native command prefix', () => {
-      for(const field of command.fields.filter(field=>field.kind==='integer'&&field.style==='signed'))for(const value of [0,-1])assert.ok(plan(command.name,{...inputFor(command),[field.key]:value}).tasks[0].args.includes(field.flag+'='+value));
+      for(const field of command.fields.filter(field=>field.kind==='integer'&&field.style==='signed'))for(const value of [0,-1])assert.ok(plan(command.name,{...inputFor(command),[field.key]:value}).tasks[0].args.includes(scalarToken(field,value)));
       const document = plan(command.name, inputFor(command));
       assert.equal(document.inherit_env, true);
       assert.equal(document.jobs, 1);
@@ -62,7 +66,7 @@ export async function suite(directory) {
         }
         const values = Array.isArray(value) ? value : [String(value)];
         for (const token of values) {
-          const expected = !field.flag ? (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token : ['space-list','separate','file-separate','directory-separate'].includes(field.style) ? token : field.flag + '=' + (field.style.startsWith('prefix:') ? field.style.slice(7) : '') + token;
+          const expected = scalarToken(field,token);
           assert.ok(task.args.includes(expected), command.name + ': missing ' + expected);
           if (field.scope === 'global' && command.args.length) assert.ok(task.args.indexOf(expected) < task.args.indexOf(command.args[0]));
         }
@@ -81,7 +85,7 @@ export async function suite(directory) {
         if (field.kind === 'strings') invalid.push({...base,[field.key]:[42]}, {...base,[field.key]:['']});
         if (field.kind === 'integer' && field.style !== 'signed') {
           invalid.push({...base,[field.key]:field.style === 'nonnegative' ? -1 : 0});
-          if (field.style === 'nonnegative') assert.ok(plan(command.name,{...base,[field.key]:0}).tasks[0].args.includes(field.flag+'=0'));
+          if (field.style === 'nonnegative') assert.ok(plan(command.name,{...base,[field.key]:0}).tasks[0].args.includes(scalarToken(field,0)));
         }
         if (field.kind === 'string') invalid.push({...base,[field.key]:''},{...base,[field.key]:'bad\0value'});
         if (field.choices.length) invalid.push({...base,[field.key]:'invalid-choice'});
