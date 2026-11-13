@@ -81,9 +81,9 @@ valueTokens field value = do
       values <- CSV.parse text
       when (field.required && Array.null values) $ Left (field.key <> " must not be empty")
       unless (all validText values) $ Left (field.key <> " must not contain NUL")
-      when (Array.elem field.style [ "assignments", "assignment-list", "structured-assignments" ]) $ traverse_ (\value -> do
-        let key = fromMaybe "" (Array.head (String.split (Pattern "=") value))
-        unless (key /= "" && String.contains (Pattern "=") value && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ] || (field.style == "structured-assignments" && char == '/')) (CU.toCharArray key)) $
+      when (Array.elem field.style [ "assignments", "assignment-list", "structured-assignments" ]) $ traverse_ (\entry -> do
+        let key = fromMaybe "" (Array.head (String.split (Pattern "=") entry))
+        unless (key /= "" && String.contains (Pattern "=") entry && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ] || (field.style == "structured-assignments" && char == '/')) (CU.toCharArray key)) $
           Left (field.key <> " entries must be KEY=VALUE with valid native key characters")) values
       pure values
     "strings" -> do
