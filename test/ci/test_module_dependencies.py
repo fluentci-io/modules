@@ -21,7 +21,11 @@ class ModuleDependencies(unittest.TestCase):
             dependencies = manifest.get('dependencies', {})
             graph[module['name']] = list(dependencies)
             if not module['path'].startswith('setup/'):
-                if module['name'] == 'nix-publish':
+                if module['path'].startswith('notifications/'):
+                    # Webhook/Bot API senders share curl rather than installing
+                    # a provider CLI. Keep that prerequisite exact.
+                    self.assertEqual(set(dependencies), {'setup-curl'})
+                elif module['name'] == 'nix-publish':
                     self.assertTrue({'setup-nix', 'setup-bun', 'setup-flakehub-push'} <= dependencies.keys())
                 else:
                     self.assertIn('setup-' + module['name'], dependencies)
