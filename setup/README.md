@@ -7,6 +7,10 @@ Private PureScript helpers compose the underlying installers.
 The [PureScript toolchain module](./purescript/README.md) composes runtime setup
 with npm, the compiler, and Spago, with independent version selection.
 
+The [Wasmer](./wasmer/README.md) and [Spin](./spin/README.md) installers select
+versioned official runtime archives. Their deployment modules compose these installers;
+project compiler toolchains, cloud credentials and Spin deployment plugins are separate.
+
 ## Platforms
 
 | Host OS | Runtime modules | Nix and Determinate Nix |

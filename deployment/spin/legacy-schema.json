@@ -1,0 +1,650 @@
+{
+  "name": "spin",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "build": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Named build profile."
+          },
+          "components": {
+            "type": "string",
+            "description": "Comma-separated component IDs; omitted builds all components."
+          },
+          "skipTargetChecks": {
+            "type": "boolean",
+            "description": "Skip deployment-target compatibility checks."
+          },
+          "skipGenerateWits": {
+            "type": "boolean",
+            "description": "Skip generating dependency WIT files."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "registry_push": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "description": "OCI registry reference including the desired tag."
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source."
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Build profile to push."
+          },
+          "build": {
+            "type": "boolean",
+            "description": "Build before pushing."
+          },
+          "compose": {
+            "type": "boolean",
+            "description": "Compose component dependencies before pushing."
+          },
+          "annotations": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE OCI image annotations."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for registry cache data."
+          },
+          "insecure": {
+            "type": "boolean",
+            "description": "Explicitly ignore registry certificate errors."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "registry_pull": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "description": "OCI registry reference to pull."
+          },
+          "prepare": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output directory for a prepared app; native CLI requires absent or empty directory."
+          },
+          "cacheDir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directory for registry cache data."
+          },
+          "insecure": {
+            "type": "boolean",
+            "description": "Explicitly ignore registry certificate errors."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "reference"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "cloud_deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source."
+          },
+          "build": {
+            "type": "boolean",
+            "description": "Build the local app before deployment."
+          },
+          "environmentName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Saved Fermyon deployment environment."
+          },
+          "readinessTimeout": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Readiness wait in seconds; zero skips waiting."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE app variables. Avoid passing secrets in argv."
+          },
+          "keyValues": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE entries for the default store."
+          },
+          "links": {
+            "type": "string",
+            "description": "Comma-separated explicit resource links, such as sqlite:label=database."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "cloud_login": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "environmentName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name under which to save the login."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cloud instance URL."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "plugins_install": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Plugin name, for example cloud."
+          },
+          "pluginVersion": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Exact plugin release; omitted uses native selection."
+          },
+          "yes": {
+            "type": "boolean",
+            "description": "Explicitly accept the plugin installation prompt."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "plugins_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "installed": {
+            "type": "boolean",
+            "description": "List installed plugins only."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "up": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source."
+          },
+          "build": {
+            "type": "boolean",
+            "description": "Build the application first."
+          },
+          "env": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE component environment overrides."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

@@ -1189,6 +1189,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-spin"
+version = "0.1.0"
+path = "setup/spin"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-sqlfluff"
 version = "0.1.0"
 path = "setup/sqlfluff"
@@ -1287,6 +1294,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-wasmer"
+version = "0.1.0"
+path = "setup/wasmer"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-wrangler"
 version = "0.1.0"
 path = "setup/wrangler"
@@ -1339,6 +1353,13 @@ runtime = "component"
 name = "sonarqube"
 version = "0.1.0"
 path = "code-quality/sonarqube"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "spin"
+version = "0.1.0"
+path = "deployment/spin"
 sdk = "purescript"
 runtime = "component"
 
@@ -1430,6 +1451,13 @@ runtime = "component"
 name = "vercel"
 version = "0.1.0"
 path = "deployment/vercel"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "wasmer"
+version = "0.1.0"
+path = "deployment/wasmer"
 sdk = "purescript"
 runtime = "component"
 

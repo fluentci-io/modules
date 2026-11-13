@@ -146,6 +146,8 @@ substitute host version template = foldl (\value pair -> String.replaceAll (Patt
     , { key: "{binaryenarch}", value: if arm then if mac then "arm64" else "aarch64" else "x86_64" }
     , { key: "{miseplatform}", value: host.os <> "-" <> if arm then "arm64" else "x64" }
     , { key: "{jfarch}", value: if arm then "arm64" else "amd64" }
+    , { key: "{wasmerarch}", value: if arm then if mac then "arm64" else "aarch64" else "amd64" }
+    , { key: "{spinarch}", value: if arm then "aarch64" else "amd64" }
     , { key: "{goarch}", value: if arm then "arm64" else "amd64" }
     , { key: "{xarch}", value: if arm then "arm64" else "x64" }
     , { key: "{rustarch}", value: if arm then "aarch64" else "x86_64" }
@@ -202,8 +204,8 @@ githubRelease tool host requested = do
   let version = fromMaybe tagName (String.stripPrefix (Pattern tool.tagPrefix) tagName)
   unless (versionToken version) $ throw "Upstream returned an invalid release version"
   assets <- H.field "assets" json :: Effect (Array { name :: String, browser_download_url :: String, digest :: Maybe String })
-  alpine <- if tool.name == "garden" && host.os == "linux" then H.exists "/etc/alpine-release" else pure false
-  let platform = if alpine then host { os = "alpine" } else host
+  alpine <- if Array.elem tool.name [ "garden", "spin" ] && host.os == "linux" then H.exists "/etc/alpine-release" else pure false
+  let platform = if alpine then host { os = if tool.name == "spin" then "static-linux" else "alpine" } else host
       wanted = substitute platform version tool.asset
   asset <- case Array.find (\asset -> asset.name == wanted) assets of
     Nothing -> throw ("No official " <> tool.name <> " asset for " <> host.os <> "/" <> host.arch <> ": " <> wanted)

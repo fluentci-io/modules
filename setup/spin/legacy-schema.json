@@ -1,0 +1,44 @@
+{
+  "name": "setup-spin",
+  "exports": {
+    "setup": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "default": "4.3.0"
+          },
+          "installDir": {
+            "type": "string"
+          },
+          "packageName": {
+            "type": "string"
+          },
+          "sudo": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "binDir": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

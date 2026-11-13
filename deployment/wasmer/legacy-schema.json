@@ -1,0 +1,719 @@
+{
+  "name": "wasmer",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "deploy": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing directory containing app.yaml."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing app.yaml file; mutually exclusive with directory in Wasmer."
+          },
+          "envFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing dotenv file for deployment; protect its contents and native logs."
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Owner user or namespace."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the application."
+          },
+          "publishPackage": {
+            "type": "boolean",
+            "description": "Publish a local package referenced by app.yaml."
+          },
+          "buildRemote": {
+            "type": "boolean",
+            "description": "Use the remote autobuild pipeline."
+          },
+          "noWait": {
+            "type": "boolean",
+            "description": "Return before the application becomes reachable."
+          },
+          "noDefault": {
+            "type": "boolean",
+            "description": "Deploy without activating the new app version."
+          },
+          "noPersistId": {
+            "type": "boolean",
+            "description": "Do not persist app_id into app.yaml."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "description": "Native output format; read results from stdout."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "publish": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing package directory containing wasmer.toml."
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Registry namespace."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Published package name."
+          },
+          "packageVersion": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Published package version."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Run native publication validation without uploading."
+          },
+          "wait": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "none",
+              "container",
+              "native-executables",
+              "bindings",
+              "all"
+            ],
+            "description": "Artifacts to wait for before returning."
+          },
+          "queryTimeout": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Timeout per registry query, such as 5m."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "validate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing WebAssembly module to validate."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Owner namespace to list."
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Include all accessible applications."
+          },
+          "max": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum applications to display."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "description": "Native output format; read results from stdout."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "app": {
+            "type": "string",
+            "minLength": 1,
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "description": "Native output format; read results from stdout."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_logs": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "app": {
+            "type": "string",
+            "minLength": 1,
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration."
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Earliest timestamp or relative duration."
+          },
+          "until": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Latest timestamp or relative duration."
+          },
+          "max": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum log lines."
+          },
+          "watch": {
+            "type": "boolean",
+            "description": "Watch continuously; bound the module timeout."
+          },
+          "streams": {
+            "type": "string",
+            "description": "Comma-separated log stream names."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "description": "Native output format; read results from stdout."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "app_delete": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "app": {
+            "type": "string",
+            "minLength": 1,
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "app"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "deployments_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "app": {
+            "type": "string",
+            "minLength": 1,
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Pagination offset."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum deployment records."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version_activate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "versionId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Unique application version ID, not a version name."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "description": "Native output format; read results from stdout."
+          },
+          "arguments": {
+            "type": "string",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token."
+          }
+        },
+        "required": [
+          "runDir",
+          "versionId"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

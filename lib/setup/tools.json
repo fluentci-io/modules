@@ -2048,6 +2048,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "spin",
+    "title": "Spin",
+    "program": "spin",
+    "backend": "github",
+    "package": "",
+    "repository": "spinframework/spin",
+    "asset": "spin-v{version}-{hostos}-{spinarch}.tar.gz",
+    "format": "tar",
+    "member": "spin",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "4.3.0",
+    "linuxPackage": "spin-framework",
+    "macPackage": "spin-framework",
+    "freebsdPackage": "spin-framework",
+    "openbsdPackage": "spin-framework",
+    "netbsdPackage": "spin-framework",
+    "notes": "Install the matching official archive and preserve adjacent resources; verify release SHA-256 metadata when available. BSD requires an appropriate native repository package when available.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "sqlfluff",
     "title": "sqlfluff",
     "program": "sqlfluff",
@@ -2367,6 +2390,29 @@
     "openbsdPackage": "vercel",
     "netbsdPackage": "vercel",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "wasmer",
+    "title": "Wasmer",
+    "program": "wasmer",
+    "backend": "github",
+    "package": "",
+    "repository": "wasmerio/wasmer",
+    "asset": "wasmer-{os}-{wasmerarch}.tar.gz",
+    "format": "tar",
+    "member": "wasmer",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "7.5.0",
+    "linuxPackage": "wasmer",
+    "macPackage": "wasmer",
+    "freebsdPackage": "wasmer",
+    "openbsdPackage": "wasmer",
+    "netbsdPackage": "wasmer",
+    "notes": "Install the matching official archive and preserve adjacent resources; verify release SHA-256 metadata when available. BSD requires an appropriate native repository package when available.",
     "tagPrefix": "v"
   },
   {

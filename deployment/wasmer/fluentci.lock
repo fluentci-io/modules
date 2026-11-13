@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-wasmer": "path:name = \"setup-wasmer\"\nruntime = \"component\"\npath = \"../../setup/wasmer\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

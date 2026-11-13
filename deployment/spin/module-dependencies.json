@@ -1,0 +1,13 @@
+{
+  "module": "spin",
+  "requirements": [
+    {
+      "alias": "setup-spin",
+      "program": "spin",
+      "probe": [
+        "which",
+        "spin"
+      ]
+    }
+  ]
+}

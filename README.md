@@ -234,6 +234,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-shellcheck](./setup/shellcheck/README.md) | Install and verify shellcheck, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/shellcheck/COMPONENT.md) |
 | [setup-snyk](./setup/snyk/README.md) | Install and verify snyk, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/snyk/COMPONENT.md) |
 | [setup-sonarqube](./setup/sonarqube/README.md) | Install and verify sonarqube, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sonarqube/COMPONENT.md) |
+| [setup-spin](./setup/spin/README.md) | Install and verify a selected Spin release. | `setup`, [typed contract](./setup/spin/COMPONENT.md) |
 | [setup-sqlfluff](./setup/sqlfluff/README.md) | Install and verify sqlfluff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sqlfluff/COMPONENT.md) |
 | [setup-sqruff](./setup/sqruff/README.md) | Install and verify sqruff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sqruff/COMPONENT.md) |
 | [setup-syft](./setup/syft/README.md) | Install and verify syft, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/syft/COMPONENT.md) |
@@ -248,6 +249,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-uv](./setup/uv/README.md) | Install and verify uv, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/uv/COMPONENT.md) |
 | [setup-vault](./setup/vault/README.md) | Install and verify vault, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/vault/COMPONENT.md) |
 | [setup-vercel](./setup/vercel/README.md) | Install and verify vercel, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/vercel/COMPONENT.md) |
+| [setup-wasmer](./setup/wasmer/README.md) | Install and verify a selected Wasmer release. | `setup`, [typed contract](./setup/wasmer/COMPONENT.md) |
 | [setup-wrangler](./setup/wrangler/README.md) | Install and verify wrangler, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/wrangler/COMPONENT.md) |
 | [setup-xata](./setup/xata/README.md) | Install and verify the Xata CLI and publish PATH. | `setup`, [typed contract](./setup/xata/COMPONENT.md) |
 | [setup-xtp](./setup/xtp/README.md) | Install and verify xtp, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/xtp/COMPONENT.md) |
@@ -256,6 +258,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [shellcheck](./linting/shellcheck/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/shellcheck/COMPONENT.md) |
 | [snyk](./security/snyk/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./security/snyk/COMPONENT.md) |
 | [sonarqube](./code-quality/sonarqube/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./code-quality/sonarqube/COMPONENT.md) |
+| [spin](./deployment/spin/README.md) | Build Spin apps, publish OCI artifacts and deploy through plugins. | `build`, `registry-push`, `cloud-deploy`, [typed contract](./deployment/spin/COMPONENT.md) |
 | [sqlfluff](./linting/sqlfluff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqlfluff/COMPONENT.md) |
 | [sqruff](./linting/sqruff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqruff/COMPONENT.md) |
 | [syft](./security/syft/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/syft/COMPONENT.md) |
@@ -269,6 +272,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [uv](./package-management/uv/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `sync`, [typed contract](./package-management/uv/COMPONENT.md) |
 | [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |
 | [vercel](./deployment/vercel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/vercel/COMPONENT.md) |
+| [wasmer](./deployment/wasmer/README.md) | Publish Wasm packages and manage Wasmer Edge deployments. | `publish`, `deploy`, `app-get`, [typed contract](./deployment/wasmer/COMPONENT.md) |
 | [wrangler](./deployment/wrangler/README.md) | Run a Wrangler operation with literal arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/wrangler/COMPONENT.md) |
 | [xata](./databases/xata/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./databases/xata/COMPONENT.md) |
 | [yamllint](./linting/yamllint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/yamllint/COMPONENT.md) |

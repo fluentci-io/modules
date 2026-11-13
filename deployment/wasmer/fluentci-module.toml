@@ -1,0 +1,11 @@
+name = "wasmer"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-wasmer = { path = "../../setup/wasmer", sdk = "purescript", runtime = "component" }

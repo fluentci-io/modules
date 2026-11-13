@@ -37349,5 +37349,1422 @@
         "example": {}
       }
     ]
+  },
+  {
+    "name": "wasmer",
+    "path": "deployment/wasmer",
+    "title": "Wasmer",
+    "program": "wasmer",
+    "docs": "https://docs.wasmer.io/edge/cli/",
+    "notes": "Install project compiler/toolchain dependencies separately. Credentials stay in native environment/configuration. Typed functions return native execution report and log paths. Spin cloud deployment requires the explicitly installed cloud plugin; core deploy uses SPIN_DEPLOY_PLUGIN.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "description": "Execute additional Wasmer CLI commands with literal CSV arguments.",
+        "fields": [
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": true,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "description": "Print the installed Wasmer version.",
+        "fields": [],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy",
+        "args": [
+          "deploy",
+          "--non-interactive"
+        ],
+        "description": "Deploy an application to Wasmer Edge without interactive prompts.",
+        "fields": [
+          {
+            "key": "directory",
+            "flag": "--dir",
+            "description": "Existing directory containing app.yaml.",
+            "kind": "string",
+            "style": "directory-separate",
+            "sample": "app",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "path",
+            "flag": "--path",
+            "description": "Existing app.yaml file; mutually exclusive with directory in Wasmer.",
+            "kind": "string",
+            "style": "file-separate",
+            "sample": "app.yaml",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "envFile",
+            "flag": "--env-file",
+            "description": "Existing dotenv file for deployment; protect its contents and native logs.",
+            "kind": "string",
+            "style": "file-separate",
+            "sample": "deploy.env",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "owner",
+            "flag": "--owner",
+            "description": "Owner user or namespace.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "name",
+            "flag": "--name",
+            "description": "Name of the application.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "publishPackage",
+            "flag": "--publish-package",
+            "description": "Publish a local package referenced by app.yaml.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "buildRemote",
+            "flag": "--build-remote",
+            "description": "Use the remote autobuild pipeline.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "noWait",
+            "flag": "--no-wait",
+            "description": "Return before the application becomes reachable.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "noDefault",
+            "flag": "--no-default",
+            "description": "Deploy without activating the new app version.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "noPersistId",
+            "flag": "--no-persist-id",
+            "description": "Do not persist app_id into app.yaml.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "format",
+            "flag": "--format",
+            "description": "Native output format; read results from stdout.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "default": "json"
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "publish",
+        "args": [
+          "publish",
+          "--non-interactive"
+        ],
+        "description": "Publish a local package to the Wasmer registry without prompts.",
+        "fields": [
+          {
+            "key": "directory",
+            "flag": "",
+            "description": "Existing package directory containing wasmer.toml.",
+            "kind": "string",
+            "style": "directory",
+            "sample": "package",
+            "required": false,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "namespace",
+            "flag": "--namespace",
+            "description": "Registry namespace.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "name",
+            "flag": "--name",
+            "description": "Published package name.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "packageVersion",
+            "flag": "--version",
+            "description": "Published package version.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "dryRun",
+            "flag": "--dry-run",
+            "description": "Run native publication validation without uploading.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "wait",
+            "flag": "--wait",
+            "description": "Artifacts to wait for before returning.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [
+              "none",
+              "container",
+              "native-executables",
+              "bindings",
+              "all"
+            ],
+            "default": null
+          },
+          {
+            "key": "queryTimeout",
+            "flag": "--timeout",
+            "description": "Timeout per registry query, such as 5m.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "validate",
+        "args": [
+          "validate"
+        ],
+        "description": "Validate a local WebAssembly file before publishing.",
+        "fields": [
+          {
+            "key": "file",
+            "flag": "",
+            "description": "Existing WebAssembly module to validate.",
+            "kind": "string",
+            "style": "file",
+            "sample": "app.wasm",
+            "required": true,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "app_list",
+        "args": [
+          "app",
+          "list"
+        ],
+        "description": "List accessible Wasmer Edge applications.",
+        "fields": [
+          {
+            "key": "namespace",
+            "flag": "--namespace",
+            "description": "Owner namespace to list.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "all",
+            "flag": "--all",
+            "description": "Include all accessible applications.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "max",
+            "flag": "--max",
+            "description": "Maximum applications to display.",
+            "kind": "integer",
+            "style": "value",
+            "sample": 100,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "format",
+            "flag": "--format",
+            "description": "Native output format; read results from stdout.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "default": "json"
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "app_get",
+        "args": [
+          "app",
+          "get"
+        ],
+        "description": "Inspect a Wasmer Edge application.",
+        "fields": [
+          {
+            "key": "app",
+            "flag": "",
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration.",
+            "kind": "string",
+            "style": "value",
+            "sample": "owner/ci-app",
+            "required": false,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "format",
+            "flag": "--format",
+            "description": "Native output format; read results from stdout.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "default": "json"
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "app_logs",
+        "args": [
+          "app",
+          "logs"
+        ],
+        "description": "Retrieve logs without continuous watching by default.",
+        "fields": [
+          {
+            "key": "app",
+            "flag": "",
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration.",
+            "kind": "string",
+            "style": "value",
+            "sample": "owner/ci-app",
+            "required": false,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "from",
+            "flag": "--from",
+            "description": "Earliest timestamp or relative duration.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "until",
+            "flag": "--until",
+            "description": "Latest timestamp or relative duration.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "max",
+            "flag": "--max",
+            "description": "Maximum log lines.",
+            "kind": "integer",
+            "style": "value",
+            "sample": 100,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "watch",
+            "flag": "--watch",
+            "description": "Watch continuously; bound the module timeout.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "streams",
+            "flag": "--streams",
+            "description": "Comma-separated log stream names.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "example",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "format",
+            "flag": "--format",
+            "description": "Native output format; read results from stdout.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "default": "json"
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "app_delete",
+        "args": [
+          "app",
+          "delete"
+        ],
+        "description": "Delete the explicitly identified application; destructive native operation.",
+        "fields": [
+          {
+            "key": "app",
+            "flag": "",
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration.",
+            "kind": "string",
+            "style": "value",
+            "sample": "owner/ci-app",
+            "required": true,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deployments_list",
+        "args": [
+          "app",
+          "deployments",
+          "list"
+        ],
+        "description": "Inspect deployment history for an application.",
+        "fields": [
+          {
+            "key": "app",
+            "flag": "",
+            "description": "App ID, namespace/name or alias; omitted uses the local app configuration.",
+            "kind": "string",
+            "style": "value",
+            "sample": "owner/ci-app",
+            "required": false,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "offset",
+            "flag": "--offset",
+            "description": "Pagination offset.",
+            "kind": "integer",
+            "style": "nonnegative",
+            "sample": 0,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "limit",
+            "flag": "--limit",
+            "description": "Maximum deployment records.",
+            "kind": "integer",
+            "style": "value",
+            "sample": 20,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version_activate",
+        "args": [
+          "app",
+          "version",
+          "activate"
+        ],
+        "description": "Activate a selected unique version ID for rollback or promotion.",
+        "fields": [
+          {
+            "key": "versionId",
+            "flag": "",
+            "description": "Unique application version ID, not a version name.",
+            "kind": "string",
+            "style": "value",
+            "sample": "dav_example",
+            "required": true,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "format",
+            "flag": "--format",
+            "description": "Native output format; read results from stdout.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [
+              "json",
+              "yaml",
+              "table"
+            ],
+            "default": "json"
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
+    "name": "spin",
+    "path": "deployment/spin",
+    "title": "Spin",
+    "program": "spin",
+    "docs": "https://spinframework.dev/v4/cli-reference",
+    "notes": "Install project compiler/toolchain dependencies separately. Credentials stay in native environment/configuration. Typed functions return native execution report and log paths. Spin cloud deployment requires the explicitly installed cloud plugin; core deploy uses SPIN_DEPLOY_PLUGIN.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "description": "Execute additional Spin or plugin commands with literal CSV arguments.",
+        "fields": [
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": true,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "description": "Print the installed Spin version.",
+        "fields": [],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "build",
+        "args": [
+          "build"
+        ],
+        "description": "Build application components with the project toolchains.",
+        "fields": [
+          {
+            "key": "from",
+            "flag": "--from",
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source.",
+            "kind": "string",
+            "style": "value",
+            "sample": "spin.toml",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "profile",
+            "flag": "--profile",
+            "description": "Named build profile.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "components",
+            "flag": "--component-id",
+            "description": "Comma-separated component IDs; omitted builds all components.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "example",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "skipTargetChecks",
+            "flag": "--skip-target-checks",
+            "description": "Skip deployment-target compatibility checks.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "skipGenerateWits",
+            "flag": "--skip-generate-wits",
+            "description": "Skip generating dependency WIT files.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "registry_push",
+        "args": [
+          "registry",
+          "push"
+        ],
+        "description": "Push an application as an OCI artifact using native registry credentials.",
+        "fields": [
+          {
+            "key": "reference",
+            "flag": "",
+            "description": "OCI registry reference including the desired tag.",
+            "kind": "string",
+            "style": "value",
+            "sample": "ghcr.io/example/app:1.0.0",
+            "required": true,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "from",
+            "flag": "--from",
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source.",
+            "kind": "string",
+            "style": "value",
+            "sample": "spin.toml",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "profile",
+            "flag": "--profile",
+            "description": "Build profile to push.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "build",
+            "flag": "--build",
+            "description": "Build before pushing.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "compose",
+            "flag": "--compose",
+            "description": "Compose component dependencies before pushing.",
+            "kind": "boolean",
+            "style": "value",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "annotations",
+            "flag": "--annotation",
+            "description": "Comma-separated KEY=VALUE OCI image annotations.",
+            "kind": "csv",
+            "style": "assignments",
+            "sample": "key=value",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "cacheDir",
+            "flag": "--cache-dir",
+            "description": "Directory for registry cache data.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "insecure",
+            "flag": "--insecure",
+            "description": "Explicitly ignore registry certificate errors.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "registry_pull",
+        "args": [
+          "registry",
+          "pull"
+        ],
+        "description": "Pull an application from an OCI registry.",
+        "fields": [
+          {
+            "key": "reference",
+            "flag": "",
+            "description": "OCI registry reference to pull.",
+            "kind": "string",
+            "style": "value",
+            "sample": "ghcr.io/example/app:1.0.0",
+            "required": true,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "prepare",
+            "flag": "--prepare",
+            "description": "Output directory for a prepared app; native CLI requires absent or empty directory.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "cacheDir",
+            "flag": "--cache-dir",
+            "description": "Directory for registry cache data.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "insecure",
+            "flag": "--insecure",
+            "description": "Explicitly ignore registry certificate errors.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "deploy",
+        "args": [
+          "deploy"
+        ],
+        "description": "Deploy through the plugin named by SPIN_DEPLOY_PLUGIN; arguments are plugin-specific.",
+        "fields": [
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "cloud_deploy",
+        "args": [
+          "cloud",
+          "deploy"
+        ],
+        "description": "Deploy through the explicitly installed Fermyon cloud plugin.",
+        "fields": [
+          {
+            "key": "from",
+            "flag": "--from",
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source.",
+            "kind": "string",
+            "style": "value",
+            "sample": "spin.toml",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "build",
+            "flag": "--build",
+            "description": "Build the local app before deployment.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "environmentName",
+            "flag": "--environment-name",
+            "description": "Saved Fermyon deployment environment.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "readinessTimeout",
+            "flag": "--readiness-timeout",
+            "description": "Readiness wait in seconds; zero skips waiting.",
+            "kind": "integer",
+            "style": "nonnegative",
+            "sample": 60,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "variables",
+            "flag": "--variable",
+            "description": "Comma-separated KEY=VALUE app variables. Avoid passing secrets in argv.",
+            "kind": "csv",
+            "style": "assignments",
+            "sample": "key=value",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "keyValues",
+            "flag": "--key-value",
+            "description": "Comma-separated KEY=VALUE entries for the default store.",
+            "kind": "csv",
+            "style": "assignments",
+            "sample": "key=value",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "links",
+            "flag": "--link",
+            "description": "Comma-separated explicit resource links, such as sqlite:label=database.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "example",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "cloud_login",
+        "args": [
+          "cloud",
+          "login",
+          "--auth-method=token"
+        ],
+        "description": "Authenticate the cloud plugin using inherited SPIN_AUTH_TOKEN without browser login.",
+        "fields": [
+          {
+            "key": "environmentName",
+            "flag": "--environment-name",
+            "description": "Name under which to save the login.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "url",
+            "flag": "--url",
+            "description": "Cloud instance URL.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "plugins_install",
+        "args": [
+          "plugins",
+          "install"
+        ],
+        "description": "Install a selected deployment/runtime plugin explicitly.",
+        "fields": [
+          {
+            "key": "name",
+            "flag": "",
+            "description": "Plugin name, for example cloud.",
+            "kind": "string",
+            "style": "value",
+            "sample": "cloud",
+            "required": true,
+            "scope": "positional",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "pluginVersion",
+            "flag": "--version",
+            "description": "Exact plugin release; omitted uses native selection.",
+            "kind": "string",
+            "style": "value",
+            "sample": null,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "yes",
+            "flag": "--yes",
+            "description": "Explicitly accept the plugin installation prompt.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "plugins_list",
+        "args": [
+          "plugins",
+          "list"
+        ],
+        "description": "Inspect installed Spin plugins.",
+        "fields": [
+          {
+            "key": "installed",
+            "flag": "--installed",
+            "description": "List installed plugins only.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "up",
+        "args": [
+          "up"
+        ],
+        "description": "Run an application in the foreground; use a scoped lifecycle and bounded timeout.",
+        "fields": [
+          {
+            "key": "from",
+            "flag": "--from",
+            "description": "Local app manifest/directory or native remote reference where supported; native CLI validates the source.",
+            "kind": "string",
+            "style": "value",
+            "sample": "spin.toml",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "build",
+            "flag": "--build",
+            "description": "Build the application first.",
+            "kind": "boolean",
+            "style": "switch",
+            "sample": true,
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "env",
+            "flag": "--env",
+            "description": "Comma-separated KEY=VALUE component environment overrides.",
+            "kind": "csv",
+            "style": "assignments",
+            "sample": "key=value",
+            "required": false,
+            "scope": "option",
+            "choices": [],
+            "default": null
+          },
+          {
+            "key": "arguments",
+            "flag": "",
+            "description": "Additional literal native tokens in CSV form; CSV quotes preserve commas inside a token.",
+            "kind": "csv",
+            "style": "value",
+            "sample": "--help",
+            "required": false,
+            "scope": "raw",
+            "choices": [],
+            "default": null
+          }
+        ],
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
   }
 ]
