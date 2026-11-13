@@ -222,6 +222,9 @@
   "sonarqube": [
     "setup-sonarqube"
   ],
+  "sonarqube-scanner": [
+    "setup-sonarqube-scanner"
+  ],
   "spin": [
     "setup-spin"
   ],

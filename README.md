@@ -233,7 +233,8 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-semgrep](./setup/semgrep/README.md) | Install and verify semgrep, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/semgrep/COMPONENT.md) |
 | [setup-shellcheck](./setup/shellcheck/README.md) | Install and verify shellcheck, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/shellcheck/COMPONENT.md) |
 | [setup-snyk](./setup/snyk/README.md) | Install and verify snyk, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/snyk/COMPONENT.md) |
-| [setup-sonarqube](./setup/sonarqube/README.md) | Install and verify sonarqube, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sonarqube/COMPONENT.md) |
+| [setup-sonarqube](./setup/sonarqube/README.md) | Install and verify the standalone sonar CLI and publish PATH. | `setup`, [typed contract](./setup/sonarqube/COMPONENT.md) |
+| [setup-sonarqube-scanner](./setup/sonarqube-scanner/README.md) | Install and verify SonarScanner CLI and publish PATH. | `setup`, [typed contract](./setup/sonarqube-scanner/COMPONENT.md) |
 | [setup-spin](./setup/spin/README.md) | Install and verify a selected Spin release. | `setup`, [typed contract](./setup/spin/COMPONENT.md) |
 | [setup-sqlfluff](./setup/sqlfluff/README.md) | Install and verify sqlfluff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sqlfluff/COMPONENT.md) |
 | [setup-sqruff](./setup/sqruff/README.md) | Install and verify sqruff, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/sqruff/COMPONENT.md) |
@@ -257,7 +258,8 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-zig](./setup/zig/README.md) | Install and verify zig, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/zig/COMPONENT.md) |
 | [shellcheck](./linting/shellcheck/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/shellcheck/COMPONENT.md) |
 | [snyk](./security/snyk/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./security/snyk/COMPONENT.md) |
-| [sonarqube](./code-quality/sonarqube/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./code-quality/sonarqube/COMPONENT.md) |
+| [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube CLI analysis, quality gates, APIs, architecture, and integrations. | 49 functions, [typed contract](./code-quality/sonarqube/COMPONENT.md) |
+| [sonarqube-scanner](./code-quality/sonarqube-scanner/README.md) | Submit full-project SonarScanner analysis and optionally wait for the quality gate. | `run`, `version`, `scan`, [typed contract](./code-quality/sonarqube-scanner/COMPONENT.md) |
 | [spin](./deployment/spin/README.md) | Build Spin apps, publish OCI artifacts and deploy through plugins. | `build`, `registry-push`, `cloud-deploy`, [typed contract](./deployment/spin/COMPONENT.md) |
 | [sqlfluff](./linting/sqlfluff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqlfluff/COMPONENT.md) |
 | [sqruff](./linting/sqruff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqruff/COMPONENT.md) |

@@ -23446,10 +23446,10 @@
   {
     "name": "sonarqube",
     "path": "code-quality/sonarqube",
-    "program": "sonar-scanner",
+    "program": "sonar",
     "title": "SonarQube",
-    "docs": "https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/scanners/sonarscanner",
-    "notes": "Install SonarScanner CLI and the Java runtime required by that release, or use its bundled runtime. Supply SONAR_TOKEN and optionally SONAR_HOST_URL through the environment. Configure sonar-project.properties or typed fields. properties contains nonsecret property=value entries; values become literal -Dproperty=value arguments. qualityGateWait=true waits for the server quality gate and fails when it fails. Analysis sends project information to the configured SonarQube service.",
+    "docs": "https://www.sonarsource.com/sonarqube/cli/commands.html",
+    "notes": "Use setup-sonarqube for the sonar CLI. CI authentication uses SONARQUBE_CLI_TOKEN plus SONARQUBE_CLI_ORG (Cloud) or SONARQUBE_CLI_SERVER (Server); credentials stay inherited. SONAR_TOKEN belongs to the separate SonarScanner module. Commands preserve native failures and return execution report paths. Analysis modes, quality gates, authenticated APIs, architecture, configuration, integrations and diagnostics are exposed as typed operations. Interactive commands still require native terminal/keychain facilities; CI should use environment authentication and explicit operands. Noninteractive options default to true where available; force remains opt-in.",
     "environment": {},
     "commands": [
       {
@@ -23458,16 +23458,2409 @@
         "fields": [
           {
             "key": "arguments",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "",
             "default": null,
             "required": true,
-            "sample": [
-              "--help"
-            ],
+            "sample": "--help",
             "style": "value",
             "scope": "raw",
-            "description": "arguments",
+            "description": "Required comma-separated literal native argument tokens; CSV quoting preserves embedded commas.",
+            "choices": []
+          }
+        ],
+        "description": "Execute any sonar command with literal comma-separated arguments.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Print the SonarQube CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "help",
+        "args": [
+          "--help"
+        ],
+        "fields": [],
+        "description": "Show SonarQube CLI commands and options.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth_login",
+        "args": [
+          "auth",
+          "login"
+        ],
+        "fields": [
+          {
+            "key": "server",
+            "kind": "string",
+            "flag": "--server",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "SonarQube Server URL, SonarQube Cloud EU (https://sonarcloud.io), or SonarQube Cloud US (https://sonarqube.us). Defaults to SonarQube Cloud EU.",
+            "choices": []
+          },
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "--org",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "SonarQube Cloud organization key (required for SonarQube Cloud)",
+            "choices": []
+          },
+          {
+            "key": "withToken",
+            "kind": "boolean",
+            "flag": "--with-token",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Read an existing token from standard input",
+            "choices": []
+          }
+        ],
+        "description": "Authenticate via browser or an existing token and save credentials in the system keychain. For CI and automation, use environment variables instead: https://docs.sonarsource.com/sonarqube-cli/using-sonarqube-cli/environment-variables",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth_org",
+        "args": [
+          "auth",
+          "org"
+        ],
+        "fields": [
+          {
+            "key": "org",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "SonarQube Cloud organization key",
+            "choices": []
+          }
+        ],
+        "description": "Switch the active SonarQube Cloud organization without logging in again Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth_logout",
+        "args": [
+          "auth",
+          "logout"
+        ],
+        "fields": [
+          {
+            "key": "server",
+            "kind": "string",
+            "flag": "--server",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Select a saved server URL and clear all saved connections and the shared token for its hostname",
+            "choices": []
+          }
+        ],
+        "description": "Remove the active connection, or all saved connections for a hostname with --server",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth_status",
+        "args": [
+          "auth",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          }
+        ],
+        "description": "Show active authentication connection with token verification",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "list_issues",
+        "args": [
+          "list",
+          "issues"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          },
+          {
+            "key": "statuses",
+            "kind": "csv",
+            "flag": "--statuses",
+            "default": null,
+            "required": false,
+            "sample": "OPEN",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Filter by status (comma-separated list of: OPEN, CONFIRMED, FALSE_POSITIVE, ACCEPTED, FIXED). Defaults to OPEN, CONFIRMED. Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "severities",
+            "kind": "csv",
+            "flag": "--severities",
+            "default": null,
+            "required": false,
+            "sample": "HIGH",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Filter by severity. Valid values depend on server mode \u2014 Multi-Quality Rule (MQR) mode: INFO, LOW, MEDIUM, HIGH, BLOCKER; Standard Experience mode: INFO, MINOR, MAJOR, CRITICAL, BLOCKER. Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Branch name. Cannot be combined with --pull-request.",
+            "choices": []
+          },
+          {
+            "key": "pullRequest",
+            "kind": "string",
+            "flag": "--pull-request",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Pull request ID. Cannot be combined with --branch.",
+            "choices": []
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Limit results to one file, or to a directory's own files (not its subdirectories): a full path from the project root, or just a name if it matches only one",
+            "choices": []
+          },
+          {
+            "key": "newCode",
+            "kind": "boolean",
+            "flag": "--new-code",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Only show issues on new code (the leak period)",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page size (1-500)",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page number",
+            "choices": []
+          }
+        ],
+        "description": "Search for issues in SonarQube Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "list_projects",
+        "args": [
+          "list",
+          "projects"
+        ],
+        "fields": [
+          {
+            "key": "query",
+            "kind": "string",
+            "flag": "--query",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Search query to filter projects by name or key",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page number",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page size (1-500)",
+            "choices": []
+          }
+        ],
+        "description": "Search for projects in SonarQube Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "list_orgs",
+        "args": [
+          "list",
+          "orgs"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page number",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page size (1-500)",
+            "choices": []
+          }
+        ],
+        "description": "List organizations you have access to (SonarQube Cloud only) Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "quality_gate_status",
+        "args": [
+          "quality-gate",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Branch name. Cannot be combined with --pull-request.",
+            "choices": []
+          },
+          {
+            "key": "pullRequest",
+            "kind": "string",
+            "flag": "--pull-request",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Pull request ID. Cannot be combined with --branch.",
+            "choices": []
+          },
+          {
+            "key": "all",
+            "kind": "boolean",
+            "flag": "--all",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Also show passing conditions. By default only failing conditions are shown.",
+            "choices": []
+          },
+          {
+            "key": "category",
+            "kind": "string",
+            "flag": "--category",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only show the breakdown for one category of failing conditions",
+            "choices": []
+          },
+          {
+            "key": "top",
+            "kind": "integer",
+            "flag": "--top",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Number of entries to include in the breakdown, per condition",
+            "choices": []
+          },
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "File or directory path to show conditions for, instead of the whole project",
+            "choices": []
+          }
+        ],
+        "description": "Show the quality gate verdict for a project Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "import_repositories",
+        "args": [
+          "import"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "csv",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "sample": "org/repository",
+            "style": "value",
+            "scope": "option",
+            "description": "DevOps platform repository slug (e.g. my-org/my-repo). Repeatable and/or comma-separated to import multiple repositories. Cannot be combined with --all or --regex. Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "all",
+            "kind": "boolean",
+            "flag": "--all",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Import every eligible repository in the organization (not already imported, and allowed by its project visibility settings). Cannot be combined with --repo or --regex.",
+            "choices": []
+          },
+          {
+            "key": "regex",
+            "kind": "string",
+            "flag": "--regex",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Import only eligible repositories whose DevOps platform name (not slug) matches this regular expression. Case-sensitive by default; wrap as /pattern/flags to add flags like case-insensitive matching. Cannot be combined with --repo or --all. Examples: --regex \"^test-\" --regex \"/^archived-/i\"",
+            "choices": []
+          },
+          {
+            "key": "dopSetting",
+            "kind": "string",
+            "flag": "--dop-setting",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "SonarQube Server only: key of the DevOps platform setting to import from. Required when several are configured and prompts are off.",
+            "choices": []
+          },
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip all prompts; require explicit flags",
+            "choices": []
+          }
+        ],
+        "description": "Import repositories from a connected DevOps platform into SonarQube Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "api",
+        "args": [
+          "api"
+        ],
+        "fields": [
+          {
+            "key": "data",
+            "kind": "string",
+            "flag": "--data",
+            "default": null,
+            "required": false,
+            "sample": "{\"name\":\"example\"}",
+            "style": "value",
+            "scope": "option",
+            "description": "JSON string for request body. The tool will automatically format as either form data or JSON body.",
+            "choices": []
+          },
+          {
+            "key": "verbose",
+            "kind": "boolean",
+            "flag": "--verbose",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Print request and response details for debugging.",
+            "choices": []
+          },
+          {
+            "key": "method",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "get",
+            "style": "value",
+            "scope": "positional",
+            "description": "HTTP method (get, post, patch, put, delete)",
+            "choices": [
+              "get",
+              "post",
+              "patch",
+              "put",
+              "delete"
+            ]
+          },
+          {
+            "key": "endpoint",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "/api/projects/search",
+            "style": "value",
+            "scope": "positional",
+            "description": "API endpoint path. Must start with \"/\", and can contain query parameters.",
+            "choices": []
+          }
+        ],
+        "description": "Make authenticated API requests to SonarQube Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_git",
+        "args": [
+          "integrate",
+          "git"
+        ],
+        "fields": [
+          {
+            "key": "hook",
+            "kind": "string",
+            "flag": "--hook",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Hook to install: pre-commit (scan staged files) or pre-push (scan files in unpushed commits)",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Overwrite existing hook if it is not from sonar integrate git",
+            "choices": []
+          },
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "local",
+            "kind": "boolean",
+            "flag": "--local",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Install the hook for this repository only, instead of globally (workaround for setups where a global hook does not fit, e.g. Husky)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; the hook is installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Install a Git pre-commit hook that scans staged files for secrets and dependency risks before each commit, or a Git pre-push hook that scans committed files for secrets before each push. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_claude",
+        "args": [
+          "integrate",
+          "claude"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for Claude Code. This will install secrets scanning hooks, configure Vortex analysis and MCP Server. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_copilot",
+        "args": [
+          "integrate",
+          "copilot"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for GitHub Copilot CLI. This will install secrets scanning hooks, configure Vortex analysis and MCP Server. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_codex",
+        "args": [
+          "integrate",
+          "codex"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for Codex. This will install secrets scanning hooks, configure Vortex analysis and MCP Server. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_antigravity",
+        "args": [
+          "integrate",
+          "antigravity"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for Antigravity. Installs secrets scanning hooks, prompt-secrets instructions, and Vortex Context. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_cursor",
+        "args": [
+          "integrate",
+          "cursor"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for Cursor. This will configure the SonarQube MCP Server, install secrets scanning hooks, and configure Vortex analysis. Note: Cursor's cloud/background agents only pick up project-level hooks, not global ones. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_opencode",
+        "args": [
+          "integrate",
+          "opencode"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for OpenCode. This will install secrets scanning hooks, configure Vortex analysis and MCP Server. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_devin",
+        "args": [
+          "integrate",
+          "devin"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for Devin. This will install secrets scanning hooks, configure Vortex analysis and MCP Server. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "integrate_pi",
+        "args": [
+          "integrate",
+          "pi"
+        ],
+        "fields": [
+          {
+            "key": "nonInteractive",
+            "kind": "boolean",
+            "flag": "--non-interactive",
+            "default": true,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Non-interactive mode (no prompts)",
+            "choices": []
+          },
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Backwards compatibility; integrations are installed globally by default",
+            "choices": []
+          }
+        ],
+        "description": "Setup SonarQube integration for Pi. This will install secrets scanning hooks, configure Vortex analysis and the SonarQube MCP Server. Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "context",
+        "args": [
+          "context"
+        ],
+        "fields": [
+          {
+            "key": "action",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Action forwarded to sonar-context-augmentation",
+            "choices": []
+          },
+          {
+            "key": "contextArguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "raw",
+            "description": "Additional arguments forwarded to sonar-context-augmentation Comma-separated literal tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Augment AI agents with context from your codebase",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "analyze",
+        "args": [
+          "analyze"
+        ],
+        "fields": [
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": "src/example.ts",
+            "style": "file",
+            "scope": "option",
+            "description": "Analyze specific file(s) instead of the git change set (repeatable) Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "staged",
+            "kind": "boolean",
+            "flag": "--staged",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Analyze staged files only (git diff --cached)",
+            "choices": []
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Analyze files changed vs a branch or ref (e.g. main)",
+            "choices": []
+          },
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "SonarQube project key (overrides auto-detected project)",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip the large change set confirmation prompt",
+            "choices": []
+          },
+          {
+            "key": "depth",
+            "kind": "string",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "sample": "STANDARD",
+            "style": "value",
+            "scope": "option",
+            "description": "Analysis depth: STANDARD (fast) or DEEP (cross-file). Default: STANDARD for one --file; DEEP otherwise.",
+            "choices": [
+              "STANDARD",
+              "DEEP"
+            ]
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          }
+        ],
+        "description": "Analyze code for quality and security issues Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "analyze_secrets",
+        "args": [
+          "analyze",
+          "secrets"
+        ],
+        "fields": [
+          {
+            "key": "stdin",
+            "kind": "boolean",
+            "flag": "--stdin",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Read from standard input instead of paths",
+            "choices": []
+          },
+          {
+            "key": "exclude",
+            "kind": "csv",
+            "flag": "--exclude",
+            "default": null,
+            "required": false,
+            "sample": "vendor",
+            "style": "value",
+            "scope": "option",
+            "description": "File or directory to skip (repeatable; exact path or directory prefix, no wildcards). Overrides the secrets.exclude config key Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "paths",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "File or directory paths to scan for secrets Comma-separated literal tokens.",
+            "choices": []
+          }
+        ],
+        "description": "Scan files or stdin for hardcoded secrets Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "analyze_dependency_risks",
+        "args": [
+          "analyze",
+          "dependency-risks"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key (auto-detected when omitted)",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "statuses",
+            "kind": "csv",
+            "flag": "--statuses",
+            "default": null,
+            "required": false,
+            "sample": "active",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Filter issues by status Raw: new | open | confirm | accept | safe | fixed Presets: active | to_fix | all active: new, open, confirm to_fix: new, open, confirm, accept all: new, open, confirm, accept, safe, fixed Presets and raw statuses can be combined; the resulting set is the union. Examples: --statuses active --statuses new,confirm --statuses active,safe Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "minSeverity",
+            "kind": "string",
+            "flag": "--min-severity",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Minimum severity level to include. Allowed values: BLOCKER, HIGH, MEDIUM, LOW, INFO (default: all severities)",
+            "choices": []
+          }
+        ],
+        "description": "Analyze project dependencies for security and license risks Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "analyze_agentic",
+        "args": [
+          "analyze",
+          "agentic"
+        ],
+        "fields": [
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "--file",
+            "default": null,
+            "required": false,
+            "sample": "src/example.ts",
+            "style": "file",
+            "scope": "option",
+            "description": "Analyze specific file(s) instead of the git change set (repeatable) Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          },
+          {
+            "key": "staged",
+            "kind": "boolean",
+            "flag": "--staged",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Analyze staged files only (git diff --cached)",
+            "choices": []
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Analyze files changed vs a branch or ref (e.g. main)",
+            "choices": []
+          },
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "SonarQube project key (overrides auto-detected project)",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip the large change set confirmation prompt",
+            "choices": []
+          },
+          {
+            "key": "depth",
+            "kind": "string",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "sample": "STANDARD",
+            "style": "value",
+            "scope": "option",
+            "description": "Analysis depth: STANDARD (fast) or DEEP (cross-file). Default: STANDARD for one --file; DEEP otherwise.",
+            "choices": [
+              "STANDARD",
+              "DEEP"
+            ]
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Branch name for analysis context",
+            "choices": []
+          }
+        ],
+        "description": "Run server-side Vortex analysis. Limitations apply Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "remediate",
+        "args": [
+          "remediate"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "SonarQube Cloud project key (overrides auto-detected project)",
+            "choices": []
+          },
+          {
+            "key": "issues",
+            "kind": "csv",
+            "flag": "--issues",
+            "default": null,
+            "required": false,
+            "sample": "issue-1",
+            "style": "comma-list",
+            "scope": "option",
+            "description": "Comma-separated issue keys to remediate non-interactively (max 20). Required when stdin is not a TTY. Comma-separated values; whitespace is trimmed and entries are passed literally.",
+            "choices": []
+          }
+        ],
+        "description": "Trigger AI agent remediation for eligible issues (SonarQube Cloud only) Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "link",
+        "args": [
+          "link"
+        ],
+        "fields": [
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "--path",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Path to the project root, relative to the repository root",
+            "choices": []
+          },
+          {
+            "key": "monorepo",
+            "kind": "boolean",
+            "flag": "--monorepo",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Add or update this directory in the projects array instead of replacing the single link",
+            "choices": []
+          },
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "SonarQube project key (omit to pick one: a verified suggestion, or a search)",
+            "choices": []
+          }
+        ],
+        "description": "Link a project to the active connection in .sonar-config.json Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "link_list",
+        "args": [
+          "link",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "path",
+            "kind": "string",
+            "flag": "--path",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "File or directory to list projects for (default: current directory)",
+            "choices": []
+          },
+          {
+            "key": "pattern",
+            "kind": "string",
+            "flag": "--pattern",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only list projects whose key or directory matches this regex",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page number",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page size (1-100)",
+            "choices": []
+          }
+        ],
+        "description": "List linked projects at, under or enclosing a path as JSON, nearest first Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config_get",
+        "args": [
+          "config",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "telemetry.enabled",
+            "style": "value",
+            "scope": "positional",
+            "description": "Config key to read",
+            "choices": []
+          }
+        ],
+        "description": "Print a stored sonar config value",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config_list",
+        "args": [
+          "config",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "onlySet",
+            "kind": "boolean",
+            "flag": "--only-set",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Only show keys that currently have a value",
+            "choices": []
+          }
+        ],
+        "description": "Print every sonar config key with its current value",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config_set",
+        "args": [
+          "config",
+          "set"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "telemetry.enabled",
+            "style": "value",
+            "scope": "positional",
+            "description": "Config key to set",
+            "choices": []
+          },
+          {
+            "key": "value",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Value to store; omit to enter it interactively without echoing",
+            "choices": []
+          }
+        ],
+        "description": "Store a sonar config value",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config_unset",
+        "args": [
+          "config",
+          "unset"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "telemetry.enabled",
+            "style": "value",
+            "scope": "positional",
+            "description": "Config key to unset",
+            "choices": []
+          }
+        ],
+        "description": "Remove a stored sonar config value",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_current_get",
+        "args": [
+          "architecture",
+          "current",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          },
+          {
+            "key": "component",
+            "kind": "string",
+            "flag": "--component",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Node key to start below, from a previous current get",
+            "choices": []
+          },
+          {
+            "key": "depth",
+            "kind": "integer",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Levels below the start node (default 1)",
+            "choices": []
+          },
+          {
+            "key": "from",
+            "kind": "string",
+            "flag": "--from",
+            "default": null,
+            "required": false,
+            "sample": "component-key",
+            "style": "value",
+            "scope": "option",
+            "description": "Dependency source key, including descendants; requires --to",
+            "choices": []
+          },
+          {
+            "key": "to",
+            "kind": "string",
+            "flag": "--to",
+            "default": null,
+            "required": false,
+            "sample": "component-key",
+            "style": "value",
+            "scope": "option",
+            "description": "Dependency destination key, including descendants; requires --from",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Dependency page (default 1; requires --from/--to)",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Dependencies per page (default/maximum 20)",
+            "choices": []
+          },
+          {
+            "key": "language",
+            "kind": "string",
+            "flag": "--language",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only this language (default: all)",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format (default: text on a terminal, toon otherwise)",
+            "choices": []
+          }
+        ],
+        "description": "Current architecture, at most 150 nodes, 20 dependencies and 5 feedback pairs across languages; drill down with --component and --depth Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_intended_get",
+        "args": [
+          "architecture",
+          "intended",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          },
+          {
+            "key": "component",
+            "kind": "string",
+            "flag": "--component",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Group key to start below, e.g. Domain/Billing",
+            "choices": []
+          },
+          {
+            "key": "depth",
+            "kind": "integer",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Levels of groups below the start group (default: all)",
+            "choices": []
+          },
+          {
+            "key": "language",
+            "kind": "string",
+            "flag": "--language",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only this language (default: all)",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format (default: text on a terminal, toon otherwise)",
+            "choices": []
+          }
+        ],
+        "description": "Intended architecture; full JSON can be saved with intended set, --component/--depth give partial views, --language exports are CLI-only and cannot be passed to MCP architecture_set Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_intended_set",
+        "args": [
+          "architecture",
+          "intended",
+          "set"
+        ],
+        "fields": [
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": true,
+            "sample": "architecture.json",
+            "style": "file",
+            "scope": "option",
+            "description": "Intended architecture JSON file",
+            "choices": []
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "--dry-run",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Validate and show the changes, removals first, without writing",
+            "choices": []
+          },
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          }
+        ],
+        "description": "Replace the intended architecture with a file shaped like the output of intended get --format json Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_directives_get",
+        "args": [
+          "architecture",
+          "directives",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "id",
+            "kind": "string",
+            "flag": "--id",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Directive UUID; cannot be combined with pagination",
+            "choices": []
+          },
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format (default: text on a terminal, toon otherwise)",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page number (default 1)",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Items per page (default 50, maximum 1000)",
+            "choices": []
+          }
+        ],
+        "description": "Read a directive by id or list a page of visible project directives Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_directives_set",
+        "args": [
+          "architecture",
+          "directives",
+          "set"
+        ],
+        "fields": [
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "--file",
+            "default": null,
+            "required": true,
+            "sample": "architecture.json",
+            "style": "file",
+            "scope": "option",
+            "description": "JSON object with create, update and delete arrays",
+            "choices": []
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "--dry-run",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Preview changes without writing",
+            "choices": []
+          },
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          }
+        ],
+        "description": "Create, update or delete explicit project directives Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_findings_get",
+        "args": [
+          "architecture",
+          "findings",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "projectKey",
+            "kind": "string",
+            "flag": "--project",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Project key",
+            "choices": []
+          },
+          {
+            "key": "category",
+            "kind": "string",
+            "flag": "--category",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only this category",
+            "choices": []
+          },
+          {
+            "key": "type",
+            "kind": "string",
+            "flag": "--type",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only this finding type",
+            "choices": []
+          },
+          {
+            "key": "language",
+            "kind": "string",
+            "flag": "--language",
+            "default": null,
+            "required": false,
+            "sample": "example",
+            "style": "value",
+            "scope": "option",
+            "description": "Only this language (default: all)",
+            "choices": []
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format (default: text on a terminal, toon otherwise)",
+            "choices": []
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "value",
+            "scope": "option",
+            "description": "Page number (default 1)",
+            "choices": []
+          },
+          {
+            "key": "pageSize",
+            "kind": "integer",
+            "flag": "--page-size",
+            "default": null,
+            "required": false,
+            "sample": 2,
+            "style": "nonnegative",
+            "scope": "option",
+            "description": "Items per page (default 50, 0 counts only, maximum 1000)",
+            "choices": []
+          }
+        ],
+        "description": "List findings with their details from the latest main-branch analysis Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "architecture_install_skill",
+        "args": [
+          "architecture",
+          "install-skill"
+        ],
+        "fields": [
+          {
+            "key": "global",
+            "kind": "boolean",
+            "flag": "--global",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Install in the home directory instead of the repository",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Replace a SKILL.md that was not written by this command",
+            "choices": []
+          }
+        ],
+        "description": "Install the architecture skill for Claude Code and Cursor in this repository Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "system_status",
+        "args": [
+          "system",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          },
+          {
+            "key": "json",
+            "kind": "boolean",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Output as JSON for machine consumption",
+            "choices": []
+          }
+        ],
+        "description": "Show overall system status: authentication, installed binaries, and integrations",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "system_reset",
+        "args": [
+          "system",
+          "reset"
+        ],
+        "fields": [
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip the interactive confirmation prompt (required for non-interactive use)",
+            "choices": []
+          },
+          {
+            "key": "all",
+            "kind": "boolean",
+            "flag": "--all",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Also remove CLI configuration (sonar config), including network and telemetry configuration",
+            "choices": []
+          }
+        ],
+        "description": "Reset the CLI to factory defaults: remove tokens, binaries, integrations, cached files, and local stats data. Pass --all to also remove CLI configuration (sonar config).",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "allowlist_secrets_show",
+        "args": [
+          "allowlist",
+          "secrets",
+          "show"
+        ],
+        "fields": [],
+        "description": "List entries in the sonar-secrets allowlist",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "allowlist_secrets_add",
+        "args": [
+          "allowlist",
+          "secrets",
+          "add"
+        ],
+        "fields": [],
+        "description": "Add a secret value to the sonar-secrets allowlist (interactive; requires a real terminal, not usable by agents or scripts)",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "allowlist_secrets_remove",
+        "args": [
+          "allowlist",
+          "secrets",
+          "remove"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "example",
+            "style": "value",
+            "scope": "positional",
+            "description": "Unique key of the allowlist entry to remove",
+            "choices": []
+          }
+        ],
+        "description": "Remove an entry from the sonar-secrets allowlist by key",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "allowlist_secrets_clear",
+        "args": [
+          "allowlist",
+          "secrets",
+          "clear"
+        ],
+        "fields": [
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Skip the interactive confirmation prompt (required for non-interactive use)",
+            "choices": []
+          }
+        ],
+        "description": "Remove all entries from the sonar-secrets allowlist",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "update",
+        "args": [
+          "update"
+        ],
+        "fields": [
+          {
+            "key": "status",
+            "kind": "boolean",
+            "flag": "--status",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Check for a newer version without installing",
+            "choices": []
+          },
+          {
+            "key": "force",
+            "kind": "boolean",
+            "flag": "--force",
+            "default": null,
+            "required": false,
+            "sample": true,
+            "style": "switch",
+            "scope": "option",
+            "description": "Install the latest version even if already up to date",
+            "choices": []
+          }
+        ],
+        "description": "Update SonarQube CLI to the latest version",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "update_status",
+        "args": [
+          "update",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "sample": "json",
+            "style": "value",
+            "scope": "option",
+            "description": "Output format",
+            "choices": []
+          }
+        ],
+        "description": "Check for a newer version without installing",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
+    "name": "sonarqube-scanner",
+    "path": "code-quality/sonarqube-scanner",
+    "program": "sonar-scanner",
+    "title": "SonarQube Scanner",
+    "docs": "https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/scanners/sonarscanner",
+    "notes": "Install SonarScanner CLI and its required Java runtime using setup-sonarqube-scanner. Supply SONAR_TOKEN and optionally SONAR_HOST_URL through the environment. Configure sonar-project.properties or typed fields. properties is a comma-separated list of nonsecret property=value entries, emitted literally as -Dproperty=value. qualityGateWait=true blocks on the server quality gate. This tool submits full-project analysis; it is distinct from the sonar CLI in the sonarqube module.",
+    "environment": {},
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "sample": "--help",
+            "style": "value",
+            "scope": "raw",
+            "description": "Comma-separated arguments; values are passed as literal native arguments.",
             "choices": []
           }
         ],
@@ -23505,14 +25898,14 @@
           },
           {
             "key": "sources",
-            "kind": "string",
-            "flag": "",
+            "kind": "csv",
+            "flag": "-Dsonar.sources",
             "default": null,
             "required": false,
             "sample": "src",
-            "style": "prefix:-Dsonar.sources=",
+            "style": "comma-list",
             "scope": "positional",
-            "description": "sources",
+            "description": "Comma-separated source directories; whitespace is trimmed and the native sonar.sources property receives the normalized list.",
             "choices": []
           },
           {
@@ -23553,16 +25946,14 @@
           },
           {
             "key": "properties",
-            "kind": "strings",
+            "kind": "csv",
             "flag": "",
             "default": null,
             "required": false,
-            "sample": [
-              "sonar.sourceEncoding=UTF-8"
-            ],
+            "sample": "sonar.sourceEncoding=UTF-8",
             "style": "prefix:-D",
             "scope": "positional",
-            "description": "properties",
+            "description": "Comma-separated properties; values are passed as literal native arguments.",
             "choices": []
           }
         ],
@@ -23571,7 +25962,8 @@
         "environment": {},
         "example": {}
       }
-    ]
+    ],
+    "csvLists": true
   },
   {
     "name": "sqlfluff",

@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 212 modules. This inventory covers every public
+The registry contains 214 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
@@ -27,7 +27,8 @@ Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
 - Formatter check exports and lint/test exports are gates; format/install exports mutate files.
 - Scorecard scan produces findings; its `gate` export enforces a minimum per-check score.
   Syft produces an SBOM; use Grype or Trivy to evaluate vulnerabilities in that inventory.
-- SonarScanner needs the server-side quality gate wait option when a blocking gate is needed.
+- sonarqube wraps the sonar CLI; sonarqube-scanner submits full-project Scanner analysis.
+  Scanner needs its server-side quality gate wait option when a blocking gate is needed.
   Coverage upload success confirms delivery, not a passing coverage threshold.
 - Terraform/OpenTofu plans do not enable detailed exit codes by default. Use the native
   options deliberately: exit code 2 is treated as a failed task by the shared executor.
@@ -226,6 +227,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-shellcheck](../setup/shellcheck/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-snyk](../setup/snyk/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-sonarqube](../setup/sonarqube/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
+| [setup-sonarqube-scanner](../setup/sonarqube-scanner/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-spin](../setup/spin/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-sqlfluff](../setup/sqlfluff/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [setup-sqruff](../setup/sqruff/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
@@ -249,7 +251,8 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [setup-zig](../setup/zig/README.md) | Install and verify a prerequisite tool, select its version, and publish PATH. | `setup` (pipeline operation) |
 | [shellcheck](../linting/shellcheck/README.md) | Check source or configuration and fail on lint violations. | `run` (escape hatch), `version` (diagnostic), `lint` (pipeline operation) |
 | [snyk](../security/snyk/README.md) | Produce security findings, inventory dependencies, or enforce a security gate. | `run` (escape hatch), `version` (diagnostic), `setup` (pipeline operation), `test` (pipeline operation), `code-test` (pipeline operation), `iac-test` (pipeline operation), `container-test` (pipeline operation), `monitor` (pipeline operation) |
-| [sonarqube](../code-quality/sonarqube/README.md) | Upload coverage or run a code quality analysis. | `run` (escape hatch), `version` (diagnostic), `scan` (pipeline operation) |
+| [sonarqube](../code-quality/sonarqube/README.md) | Upload coverage or run a code quality analysis. | `run` (escape hatch), `version` (diagnostic), `help` (diagnostic), `auth-login` (pipeline operation), `auth-org` (pipeline operation), `auth-logout` (pipeline operation), `auth-status` (pipeline operation), `list-issues` (pipeline operation), `list-projects` (pipeline operation), `list-orgs` (pipeline operation), `quality-gate-status` (pipeline operation), `import-repositories` (pipeline operation), `api` (pipeline operation), `integrate-git` (pipeline operation), `integrate-claude` (pipeline operation), `integrate-copilot` (pipeline operation), `integrate-codex` (pipeline operation), `integrate-antigravity` (pipeline operation), `integrate-cursor` (pipeline operation), `integrate-opencode` (pipeline operation), `integrate-devin` (pipeline operation), `integrate-pi` (pipeline operation), `context` (pipeline operation), `analyze` (pipeline operation), `analyze-secrets` (pipeline operation), `analyze-dependency-risks` (pipeline operation), `analyze-agentic` (pipeline operation), `remediate` (pipeline operation), `link` (pipeline operation), `link-list` (pipeline operation), `config-get` (pipeline operation), `config-list` (pipeline operation), `config-set` (pipeline operation), `config-unset` (pipeline operation), `architecture-current-get` (pipeline operation), `architecture-intended-get` (pipeline operation), `architecture-intended-set` (pipeline operation), `architecture-directives-get` (pipeline operation), `architecture-directives-set` (pipeline operation), `architecture-findings-get` (pipeline operation), `architecture-install-skill` (pipeline operation), `system-status` (pipeline operation), `system-reset` (pipeline operation), `allowlist-secrets-show` (pipeline operation), `allowlist-secrets-add` (pipeline operation), `allowlist-secrets-remove` (pipeline operation), `allowlist-secrets-clear` (pipeline operation), `update` (pipeline operation), `update-status` (pipeline operation) |
+| [sonarqube-scanner](../code-quality/sonarqube-scanner/README.md) | Upload coverage or run a code quality analysis. | `run` (escape hatch), `version` (diagnostic), `scan` (pipeline operation) |
 | [spin](../deployment/spin/README.md) | Deploy an application and inspect its rollout or service state. | `run` (escape hatch), `version` (diagnostic), `build` (pipeline operation), `registry-push` (pipeline operation), `registry-pull` (pipeline operation), `deploy` (pipeline operation), `cloud-deploy` (pipeline operation), `cloud-login` (pipeline operation), `plugins-install` (pipeline operation), `plugins-list` (pipeline operation), `up` (pipeline operation) |
 | [sqlfluff](../linting/sqlfluff/README.md) | Check source or configuration and fail on lint violations. | `run` (escape hatch), `version` (diagnostic), `lint` (pipeline operation), `fix` (pipeline operation), `parse` (pipeline operation) |
 | [sqruff](../linting/sqruff/README.md) | Check source or configuration and fail on lint violations. | `run` (escape hatch), `version` (diagnostic), `lint` (pipeline operation), `fix` (pipeline operation) |

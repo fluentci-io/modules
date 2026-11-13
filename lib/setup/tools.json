@@ -2027,6 +2027,29 @@
   {
     "name": "sonarqube",
     "title": "SonarQube",
+    "program": "sonar",
+    "backend": "sonar-cli",
+    "package": "",
+    "repository": "SonarSource/sonarqube-cli",
+    "asset": "",
+    "format": "raw",
+    "member": "",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "",
+    "macPackage": "",
+    "freebsdPackage": "",
+    "openbsdPackage": "",
+    "netbsdPackage": "",
+    "notes": "Official standalone sonar CLI: Linux x86-64/ARM64 and macOS ARM64. Other hosts fail explicitly. Select latest or an exact CDN release ID, such as 1.12.0.17622. This is distinct from SonarScanner.",
+    "tagPrefix": ""
+  },
+  {
+    "name": "sonarqube-scanner",
+    "title": "SonarQube Scanner",
     "program": "sonar-scanner",
     "backend": "sonar",
     "package": "",

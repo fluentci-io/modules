@@ -1189,6 +1189,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-sonarqube-scanner"
+version = "0.1.0"
+path = "setup/sonarqube-scanner"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-spin"
 version = "0.1.0"
 path = "setup/spin"
@@ -1353,6 +1360,13 @@ runtime = "component"
 name = "sonarqube"
 version = "0.1.0"
 path = "code-quality/sonarqube"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "sonarqube-scanner"
+version = "0.1.0"
+path = "code-quality/sonarqube-scanner"
 sdk = "purescript"
 runtime = "component"
 

@@ -28,6 +28,7 @@
     "dependency:code-quality/codacy:setup-codacy": "path:name = \"setup-codacy\"\nruntime = \"component\"\npath = \"code-quality/codacy/../../setup/codacy\"\nsdk = \"purescript\"\n",
     "dependency:code-quality/codecov:setup-codecov": "path:name = \"setup-codecov\"\nruntime = \"component\"\npath = \"code-quality/codecov/../../setup/codecov\"\nsdk = \"purescript\"\n",
     "dependency:code-quality/coveralls:setup-coveralls": "path:name = \"setup-coveralls\"\nruntime = \"component\"\npath = \"code-quality/coveralls/../../setup/coveralls\"\nsdk = \"purescript\"\n",
+    "dependency:code-quality/sonarqube-scanner:setup-sonarqube-scanner": "path:name = \"setup-sonarqube-scanner\"\nruntime = \"component\"\npath = \"code-quality/sonarqube-scanner/../../setup/sonarqube-scanner\"\nsdk = \"purescript\"\n",
     "dependency:code-quality/sonarqube:setup-sonarqube": "path:name = \"setup-sonarqube\"\nruntime = \"component\"\npath = \"code-quality/sonarqube/../../setup/sonarqube\"\nsdk = \"purescript\"\n",
     "dependency:containers/apko:setup-apko": "path:name = \"setup-apko\"\nruntime = \"component\"\npath = \"containers/apko/../../setup/apko\"\nsdk = \"purescript\"\n",
     "dependency:containers/buildkit:setup-buildkit": "path:name = \"setup-buildkit\"\nruntime = \"component\"\npath = \"containers/buildkit/../../setup/buildkit\"\nsdk = \"purescript\"\n",

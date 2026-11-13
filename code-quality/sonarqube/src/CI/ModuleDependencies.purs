@@ -32,4 +32,4 @@ ensureFor _ = do
     Right value -> pure value
   unless (os == "linux" || os == "macos" || os == "freebsd" || os == "openbsd" || os == "netbsd") $
     throw ("Unsupported setup dependency OS: " <> os)
-  ensure "setup-sonarqube" [ "which", "sonar-scanner" ]
+  ensure "setup-sonarqube" [ "which", "sonar" ]

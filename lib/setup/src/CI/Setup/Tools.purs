@@ -53,7 +53,7 @@ verify tool expected executable = do
     text <- H.capture ([ executable ] <> tool.versionArgs)
     actual <- H.versionFrom tool.name text
     when (tool.name == "aws" && not (String.startsWith (Pattern "2.") actual)) $ throw "AWS CLI v2 is required"
-    let wanted = stripV expected
+    let wanted = if tool.name == "sonarqube" then String.joinWith "." (Array.take 3 (String.split (Pattern ".") (stripV expected))) else stripV expected
     unless (wanted == "latest" || wanted == actual || String.startsWith (Pattern (wanted <> ".")) actual) $
       throw ("Installed " <> tool.name <> " version mismatch: requested " <> expected <> ", got " <> actual)
     pure actual
@@ -194,6 +194,20 @@ xataRelease host requested = do
     throw "Xata manifest must provide a SHA-256 checksum"
   pure { version, url: binary.url, sha256: binary.sha256sum }
 
+sonarRelease :: String -> Effect { version :: String, url :: String, sha256 :: String }
+sonarRelease requested = do
+  selected <- if requested == "latest" then trim <$> H.fetch "https://binaries.sonarsource.com/Distribution/sonarqube-cli/stable.version"
+    else if Array.length (String.split (Pattern ".") (stripV requested)) == 3 then do
+      json <- H.fetch "https://api.github.com/repos/SonarSource/sonarqube-cli/releases?per_page=100" >>= H.json
+      releases <- either (throw <<< show) pure (decodeJson json) :: Effect (Array { tag_name :: String })
+      case Array.find (String.startsWith (Pattern (stripV requested <> ".")) <<< _.tag_name) releases of
+        Nothing -> throw "SonarQube CLI version not found in recent releases; supply its full CDN release ID"
+        Just releaseInfo -> pure releaseInfo.tag_name
+    else pure (stripV requested)
+  unless (Array.length (String.split (Pattern ".") selected) == 4 && all (\part -> part /= "" && all (\c -> c >= '0' && c <= '9') (CU.toCharArray part)) (String.split (Pattern ".") selected)) $
+    throw "SonarQube CLI release must be a numeric four-part CDN version"
+  pure { version: selected, url: "", sha256: "" }
+
 githubRelease :: Tool -> Host -> String -> Effect { version :: String, url :: String, sha256 :: String }
 githubRelease tool host requested = do
   let tag = tool.tagPrefix <> fromMaybe requested (String.stripPrefix (Pattern tool.tagPrefix) requested)
@@ -278,6 +292,14 @@ ensureRuntime tool host = do
 install :: String -> Host -> Config -> Effect Result
 install name host config = do
   tool <- lookup name
+  when (name == "sonarqube" && not (host.os == "linux" || host.os == "macos")) $
+    throw "SonarQube CLI supports Linux and macOS only"
+  when (name == "sonarqube" && host.os == "macos" && host.arch /= "aarch64") $
+    throw "SonarQube CLI has no native macOS x86_64 binary; use an ARM64 runner"
+  when (name == "sonarqube" && config.version /= "latest") $ do
+    let parts = String.split (Pattern ".") (stripV config.version)
+    unless (Array.elem (Array.length parts) [ 3, 4 ] && all (\part -> part /= "" && all (\c -> c >= '0' && c <= '9') (CU.toCharArray part)) parts) $
+      throw "SonarQube CLI version must be latest, a semantic version, or a full four-part CDN release ID"
   when (Array.elem name [ "dpkg", "rpmbuild" ] && host.os /= "linux") $ throw (name <> " setup is Linux-only")
   when (name == "gh" && isBSD host.os && config.installDir /= "") $ throw "Native GitHub CLI packages use the system prefix; omit installDir"
   when (Array.elem name [ "macports", "macports-rs" ] && host.os /= "macos") $ throw (name <> " setup is macOS-only")
@@ -330,6 +352,7 @@ install name host config = do
       throw (if name == "macports-rs" then "sudo requires a nonempty packages list; the CLI installation is per-user" else "This installer is per-user; omit sudo")
     H.requireTools [ "mkdir", "test", "which", "chmod", "cp", "mv", "ln", "find", "dirname" ]
     githubInfo <- if tool.backend == "github" then Just <$> githubRelease tool host config.version
+      else if tool.backend == "sonar-cli" then Just <$> sonarRelease config.version
       else if tool.backend == "xata" then Just <$> xataRelease host config.version else pure Nothing
     let selectedVersion = maybe config.version _.version githubInfo
     home <- if config.installDir == "" then H.userHome else pure ""
@@ -426,6 +449,20 @@ install name host config = do
           let platform = (if host.os == "macos" then "mac-" else "linux-") <> if host.arch == "aarch64" then "arm64" else "amd64"
           extract (tool { format = "raw" }) ("https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/" <> selected <> "/jfrog-cli-" <> platform <> "/jf") "" destination
           pure selected
+        else if tool.backend == "sonar-cli" then do
+          H.requireTools [ "curl" ]
+          let platform = if host.os == "macos" then "macos-arm64" else if host.arch == "aarch64" then "linux-arm64" else "linux-x86-64"
+              base = "https://binaries.sonarsource.com/Distribution/sonarqube-cli/" <> selectedVersion <> "/" <> host.os <> "/sonarqube-cli-" <> selectedVersion <> "-" <> platform
+          H.withTemp \temp -> do
+            -- The vendor installer uses .exe for older Linux/macOS CDN releases.
+            downloaded <- try (H.download (base <> ".bin") (temp <> "/sonar"))
+            case downloaded of
+              Left _ -> H.download (base <> ".exe") (temp <> "/sonar")
+              Right _ -> pure unit
+            H.run [ "mkdir", "-p", destination <> "/bin" ]
+            H.run [ "cp", temp <> "/sonar", executable ]
+            H.run [ "chmod", "+x", executable ]
+          pure selectedVersion
         else if Array.elem tool.backend [ "helm", "terraform", "hashicorp", "sonar" ] then do
           H.requireTools [ "curl", "unzip", "tar" ]
           info <- release tool config.version

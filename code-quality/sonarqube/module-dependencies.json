@@ -3,10 +3,10 @@
   "requirements": [
     {
       "alias": "setup-sonarqube",
-      "program": "sonar-scanner",
+      "program": "sonar",
       "probe": [
         "which",
-        "sonar-scanner"
+        "sonar"
       ]
     }
   ]

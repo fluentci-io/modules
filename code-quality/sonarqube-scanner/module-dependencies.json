@@ -1,0 +1,13 @@
+{
+  "module": "sonarqube-scanner",
+  "requirements": [
+    {
+      "alias": "setup-sonarqube-scanner",
+      "program": "sonar-scanner",
+      "probe": [
+        "which",
+        "sonar-scanner"
+      ]
+    }
+  ]
+}

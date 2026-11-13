@@ -32,13 +32,9 @@
             "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "description": "arguments"
+            "type": "string",
+            "minLength": 1,
+            "description": "Required comma-separated literal native argument tokens; CSV quoting preserves embedded commas."
           }
         },
         "required": [
@@ -93,7 +89,241 @@
         "contentType": "application/json"
       }
     },
-    "scan": {
+    "help": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "auth_login": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "server": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube Server URL, SonarQube Cloud EU (https://sonarcloud.io), or SonarQube Cloud US (https://sonarqube.us). Defaults to SonarQube Cloud EU."
+          },
+          "org": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube Cloud organization key (required for SonarQube Cloud)"
+          },
+          "withToken": {
+            "type": "boolean",
+            "description": "Read an existing token from standard input"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "auth_org": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "org": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube Cloud organization key"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "auth_logout": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "server": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Select a saved server URL and clear all saved connections and the shared token for its hostname"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "auth_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "list_issues": {
       "input": {
         "type": "object",
         "properties": {
@@ -126,34 +356,2357 @@
           "projectKey": {
             "type": "string",
             "minLength": 1,
-            "description": "projectKey"
+            "description": "Project key"
           },
-          "sources": {
+          "statuses": {
+            "type": "string",
+            "description": "Filter by status (comma-separated list of: OPEN, CONFIRMED, FALSE_POSITIVE, ACCEPTED, FIXED). Defaults to OPEN, CONFIRMED. Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "severities": {
+            "type": "string",
+            "description": "Filter by severity. Valid values depend on server mode \u2014 Multi-Quality Rule (MQR) mode: INFO, LOW, MEDIUM, HIGH, BLOCKER; Standard Experience mode: INFO, MINOR, MAJOR, CRITICAL, BLOCKER. Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "format": {
             "type": "string",
             "minLength": 1,
-            "description": "sources"
+            "description": "Output format"
           },
-          "hostUrl": {
+          "branch": {
             "type": "string",
             "minLength": 1,
-            "description": "hostUrl"
+            "description": "Branch name. Cannot be combined with --pull-request."
           },
-          "organization": {
+          "pullRequest": {
             "type": "string",
             "minLength": 1,
-            "description": "organization"
+            "description": "Pull request ID. Cannot be combined with --branch."
           },
-          "qualityGateWait": {
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Limit results to one file, or to a directory's own files (not its subdirectories): a full path from the project root, or just a name if it matches only one"
+          },
+          "newCode": {
             "type": "boolean",
-            "description": "qualityGateWait"
+            "description": "Only show issues on new code (the leak period)"
           },
-          "properties": {
-            "type": "array",
-            "items": {
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page size (1-500)"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "list_projects": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
               "type": "string",
               "minLength": 1
             },
-            "description": "properties"
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Search query to filter projects by name or key"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number"
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page size (1-500)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "list_orgs": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number"
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page size (1-500)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "quality_gate_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch name. Cannot be combined with --pull-request."
+          },
+          "pullRequest": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Pull request ID. Cannot be combined with --branch."
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Also show passing conditions. By default only failing conditions are shown."
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only show the breakdown for one category of failing conditions"
+          },
+          "top": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of entries to include in the breakdown, per condition"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "File or directory path to show conditions for, instead of the whole project"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "import_repositories": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "description": "DevOps platform repository slug (e.g. my-org/my-repo). Repeatable and/or comma-separated to import multiple repositories. Cannot be combined with --all or --regex. Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Import every eligible repository in the organization (not already imported, and allowed by its project visibility settings). Cannot be combined with --repo or --regex."
+          },
+          "regex": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Import only eligible repositories whose DevOps platform name (not slug) matches this regular expression. Case-sensitive by default; wrap as /pattern/flags to add flags like case-insensitive matching. Cannot be combined with --repo or --all. Examples: --regex \"^test-\" --regex \"/^archived-/i\""
+          },
+          "dopSetting": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube Server only: key of the DevOps platform setting to import from. Required when several are configured and prompts are off."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Skip all prompts; require explicit flags"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "api": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "description": "JSON string for request body. The tool will automatically format as either form data or JSON body."
+          },
+          "verbose": {
+            "type": "boolean",
+            "description": "Print request and response details for debugging."
+          },
+          "method": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "get",
+              "post",
+              "patch",
+              "put",
+              "delete"
+            ],
+            "description": "HTTP method (get, post, patch, put, delete)"
+          },
+          "endpoint": {
+            "type": "string",
+            "minLength": 1,
+            "description": "API endpoint path. Must start with \"/\", and can contain query parameters."
+          }
+        },
+        "required": [
+          "runDir",
+          "method",
+          "endpoint"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_git": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "hook": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Hook to install: pre-commit (scan staged files) or pre-push (scan files in unpushed commits)"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Overwrite existing hook if it is not from sonar integrate git"
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "local": {
+            "type": "boolean",
+            "description": "Install the hook for this repository only, instead of globally (workaround for setups where a global hook does not fit, e.g. Husky)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; the hook is installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_claude": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_copilot": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_codex": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_antigravity": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_cursor": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_opencode": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_devin": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "integrate_pi": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "nonInteractive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Non-interactive mode (no prompts)"
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Backwards compatibility; integrations are installed globally by default"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "context": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Action forwarded to sonar-context-augmentation"
+          },
+          "contextArguments": {
+            "type": "string",
+            "description": "Additional arguments forwarded to sonar-context-augmentation Comma-separated literal tokens."
+          }
+        },
+        "required": [
+          "runDir",
+          "action"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "analyze": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "files": {
+            "type": "string",
+            "description": "Analyze specific file(s) instead of the git change set (repeatable) Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "staged": {
+            "type": "boolean",
+            "description": "Analyze staged files only (git diff --cached)"
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Analyze files changed vs a branch or ref (e.g. main)"
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube project key (overrides auto-detected project)"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Skip the large change set confirmation prompt"
+          },
+          "depth": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "STANDARD",
+              "DEEP"
+            ],
+            "description": "Analysis depth: STANDARD (fast) or DEEP (cross-file). Default: STANDARD for one --file; DEEP otherwise."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "analyze_secrets": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "stdin": {
+            "type": "boolean",
+            "description": "Read from standard input instead of paths"
+          },
+          "exclude": {
+            "type": "string",
+            "description": "File or directory to skip (repeatable; exact path or directory prefix, no wildcards). Overrides the secrets.exclude config key Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "paths": {
+            "type": "string",
+            "description": "File or directory paths to scan for secrets Comma-separated literal tokens."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "analyze_dependency_risks": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key (auto-detected when omitted)"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "statuses": {
+            "type": "string",
+            "description": "Filter issues by status Raw: new | open | confirm | accept | safe | fixed Presets: active | to_fix | all active: new, open, confirm to_fix: new, open, confirm, accept all: new, open, confirm, accept, safe, fixed Presets and raw statuses can be combined; the resulting set is the union. Examples: --statuses active --statuses new,confirm --statuses active,safe Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "minSeverity": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Minimum severity level to include. Allowed values: BLOCKER, HIGH, MEDIUM, LOW, INFO (default: all severities)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "analyze_agentic": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "files": {
+            "type": "string",
+            "description": "Analyze specific file(s) instead of the git change set (repeatable) Comma-separated values; whitespace is trimmed and entries are passed literally."
+          },
+          "staged": {
+            "type": "boolean",
+            "description": "Analyze staged files only (git diff --cached)"
+          },
+          "base": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Analyze files changed vs a branch or ref (e.g. main)"
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube project key (overrides auto-detected project)"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Skip the large change set confirmation prompt"
+          },
+          "depth": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "STANDARD",
+              "DEEP"
+            ],
+            "description": "Analysis depth: STANDARD (fast) or DEEP (cross-file). Default: STANDARD for one --file; DEEP otherwise."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch name for analysis context"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "remediate": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube Cloud project key (overrides auto-detected project)"
+          },
+          "issues": {
+            "type": "string",
+            "description": "Comma-separated issue keys to remediate non-interactively (max 20). Required when stdin is not a TTY. Comma-separated values; whitespace is trimmed and entries are passed literally."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "link": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the project root, relative to the repository root"
+          },
+          "monorepo": {
+            "type": "boolean",
+            "description": "Add or update this directory in the projects array instead of replacing the single link"
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "SonarQube project key (omit to pick one: a verified suggestion, or a search)"
+          }
+        },
+        "required": [
+          "runDir",
+          "projectKey"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "link_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "File or directory to list projects for (default: current directory)"
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only list projects whose key or directory matches this regex"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number"
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page size (1-100)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Config key to read"
+          }
+        },
+        "required": [
+          "runDir",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "onlySet": {
+            "type": "boolean",
+            "description": "Only show keys that currently have a value"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config_set": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Config key to set"
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Value to store; omit to enter it interactively without echoing"
+          }
+        },
+        "required": [
+          "runDir",
+          "key",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config_unset": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Config key to unset"
+          }
+        },
+        "required": [
+          "runDir",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_current_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          },
+          "component": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Node key to start below, from a previous current get"
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Levels below the start node (default 1)"
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Dependency source key, including descendants; requires --to"
+          },
+          "to": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Dependency destination key, including descendants; requires --from"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Dependency page (default 1; requires --from/--to)"
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Dependencies per page (default/maximum 20)"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only this language (default: all)"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format (default: text on a terminal, toon otherwise)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_intended_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          },
+          "component": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Group key to start below, e.g. Domain/Billing"
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Levels of groups below the start group (default: all)"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only this language (default: all)"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format (default: text on a terminal, toon otherwise)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_intended_set": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Intended architecture JSON file"
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Validate and show the changes, removals first, without writing"
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_directives_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Directive UUID; cannot be combined with pagination"
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format (default: text on a terminal, toon otherwise)"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number (default 1)"
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Items per page (default 50, maximum 1000)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_directives_set": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "JSON object with create, update and delete arrays"
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Preview changes without writing"
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          }
+        },
+        "required": [
+          "runDir",
+          "file"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_findings_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "projectKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Project key"
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only this category"
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only this finding type"
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Only this language (default: all)"
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format (default: text on a terminal, toon otherwise)"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Page number (default 1)"
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Items per page (default 50, 0 counts only, maximum 1000)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "architecture_install_skill": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "global": {
+            "type": "boolean",
+            "description": "Install in the home directory instead of the repository"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Replace a SKILL.md that was not written by this command"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "system_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
+          },
+          "json": {
+            "type": "boolean",
+            "description": "Output as JSON for machine consumption"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "system_reset": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Skip the interactive confirmation prompt (required for non-interactive use)"
+          },
+          "all": {
+            "type": "boolean",
+            "description": "Also remove CLI configuration (sonar config), including network and telemetry configuration"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "allowlist_secrets_show": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "allowlist_secrets_add": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "allowlist_secrets_remove": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Unique key of the allowlist entry to remove"
+          }
+        },
+        "required": [
+          "runDir",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "allowlist_secrets_clear": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Skip the interactive confirmation prompt (required for non-interactive use)"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "update": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "status": {
+            "type": "boolean",
+            "description": "Check for a newer version without installing"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Install the latest version even if already up to date"
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "update_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Output format"
           }
         },
         "required": [
