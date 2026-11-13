@@ -129,7 +129,13 @@ export async function suite(directory) {
   test('checks supported OS and missing executable before starting a plan', () => {
     const command=tool.commands[0], input=inputFor(command);
     for (const os of ['linux','macos','freebsd','openbsd','netbsd']) {
-      const f=fixture({os,input}); plugin.run(); assert.equal(f.plans.length,1);
+      const f=fixture({os,input});
+      if (['depot','flipt'].includes(tool.name) && !['linux','macos'].includes(os)) {
+        assert.throws(plugin.run,/supports Linux and macOS only/);
+        assert.equal(f.calls.length,0); assert.equal(f.plans.length,0);
+      } else {
+        plugin.run(); assert.equal(f.plans.length,1);
+      }
     }
     let f=fixture({os:'windows',input}); assert.throws(plugin.run,/Unsupported/); assert.equal(f.calls.length,0);
     for (const program of ['which','test']) {

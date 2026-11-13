@@ -37,8 +37,12 @@ export async function containerSetupSuite(directory) {
  test(schema.name+': explicit setup forwards typed options and returns the real installer result',()=>{
   const result={tool:schema.name,version:'1.2.3',binDir:'/fixture/bin',environment:[{name:'PATH',value:'/fixture/bin:/usr/bin'}]};let seen;
   installers((alias,args)=>{assert.equal(alias,'setup-'+schema.name);seen=args;return result;});
-  fixture();assert.deepEqual(native.setup({...input('setup'),version:new Just('1.2.3'),installDir:new Just('/fixture/managed')})(),result);
-  assert.deepEqual(seen,{version:'1.2.3',installDir:'/fixture/managed'});
+  for(const os of ['linux','macos'])for(const arch of ['x86_64','aarch64']){
+   seen=undefined;const f=fixture({os,arch});
+   assert.deepEqual(native.setup({...input('setup'),version:new Just('1.2.3'),installDir:new Just('/fixture/managed')})(),result);
+   assert.deepEqual(seen,{version:'1.2.3',installDir:'/fixture/managed'});
+   assert.equal(f.calls.length,0);assert.equal(f.plans.length,0);
+  }
  });
  test(schema.name+': malformed CSV lists cannot reach setup or a plan',()=>{
   const fields=Object.entries(schema.exports[schema.name==='flipt'?'validate':'build'].input.properties);

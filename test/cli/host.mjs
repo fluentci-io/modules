@@ -26,6 +26,7 @@ export function fixture(options = {}) {
     outputString: value => output.push(value),
     getFunctions: () => new Proxy({}, { get: (_target, name) => value => {
       if (name === "get_os") return options.os ?? "linux";
+      if (name === "get_arch") return options.arch ?? "x86_64";
       if (name === "get_env") return environment[value] ?? "";
       if (name === "has_env") return JSON.stringify(Object.hasOwn(environment, value));
       if (name === "set_envs") {
