@@ -106,7 +106,12 @@
     "dependency:testing/cypress:setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"testing/cypress/../../setup/bun\"\nsdk = \"purescript\"\n",
     "dependency:testing/cypress:setup-cypress": "path:name = \"setup-cypress\"\nruntime = \"component\"\npath = \"testing/cypress/../../setup/cypress\"\nsdk = \"purescript\"\n",
     "dependency:testing/playwright:setup-bun": "path:name = \"setup-bun\"\nruntime = \"component\"\npath = \"testing/playwright/../../setup/bun\"\nsdk = \"purescript\"\n",
-    "dependency:testing/playwright:setup-playwright": "path:name = \"setup-playwright\"\nruntime = \"component\"\npath = \"testing/playwright/../../setup/playwright\"\nsdk = \"purescript\"\n"
+    "dependency:testing/playwright:setup-playwright": "path:name = \"setup-playwright\"\nruntime = \"component\"\npath = \"testing/playwright/../../setup/playwright\"\nsdk = \"purescript\"\n",
+    "dependency:version-control/gh:setup-gh": "path:name = \"setup-gh\"\nruntime = \"component\"\npath = \"version-control/gh/../../setup/gh\"\nsdk = \"purescript\"\n",
+    "dependency:version-control/gh:setup-git": "path:name = \"setup-git\"\nruntime = \"component\"\npath = \"version-control/gh/../../setup/git\"\nsdk = \"purescript\"\n",
+    "dependency:version-control/git:setup-git": "path:name = \"setup-git\"\nruntime = \"component\"\npath = \"version-control/git/../../setup/git\"\nsdk = \"purescript\"\n",
+    "dependency:version-control/glab:setup-git": "path:name = \"setup-git\"\nruntime = \"component\"\npath = \"version-control/glab/../../setup/git\"\nsdk = \"purescript\"\n",
+    "dependency:version-control/glab:setup-glab": "path:name = \"setup-glab\"\nruntime = \"component\"\npath = \"version-control/glab/../../setup/glab\"\nsdk = \"purescript\"\n"
   },
   "packages": {},
   "git": {}

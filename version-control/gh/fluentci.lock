@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-gh": "path:name = \"setup-gh\"\nruntime = \"component\"\npath = \"../../setup/gh\"\nsdk = \"purescript\"\n",
+    "dependency::setup-git": "path:name = \"setup-git\"\nruntime = \"component\"\npath = \"../../setup/git\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

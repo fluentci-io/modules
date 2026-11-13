@@ -1,0 +1,1293 @@
+{
+  "name": "glab",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Required comma-separated glab command and literal argument tokens; never JSON."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "auth_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "hostname": {
+            "type": "string",
+            "minLength": 1,
+            "description": "GitLab hostname to inspect."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "repo_view": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "mr_create": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Merge request title."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Literal merge request description."
+          },
+          "sourceBranch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Source branch."
+          },
+          "targetBranch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target branch."
+          },
+          "draft": {
+            "type": "boolean",
+            "description": "Create a draft merge request."
+          },
+          "yes": {
+            "type": "boolean",
+            "default": true,
+            "description": "Skip confirmation after explicit title and description."
+          },
+          "labels": {
+            "type": "string",
+            "description": "Comma-separated label names. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "reviewers": {
+            "type": "string",
+            "description": "Comma-separated reviewer handles. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "assignees": {
+            "type": "string",
+            "description": "Comma-separated assignee handles. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "title",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "mr_view": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Merge request IID, branch or URL selector."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "text"
+            ],
+            "description": "Result format."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "number"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "mr_list": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "sourceBranch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Source branch filter."
+          },
+          "targetBranch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target branch filter."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "text"
+            ],
+            "description": "Result format."
+          },
+          "perPage": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 30,
+            "description": "Results per page."
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Page number."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "mr_checkout": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Merge request IID, branch or URL selector."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Local branch name."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "number"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "mr_note": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Merge request IID, branch or URL selector."
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Literal merge request comment."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "number",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "mr_merge": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Merge request IID, branch or URL selector."
+          },
+          "yes": {
+            "type": "boolean",
+            "default": true,
+            "description": "Skip confirmation for this explicitly requested merge."
+          },
+          "squash": {
+            "type": "boolean",
+            "description": "Squash commits before merging."
+          },
+          "removeSourceBranch": {
+            "type": "boolean",
+            "description": "Explicitly delete the source branch after merge."
+          },
+          "sha": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Expected source commit SHA."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "number"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "release_create": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "tag": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Release tag."
+          },
+          "files": {
+            "type": "string",
+            "description": "Optional asset paths."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Release title."
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Literal release notes."
+          },
+          "notesFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing release-notes file."
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Commit or branch used when creating a missing tag."
+          },
+          "noUpdate": {
+            "type": "boolean",
+            "default": true,
+            "description": "Refuse to update an existing release."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "tag"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "release_upload": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "tag": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing release tag."
+          },
+          "files": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Required comma-separated existing release asset paths."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "tag",
+          "files"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "release_download": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "tag": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Release tag; omitted selects the native latest release."
+          },
+          "assetNames": {
+            "type": "string",
+            "description": "Comma-separated asset filename patterns. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination directory."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ci_run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch or ref to run."
+          },
+          "mr": {
+            "type": "boolean",
+            "description": "Run the merge request pipeline."
+          },
+          "variables": {
+            "type": "string",
+            "description": "Comma-separated KEY:VALUE pipeline variables. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "inputs": {
+            "type": "string",
+            "description": "Comma-separated KEY:VALUE or KEY:type(value) pipeline inputs. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ci_status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch selector."
+          },
+          "live": {
+            "type": "boolean",
+            "description": "Watch pipeline status until completion."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ci_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "pipelineId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pipeline ID."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch selector."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "default": "json",
+            "enum": [
+              "json",
+              "text"
+            ],
+            "description": "Result format."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ci_retry": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "job": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Required job ID or job name; prevents interactive job selection."
+          },
+          "pipelineId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pipeline to search for the selected job."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "job"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ci_cancel": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "pipelineId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pipeline ID to cancel."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "pipelineId"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ci_lint": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing GitLab CI configuration file."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Simulate pipeline creation."
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch or tag used for simulation."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "api": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "endpoint": {
+            "type": "string",
+            "minLength": 1,
+            "description": "GitLab API endpoint path."
+          },
+          "method": {
+            "type": "string",
+            "minLength": 1,
+            "description": "HTTP request method."
+          },
+          "hostname": {
+            "type": "string",
+            "minLength": 1,
+            "description": "GitLab hostname."
+          },
+          "fields": {
+            "type": "string",
+            "description": "Comma-separated request KEY=VALUE fields. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          "inputFile": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Existing request-body file."
+          },
+          "paginate": {
+            "type": "boolean",
+            "description": "Fetch every result page."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "endpoint"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

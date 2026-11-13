@@ -1,0 +1,1 @@
+export { setup, run, version, clone, fetch, checkout, status, diff, log, show, rev_parse, describe, add, commit, tag, push, pull, submodule_update, ls_remote, archive, config_get, remote_get_url } from "./output/CI.Component/index.js";

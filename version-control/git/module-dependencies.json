@@ -1,0 +1,13 @@
+{
+  "module": "git",
+  "requirements": [
+    {
+      "alias": "setup-git",
+      "program": "git",
+      "probe": [
+        "git",
+        "--version"
+      ]
+    }
+  ]
+}

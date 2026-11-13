@@ -1,0 +1,21 @@
+{
+  "module": "glab",
+  "requirements": [
+    {
+      "alias": "setup-glab",
+      "program": "glab",
+      "probe": [
+        "glab",
+        "version"
+      ]
+    },
+    {
+      "alias": "setup-git",
+      "program": "git",
+      "probe": [
+        "git",
+        "--version"
+      ]
+    }
+  ]
+}

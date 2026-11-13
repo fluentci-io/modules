@@ -1126,6 +1126,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "git",
+    "title": "Git",
+    "program": "git",
+    "backend": "native",
+    "package": "",
+    "repository": "",
+    "asset": "",
+    "format": "",
+    "member": "git",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "git",
+    "macPackage": "git",
+    "freebsdPackage": "git",
+    "openbsdPackage": "git",
+    "netbsdPackage": "git",
+    "notes": "Reuse a verified PATH installation; otherwise native repositories determine available package versions on Linux, macOS and BSD. Exact mismatches fail clearly.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "gitlab-artifacts",
     "title": "Gitlab-Artifacts",
     "program": "glab",
@@ -1169,6 +1192,29 @@
     "openbsdPackage": "gitleaks",
     "netbsdPackage": "gitleaks",
     "notes": "",
+    "tagPrefix": "v"
+  },
+  {
+    "name": "glab",
+    "title": "GitLab CLI",
+    "program": "glab",
+    "backend": "gitlab",
+    "package": "",
+    "repository": "gitlab-org/cli",
+    "asset": "glab_{version}_{os}_{goarch}.tar.gz",
+    "format": "tar",
+    "member": "glab",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "glab",
+    "macPackage": "glab",
+    "freebsdPackage": "glab",
+    "openbsdPackage": "glab",
+    "netbsdPackage": "glab",
+    "notes": "Linux/macOS install SHA-256 verified official GitLab CLI release archives. BSD uses native glab packages. Credentials remain in GITLAB_TOKEN, GLAB_TOKEN, CI job-token configuration, or native login storage.",
     "tagPrefix": "v"
   },
   {

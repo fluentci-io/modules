@@ -98,9 +98,16 @@
   "gemfury": [
     "setup-gemfury"
   ],
+  "gh": [
+    "setup-gh",
+    "setup-git"
+  ],
   "gh-artifacts": [
     "setup-gh-artifacts",
     "setup-bun"
+  ],
+  "git": [
+    "setup-git"
   ],
   "gitlab-artifacts": [
     "setup-gitlab-artifacts",
@@ -108,6 +115,10 @@
   ],
   "gitleaks": [
     "setup-gitleaks"
+  ],
+  "glab": [
+    "setup-glab",
+    "setup-git"
   ],
   "grype": [
     "setup-grype"

@@ -223,9 +223,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "gh"
+version = "0.1.0"
+path = "version-control/gh"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "gh-artifacts"
 version = "0.1.0"
 path = "artifacts/gh-artifacts"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "git"
+version = "0.1.0"
+path = "version-control/git"
 sdk = "purescript"
 runtime = "component"
 
@@ -240,6 +254,13 @@ runtime = "component"
 name = "gitleaks"
 version = "0.1.0"
 path = "security/gitleaks"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "glab"
+version = "0.1.0"
+path = "version-control/glab"
 sdk = "purescript"
 runtime = "component"
 
@@ -867,6 +888,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-git"
+version = "0.1.0"
+path = "setup/git"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-gitlab-artifacts"
 version = "0.1.0"
 path = "setup/gitlab-artifacts"
@@ -877,6 +905,13 @@ runtime = "component"
 name = "setup-gitleaks"
 version = "0.1.0"
 path = "setup/gitleaks"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-glab"
+version = "0.1.0"
+path = "setup/glab"
 sdk = "purescript"
 runtime = "component"
 

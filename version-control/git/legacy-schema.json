@@ -1,0 +1,1277 @@
+{
+  "name": "git",
+  "exports": {
+    "run": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "arguments": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Required comma-separated git command and literal argument tokens; never JSON."
+          }
+        },
+        "required": [
+          "runDir",
+          "arguments"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "version": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "clone": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Branch or tag to check out."
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Positive shallow clone depth."
+          },
+          "filter": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Partial clone filter, for example blob:none."
+          },
+          "recursive": {
+            "type": "boolean",
+            "description": "Clone submodules recursively."
+          },
+          "singleBranch": {
+            "type": "boolean",
+            "description": "Fetch only one branch."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Repository URL or local source path."
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination checkout directory; native Git chooses the default when omitted."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "fetch": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "prune": {
+            "type": "boolean",
+            "description": "Remove stale remote-tracking refs."
+          },
+          "tags": {
+            "type": "boolean",
+            "description": "Fetch all tags."
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Positive shallow fetch depth."
+          },
+          "remote": {
+            "type": "string",
+            "minLength": 1,
+            "default": "origin",
+            "description": "Remote name or URL."
+          },
+          "refspecs": {
+            "type": "string",
+            "description": "Refspecs to fetch; omit for the remote defaults."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "checkout": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "detach": {
+            "type": "boolean",
+            "description": "Check out a detached revision."
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Revision or existing branch to check out."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "ref"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "status": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "porcelain": {
+            "type": "string",
+            "minLength": 1,
+            "default": "v1",
+            "enum": [
+              "v1",
+              "v2"
+            ],
+            "description": "Stable machine-readable status format."
+          },
+          "branch": {
+            "type": "boolean",
+            "description": "Include branch information."
+          },
+          "paths": {
+            "type": "string",
+            "description": "Optional pathspecs limiting status."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "diff": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "exitCode": {
+            "type": "boolean",
+            "default": true,
+            "description": "Fail when differences exist."
+          },
+          "cached": {
+            "type": "boolean",
+            "description": "Compare the staged index."
+          },
+          "stat": {
+            "type": "boolean",
+            "description": "Print a diff summary."
+          },
+          "revisions": {
+            "type": "string",
+            "description": "Optional revisions and path tokens in native order."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "log": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "maxCount": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 20,
+            "description": "Maximum commits to print."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "%H %s",
+            "description": "Native Git log format."
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional revision range."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "show": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native commit formatting string."
+          },
+          "stat": {
+            "type": "boolean",
+            "description": "Print changed-file statistics."
+          },
+          "object": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HEAD",
+            "description": "Revision or object:path selector."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "rev_parse": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "verify": {
+            "type": "boolean",
+            "default": true,
+            "description": "Require one valid revision."
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HEAD",
+            "description": "Revision expression to resolve."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "describe": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "tags": {
+            "type": "boolean",
+            "default": true,
+            "description": "Include lightweight tags."
+          },
+          "always": {
+            "type": "boolean",
+            "default": true,
+            "description": "Fall back to an abbreviated object name."
+          },
+          "match": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Tag name pattern."
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HEAD",
+            "description": "Commit to describe."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "add": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "paths": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Required pathspecs to stage; directories are allowed."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "paths"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "commit": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Literal commit message; an editor is never opened."
+          },
+          "allowEmpty": {
+            "type": "boolean",
+            "description": "Allow a commit with no staged changes."
+          },
+          "signoff": {
+            "type": "boolean",
+            "description": "Add a signoff trailer."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "tag": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Annotated tag message; omit for a lightweight tag."
+          },
+          "sign": {
+            "type": "boolean",
+            "description": "Cryptographically sign the tag using configured signing credentials."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "New tag name."
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HEAD",
+            "description": "Commit or object to tag."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "push": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "tags": {
+            "type": "boolean",
+            "description": "Push all local tags."
+          },
+          "atomic": {
+            "type": "boolean",
+            "description": "Require atomic remote ref updates."
+          },
+          "setUpstream": {
+            "type": "boolean",
+            "description": "Set upstream tracking for pushed branches."
+          },
+          "forceWithLease": {
+            "type": "boolean",
+            "description": "Explicitly request guarded forced ref updates; omitted by default."
+          },
+          "remote": {
+            "type": "string",
+            "minLength": 1,
+            "default": "origin",
+            "description": "Remote name or URL."
+          },
+          "refspecs": {
+            "type": "string",
+            "description": "Optional refspecs in native order."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "pull": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "ffOnly": {
+            "type": "boolean",
+            "default": true,
+            "description": "Require a fast-forward update."
+          },
+          "remote": {
+            "type": "string",
+            "minLength": 1,
+            "default": "origin",
+            "description": "Remote name or URL."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional branch to pull."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "submodule_update": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "init": {
+            "type": "boolean",
+            "default": true,
+            "description": "Initialize selected submodules."
+          },
+          "recursive": {
+            "type": "boolean",
+            "default": true,
+            "description": "Update nested submodules."
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Positive shallow submodule depth."
+          },
+          "paths": {
+            "type": "string",
+            "description": "Optional submodule pathspecs."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "ls_remote": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "tags": {
+            "type": "boolean",
+            "description": "List tags only."
+          },
+          "heads": {
+            "type": "boolean",
+            "description": "List branch heads only."
+          },
+          "remote": {
+            "type": "string",
+            "minLength": 1,
+            "default": "origin",
+            "description": "Remote URL or configured name."
+          },
+          "patterns": {
+            "type": "string",
+            "description": "Optional ref-name patterns."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "archive": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "default": "tar",
+            "enum": [
+              "tar",
+              "zip"
+            ],
+            "description": "Archive format."
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Destination archive file."
+          },
+          "prefix": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prefix for paths inside the archive."
+          },
+          "tree": {
+            "type": "string",
+            "minLength": 1,
+            "default": "HEAD",
+            "description": "Tree or commit to archive."
+          },
+          "paths": {
+            "type": "string",
+            "description": "Optional paths to include."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "output"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "config_get": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Git configuration key to query."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    },
+    "remote_get_url": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "minLength": 1
+          },
+          "runDir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 900000
+          },
+          "artifacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Named output files to collect with their sizes and SHA-256 digests in the execution report."
+          },
+          "remote": {
+            "type": "string",
+            "minLength": 1,
+            "default": "origin",
+            "description": "Remote name to inspect."
+          },
+          "extraArgs": {
+            "type": "string",
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        },
+        "required": [
+          "runDir"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string",
+        "contentType": "application/json"
+      }
+    }
+  }
+}

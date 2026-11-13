@@ -29,6 +29,7 @@ PURPOSES = {
     'secrets': 'Inject secrets into child commands or manage secret metadata and files.',
     'security': 'Produce security findings, inventory dependencies, or enforce a security gate.',
     'setup': 'Install and verify a prerequisite tool, select its version, and publish PATH.',
+    'version-control': 'Check out source, manage refs, publish releases, and orchestrate pull requests and CI runs.',
     'testing': 'Install test dependencies or browsers, run tests, and propagate failures.',
 }
 DIAGNOSTICS = {'version', 'help', 'du', 'stats', 'cache_list', 'targets', 'query', 'lsjson'}
@@ -57,7 +58,7 @@ def inventory():
                 if not (ROOT / 'setup' / prerequisite / 'entry.mjs').exists():
                     raise ValueError(f'{path}: missing setup companion for {prerequisite}')
         commands = {c['name']: c for c in catalog.get(path, {}).get('commands', [])}
-        if commands and (set(commands) | ({"setup"} if tool in {"depot", "flipt"} else set())) != set(exports):
+        if commands and (set(commands) | ({"setup"} if tool in {"depot", "flipt", "git", "gh", "glab"} else set())) != set(exports):
             raise ValueError(f'{path}: exported functions differ from reviewed catalog')
         functions = []
         for name in exports:

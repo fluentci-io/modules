@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-git": "path:name = \"setup-git\"\nruntime = \"component\"\npath = \"../../setup/git\"\nsdk = \"purescript\"\n",
+    "dependency::setup-glab": "path:name = \"setup-glab\"\nruntime = \"component\"\npath = \"../../setup/glab\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

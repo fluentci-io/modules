@@ -251,6 +251,35 @@ githubRelease tool host requested = do
       throw (tool.name <> " release must provide a valid SHA-256 checksum")
   pure { version, url: asset.browser_download_url, sha256: digest }
 
+gitlabRelease :: Tool -> Host -> String -> Effect { version :: String, url :: String, sha256 :: String }
+gitlabRelease tool host requested = do
+  let endpoint = "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases/" <>
+        if requested == "latest" then "permalink/latest" else "v" <> stripV requested
+  response <- H.fetch endpoint >>= H.json
+  version <- stripV <$> H.field "tag_name" response
+  unless (versionToken version && (requested == "latest" || stripV requested == version)) $
+    throw "GitLab CLI release metadata does not match the requested version"
+  assets <- H.field "assets" response
+  links <- H.field "links" assets :: Effect (Array { name :: String, url :: String })
+  let wanted = substitute host version tool.asset
+  archive <- case Array.find (\entry -> entry.name == wanted) links of
+    Nothing -> throw ("No official glab archive for " <> host.os <> "/" <> host.arch)
+    Just entry -> pure entry
+  checksum <- case Array.find (\entry -> entry.name == "checksums.txt") links of
+    Nothing -> throw "GitLab CLI release has no checksums.txt"
+    Just entry -> pure entry
+  unless (String.startsWith (Pattern "https://") archive.url && String.startsWith (Pattern "https://") checksum.url) $
+    throw "GitLab CLI release downloads require HTTPS"
+  text <- H.fetch checksum.url
+  let rows = map (Array.filter (_ /= "") <<< String.split (Pattern " ") <<< trim) (String.split (Pattern "\n") text)
+      matches = Array.filter (\row -> Array.index row 1 == Just wanted || Array.index row 1 == Just ("*" <> wanted)) rows
+  digest <- case matches of
+    [ row ] -> maybe (throw "Missing GitLab CLI checksum") pure (Array.head row)
+    _ -> throw "Missing or ambiguous GitLab CLI archive checksum"
+  unless (CU.length digest == 64 && all (\c -> (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) (CU.toCharArray digest)) $
+    throw "Invalid GitLab CLI SHA-256 checksum"
+  pure { version, url: archive.url, sha256: digest }
+
 extract :: Tool -> String -> String -> String -> Effect Unit
 extract tool url digest destination = do
   unless (String.startsWith (Pattern "https://") url) $ throw "Installer download must use HTTPS"
@@ -304,7 +333,7 @@ install :: String -> Host -> Config -> Effect Result
 install name host config = do
   tool <- lookup name
   when (Array.elem name [ "depot", "flipt" ] && host.os /= "linux" && host.os /= "macos") $ throw (name <> " supports Linux and macOS only")
-  reusable <- if Array.elem name [ "depot", "buildx", "flipt" ] && config.installDir == "" && config.packageName == "" && not config.sudo then try do
+  reusable <- if Array.elem name [ "depot", "buildx", "flipt", "glab" ] && config.installDir == "" && config.packageName == "" && not config.sudo then try do
     executable <- H.findExecutable (if name == "buildx" then "docker" else tool.program)
     unless (String.startsWith (Pattern "/") executable) $ throw "Executable not found"
     text <- H.capture (if name == "buildx" then [ executable, "buildx", "version" ] else [ executable, if name == "flipt" then "--version" else "version" ])
@@ -381,6 +410,7 @@ installFresh name host config = do
       throw (if name == "macports-rs" then "sudo requires a nonempty packages list; the CLI installation is per-user" else "This installer is per-user; omit sudo")
     H.requireTools [ "mkdir", "test", "which", "chmod", "cp", "mv", "ln", "find", "dirname" ]
     githubInfo <- if tool.backend == "github" then Just <$> githubRelease tool host config.version
+      else if tool.backend == "gitlab" then Just <$> gitlabRelease tool host config.version
       else if tool.backend == "sonar-cli" then Just <$> sonarRelease config.version
       else if tool.backend == "xata" then Just <$> xataRelease host config.version else pure Nothing
     let selectedVersion = maybe config.version _.version githubInfo
@@ -504,7 +534,7 @@ installFresh name host config = do
           extract (tool { format = if tool.backend == "helm" then "tar" else "zip" }) url "" destination
           pure info.version
         else do
-          H.requireTools (if tool.format == "raw" then [ "curl" ] else [ "curl", "tar", "unzip" ])
+          H.requireTools (if tool.backend == "gitlab" then [ "curl", "tar" ] else if tool.format == "raw" then [ "curl" ] else [ "curl", "tar", "unzip" ])
           when (name == "buildx") $ H.requireTools [ "docker" ]
           info <- case githubInfo of
             Just value -> pure value

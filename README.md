@@ -96,9 +96,12 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [garden](./deployment/garden/README.md) | Build, deploy, test and clean up Garden project environments. | `run`, `build`, `deploy`, `test`, [typed contract](./deployment/garden/COMPONENT.md) |
 | [gcloud](./cloud/gcloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `config-list`, [typed contract](./cloud/gcloud/COMPONENT.md) |
 | [gemfury](./publishing/gemfury/README.md) | Upload Linux packages to Gemfury using credentials from the host environment. | `upload`, [typed contract](./publishing/gemfury/COMPONENT.md) |
+| [gh](./version-control/gh/README.md) | Manage pull requests, releases and GitHub Actions runs through typed GitHub CLI functions. | `setup`, `run`, `version`, [typed contract](./version-control/gh/COMPONENT.md) |
 | [gh-artifacts](./artifacts/gh-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gh-artifacts/COMPONENT.md) |
+| [git](./version-control/git/README.md) | Check out source, inspect revisions, create commits and tags, and publish refs with typed Git functions. | `setup`, `run`, `version`, [typed contract](./version-control/git/COMPONENT.md) |
 | [gitlab-artifacts](./artifacts/gitlab-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/gitlab-artifacts/COMPONENT.md) |
 | [gitleaks](./security/gitleaks/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan-dir`, [typed contract](./security/gitleaks/COMPONENT.md) |
+| [glab](./version-control/glab/README.md) | Manage merge requests, releases and GitLab CI jobs and pipelines through typed GitLab CLI functions. | `setup`, `run`, `version`, [typed contract](./version-control/glab/COMPONENT.md) |
 | [grype](./security/grype/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/grype/COMPONENT.md) |
 | [helm](./deployment/helm/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./deployment/helm/COMPONENT.md) |
 | [infisical](./secrets/infisical/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/infisical/COMPONENT.md) |
@@ -188,8 +191,10 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-gemfury](./setup/gemfury/README.md) | Install and verify gemfury, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gemfury/COMPONENT.md) |
 | [setup-gh](./setup/gh/README.md) | Install the GitHub CLI and publish its executable directory to PATH. | `setup`, [typed contract](./setup/gh/COMPONENT.md) |
 | [setup-gh-artifacts](./setup/gh-artifacts/README.md) | Install and verify gh-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gh-artifacts/COMPONENT.md) |
+| [setup-git](./setup/git/README.md) | Install or reuse a verified git CLI. | `setup`, [typed contract](./setup/git/COMPONENT.md) |
 | [setup-gitlab-artifacts](./setup/gitlab-artifacts/README.md) | Install and verify gitlab-artifacts, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitlab-artifacts/COMPONENT.md) |
 | [setup-gitleaks](./setup/gitleaks/README.md) | Install and verify gitleaks, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gitleaks/COMPONENT.md) |
+| [setup-glab](./setup/glab/README.md) | Install or reuse a verified glab CLI. | `setup`, [typed contract](./setup/glab/COMPONENT.md) |
 | [setup-gleam](./setup/gleam/README.md) | Install and verify gleam, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/gleam/COMPONENT.md) |
 | [setup-go](./setup/go/README.md) | Install and verify go, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/go/COMPONENT.md) |
 | [setup-grype](./setup/grype/README.md) | Install and verify grype, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/grype/COMPONENT.md) |

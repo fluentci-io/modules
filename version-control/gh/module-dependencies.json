@@ -1,0 +1,21 @@
+{
+  "module": "gh",
+  "requirements": [
+    {
+      "alias": "setup-gh",
+      "program": "gh",
+      "probe": [
+        "gh",
+        "--version"
+      ]
+    },
+    {
+      "alias": "setup-git",
+      "program": "git",
+      "probe": [
+        "git",
+        "--version"
+      ]
+    }
+  ]
+}

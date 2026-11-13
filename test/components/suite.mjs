@@ -19,7 +19,7 @@ export async function componentSuite(directory) {
    test('typed component '+name+': native arguments and return value',()=>{
     const command=cli?.commands.find(command=>command.name===name);
     const input=args(contract,command);
-    if(name==='setup'&&['depot','buildx','flipt'].includes(schema.name)){input.version=new Just('../invalid-version');const f=fixture();assert.throws(()=>native[name](input)());assert.equal(f.calls.length,0);return;}
+    if(name==='setup'&&['depot','buildx','flipt','git','gh','glab'].includes(schema.name)){input.version=new Just('../invalid-version');const f=fixture();assert.throws(()=>native[name](input)());assert.equal(f.calls.length,0);return;}
     if(cli){const f=fixture();const result=native[name](input)();assert.equal(result.outcome,'succeeded');assert.equal(result.reportPath,input.runDir+'/result.json');assert.equal(f.plans.length,1);assert.equal(f.output.length,0);return;}
     if(schema.name.startsWith('setup-')){input.version=new Just('../invalid-version');const f=fixture();assert.throws(()=>native[name](input)());assert.equal(f.calls.length,0);return;}
     if(['gemfury','cachix'].includes(schema.name)){fixture();const result=native[name](input)();assert.equal(result.uploaded??result.enabled,false);return;}

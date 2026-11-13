@@ -85,6 +85,10 @@ valueTokens field value = do
         let key = fromMaybe "" (Array.head (String.split (Pattern "=") entry))
         unless (key /= "" && String.contains (Pattern "=") entry && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ] || (field.style == "structured-assignments" && char == '/')) (CU.toCharArray key)) $
           Left (field.key <> " entries must be KEY=VALUE with valid native key characters")) values
+      when (field.style == "colon-assignments") $ traverse_ (\entry -> do
+        let key = fromMaybe "" (Array.head (String.split (Pattern ":") entry))
+        unless (key /= "" && String.contains (Pattern ":") entry && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ]) (CU.toCharArray key)) $
+          Left (field.key <> " entries must be KEY:VALUE with valid native key characters")) values
       pure values
     "strings" -> do
       values <- jsonValue value
@@ -177,7 +181,7 @@ executeWithSetup = executePrepared true
 executePrepared :: Boolean -> (String -> Effect Unit) -> String -> String -> Json -> Effect { outcome :: String, runDir :: String, reportPath :: String, stdoutPath :: String, stderrPath :: String }
 executePrepared allowSetup setupDependency name commandName json = do
   prepared <- either throw pure (prepare name commandName json)
-  let automaticSetup = allowSetup && (prepared.automaticSetup || Array.elem name [ "depot", "flipt" ])
+  let automaticSetup = allowSetup && (prepared.automaticSetup || Array.elem name [ "depot", "flipt", "git", "gh", "glab" ])
   os <- P.getOS >>= unwrap
   unless (Array.elem os [ "linux", "macos", "freebsd", "openbsd", "netbsd" ]) $
     throw ("Unsupported CLI host OS: " <> os)

@@ -37,6 +37,8 @@ def definitions():
                 dependencies.append({'alias': 'setup-bun', 'program': 'bun', 'probe': ['which', 'bun']})
         if name == 'depot':dependencies[0]['probe'] = ['depot', 'version']
         if name == 'flipt':dependencies[0]['probe'] = ['flipt', '--version']
+        if name in ['git','gh','glab']:dependencies[0]['probe'] = [name, 'version' if name=='glab' else '--version']
+        if name in ['gh','glab']:dependencies.append({'alias':'setup-git','program':'git','probe':['git','--version']})
         for d in dependencies:
             if d['alias'] not in modules or not d['program']:
                 raise ValueError(f'{name}: missing setup dependency {d}')
@@ -63,7 +65,7 @@ def source(name, requirements):
       '  unless (os == "linux" || os == "macos" || os == "freebsd" || os == "openbsd" || os == "netbsd") $',
       '    throw ("Unsupported setup dependency OS: " <> os)']
     call = lambda d: 'ensure ' + json.dumps(d['alias']) + ' [ ' + ', '.join(json.dumps(x) for x in d['probe']) + ' ]'
-    if name in ['buildx', 'cachix']:
+    if name in ['buildx', 'cachix', 'gh', 'glab']:
         lines += ['  ' + call(d) for d in requirements]
     elif name == 'nix-publish':
         lines += ['  ' + call(requirements[0])]
@@ -89,7 +91,7 @@ def source(name, requirements):
             lines += ['  when (executable == ' + json.dumps(program) + ') $ ensure ' + json.dumps(main['alias']) + ' [ "which", ' + json.dumps(program) + ' ]']
     for program in {'dpkg':['dpkg','realpath'],'rpmbuild':['rpmspec','rpm','realpath']}.get(name,[]):
         lines += ['  ensure '+json.dumps(requirements[0]['alias'])+' [ \"which\", '+json.dumps(program)+' ]']
-    if name in ['buildx', 'cachix'] or (len(requirements) == 1 and name not in ['cmake', 'rustfmt']):
+    if name in ['buildx', 'cachix', 'gh', 'glab'] or (len(requirements) == 1 and name not in ['cmake', 'rustfmt']):
         lines = [line.replace('ensureFor executable = do', 'ensureFor _ = do') for line in lines]
     return '\n'.join(lines) + '\n'
 

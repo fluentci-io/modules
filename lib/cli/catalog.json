@@ -42274,5 +42274,4022 @@
       }
     ],
     "csvLists": true
+  },
+  {
+    "name": "git",
+    "path": "version-control/git",
+    "program": "git",
+    "title": "Git",
+    "docs": "https://railpack.com/reference/cli",
+    "notes": "Use setup-railpack or provide railpack on PATH. prepare is the CI-oriented planning command; it creates plan/info JSON files and propagates planning errors. build requires a reachable BuildKit daemon (BUILDKIT_HOST) and uses native Docker registry credentials. Use envNames to forward selected host environment variables by name; values remain outside the generated command arguments. Build commands in configuration are trusted project code.",
+    "environment": {
+      "CI": "true",
+      "GIT_TERMINAL_PROMPT": "0"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Required comma-separated git command and literal argument tokens; never JSON."
+          }
+        ],
+        "description": "Run any native git command with literal argv.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Report the installed git CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "clone",
+        "args": [
+          "clone"
+        ],
+        "fields": [
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch or tag to check out."
+          },
+          {
+            "key": "depth",
+            "kind": "integer",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Positive shallow clone depth."
+          },
+          {
+            "key": "filter",
+            "kind": "string",
+            "flag": "--filter",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Partial clone filter, for example blob:none."
+          },
+          {
+            "key": "recursive",
+            "kind": "boolean",
+            "flag": "--recurse-submodules",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Clone submodules recursively."
+          },
+          {
+            "key": "singleBranch",
+            "kind": "boolean",
+            "flag": "--single-branch",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fetch only one branch."
+          },
+          {
+            "key": "url",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Repository URL or local source path."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Destination checkout directory; native Git chooses the default when omitted."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Clone a repository with optional shallow, partial and submodule checkout.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "fetch",
+        "args": [
+          "fetch"
+        ],
+        "fields": [
+          {
+            "key": "prune",
+            "kind": "boolean",
+            "flag": "--prune",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Remove stale remote-tracking refs."
+          },
+          {
+            "key": "tags",
+            "kind": "boolean",
+            "flag": "--tags",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fetch all tags."
+          },
+          {
+            "key": "depth",
+            "kind": "integer",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Positive shallow fetch depth."
+          },
+          {
+            "key": "remote",
+            "kind": "string",
+            "flag": "",
+            "default": "origin",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Remote name or URL."
+          },
+          {
+            "key": "refspecs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Refspecs to fetch; omit for the remote defaults."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Fetch selected refs and tags without merging them.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "checkout",
+        "args": [
+          "checkout"
+        ],
+        "fields": [
+          {
+            "key": "detach",
+            "kind": "boolean",
+            "flag": "--detach",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Check out a detached revision."
+          },
+          {
+            "key": "ref",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Revision or existing branch to check out."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Check out a revision while retaining native dirty-worktree safety checks.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "status",
+        "args": [
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "porcelain",
+            "kind": "string",
+            "flag": "--porcelain",
+            "default": "v1",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "v1",
+              "v2"
+            ],
+            "description": "Stable machine-readable status format."
+          },
+          {
+            "key": "branch",
+            "kind": "boolean",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Include branch information."
+          },
+          {
+            "key": "paths",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional pathspecs limiting status."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect checkout and index state with stable machine-readable output.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "diff",
+        "args": [
+          "diff"
+        ],
+        "fields": [
+          {
+            "key": "exitCode",
+            "kind": "boolean",
+            "flag": "--exit-code",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fail when differences exist."
+          },
+          {
+            "key": "cached",
+            "kind": "boolean",
+            "flag": "--cached",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Compare the staged index."
+          },
+          {
+            "key": "stat",
+            "kind": "boolean",
+            "flag": "--stat",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Print a diff summary."
+          },
+          {
+            "key": "revisions",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional revisions and path tokens in native order."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Compare source revisions or the working tree and optionally fail on differences.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "log",
+        "args": [
+          "log"
+        ],
+        "fields": [
+          {
+            "key": "maxCount",
+            "kind": "integer",
+            "flag": "--max-count",
+            "default": 20,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Maximum commits to print."
+          },
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "%H %s",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Native Git log format."
+          },
+          {
+            "key": "revision",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional revision range."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Read bounded commit history for release notes or change detection.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "show",
+        "args": [
+          "show"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Native commit formatting string."
+          },
+          {
+            "key": "stat",
+            "kind": "boolean",
+            "flag": "--stat",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Print changed-file statistics."
+          },
+          {
+            "key": "object",
+            "kind": "string",
+            "flag": "",
+            "default": "HEAD",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Revision or object:path selector."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect a selected commit, tree or versioned file.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "rev_parse",
+        "args": [
+          "rev-parse"
+        ],
+        "fields": [
+          {
+            "key": "verify",
+            "kind": "boolean",
+            "flag": "--verify",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Require one valid revision."
+          },
+          {
+            "key": "revision",
+            "kind": "string",
+            "flag": "",
+            "default": "HEAD",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Revision expression to resolve."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Resolve an exact commit or object identifier.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "describe",
+        "args": [
+          "describe"
+        ],
+        "fields": [
+          {
+            "key": "tags",
+            "kind": "boolean",
+            "flag": "--tags",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Include lightweight tags."
+          },
+          {
+            "key": "always",
+            "kind": "boolean",
+            "flag": "--always",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fall back to an abbreviated object name."
+          },
+          {
+            "key": "match",
+            "kind": "string",
+            "flag": "--match",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Tag name pattern."
+          },
+          {
+            "key": "revision",
+            "kind": "string",
+            "flag": "",
+            "default": "HEAD",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Commit to describe."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Derive a release identifier from Git tags and commit history.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "add",
+        "args": [
+          "add"
+        ],
+        "fields": [
+          {
+            "key": "paths",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Required pathspecs to stage; directories are allowed."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Stage explicitly selected paths without implicitly staging all files.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "commit",
+        "args": [
+          "commit"
+        ],
+        "fields": [
+          {
+            "key": "message",
+            "kind": "string",
+            "flag": "--message",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal commit message; an editor is never opened."
+          },
+          {
+            "key": "allowEmpty",
+            "kind": "boolean",
+            "flag": "--allow-empty",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Allow a commit with no staged changes."
+          },
+          {
+            "key": "signoff",
+            "kind": "boolean",
+            "flag": "--signoff",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Add a signoff trailer."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a commit from staged changes using the inherited Git author identity.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "tag",
+        "args": [
+          "tag"
+        ],
+        "fields": [
+          {
+            "key": "message",
+            "kind": "string",
+            "flag": "--message",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Annotated tag message; omit for a lightweight tag."
+          },
+          {
+            "key": "sign",
+            "kind": "boolean",
+            "flag": "--sign",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Cryptographically sign the tag using configured signing credentials."
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "New tag name."
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "",
+            "default": "HEAD",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Commit or object to tag."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create an explicitly named release tag without forcing replacement.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "push",
+        "args": [
+          "push"
+        ],
+        "fields": [
+          {
+            "key": "tags",
+            "kind": "boolean",
+            "flag": "--tags",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Push all local tags."
+          },
+          {
+            "key": "atomic",
+            "kind": "boolean",
+            "flag": "--atomic",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Require atomic remote ref updates."
+          },
+          {
+            "key": "setUpstream",
+            "kind": "boolean",
+            "flag": "--set-upstream",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Set upstream tracking for pushed branches."
+          },
+          {
+            "key": "forceWithLease",
+            "kind": "boolean",
+            "flag": "--force-with-lease",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicitly request guarded forced ref updates; omitted by default."
+          },
+          {
+            "key": "remote",
+            "kind": "string",
+            "flag": "",
+            "default": "origin",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Remote name or URL."
+          },
+          {
+            "key": "refspecs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional refspecs in native order."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Push selected refs; force updates and tag publication are opt-in.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pull",
+        "args": [
+          "pull"
+        ],
+        "fields": [
+          {
+            "key": "ffOnly",
+            "kind": "boolean",
+            "flag": "--ff-only",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Require a fast-forward update."
+          },
+          {
+            "key": "remote",
+            "kind": "string",
+            "flag": "",
+            "default": "origin",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Remote name or URL."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional branch to pull."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Update the checkout, requiring a fast-forward by default.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "submodule_update",
+        "args": [
+          "submodule",
+          "update"
+        ],
+        "fields": [
+          {
+            "key": "init",
+            "kind": "boolean",
+            "flag": "--init",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Initialize selected submodules."
+          },
+          {
+            "key": "recursive",
+            "kind": "boolean",
+            "flag": "--recursive",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Update nested submodules."
+          },
+          {
+            "key": "depth",
+            "kind": "integer",
+            "flag": "--depth",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Positive shallow submodule depth."
+          },
+          {
+            "key": "paths",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional submodule pathspecs."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Initialize and update submodules at their committed revisions.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ls_remote",
+        "args": [
+          "ls-remote"
+        ],
+        "fields": [
+          {
+            "key": "tags",
+            "kind": "boolean",
+            "flag": "--tags",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "List tags only."
+          },
+          {
+            "key": "heads",
+            "kind": "boolean",
+            "flag": "--heads",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "List branch heads only."
+          },
+          {
+            "key": "remote",
+            "kind": "string",
+            "flag": "",
+            "default": "origin",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Remote URL or configured name."
+          },
+          {
+            "key": "patterns",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional ref-name patterns."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect remote refs without checking out or modifying repository contents.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "archive",
+        "args": [
+          "archive"
+        ],
+        "fields": [
+          {
+            "key": "format",
+            "kind": "string",
+            "flag": "--format",
+            "default": "tar",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "tar",
+              "zip"
+            ],
+            "description": "Archive format."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination archive file."
+          },
+          {
+            "key": "prefix",
+            "kind": "string",
+            "flag": "--prefix",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Prefix for paths inside the archive."
+          },
+          {
+            "key": "tree",
+            "kind": "string",
+            "flag": "",
+            "default": "HEAD",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Tree or commit to archive."
+          },
+          {
+            "key": "paths",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional paths to include."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a source release archive from a selected Git tree.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "config_get",
+        "args": [
+          "config",
+          "--get"
+        ],
+        "fields": [
+          {
+            "key": "key",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Git configuration key to query."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Read one configured Git value without modifying configuration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "remote_get_url",
+        "args": [
+          "remote",
+          "get-url"
+        ],
+        "fields": [
+          {
+            "key": "remote",
+            "kind": "string",
+            "flag": "",
+            "default": "origin",
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Remote name to inspect."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Read the configured repository remote URL.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
+    "name": "gh",
+    "path": "version-control/gh",
+    "program": "gh",
+    "title": "GitHub CLI",
+    "docs": "https://railpack.com/reference/cli",
+    "notes": "Use setup-railpack or provide railpack on PATH. prepare is the CI-oriented planning command; it creates plan/info JSON files and propagates planning errors. build requires a reachable BuildKit daemon (BUILDKIT_HOST) and uses native Docker registry credentials. Use envNames to forward selected host environment variables by name; values remain outside the generated command arguments. Build commands in configuration are trusted project code.",
+    "environment": {
+      "CI": "true",
+      "GIT_TERMINAL_PROMPT": "0",
+      "GH_PROMPT_DISABLED": "1"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Required comma-separated gh command and literal argument tokens; never JSON."
+          }
+        ],
+        "description": "Run any native gh command with literal argv.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "--version"
+        ],
+        "fields": [],
+        "description": "Report the installed gh CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth_status",
+        "args": [
+          "auth",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "hostname",
+            "kind": "string",
+            "flag": "--hostname",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "GitHub hostname to inspect."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Check existing GitHub authentication without interactive login.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "repo_view",
+        "args": [
+          "repo",
+          "view"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Repository OWNER/REPO or URL; omit to use the current checkout."
+          },
+          {
+            "key": "jsonFields",
+            "kind": "csv",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "style": "comma-list",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated result field names, such as name,url,defaultBranchRef. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect repository metadata.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_create",
+        "args": [
+          "pr",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "title",
+            "kind": "string",
+            "flag": "--title",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Pull request title."
+          },
+          {
+            "key": "body",
+            "kind": "string",
+            "flag": "--body",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal pull request description; no editor is opened."
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Base branch."
+          },
+          {
+            "key": "head",
+            "kind": "string",
+            "flag": "--head",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Head branch or OWNER:BRANCH."
+          },
+          {
+            "key": "draft",
+            "kind": "boolean",
+            "flag": "--draft",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Create a draft pull request."
+          },
+          {
+            "key": "labels",
+            "kind": "csv",
+            "flag": "--label",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated label names. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "reviewers",
+            "kind": "csv",
+            "flag": "--reviewer",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated reviewer handles or team names. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "assignees",
+            "kind": "csv",
+            "flag": "--assignee",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated assignee handles. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a pull request with explicit noninteractive title and description.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_view",
+        "args": [
+          "pr",
+          "view"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Pull request number, URL or branch selector."
+          },
+          {
+            "key": "jsonFields",
+            "kind": "csv",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "style": "comma-list",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated result fields. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Read a pull request and its review state.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_list",
+        "args": [
+          "pr",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "state",
+            "kind": "string",
+            "flag": "--state",
+            "default": "open",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "open",
+              "closed",
+              "merged",
+              "all"
+            ],
+            "description": "Pull request state filter."
+          },
+          {
+            "key": "base",
+            "kind": "string",
+            "flag": "--base",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Base branch filter."
+          },
+          {
+            "key": "head",
+            "kind": "string",
+            "flag": "--head",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Head branch filter."
+          },
+          {
+            "key": "limit",
+            "kind": "integer",
+            "flag": "--limit",
+            "default": 30,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Maximum results."
+          },
+          {
+            "key": "jsonFields",
+            "kind": "csv",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "style": "comma-list",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated result fields. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "List pull requests for automated review or release workflows.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_checkout",
+        "args": [
+          "pr",
+          "checkout"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Pull request number, URL or branch selector."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Local branch name."
+          },
+          {
+            "key": "detach",
+            "kind": "boolean",
+            "flag": "--detach",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Use a detached checkout."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Check out a pull request into the working tree.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_checks",
+        "args": [
+          "pr",
+          "checks"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Pull request number, URL or branch selector."
+          },
+          {
+            "key": "watch",
+            "kind": "boolean",
+            "flag": "--watch",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Wait for checks to complete."
+          },
+          {
+            "key": "failFast",
+            "kind": "boolean",
+            "flag": "--fail-fast",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Stop watching after the first failed check."
+          },
+          {
+            "key": "required",
+            "kind": "boolean",
+            "flag": "--required",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Show required checks only."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect or wait for pull request checks; native failing and pending statuses propagate.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_comment",
+        "args": [
+          "pr",
+          "comment"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Pull request number, URL or branch selector."
+          },
+          {
+            "key": "body",
+            "kind": "string",
+            "flag": "--body",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal review or pipeline comment."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Publish a pipeline comment to a pull request.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "pr_merge",
+        "args": [
+          "pr",
+          "merge"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "method",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "prefix:--",
+            "scope": "option",
+            "choices": [
+              "squash",
+              "merge",
+              "rebase"
+            ],
+            "description": "Required merge strategy: squash, merge, or rebase; no interactive selection."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Pull request number, URL or branch selector."
+          },
+          {
+            "key": "auto",
+            "kind": "boolean",
+            "flag": "--auto",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Enable automatic merge after checks pass."
+          },
+          {
+            "key": "deleteBranch",
+            "kind": "boolean",
+            "flag": "--delete-branch",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Delete the branch after merge."
+          },
+          {
+            "key": "matchHeadCommit",
+            "kind": "string",
+            "flag": "--match-head-commit",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Require the expected head commit before merging."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Merge a reviewed pull request using an explicitly selected strategy; branch deletion is opt-in.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_create",
+        "args": [
+          "release",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Release tag."
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional existing release asset paths; filenames must be literal, without shell globs."
+          },
+          {
+            "key": "title",
+            "kind": "string",
+            "flag": "--title",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Release title."
+          },
+          {
+            "key": "notes",
+            "kind": "string",
+            "flag": "--notes",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal release notes."
+          },
+          {
+            "key": "notesFile",
+            "kind": "string",
+            "flag": "--notes-file",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing release-notes file."
+          },
+          {
+            "key": "target",
+            "kind": "string",
+            "flag": "--target",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Commit or branch used for a missing tag."
+          },
+          {
+            "key": "draft",
+            "kind": "boolean",
+            "flag": "--draft",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Create a draft release."
+          },
+          {
+            "key": "prerelease",
+            "kind": "boolean",
+            "flag": "--prerelease",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Mark as a prerelease."
+          },
+          {
+            "key": "generateNotes",
+            "kind": "boolean",
+            "flag": "--generate-notes",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Generate release notes on GitHub."
+          },
+          {
+            "key": "verifyTag",
+            "kind": "boolean",
+            "flag": "--verify-tag",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Require the tag to already exist."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a GitHub release and optionally attach release assets.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_upload",
+        "args": [
+          "release",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Existing release tag."
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "Required comma-separated existing asset paths."
+          },
+          {
+            "key": "clobber",
+            "kind": "boolean",
+            "flag": "--clobber",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicitly replace existing assets with matching names."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Upload assets to an existing release; replacement is opt-in.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_download",
+        "args": [
+          "release",
+          "download"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Release tag; omitted selects the native latest release."
+          },
+          {
+            "key": "patterns",
+            "kind": "csv",
+            "flag": "--pattern",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated asset filename patterns. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "--dir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination download directory."
+          },
+          {
+            "key": "clobber",
+            "kind": "boolean",
+            "flag": "--clobber",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicitly overwrite existing files."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Download selected release assets.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "workflow_run",
+        "args": [
+          "workflow",
+          "run"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "workflow",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Workflow ID, name or filename."
+          },
+          {
+            "key": "ref",
+            "kind": "string",
+            "flag": "--ref",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch or tag to dispatch."
+          },
+          {
+            "key": "inputs",
+            "kind": "csv",
+            "flag": "--raw-field",
+            "default": null,
+            "required": false,
+            "style": "assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated workflow input KEY=VALUE entries; values stay strings. Empty entries are rejected; CSV quotes preserve literal commas.",
+            "sample": "key=value"
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Dispatch a GitHub Actions workflow with named scalar inputs.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_list",
+        "args": [
+          "run",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "workflow",
+            "kind": "string",
+            "flag": "--workflow",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Workflow selector."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch filter."
+          },
+          {
+            "key": "status",
+            "kind": "string",
+            "flag": "--status",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Native run status filter."
+          },
+          {
+            "key": "limit",
+            "kind": "integer",
+            "flag": "--limit",
+            "default": 20,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Maximum results."
+          },
+          {
+            "key": "jsonFields",
+            "kind": "csv",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "style": "comma-list",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated result fields. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "List workflow runs for pipeline orchestration.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_view",
+        "args": [
+          "run",
+          "view"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "runId",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Workflow run ID."
+          },
+          {
+            "key": "exitStatus",
+            "kind": "boolean",
+            "flag": "--exit-status",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fail when the run failed."
+          },
+          {
+            "key": "log",
+            "kind": "boolean",
+            "flag": "--log",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Print job logs."
+          },
+          {
+            "key": "jsonFields",
+            "kind": "csv",
+            "flag": "--json",
+            "default": null,
+            "required": false,
+            "style": "comma-list",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated result fields. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect a workflow run and propagate its failure status.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_watch",
+        "args": [
+          "run",
+          "watch"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "runId",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Workflow run ID."
+          },
+          {
+            "key": "exitStatus",
+            "kind": "boolean",
+            "flag": "--exit-status",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fail when the watched run failed."
+          },
+          {
+            "key": "interval",
+            "kind": "integer",
+            "flag": "--interval",
+            "default": 3,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Polling interval in seconds."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Wait for a workflow run and propagate failure to the pipeline.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_rerun",
+        "args": [
+          "run",
+          "rerun"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "runId",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Workflow run ID."
+          },
+          {
+            "key": "failed",
+            "kind": "boolean",
+            "flag": "--failed",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Rerun only failed jobs."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Rerun a selected workflow run or its failed jobs.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "run_cancel",
+        "args": [
+          "run",
+          "cancel"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "runId",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Workflow run ID."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Cancel a selected workflow run.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "api",
+        "args": [
+          "api"
+        ],
+        "fields": [
+          {
+            "key": "endpoint",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "GitHub REST endpoint or graphql."
+          },
+          {
+            "key": "method",
+            "kind": "string",
+            "flag": "--method",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "HTTP method such as GET or POST."
+          },
+          {
+            "key": "hostname",
+            "kind": "string",
+            "flag": "--hostname",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "GitHub hostname."
+          },
+          {
+            "key": "fields",
+            "kind": "csv",
+            "flag": "--raw-field",
+            "default": null,
+            "required": false,
+            "style": "assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated request KEY=VALUE fields. Empty entries are rejected; CSV quotes preserve literal commas.",
+            "sample": "key=value"
+          },
+          {
+            "key": "inputFile",
+            "kind": "string",
+            "flag": "--input",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing request-body file; no JSON object is required as a CLI argument."
+          },
+          {
+            "key": "paginate",
+            "kind": "boolean",
+            "flag": "--paginate",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fetch all response pages."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Call the authenticated GitHub API using scalar fields or a request file.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
+  },
+  {
+    "name": "glab",
+    "path": "version-control/glab",
+    "program": "glab",
+    "title": "GitLab CLI",
+    "docs": "https://railpack.com/reference/cli",
+    "notes": "Use setup-railpack or provide railpack on PATH. prepare is the CI-oriented planning command; it creates plan/info JSON files and propagates planning errors. build requires a reachable BuildKit daemon (BUILDKIT_HOST) and uses native Docker registry credentials. Use envNames to forward selected host environment variables by name; values remain outside the generated command arguments. Build commands in configuration are trusted project code.",
+    "environment": {
+      "CI": "true",
+      "GIT_TERMINAL_PROMPT": "0"
+    },
+    "commands": [
+      {
+        "name": "run",
+        "args": [],
+        "fields": [
+          {
+            "key": "arguments",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Required comma-separated glab command and literal argument tokens; never JSON."
+          }
+        ],
+        "description": "Run any native glab command with literal argv.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "version",
+        "args": [
+          "version"
+        ],
+        "fields": [],
+        "description": "Report the installed glab CLI version.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "auth_status",
+        "args": [
+          "auth",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "hostname",
+            "kind": "string",
+            "flag": "--hostname",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "GitLab hostname to inspect."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Check inherited GitLab authentication without interactive login.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "repo_view",
+        "args": [
+          "repo",
+          "view"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect GitLab repository metadata without opening a browser.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "mr_create",
+        "args": [
+          "mr",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "title",
+            "kind": "string",
+            "flag": "--title",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Merge request title."
+          },
+          {
+            "key": "description",
+            "kind": "string",
+            "flag": "--description",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal merge request description."
+          },
+          {
+            "key": "sourceBranch",
+            "kind": "string",
+            "flag": "--source-branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Source branch."
+          },
+          {
+            "key": "targetBranch",
+            "kind": "string",
+            "flag": "--target-branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target branch."
+          },
+          {
+            "key": "draft",
+            "kind": "boolean",
+            "flag": "--draft",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Create a draft merge request."
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Skip confirmation after explicit title and description."
+          },
+          {
+            "key": "labels",
+            "kind": "csv",
+            "flag": "--label",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated label names. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "reviewers",
+            "kind": "csv",
+            "flag": "--reviewer",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated reviewer handles. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "assignees",
+            "kind": "csv",
+            "flag": "--assignee",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated assignee handles. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a noninteractive merge request with explicit title and description.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "mr_view",
+        "args": [
+          "mr",
+          "view"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Merge request IID, branch or URL selector."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json",
+              "text"
+            ],
+            "description": "Result format."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Read a merge request and its state.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "mr_list",
+        "args": [
+          "mr",
+          "list"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "sourceBranch",
+            "kind": "string",
+            "flag": "--source-branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Source branch filter."
+          },
+          {
+            "key": "targetBranch",
+            "kind": "string",
+            "flag": "--target-branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target branch filter."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json",
+              "text"
+            ],
+            "description": "Result format."
+          },
+          {
+            "key": "perPage",
+            "kind": "integer",
+            "flag": "--per-page",
+            "default": 30,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Results per page."
+          },
+          {
+            "key": "page",
+            "kind": "integer",
+            "flag": "--page",
+            "default": 1,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Page number."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "List merge requests in a machine-readable format.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "mr_checkout",
+        "args": [
+          "mr",
+          "checkout"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Merge request IID, branch or URL selector."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Local branch name."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Check out a merge request locally.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "mr_note",
+        "args": [
+          "mr",
+          "note"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Merge request IID, branch or URL selector."
+          },
+          {
+            "key": "message",
+            "kind": "string",
+            "flag": "--message",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal merge request comment."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Publish a pipeline comment on a merge request.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "mr_merge",
+        "args": [
+          "mr",
+          "merge"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "number",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Merge request IID, branch or URL selector."
+          },
+          {
+            "key": "yes",
+            "kind": "boolean",
+            "flag": "--yes",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Skip confirmation for this explicitly requested merge."
+          },
+          {
+            "key": "squash",
+            "kind": "boolean",
+            "flag": "--squash",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Squash commits before merging."
+          },
+          {
+            "key": "removeSourceBranch",
+            "kind": "boolean",
+            "flag": "--remove-source-branch",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Explicitly delete the source branch after merge."
+          },
+          {
+            "key": "sha",
+            "kind": "string",
+            "flag": "--sha",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Expected source commit SHA."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Merge a selected merge request; source branch deletion remains opt-in.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_create",
+        "args": [
+          "release",
+          "create"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Release tag."
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "Optional asset paths."
+          },
+          {
+            "key": "name",
+            "kind": "string",
+            "flag": "--name",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Release title."
+          },
+          {
+            "key": "notes",
+            "kind": "string",
+            "flag": "--notes",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Literal release notes."
+          },
+          {
+            "key": "notesFile",
+            "kind": "string",
+            "flag": "--notes-file",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing release-notes file."
+          },
+          {
+            "key": "ref",
+            "kind": "string",
+            "flag": "--ref",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Commit or branch used when creating a missing tag."
+          },
+          {
+            "key": "noUpdate",
+            "kind": "boolean",
+            "flag": "--no-update",
+            "default": true,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Refuse to update an existing release."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a GitLab release and attach optional assets; existing releases are protected by default.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_upload",
+        "args": [
+          "release",
+          "upload"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Existing release tag."
+          },
+          {
+            "key": "files",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "Required comma-separated existing release asset paths."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Upload files to an existing GitLab release.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "release_download",
+        "args": [
+          "release",
+          "download"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "tag",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Release tag; omitted selects the native latest release."
+          },
+          {
+            "key": "assetNames",
+            "kind": "csv",
+            "flag": "--asset-name",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated asset filename patterns. Empty entries are rejected; CSV quotes preserve literal commas."
+          },
+          {
+            "key": "directory",
+            "kind": "string",
+            "flag": "--dir",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Destination directory."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Download selected GitLab release assets.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci_run",
+        "args": [
+          "ci",
+          "run"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch or ref to run."
+          },
+          {
+            "key": "mr",
+            "kind": "boolean",
+            "flag": "--mr",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Run the merge request pipeline."
+          },
+          {
+            "key": "variables",
+            "kind": "csv",
+            "flag": "--variables-env",
+            "default": null,
+            "required": false,
+            "style": "colon-assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated KEY:VALUE pipeline variables. Empty entries are rejected; CSV quotes preserve literal commas.",
+            "sample": "key:value"
+          },
+          {
+            "key": "inputs",
+            "kind": "csv",
+            "flag": "--input",
+            "default": null,
+            "required": false,
+            "style": "colon-assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated KEY:VALUE or KEY:type(value) pipeline inputs. Empty entries are rejected; CSV quotes preserve literal commas.",
+            "sample": "key:value"
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Create a GitLab pipeline with named variables or inputs.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci_status",
+        "args": [
+          "ci",
+          "status"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch selector."
+          },
+          {
+            "key": "live",
+            "kind": "boolean",
+            "flag": "--live",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Watch pipeline status until completion."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Inspect or watch a GitLab pipeline status.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci_get",
+        "args": [
+          "ci",
+          "get"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "pipelineId",
+            "kind": "integer",
+            "flag": "--pipeline-id",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Pipeline ID."
+          },
+          {
+            "key": "branch",
+            "kind": "string",
+            "flag": "--branch",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch selector."
+          },
+          {
+            "key": "output",
+            "kind": "string",
+            "flag": "--output",
+            "default": "json",
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [
+              "json",
+              "text"
+            ],
+            "description": "Result format."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Read detailed pipeline information.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci_retry",
+        "args": [
+          "ci",
+          "retry"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "job",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Required job ID or job name; prevents interactive job selection."
+          },
+          {
+            "key": "pipelineId",
+            "kind": "integer",
+            "flag": "--pipeline-id",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Pipeline to search for the selected job."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Retry one explicitly selected GitLab CI job, optionally within a selected pipeline.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci_cancel",
+        "args": [
+          "ci",
+          "cancel",
+          "pipeline"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "pipelineId",
+            "kind": "integer",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "Pipeline ID to cancel."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Cancel one explicitly selected pipeline using glab ci cancel pipeline.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "ci_lint",
+        "args": [
+          "ci",
+          "lint"
+        ],
+        "fields": [
+          {
+            "key": "repo",
+            "kind": "string",
+            "flag": "--repo",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Target OWNER/REPO, GitLab group/project, or repository URL; omit to use the local checkout."
+          },
+          {
+            "key": "file",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "positional",
+            "choices": [],
+            "description": "Existing GitLab CI configuration file."
+          },
+          {
+            "key": "dryRun",
+            "kind": "boolean",
+            "flag": "--dry-run",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Simulate pipeline creation."
+          },
+          {
+            "key": "ref",
+            "kind": "string",
+            "flag": "--ref",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "Branch or tag used for simulation."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Validate GitLab CI configuration using the native server lint API.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      },
+      {
+        "name": "api",
+        "args": [
+          "api"
+        ],
+        "fields": [
+          {
+            "key": "endpoint",
+            "kind": "string",
+            "flag": "",
+            "default": null,
+            "required": true,
+            "style": "value",
+            "scope": "positional",
+            "choices": [],
+            "description": "GitLab API endpoint path."
+          },
+          {
+            "key": "method",
+            "kind": "string",
+            "flag": "--method",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "HTTP request method."
+          },
+          {
+            "key": "hostname",
+            "kind": "string",
+            "flag": "--hostname",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "option",
+            "choices": [],
+            "description": "GitLab hostname."
+          },
+          {
+            "key": "fields",
+            "kind": "csv",
+            "flag": "--raw-field",
+            "default": null,
+            "required": false,
+            "style": "assignments",
+            "scope": "option",
+            "choices": [],
+            "description": "Comma-separated request KEY=VALUE fields. Empty entries are rejected; CSV quotes preserve literal commas.",
+            "sample": "key=value"
+          },
+          {
+            "key": "inputFile",
+            "kind": "string",
+            "flag": "--input",
+            "default": null,
+            "required": false,
+            "style": "file",
+            "scope": "option",
+            "choices": [],
+            "description": "Existing request-body file."
+          },
+          {
+            "key": "paginate",
+            "kind": "boolean",
+            "flag": "--paginate",
+            "default": null,
+            "required": false,
+            "style": "switch",
+            "scope": "option",
+            "choices": [],
+            "description": "Fetch every result page."
+          },
+          {
+            "key": "extraArgs",
+            "kind": "csv",
+            "flag": "",
+            "default": null,
+            "required": false,
+            "style": "value",
+            "scope": "raw",
+            "choices": [],
+            "description": "Comma-separated additional literal native tokens; no shell expansion. Empty entries are rejected; CSV quotes preserve literal commas."
+          }
+        ],
+        "description": "Call the authenticated GitLab API with scalar fields or a body file.",
+        "program": "",
+        "environment": {},
+        "example": {}
+      }
+    ],
+    "csvLists": true
   }
 ]

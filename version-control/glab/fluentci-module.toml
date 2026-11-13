@@ -1,0 +1,12 @@
+name = "glab"
+version = "0.1.0"
+license = "MIT"
+sdk = "purescript"
+runtime = "component"
+entry = "entry.mjs"
+artifact = "dist/plugin.wasm"
+build = ["npm", "run", "build"]
+
+[dependencies]
+setup-glab = { path = "../../setup/glab", sdk = "purescript", runtime = "component" }
+setup-git = { path = "../../setup/git", sdk = "purescript", runtime = "component" }

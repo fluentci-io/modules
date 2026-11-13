@@ -1,0 +1,8 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-git": "path:name = \"setup-git\"\nruntime = \"component\"\npath = \"../../setup/git\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}
