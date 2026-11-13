@@ -11,6 +11,52 @@ Missing tools are installed on demand; existing tools and explicit executable ov
 are preserved. See [module dependencies](./docs/MODULE_DEPENDENCIES.md) for publishing
 and runtime behavior.
 
+## Usage
+
+Register source modules with the component runtime:
+
+```toml
+[[modules]]
+name = "gemfury"
+version = "0.2.0"
+path = "vendor/fluentci-modules/publishing/gemfury"
+sdk = "purescript"
+runtime = "component"
+```
+
+Build packages first, configure credentials in the CI environment, then upload:
+
+```sh
+fluentci run gemfury upload --files '["dist/app.deb","dist/app.rpm"]'
+fluentci run dpkg build --directory package --arch arm64 --output dist/app.deb
+fluentci run setup-node setup --version 22.14.0
+fluentci run cmake build --run-dir .fluentci/build --build-dir build --parallel 2
+fluentci run wrangler dry-run --run-dir .fluentci/worker --outdir dist/worker
+```
+
+Functions use native named arguments and return typed values. Run
+`fluentci run MODULE FUNCTION --help` for types, descriptions, and return values.
+The [component guide](./docs/COMPONENTS.md) covers migration from JSON plugin
+input, structured results, list arguments, building, and validation.
+
+## Development
+
+Install Node.js, Bun, PureScript, and Spago. Initialize the shared component
+compiler once, then build/test individual modules:
+
+```sh
+bun install --cwd lib/component --frozen-lockfile
+npm ci --prefix packaging/dpkg
+npm run build --prefix packaging/dpkg
+npm test --prefix packaging/dpkg
+node scripts/validate_wasm.mjs packaging/dpkg
+```
+
+Every `dist/plugin.wasm` is a native component with embedded typed contracts.
+CI checks compiled binary signatures and runs module tests on Linux/macOS;
+BSD package routing uses fixtures. See [CI](./.github/README.md),
+[CONTRIBUTING.md](./CONTRIBUTING.md), and the [audit](./docs/PIPELINE_AUDIT.md).
+
 ## Modules
 
 All modules are registered alphabetically in [fluentci.toml](./fluentci.toml).
@@ -229,52 +275,6 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 
 Each module has its own dependencies, build scripts, tests, and documentation.
 Source APIs also expose helpers for composition in PureScript pipelines.
-
-## Usage
-
-Register source modules with the component runtime:
-
-```toml
-[[modules]]
-name = "gemfury"
-version = "0.2.0"
-path = "vendor/fluentci-modules/publishing/gemfury"
-sdk = "purescript"
-runtime = "component"
-```
-
-Build packages first, configure credentials in the CI environment, then upload:
-
-```sh
-fluentci run gemfury upload --files '["dist/app.deb","dist/app.rpm"]'
-fluentci run dpkg build --directory package --arch arm64 --output dist/app.deb
-fluentci run setup-node setup --version 22.14.0
-fluentci run cmake build --run-dir .fluentci/build --build-dir build --parallel 2
-fluentci run wrangler dry-run --run-dir .fluentci/worker --outdir dist/worker
-```
-
-Functions use native named arguments and return typed values. Run
-`fluentci run MODULE FUNCTION --help` for types, descriptions, and return values.
-The [component guide](./docs/COMPONENTS.md) covers migration from JSON plugin
-input, structured results, list arguments, building, and validation.
-
-## Development
-
-Install Node.js, Bun, PureScript, and Spago. Initialize the shared component
-compiler once, then build/test individual modules:
-
-```sh
-bun install --cwd lib/component --frozen-lockfile
-npm ci --prefix packaging/dpkg
-npm run build --prefix packaging/dpkg
-npm test --prefix packaging/dpkg
-node scripts/validate_wasm.mjs packaging/dpkg
-```
-
-Every `dist/plugin.wasm` is a native component with embedded typed contracts.
-CI checks compiled binary signatures and runs module tests on Linux/macOS;
-BSD package routing uses fixtures. See [CI](./.github/README.md),
-[CONTRIBUTING.md](./CONTRIBUTING.md), and the [audit](./docs/PIPELINE_AUDIT.md).
 
 ## License
 
