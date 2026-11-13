@@ -26,7 +26,7 @@ test('Tangled fixtures select run and supply required native arguments',()=>{
 });
 test('tools without version use help or a real named operation',()=>{
  assert.equal(operation('codacy').name,'help');
- assert.equal(operation('ubicloud').name,'help');
+ assert.equal(operation('ubicloud').name,'version');
  assert.equal(operation('nix-publish').name,'check');
 });
 test('each CLI fixture supplies all required public arguments before failure assertions',()=>{

@@ -1,0 +1,1119 @@
+{
+  "repository": "https://github.com/ubicloud/ubicloud",
+  "revision": "cb7a521f29f81cc66bd4112d67fff3f33cad33bc",
+  "cliSource": "https://github.com/ubicloud/cli",
+  "commands": [
+    {
+      "function": "ai_api_key_create",
+      "source": "cli-commands/ai/api-key/create.rb",
+      "args": [
+        "ai",
+        "api-key",
+        "create"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "ai_api_key_list",
+      "source": "cli-commands/ai/api-key/list.rb",
+      "args": [
+        "ai",
+        "api-key",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "ai_api_key_destroy",
+      "source": "cli-commands/ai/api-key/post/destroy.rb",
+      "args": [
+        "ai",
+        "api-key",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ai_api_key_show",
+      "source": "cli-commands/ai/api-key/post/show.rb",
+      "args": [
+        "ai",
+        "api-key",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ai_endpoint_list",
+      "source": "cli-commands/ai/endpoint/list.rb",
+      "args": [
+        "ai",
+        "endpoint",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "al_search",
+      "source": "cli-commands/al/search.rb",
+      "args": [
+        "al",
+        "search"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "fw_list",
+      "source": "cli-commands/fw/list.rb",
+      "args": [
+        "fw",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "fw_add_rule",
+      "source": "cli-commands/fw/post/add-rule.rb",
+      "args": [
+        "fw",
+        "add-rule"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_attach_subnet",
+      "source": "cli-commands/fw/post/attach-subnet.rb",
+      "args": [
+        "fw",
+        "attach-subnet"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_create",
+      "source": "cli-commands/fw/post/create.rb",
+      "args": [
+        "fw",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_delete_rule",
+      "source": "cli-commands/fw/post/delete-rule.rb",
+      "args": [
+        "fw",
+        "delete-rule"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_destroy",
+      "source": "cli-commands/fw/post/destroy.rb",
+      "args": [
+        "fw",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_detach_subnet",
+      "source": "cli-commands/fw/post/detach-subnet.rb",
+      "args": [
+        "fw",
+        "detach-subnet"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_modify_rule",
+      "source": "cli-commands/fw/post/modify-rule.rb",
+      "args": [
+        "fw",
+        "modify-rule"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_rename",
+      "source": "cli-commands/fw/post/rename.rb",
+      "args": [
+        "fw",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_show",
+      "source": "cli-commands/fw/post/show.rb",
+      "args": [
+        "fw",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "fw_update_description",
+      "source": "cli-commands/fw/post/update-description.rb",
+      "args": [
+        "fw",
+        "update-description"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "gh_installation_list",
+      "source": "cli-commands/gh/installation/list.rb",
+      "args": [
+        "gh",
+        "installation",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "gh_installation_list_repositories",
+      "source": "cli-commands/gh/installation/post/list-repositories.rb",
+      "args": [
+        "gh",
+        "installation",
+        "list-repositories"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "gh_list_cache_entries",
+      "source": "cli-commands/gh/post/list-cache-entries.rb",
+      "args": [
+        "gh",
+        "list-cache-entries"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "gh_remove_all_cache_entries",
+      "source": "cli-commands/gh/post/remove-all-cache-entries.rb",
+      "args": [
+        "gh",
+        "remove-all-cache-entries"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "gh_remove_cache_entry",
+      "source": "cli-commands/gh/post/remove-cache-entry.rb",
+      "args": [
+        "gh",
+        "remove-cache-entry"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "help",
+      "source": "cli-commands/help.rb",
+      "args": [
+        "help"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "kc_list",
+      "source": "cli-commands/kc/list.rb",
+      "args": [
+        "kc",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "kc_create_nodepool",
+      "source": "cli-commands/kc/post/create-nodepool.rb",
+      "args": [
+        "kc",
+        "create-nodepool"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_create",
+      "source": "cli-commands/kc/post/create.rb",
+      "args": [
+        "kc",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_destroy_nodepool",
+      "source": "cli-commands/kc/post/destroy-nodepool.rb",
+      "args": [
+        "kc",
+        "destroy-nodepool"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_destroy",
+      "source": "cli-commands/kc/post/destroy.rb",
+      "args": [
+        "kc",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_kubeconfig",
+      "source": "cli-commands/kc/post/kubeconfig.rb",
+      "args": [
+        "kc",
+        "kubeconfig"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_rename",
+      "source": "cli-commands/kc/post/rename.rb",
+      "args": [
+        "kc",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_resize_nodepool",
+      "source": "cli-commands/kc/post/resize-nodepool.rb",
+      "args": [
+        "kc",
+        "resize-nodepool"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_retire_node",
+      "source": "cli-commands/kc/post/retire-node.rb",
+      "args": [
+        "kc",
+        "retire-node"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_show",
+      "source": "cli-commands/kc/post/show.rb",
+      "args": [
+        "kc",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_upgrade_nodepool",
+      "source": "cli-commands/kc/post/upgrade-nodepool.rb",
+      "args": [
+        "kc",
+        "upgrade-nodepool"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "kc_upgrade",
+      "source": "cli-commands/kc/post/upgrade.rb",
+      "args": [
+        "kc",
+        "upgrade"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_list",
+      "source": "cli-commands/lb/list.rb",
+      "args": [
+        "lb",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "lb_attach_vm",
+      "source": "cli-commands/lb/post/attach-vm.rb",
+      "args": [
+        "lb",
+        "attach-vm"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_create",
+      "source": "cli-commands/lb/post/create.rb",
+      "args": [
+        "lb",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_destroy",
+      "source": "cli-commands/lb/post/destroy.rb",
+      "args": [
+        "lb",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_detach_vm",
+      "source": "cli-commands/lb/post/detach-vm.rb",
+      "args": [
+        "lb",
+        "detach-vm"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_disable_ssl_certificate",
+      "source": "cli-commands/lb/post/disable-ssl-certificate.rb",
+      "args": [
+        "lb",
+        "disable-ssl-certificate"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_enable_ssl_certificate",
+      "source": "cli-commands/lb/post/enable-ssl-certificate.rb",
+      "args": [
+        "lb",
+        "enable-ssl-certificate"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_rename",
+      "source": "cli-commands/lb/post/rename.rb",
+      "args": [
+        "lb",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_show",
+      "source": "cli-commands/lb/post/show.rb",
+      "args": [
+        "lb",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "lb_update",
+      "source": "cli-commands/lb/post/update.rb",
+      "args": [
+        "lb",
+        "update"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_list",
+      "source": "cli-commands/mi/list.rb",
+      "args": [
+        "mi",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "mi_create_version",
+      "source": "cli-commands/mi/post/create-version.rb",
+      "args": [
+        "mi",
+        "create-version"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_create",
+      "source": "cli-commands/mi/post/create.rb",
+      "args": [
+        "mi",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_destroy_version",
+      "source": "cli-commands/mi/post/destroy-version.rb",
+      "args": [
+        "mi",
+        "destroy-version"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_destroy",
+      "source": "cli-commands/mi/post/destroy.rb",
+      "args": [
+        "mi",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_list_versions",
+      "source": "cli-commands/mi/post/list-versions.rb",
+      "args": [
+        "mi",
+        "list-versions"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_rename",
+      "source": "cli-commands/mi/post/rename.rb",
+      "args": [
+        "mi",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_set_latest",
+      "source": "cli-commands/mi/post/set-latest.rb",
+      "args": [
+        "mi",
+        "set-latest"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "mi_show",
+      "source": "cli-commands/mi/post/show.rb",
+      "args": [
+        "mi",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_list",
+      "source": "cli-commands/pg/list.rb",
+      "args": [
+        "pg",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "pg_add_bearer_metric_destination",
+      "source": "cli-commands/pg/post/add-bearer-metric-destination.rb",
+      "args": [
+        "pg",
+        "add-bearer-metric-destination"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_cert_auth_user",
+      "source": "cli-commands/pg/post/add-cert-auth-user.rb",
+      "args": [
+        "pg",
+        "add-cert-auth-user"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_config_entries",
+      "source": "cli-commands/pg/post/add-config-entries.rb",
+      "args": [
+        "pg",
+        "add-config-entries"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_firewall_rule",
+      "source": "cli-commands/pg/post/add-firewall-rule.rb",
+      "args": [
+        "pg",
+        "add-firewall-rule"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_metric_destination",
+      "source": "cli-commands/pg/post/add-metric-destination.rb",
+      "args": [
+        "pg",
+        "add-metric-destination"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_otlp_log_destination",
+      "source": "cli-commands/pg/post/add-otlp-log-destination.rb",
+      "args": [
+        "pg",
+        "add-otlp-log-destination"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_pgbouncer_config_entries",
+      "source": "cli-commands/pg/post/add-pgbouncer-config-entries.rb",
+      "args": [
+        "pg",
+        "add-pgbouncer-config-entries"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_add_syslog_log_destination",
+      "source": "cli-commands/pg/post/add-syslog-log-destination.rb",
+      "args": [
+        "pg",
+        "add-syslog-log-destination"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_ca_certificates",
+      "source": "cli-commands/pg/post/ca-certificates.rb",
+      "args": [
+        "pg",
+        "ca-certificates"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_create_backup_credentials",
+      "source": "cli-commands/pg/post/create-backup-credentials.rb",
+      "args": [
+        "pg",
+        "create-backup-credentials"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_create_client_cert_keypair",
+      "source": "cli-commands/pg/post/create-client-cert-keypair.rb",
+      "args": [
+        "pg",
+        "create-client-cert-keypair"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_create_read_replica",
+      "source": "cli-commands/pg/post/create-read-replica.rb",
+      "args": [
+        "pg",
+        "create-read-replica"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_create",
+      "source": "cli-commands/pg/post/create.rb",
+      "args": [
+        "pg",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_delete_firewall_rule",
+      "source": "cli-commands/pg/post/delete-firewall-rule.rb",
+      "args": [
+        "pg",
+        "delete-firewall-rule"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_delete_log_destination",
+      "source": "cli-commands/pg/post/delete-log-destination.rb",
+      "args": [
+        "pg",
+        "delete-log-destination"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_delete_metric_destination",
+      "source": "cli-commands/pg/post/delete-metric-destination.rb",
+      "args": [
+        "pg",
+        "delete-metric-destination"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_destroy",
+      "source": "cli-commands/pg/post/destroy.rb",
+      "args": [
+        "pg",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_get_logs",
+      "source": "cli-commands/pg/post/get-logs.rb",
+      "args": [
+        "pg",
+        "get-logs"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_list_backups",
+      "source": "cli-commands/pg/post/list-backups.rb",
+      "args": [
+        "pg",
+        "list-backups"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_list_servers",
+      "source": "cli-commands/pg/post/list-servers.rb",
+      "args": [
+        "pg",
+        "list-servers"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_modify_firewall_rule",
+      "source": "cli-commands/pg/post/modify-firewall-rule.rb",
+      "args": [
+        "pg",
+        "modify-firewall-rule"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_modify",
+      "source": "cli-commands/pg/post/modify.rb",
+      "args": [
+        "pg",
+        "modify"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_pg_dump",
+      "source": "cli-commands/pg/post/pg_dump.rb",
+      "args": [
+        "pg",
+        "pg_dump"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_pg_dumpall",
+      "source": "cli-commands/pg/post/pg_dumpall.rb",
+      "args": [
+        "pg",
+        "pg_dumpall"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_promote_read_replica",
+      "source": "cli-commands/pg/post/promote-read-replica.rb",
+      "args": [
+        "pg",
+        "promote-read-replica"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_psql",
+      "source": "cli-commands/pg/post/psql.rb",
+      "args": [
+        "pg",
+        "psql"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_recycle",
+      "source": "cli-commands/pg/post/recycle.rb",
+      "args": [
+        "pg",
+        "recycle"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_remove_cert_auth_user",
+      "source": "cli-commands/pg/post/remove-cert-auth-user.rb",
+      "args": [
+        "pg",
+        "remove-cert-auth-user"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_remove_config_entries",
+      "source": "cli-commands/pg/post/remove-config-entries.rb",
+      "args": [
+        "pg",
+        "remove-config-entries"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_remove_pgbouncer_config_entries",
+      "source": "cli-commands/pg/post/remove-pgbouncer-config-entries.rb",
+      "args": [
+        "pg",
+        "remove-pgbouncer-config-entries"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_rename",
+      "source": "cli-commands/pg/post/rename.rb",
+      "args": [
+        "pg",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_reset_superuser_password",
+      "source": "cli-commands/pg/post/reset-superuser-password.rb",
+      "args": [
+        "pg",
+        "reset-superuser-password"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_restart",
+      "source": "cli-commands/pg/post/restart.rb",
+      "args": [
+        "pg",
+        "restart"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_restore",
+      "source": "cli-commands/pg/post/restore.rb",
+      "args": [
+        "pg",
+        "restore"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_set_maintenance_window",
+      "source": "cli-commands/pg/post/set-maintenance-window.rb",
+      "args": [
+        "pg",
+        "set-maintenance-window"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_show_config",
+      "source": "cli-commands/pg/post/show-config.rb",
+      "args": [
+        "pg",
+        "show-config"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_show_default_config",
+      "source": "cli-commands/pg/post/show-default-config.rb",
+      "args": [
+        "pg",
+        "show-default-config"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_show_pgbouncer_config",
+      "source": "cli-commands/pg/post/show-pgbouncer-config.rb",
+      "args": [
+        "pg",
+        "show-pgbouncer-config"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_show_upgrade_status",
+      "source": "cli-commands/pg/post/show-upgrade-status.rb",
+      "args": [
+        "pg",
+        "show-upgrade-status"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_show",
+      "source": "cli-commands/pg/post/show.rb",
+      "args": [
+        "pg",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "pg_upgrade",
+      "source": "cli-commands/pg/post/upgrade.rb",
+      "args": [
+        "pg",
+        "upgrade"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ps_list",
+      "source": "cli-commands/ps/list.rb",
+      "args": [
+        "ps",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "ps_connect",
+      "source": "cli-commands/ps/post/connect.rb",
+      "args": [
+        "ps",
+        "connect"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ps_create",
+      "source": "cli-commands/ps/post/create.rb",
+      "args": [
+        "ps",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ps_destroy",
+      "source": "cli-commands/ps/post/destroy.rb",
+      "args": [
+        "ps",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ps_disconnect",
+      "source": "cli-commands/ps/post/disconnect.rb",
+      "args": [
+        "ps",
+        "disconnect"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ps_rename",
+      "source": "cli-commands/ps/post/rename.rb",
+      "args": [
+        "ps",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "ps_show",
+      "source": "cli-commands/ps/post/show.rb",
+      "args": [
+        "ps",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "sk_list",
+      "source": "cli-commands/sk/list.rb",
+      "args": [
+        "sk",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "sk_create",
+      "source": "cli-commands/sk/post/create.rb",
+      "args": [
+        "sk",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "sk_destroy",
+      "source": "cli-commands/sk/post/destroy.rb",
+      "args": [
+        "sk",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "sk_rename",
+      "source": "cli-commands/sk/post/rename.rb",
+      "args": [
+        "sk",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "sk_show",
+      "source": "cli-commands/sk/post/show.rb",
+      "args": [
+        "sk",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "sk_update",
+      "source": "cli-commands/sk/post/update.rb",
+      "args": [
+        "sk",
+        "update"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "version",
+      "source": "cli-commands/version.rb",
+      "args": [
+        "version"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "vm_list",
+      "source": "cli-commands/vm/list.rb",
+      "args": [
+        "vm",
+        "list"
+      ],
+      "resourceBeforeCommand": false
+    },
+    {
+      "function": "vm_create",
+      "source": "cli-commands/vm/post/create.rb",
+      "args": [
+        "vm",
+        "create"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_destroy",
+      "source": "cli-commands/vm/post/destroy.rb",
+      "args": [
+        "vm",
+        "destroy"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_rename",
+      "source": "cli-commands/vm/post/rename.rb",
+      "args": [
+        "vm",
+        "rename"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_restart",
+      "source": "cli-commands/vm/post/restart.rb",
+      "args": [
+        "vm",
+        "restart"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_scp",
+      "source": "cli-commands/vm/post/scp.rb",
+      "args": [
+        "vm",
+        "scp"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_serial_log",
+      "source": "cli-commands/vm/post/serial-log.rb",
+      "args": [
+        "vm",
+        "serial-log"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_set_maintenance_window",
+      "source": "cli-commands/vm/post/set-maintenance-window.rb",
+      "args": [
+        "vm",
+        "set-maintenance-window"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_sftp",
+      "source": "cli-commands/vm/post/sftp.rb",
+      "args": [
+        "vm",
+        "sftp"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_show",
+      "source": "cli-commands/vm/post/show.rb",
+      "args": [
+        "vm",
+        "show"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_ssh",
+      "source": "cli-commands/vm/post/ssh.rb",
+      "args": [
+        "vm",
+        "ssh"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_start",
+      "source": "cli-commands/vm/post/start.rb",
+      "args": [
+        "vm",
+        "start"
+      ],
+      "resourceBeforeCommand": true
+    },
+    {
+      "function": "vm_stop",
+      "source": "cli-commands/vm/post/stop.rb",
+      "args": [
+        "vm",
+        "stop"
+      ],
+      "resourceBeforeCommand": true
+    }
+  ]
+}

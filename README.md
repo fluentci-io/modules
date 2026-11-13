@@ -219,7 +219,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [trivy](./security/trivy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trivy/COMPONENT.md) |
 | [trufflehog](./security/trufflehog/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trufflehog/COMPONENT.md) |
 | [turborepo](./build/turborepo/README.md) | Run cached tasks, affected builds and workspace pruning. | `run-tasks`, `affected`, `prune`, [typed contract](./build/turborepo/COMPONENT.md) |
-| [ubicloud](./cloud/ubicloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `help`, [typed contract](./cloud/ubicloud/COMPONENT.md) |
+| [ubicloud](./cloud/ubicloud/README.md) | Manage cloud resources through all 123 reviewed ubi commands; requires UBI_TOKEN. | `vm-list`, `pg-create`, `kc-kubeconfig`, [typed contract](./cloud/ubicloud/COMPONENT.md) |
 | [uv](./package-management/uv/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `sync`, [typed contract](./package-management/uv/COMPONENT.md) |
 | [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |
 | [vercel](./deployment/vercel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/vercel/COMPONENT.md) |

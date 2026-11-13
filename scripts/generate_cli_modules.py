@@ -59,13 +59,14 @@ def generated():
                     argument = (field['flag'] + '=' if field['flag'] else '') + field['style'][7:] + '<value>'
                 elif field['style'] in ['separate','file-separate','directory-separate']:
                     argument = field['flag'] + ' <value>'
-                elif field['style'] == 'comma-list':
+                elif field['style'] in ['comma-list', 'assignment-list']:
                     argument = field['flag'] + '=<comma-separated values>'
                 elif field['style'] == 'space-list':
                     argument = field['flag'] + ' <values...>'
                 elif field['flag'] and field['style'] != 'switch':
                     argument += '=<value>'
                 kind = ('string (CSV)' if field['kind']=='csv' else field['kind']) + (' (' + ', '.join(field['choices']) + ')' if field['choices'] else '')
+                if field['scope'].startswith('before:'): argument += ' (before ' + field['scope'][7:] + ')'
                 docs.append(f'| `{field["key"]}` | `{kind}` | `{argument}`' + (' (global)' if field['scope']=='global' else '') + f' | {default} |')
             docs.append('')
         yield directory / 'OPTIONS.md', '\n'.join(docs)

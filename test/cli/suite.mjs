@@ -34,7 +34,11 @@ export async function suite(directory) {
       assert.equal(document.jobs, 1);
       const task = document.tasks[0];
       assert.equal(task.program, command.program || tool.program);
-      assert.deepEqual(task.args.slice(0, command.args.length), command.args);
+      const initial=inputFor(command);
+      const prefix=command.args.flatMap(arg=>[
+        ...command.fields.filter(field=>field.scope==='before:'+arg&&Object.hasOwn(initial,field.key)).map(field=>String(initial[field.key])),arg
+      ]);
+      assert.deepEqual(task.args.slice(0,prefix.length),prefix);
       assert.equal(task.cwd, '.');
       assert.equal(task.timeout_ms, 900000);
       for (const [key,value] of Object.entries({...tool.environment,...command.environment})) assert.equal(task.env[key],value);
@@ -81,7 +85,7 @@ export async function suite(directory) {
         }
         if (field.kind === 'string') invalid.push({...base,[field.key]:''},{...base,[field.key]:'bad\0value'});
         if (field.choices.length) invalid.push({...base,[field.key]:'invalid-choice'});
-        if (field.scope === 'positional') invalid.push({...base,[field.key]:field.kind === 'strings'?['--flag']:'--flag'});
+        if (field.scope === 'positional' || (field.scope.startsWith('before:') && !field.flag)) invalid.push({...base,[field.key]:field.kind === 'strings'?['--flag']:'--flag'});
       }
       for (const input of invalid) {
         const f=fixture({input}); assert.throws(plugin[command.name], undefined, JSON.stringify(input));

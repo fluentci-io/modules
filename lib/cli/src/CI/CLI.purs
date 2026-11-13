@@ -81,10 +81,10 @@ valueTokens field value = do
       values <- CSV.parse text
       when (field.required && Array.null values) $ Left (field.key <> " must not be empty")
       unless (all validText values) $ Left (field.key <> " must not contain NUL")
-      when (field.style == "assignments") $ traverse_ (\value -> do
+      when (Array.elem field.style [ "assignments", "assignment-list", "structured-assignments" ]) $ traverse_ (\value -> do
         let key = fromMaybe "" (Array.head (String.split (Pattern "=") value))
-        unless (key /= "" && String.contains (Pattern "=") value && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ]) (CU.toCharArray key)) $
-          Left (field.key <> " entries must be KEY=VALUE with alphanumeric, underscore, dash or dot keys")) values
+        unless (key /= "" && String.contains (Pattern "=") value && all (\char -> (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || Array.elem char [ '_', '-', '.' ] || (field.style == "structured-assignments" && char == '/')) (CU.toCharArray key)) $
+          Left (field.key <> " entries must be KEY=VALUE with valid native key characters")) values
       pure values
     "strings" -> do
       values <- jsonValue value
@@ -101,13 +101,13 @@ valueTokens field value = do
         Left (field.key <> if field.style == "nonnegative" then " must be nonnegative" else " must be positive")
       pure [ show number ]
     _ -> Left ("Unknown CLI field type: " <> field.kind)
-  when (field.scope == "positional" && Array.any (\text -> text == "-" || String.startsWith (Pattern "-") text) tokens) $
+  when ((field.scope == "positional" || (field.flag == "" && String.startsWith (Pattern "before:") field.scope)) && Array.any (\text -> text == "-" || String.startsWith (Pattern "-") text) tokens) $
     Left (field.key <> " cannot begin with '-'; use an explicit ./ path for such filenames")
   pure if field.flag == "" then case String.stripPrefix (Pattern "prefix:") field.style of
       Just prefix -> map (prefix <> _) tokens
       Nothing -> tokens
     else if field.style == "switch" then if Array.null tokens then [] else [ field.flag ]
-    else if field.style == "comma-list" then if Array.null tokens then [] else [ field.flag <> "=" <> String.joinWith "," tokens ]
+    else if Array.elem field.style [ "comma-list", "assignment-list" ] then if Array.null tokens then [] else [ field.flag <> "=" <> String.joinWith "," tokens ]
     else if field.style == "space-list" then if Array.null tokens then [] else [ field.flag ] <> tokens
     else if Array.elem field.style [ "separate", "file-separate", "directory-separate" ] then Array.concatMap (\token -> [ field.flag, token ]) tokens
     else case String.stripPrefix (Pattern "prefix:") field.style of
@@ -146,7 +146,8 @@ prepare name commandName json = do
     pure (map (\path -> { kind: if String.startsWith (Pattern "directory") field.style then "-d" else "-f", path }) resolved.args))
       (Array.filter (\field -> Array.elem field.style [ "file", "directory", "file-separate", "directory-separate" ]) command.fields)
   let scope scopeName = Array.concatMap _.args (Array.filter (\field -> field.scope == scopeName) fields)
-      args = scope "global" <> command.args <> scope "option" <> scope "positional" <> scope "suffix" <> scope "raw"
+      commandArgs = Array.concatMap (\arg -> scope ("before:" <> arg) <> [ arg ]) command.args
+      args = scope "global" <> commandArgs <> scope "option" <> scope "positional" <> scope "suffix" <> scope "raw"
       environment = Object.union command.environment tool.environment
       task = Plan.task name executable project # Plan.withArgs args # Plan.withTimeout timeoutMs
       configured = foldl (\current key -> current # Plan.withEnv key (fromMaybe "" (Object.lookup key environment))) task (Object.keys environment)
