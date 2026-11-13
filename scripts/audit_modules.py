@@ -22,6 +22,7 @@ PURPOSES = {
     'formatting': 'Format source files or fail CI when formatting differs.',
     'infrastructure': 'Validate, preview, apply, or inspect infrastructure changes.',
     'linting': 'Check source or configuration and fail on lint violations.',
+    'notifications': 'Send a typed pipeline notification and verify the service acknowledgement.',
     'package-management': 'Resolve, lock, build, or publish project dependencies.',
     'packaging': 'Validate a Linux package tree and produce an architecture-specific package.',
     'publishing': 'Publish built packages to a package repository.',
@@ -46,11 +47,11 @@ def inventory():
         exports = entry_points(ROOT / path)
         if category == 'setup' and module['name'] != 'setup-' + tool:
             raise ValueError(f'{path}: setup registration must use the setup- prefix')
-        if category != 'setup' and tool not in setup_tools and path not in catalog:
+        if category not in {'setup', 'notifications'} and tool not in setup_tools and path not in catalog:
             # Legacy modules have separately reviewed setup companions.
             if tool not in {'cachix', 'gemfury', 'buildx', 'dpkg', 'rpmbuild'}:
                 raise ValueError(f'{path}: missing prerequisite installation contract')
-        prerequisites = {'nix-publish': ['nix', 'bun', 'flakehub-push']}.get(module['name'], [module['name']])
+        prerequisites = ['curl'] if category == 'notifications' else {'nix-publish': ['nix', 'bun', 'flakehub-push']}.get(module['name'], [module['name']])
         if category != 'setup':
             for prerequisite in prerequisites:
                 if not (ROOT / 'setup' / prerequisite / 'entry.mjs').exists():

@@ -146,6 +146,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "discord"
+version = "0.1.0"
+path = "notifications/discord"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "docker"
 version = "0.1.0"
 path = "containers/docker"
@@ -639,6 +646,13 @@ runtime = "component"
 name = "setup-coveralls"
 version = "0.1.0"
 path = "setup/coveralls"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "setup-curl"
+version = "0.1.0"
+path = "setup/curl"
 sdk = "purescript"
 runtime = "component"
 
@@ -1350,6 +1364,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "slack"
+version = "0.1.0"
+path = "notifications/slack"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "snyk"
 version = "0.1.0"
 path = "security/snyk"
@@ -1402,6 +1423,13 @@ runtime = "component"
 name = "tangled-artifacts"
 version = "0.1.0"
 path = "artifacts/tangled-artifacts"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "telegram"
+version = "0.1.0"
+path = "notifications/telegram"
 sdk = "purescript"
 runtime = "component"
 

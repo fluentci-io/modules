@@ -65,6 +65,9 @@
   "digitalocean": [
     "setup-digitalocean"
   ],
+  "discord": [
+    "setup-curl"
+  ],
   "docker": [
     "setup-docker"
   ],
@@ -215,6 +218,9 @@
   "shellcheck": [
     "setup-shellcheck"
   ],
+  "slack": [
+    "setup-curl"
+  ],
   "snyk": [
     "setup-snyk",
     "setup-bun"
@@ -239,6 +245,9 @@
   ],
   "tangled-artifacts": [
     "setup-tangled-artifacts"
+  ],
+  "telegram": [
+    "setup-curl"
   ],
   "terraform": [
     "setup-terraform"

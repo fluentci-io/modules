@@ -1,0 +1,13 @@
+{
+  "module": "discord",
+  "requirements": [
+    {
+      "alias": "setup-curl",
+      "program": "curl",
+      "probe": [
+        "which",
+        "curl"
+      ]
+    }
+  ]
+}

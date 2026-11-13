@@ -123,6 +123,7 @@ def generated():
    if tool=='android':source+=['import CI.Setup.Android as Native']
    if tool=='uv':source+=['import CI.Setup.UvEnvironment as Native']
    if tool=='php':source+=['import CI.Setup.PHP as Native']
+  elif category=='notifications':source+=['import CI.Notifications as Native']
   elif name=='buildx':source+=['import Buildx as B','import Buildx.Commands as C']
   elif name in {'dpkg','rpmbuild'}:source+=['import CI.'+('Dpkg' if name=='dpkg' else 'Rpmbuild')+' as Native']
   elif name=='cachix':source+=['import CI.Cachix as Native','import CI.Cachix.Support (unwrap)','import FluentCI.Plugin as P','import Data.String.Common (trim)']
@@ -164,6 +165,21 @@ def generated():
      properties['installDir']['description']='Absolute per-user prefix for the PHP manager and isolated tool environments; native BSD packages require this to be omitted.'
      body=['  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))','  Contract.setupResult <$> Native.setupWith config']
     else:body=[f'  config <- either throw pure (Types.decodeConfig "{tool}" (Contract.input (Contract.encodeInput args)))',f'  Contract.setupResult <$> Setup.install "{tool}" config']
+   elif category=='notifications':
+    properties={'message':{'type':'string','minLength':1,'description':f'Notification text, passed literally and JSON-encoded internally. Maximum {2000 if name=="discord" else 4096 if name=="telegram" else 4000} Unicode characters; no JSON object is accepted.'}}
+    required=['message']
+    credential='tokenEnv' if name=='telegram' else 'webhookEnv'
+    properties[credential]={'type':'string','default':{'slack':'SLACK_WEBHOOK_URL','discord':'DISCORD_WEBHOOK_URL','telegram':'TELEGRAM_BOT_TOKEN'}[name],'description':'Name of the host environment variable holding the credential; pass the variable name, never the secret URL or token.'}
+    properties['timeoutSeconds']={'type':'integer','minimum':1,'maximum':600,'default':30,'description':'HTTP request timeout in seconds, from 1 to 600. Notifications are sent once without automatic retries.'}
+    if name=='slack':properties['threadTs']={'type':'string','description':'Existing Slack message timestamp for a threaded reply, such as 1712345678.123456.'}
+    if name=='discord':
+     properties.update({'username':{'type':'string','description':'Optional webhook display name, from 1 to 80 Unicode characters.'},'avatarUrl':{'type':'string','description':'Optional HTTPS image URL overriding the webhook avatar.'},'threadId':{'type':'string','description':'Positive numeric Discord thread ID; required for existing forum/media channel threads.'},'allowMentions':{'type':'boolean','default':False,'description':'Allow user, role and everyone mentions explicitly. The default disables all parsed mentions.'}})
+    if name=='telegram':
+     properties.update({'chatId':{'type':'string','minLength':1,'description':'Nonzero numeric Telegram chat ID (including negative group IDs), or an @channel username.'},'parseMode':{'type':'string','enum':['HTML','MarkdownV2','Markdown'],'description':'Optional Telegram formatting mode; omitted text is plain. Escape markup according to the selected mode.'},'messageThreadId':{'type':'integer','minimum':1,'description':'Optional positive forum topic message-thread ID.'},'disableNotification':{'type':'boolean','description':'Send silently when true.'},'protectContent':{'type':'boolean','description':'Protect the message from forwarding and saving when true.'},'disableWebPagePreview':{'type':'boolean','description':'Disable link previews when true.'}});required.append('chatId')
+    returned='{ provider :: String, sent :: Boolean, httpStatus :: Int, messageId :: String }'
+    output={'type':'object','properties':{'provider':{'type':'string'},'sent':{'type':'boolean'},'httpStatus':{'type':'integer'},'messageId':{'type':'string'}},'required':['provider','sent','httpStatus','messageId'],'additionalProperties':False}
+    description=f'Send one {name.capitalize()} notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.'
+    body=[f'  Native.{name} (Dependencies.ensureFor "curl") args']
    elif name in {'dpkg','rpmbuild'}:
     properties={k:{'type':'string'} for k in ['directory','arch','output']+(['spec'] if name=='rpmbuild' else [])};required=['directory','arch']+(['spec'] if name=='rpmbuild' else [])
     returned='Array String' if function=='build' else 'Boolean';output={'type':'array','items':{'type':'string'}} if function=='build' else {'type':'boolean'}
@@ -196,7 +212,8 @@ def generated():
    docs += ['| `'+re.sub(r'([a-z0-9])([A-Z])',r'\1-\2',key).replace('_','-').lower()+'` | `'+prop['type']+'` | '+('yes' if key in required else 'no')+' | '+prop['description'].replace('|','\\|')+' |' for key,prop in properties.items()]
    docs+=['','Returns `'+returned+'`.','']
   if name=='gemfury':source+=['unwrap :: forall a. P.Result a -> Effect a','unwrap = either (throw <<< P.errorMessage) pure','']
-  if module['path'] in catalog:source=[line for line in source if line not in ['import Data.Either (either)','import Effect.Exception (throw)']]
+  if module['path'] in catalog or category=='notifications':source=[line for line in source if line not in ['import Data.Either (either)','import Effect.Exception (throw)']]
+  if category=='notifications':source=[line for line in source if line not in ['import Prelude','import CI.Contract as Contract']]
   if name!='buildx':source=[line.replace('import Data.Maybe (Maybe(..))','import Data.Maybe (Maybe)') for line in source]
   if all(not any(key not in value['input']['required'] for key in value['input']['properties']) for value in schemas.values()):source=[line for line in source if line!='import Data.Maybe (Maybe)']
   yield directory/'src/CI/Component.purs','\n'.join(source)

@@ -1,0 +1,91 @@
+{
+  "name": "telegram",
+  "runtime": "component",
+  "exports": {
+    "send": {
+      "description": "Send one Telegram notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Notification text, passed literally and JSON-encoded internally. Maximum 4096 Unicode characters; no JSON object is accepted."
+          },
+          "tokenEnv": {
+            "type": "string",
+            "default": "TELEGRAM_BOT_TOKEN",
+            "description": "Name of the host environment variable holding the credential; pass the variable name, never the secret URL or token. Default: \"TELEGRAM_BOT_TOKEN\"."
+          },
+          "timeoutSeconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 600,
+            "default": 30,
+            "description": "HTTP request timeout in seconds, from 1 to 600. Notifications are sent once without automatic retries. Default: 30."
+          },
+          "chatId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Nonzero numeric Telegram chat ID (including negative group IDs), or an @channel username."
+          },
+          "parseMode": {
+            "type": "string",
+            "enum": [
+              "HTML",
+              "MarkdownV2",
+              "Markdown"
+            ],
+            "description": "Optional Telegram formatting mode; omitted text is plain. Escape markup according to the selected mode. Allowed values: HTML, MarkdownV2, Markdown."
+          },
+          "messageThreadId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Optional positive forum topic message-thread ID."
+          },
+          "disableNotification": {
+            "type": "boolean",
+            "description": "Send silently when true."
+          },
+          "protectContent": {
+            "type": "boolean",
+            "description": "Protect the message from forwarding and saving when true."
+          },
+          "disableWebPagePreview": {
+            "type": "boolean",
+            "description": "Disable link previews when true."
+          }
+        },
+        "required": [
+          "message",
+          "chatId"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "sent": {
+            "type": "boolean"
+          },
+          "httpStatus": {
+            "type": "integer"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "sent",
+          "httpStatus",
+          "messageId"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

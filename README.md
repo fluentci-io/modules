@@ -85,6 +85,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [coveralls](./code-quality/coveralls/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/coveralls/COMPONENT.md) |
 | [cypress](./testing/cypress/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/cypress/COMPONENT.md) |
 | [digitalocean](./cloud/digitalocean/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `account-get`, [typed contract](./cloud/digitalocean/COMPONENT.md) |
+| [discord](./notifications/discord/README.md) | Send typed Discord webhook notifications and verify delivery. | `send`, [typed contract](./notifications/discord/COMPONENT.md) |
 | [docker](./containers/docker/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/docker/COMPONENT.md) |
 | [doppler](./secrets/doppler/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/doppler/COMPONENT.md) |
 | [dpkg](./packaging/dpkg/README.md) | Build packages from a Linux dpkg package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/dpkg/COMPONENT.md) |
@@ -156,6 +157,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-codecov](./setup/codecov/README.md) | Install and verify codecov, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/codecov/COMPONENT.md) |
 | [setup-cosign](./setup/cosign/README.md) | Install and verify Cosign and publish PATH. | `setup`, [typed contract](./setup/cosign/COMPONENT.md) |
 | [setup-coveralls](./setup/coveralls/README.md) | Install and verify coveralls, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/coveralls/COMPONENT.md) |
+| [setup-curl](./setup/curl/README.md) | Install or verify curl through native Linux, macOS and BSD repositories. | `setup`, [typed contract](./setup/curl/COMPONENT.md) |
 | [setup-cypress](./setup/cypress/README.md) | Install and verify cypress, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/cypress/COMPONENT.md) |
 | [setup-dagger](./setup/dagger/README.md) | Install and verify Dagger and publish PATH. | `setup`, [typed contract](./setup/dagger/COMPONENT.md) |
 | [setup-deno](./setup/deno/README.md) | Install and verify deno, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/deno/COMPONENT.md) |
@@ -257,6 +259,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-yamllint](./setup/yamllint/README.md) | Install and verify yamllint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/yamllint/COMPONENT.md) |
 | [setup-zig](./setup/zig/README.md) | Install and verify zig, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/zig/COMPONENT.md) |
 | [shellcheck](./linting/shellcheck/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/shellcheck/COMPONENT.md) |
+| [slack](./notifications/slack/README.md) | Send typed Slack incoming-webhook notifications and threaded replies. | `send`, [typed contract](./notifications/slack/COMPONENT.md) |
 | [snyk](./security/snyk/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./security/snyk/COMPONENT.md) |
 | [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube CLI analysis, quality gates, APIs, architecture, and integrations. | 49 functions, [typed contract](./code-quality/sonarqube/COMPONENT.md) |
 | [sonarqube-scanner](./code-quality/sonarqube-scanner/README.md) | Submit full-project SonarScanner analysis and optionally wait for the quality gate. | `run`, `version`, `scan`, [typed contract](./code-quality/sonarqube-scanner/COMPONENT.md) |
@@ -265,6 +268,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [sqruff](./linting/sqruff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqruff/COMPONENT.md) |
 | [syft](./security/syft/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/syft/COMPONENT.md) |
 | [tangled-artifacts](./artifacts/tangled-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `upload`, [typed contract](./artifacts/tangled-artifacts/COMPONENT.md) |
+| [telegram](./notifications/telegram/README.md) | Send typed Telegram bot notifications with formatting and delivery options. | `send`, [typed contract](./notifications/telegram/COMPONENT.md) |
 | [terraform](./infrastructure/terraform/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/terraform/COMPONENT.md) |
 | [terragrunt](./infrastructure/terragrunt/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `hcl-fmt`, [typed contract](./infrastructure/terragrunt/COMPONENT.md) |
 | [trivy](./security/trivy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trivy/COMPONENT.md) |

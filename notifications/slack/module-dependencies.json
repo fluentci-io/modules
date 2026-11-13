@@ -1,0 +1,13 @@
+{
+  "module": "slack",
+  "requirements": [
+    {
+      "alias": "setup-curl",
+      "program": "curl",
+      "probe": [
+        "which",
+        "curl"
+      ]
+    }
+  ]
+}

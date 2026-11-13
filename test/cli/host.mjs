@@ -10,6 +10,8 @@ export function fixture(options = {}) {
   function command(args) {
     calls.push(args);
     if (options.fail?.(args)) throw Error("Injected command failure: " + args[0]);
+    const supplied = options.command?.(args);
+    if (supplied !== undefined) return supplied;
     if (options.native) {
       const result = spawnSync(args[0], args.slice(1), { encoding: "utf8" });
       if (result.error) throw result.error;

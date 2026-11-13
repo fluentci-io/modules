@@ -530,6 +530,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "curl",
+    "title": "curl",
+    "program": "curl",
+    "backend": "native",
+    "package": "",
+    "repository": "",
+    "asset": "",
+    "format": "",
+    "member": "curl",
+    "versionArgs": [
+      "--version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "latest",
+    "linuxPackage": "curl",
+    "macPackage": "curl",
+    "freebsdPackage": "curl",
+    "openbsdPackage": "curl",
+    "netbsdPackage": "curl",
+    "notes": "Install or verify curl through native repositories on Linux, macOS and BSD. Notification senders require curl >= 8.3.0 for credential expansion; pin an available release or upgrade the native package when the system curl is older.",
+    "tagPrefix": "v"
+  },
+  {
     "name": "cypress",
     "title": "Cypress",
     "program": "cypress",

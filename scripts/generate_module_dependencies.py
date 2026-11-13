@@ -23,7 +23,9 @@ def definitions():
             result[name] = [{'alias': 'setup-java', 'program': 'java', 'probe': ['which', 'java']}] if name == 'setup-android' else []
             continue
         primary = tools.get(name, {}).get('program') or catalog.get(name, {}).get('program')
-        if name == 'nix-publish':
+        if module['path'].startswith('notifications/'):
+            dependencies = [{'alias': 'setup-curl', 'program': 'curl', 'probe': ['which', 'curl']}]
+        elif name == 'nix-publish':
             dependencies = [{'alias': 'setup-nix', 'program': 'nix', 'probe': ['which', 'nix']}, {'alias': 'setup-bun', 'program': 'bun', 'probe': ['which', 'bun']}, {'alias': 'setup-flakehub-push', 'program': 'flakehub-push', 'probe': ['which', 'flakehub-push']}]
         elif name == 'buildx':
             dependencies = [{'alias': 'setup-docker', 'program': 'docker', 'probe': ['which', 'docker']}, {'alias': 'setup-buildx', 'program': 'docker', 'probe': ['docker', 'buildx', 'version']}]

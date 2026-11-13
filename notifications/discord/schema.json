@@ -1,0 +1,76 @@
+{
+  "name": "discord",
+  "runtime": "component",
+  "exports": {
+    "send": {
+      "description": "Send one Discord notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Notification text, passed literally and JSON-encoded internally. Maximum 2000 Unicode characters; no JSON object is accepted."
+          },
+          "webhookEnv": {
+            "type": "string",
+            "default": "DISCORD_WEBHOOK_URL",
+            "description": "Name of the host environment variable holding the credential; pass the variable name, never the secret URL or token. Default: \"DISCORD_WEBHOOK_URL\"."
+          },
+          "timeoutSeconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 600,
+            "default": 30,
+            "description": "HTTP request timeout in seconds, from 1 to 600. Notifications are sent once without automatic retries. Default: 30."
+          },
+          "username": {
+            "type": "string",
+            "description": "Optional webhook display name, from 1 to 80 Unicode characters."
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Optional HTTPS image URL overriding the webhook avatar."
+          },
+          "threadId": {
+            "type": "string",
+            "description": "Positive numeric Discord thread ID; required for existing forum/media channel threads."
+          },
+          "allowMentions": {
+            "type": "boolean",
+            "default": false,
+            "description": "Allow user, role and everyone mentions explicitly. The default disables all parsed mentions. Default: false."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "sent": {
+            "type": "boolean"
+          },
+          "httpStatus": {
+            "type": "integer"
+          },
+          "messageId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "sent",
+          "httpStatus",
+          "messageId"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

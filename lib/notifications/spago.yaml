@@ -1,0 +1,3 @@
+package:
+  name: fluentci-notifications-common
+  dependencies: [argonaut-codecs, argonaut-core, arrays, effect, either, exceptions, fluentci, foldable-traversable, foreign-object, integers, maybe, prelude, strings, tuples]
