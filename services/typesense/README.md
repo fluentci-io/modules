@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run typesense start --version 29.0
 fluentci run typesense status
 fluentci run typesense logs --tail 50
+fluentci run typesense logs --tail 50 --follow true
 fluentci run typesense restart
 fluentci run typesense stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-typesense-default -f` in the same project workspace.
 
 ## Default profile
 

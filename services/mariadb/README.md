@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run mariadb start --version 11.4
 fluentci run mariadb status
 fluentci run mariadb logs --tail 50
+fluentci run mariadb logs --tail 50 --follow true
 fluentci run mariadb restart
 fluentci run mariadb stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-mariadb-default -f` in the same project workspace.
 
 ## Default profile
 

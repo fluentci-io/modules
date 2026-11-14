@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run nginx start --version 1.28-alpine
 fluentci run nginx status
 fluentci run nginx logs --tail 50
+fluentci run nginx logs --tail 50 --follow true
 fluentci run nginx restart
 fluentci run nginx stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-nginx-default -f` in the same project workspace.
 
 ## Default profile
 

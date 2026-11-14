@@ -201,7 +201,11 @@ def generated():
      if name=='aws-emulator':fields['stateDir']=('string',None,'Required absolute host directory holding generated credentials and TLS files. Mounted into the emulator and never deleted by stop.');required=['stateDir']
      for key,(kind,default,description_) in fields.items():properties[key]={'type':kind,'description':description_,**({'default':default} if default is not None else {})}
      properties['restartPolicy']['enum']=['never','on_failure','always']
-    if function=='logs':properties['tail']={'type':'integer','default':100,'minimum':1,'maximum':10000,'description':'Maximum recent log lines, from 1 to 10000.'};output={'type':'string'};returned='String'
+    if function=='logs':
+     description='Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.'
+     properties['tail']={'type':'integer','default':100,'minimum':1,'maximum':10000,'description':'Maximum recent log lines, from 1 to 10000, before optional live output.'}
+     properties['follow']={'type':'boolean','default':False,'description':'Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running.'}
+     output={'type':'string'};returned='String'
     if function=='build':
      properties={'project':properties['project'],'image':{'type':'string','default':'fluentci/aws-emulator:local','description':'Local image name/tag to build.'},'architecture':{'type':'string','default':'auto','enum':['auto','x86_64','aarch64'],'description':'RPM architecture; auto uses the Docker daemon architecture.'},'packageUrl':{'type':'string','description':'Optional HTTPS URL of a pinned official AWS Emulator RPM; requires packageSha256. Default uses the official latest LTS package.'},'packageSha256':{'type':'string','description':'Lowercase SHA-256 for a pinned RPM; custom URLs require it.'},'timeoutMs':{'type':'integer','default':1800000,'description':'Image build deadline from 1000 to 3600000 milliseconds.'}};output={'type':'string'};returned='String'
     args='(Contract.input (Contract.encodeInput args))'

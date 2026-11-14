@@ -73,7 +73,7 @@ export async function serviceSuite(directory){
   native.start(args('start'))();assert.deepEqual(f.installed,requirements.map(r=>r.alias));assert.equal(f.definitions.length,1);
  });
  test(name+': unavailable daemon, malformed replies, and failed readiness never return success',()=>{
-  for(const options of [{fail:a=>a[0]==='docker'&&a[1]==='info'},{applyResponse:'{'},{applyResponse:'{}'},{refused:true},{state:'failed'},{state:'running'}]){
+  for(const options of [{fail:a=>a[0]==='docker'&&a[1]==='info'},{applyResponse:'{'},{applyResponse:'{}'},{applyResponse:'{"ok":"yes","services":[]}'},{applyResponse:'{"ok":true,"services":null}'},{refused:true},{state:'failed'},{state:'running'}]){
    const f=fixture(options);assert.throws(()=>native.start(args('start'))());assert.equal(f.output.length,0);
   }
  });
@@ -94,6 +94,14 @@ export async function serviceSuite(directory){
   const f=fixture();native.start(args('start'))();native.logs({...args('logs'),tail:new Just(50)})();
   assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='logs'&&a.at(-1)==='50'));assert.ok(!f.calls.some(a=>a.includes('--follow')));
   assert.throws(()=>native.logs({...args('logs'),tail:new Just(0)})());
+ });
+ test(name+': following logs forwards the native flag without changing service lifecycle',()=>{
+  const f=fixture();native.start(args('start'))();const before=f.calls.length;
+  assert.equal(native.logs({...args('logs'),follow:new Just(true),tail:new Just(20)})(),'bounded native log\n');
+  assert.deepEqual(f.calls.slice(before).filter(a=>a[0]==='fluentci'&&a[1]==='logs'),[['fluentci','logs','module-'+name+'-default','--tail','20','--follow']]);
+  assert.equal(f.states.get('module-'+name+'-default').state,'ready');assert.equal(f.definitions.length,1);
+  assert.ok(!f.calls.slice(before).some(a=>['stop','restart','apply'].includes(a[1])));
+  const bad=fixture();assert.throws(()=>native.logs({...args('logs'),follow:new Just('true')})());assert.equal(bad.calls.length,0);
  });
  if(name==='aws-emulator'){
   test('AWS Emulator image builder uses official RPMs, native file operations and the correct architecture',()=>{

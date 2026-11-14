@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run mailhog start --version v1.0.1
 fluentci run mailhog status
 fluentci run mailhog logs --tail 50
+fluentci run mailhog logs --tail 50 --follow true
 fluentci run mailhog restart
 fluentci run mailhog stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-mailhog-default -f` in the same project workspace.
 
 ## Default profile
 

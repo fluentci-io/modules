@@ -50,10 +50,11 @@ status :: { project :: Maybe String, name :: Maybe String } -> Effect Native.Ser
 status args = do
   Native.status "mailcatcher" (Contract.input (Contract.encodeInput args))
 
--- | Read a bounded snapshot of native service logs without starting a service.
+-- | Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.
 -- | @param project Workspace directory used by every native service manager call. Default: ".".
 -- | @param name Full service name, default module-mailcatcher-default; must start with module-mailcatcher- to scope lifecycle operations.
--- | @param tail Maximum recent log lines, from 1 to 10000. Default: 100.
-logs :: { project :: Maybe String, name :: Maybe String, tail :: Maybe Int } -> Effect String
+-- | @param tail Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100.
+-- | @param follow Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false.
+logs :: { project :: Maybe String, name :: Maybe String, tail :: Maybe Int, follow :: Maybe Boolean } -> Effect String
 logs args = do
   Native.logs "mailcatcher" (Contract.input (Contract.encodeInput args))

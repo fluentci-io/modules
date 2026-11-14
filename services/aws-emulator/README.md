@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run aws-emulator start --state-dir /tmp/aws-emulator-material --image fluentci/aws-emulator:ci
 fluentci run aws-emulator status
 fluentci run aws-emulator logs --tail 50
+fluentci run aws-emulator logs --tail 50 --follow true
 fluentci run aws-emulator restart
 fluentci run aws-emulator stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-aws-emulator-default -f` in the same project workspace.
 
 ## Default profile
 

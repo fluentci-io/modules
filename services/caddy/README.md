@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run caddy start --version 2-alpine
 fluentci run caddy status
 fluentci run caddy logs --tail 50
+fluentci run caddy logs --tail 50 --follow true
 fluentci run caddy restart
 fluentci run caddy stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-caddy-default -f` in the same project workspace.
 
 ## Default profile
 

@@ -9,6 +9,7 @@ There is no docker run -d, legacy asService provider, or external process manage
 fluentci run redis start --version 7-alpine
 fluentci run redis status
 fluentci run redis logs --tail 50
+fluentci run redis logs --tail 50 --follow true
 fluentci run redis restart
 fluentci run redis stop
 ```
@@ -17,7 +18,13 @@ Start waits for the configured readiness probe, returns the allocated loopback
 ports, and reuses an unchanged running definition. Stop is idempotent and targets
 only the module's named service; the native manager also stops its dependents.
 Restart reuses the existing definition. Changing image/version, mounts, ports or
-configuration requires stopping first. Logs are bounded snapshots, never streams.
+configuration requires stopping first. Logs return bounded snapshots by default. Set --follow true to stream new output
+until interrupted; interrupting the log viewer leaves the service running.
+
+The native shorthand `fluentci logs module-redis-default -f` follows the same
+service in the current workspace. Module arguments use the named `--follow true`
+option. A follow call stays attached and does not return a snapshot while active;
+use the default snapshot mode in CI steps that must finish.
 
 Names default to module-TOOL-default. Custom names must start with module-TOOL-.
 Use the same project workspace and name across calls. Services span calls, so CI
@@ -62,5 +69,6 @@ prebuilt image or a different AWS emulator.
 
 CI's dedicated Services E2E workflow builds and composes all real Wasm modules,
 checks readiness and connectivity, proves idempotent start and real restart,
-reads bounded logs, stops every service, and verifies named-volume preservation.
+reads bounded logs, verifies Redis log streaming and interruption without stopping
+the service, stops every service, and verifies named-volume preservation.
 It uses one Ubuntu runner with sequential services and a path-filtered trigger.

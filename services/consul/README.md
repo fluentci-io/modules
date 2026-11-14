@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run consul start --version 1.21
 fluentci run consul status
 fluentci run consul logs --tail 50
+fluentci run consul logs --tail 50 --follow true
 fluentci run consul restart
 fluentci run consul stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-consul-default -f` in the same project workspace.
 
 ## Default profile
 

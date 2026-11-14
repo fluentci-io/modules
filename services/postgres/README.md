@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run postgres start --version 17-alpine
 fluentci run postgres status
 fluentci run postgres logs --tail 50
+fluentci run postgres logs --tail 50 --follow true
 fluentci run postgres restart
 fluentci run postgres stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-postgres-default -f` in the same project workspace.
 
 ## Default profile
 

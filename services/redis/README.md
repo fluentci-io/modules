@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run redis start --version 7-alpine
 fluentci run redis status
 fluentci run redis logs --tail 50
+fluentci run redis logs --tail 50 --follow true
 fluentci run redis restart
 fluentci run redis stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-redis-default -f` in the same project workspace.
 
 ## Default profile
 

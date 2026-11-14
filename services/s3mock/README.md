@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run s3mock start --version latest
 fluentci run s3mock status
 fluentci run s3mock logs --tail 50
+fluentci run s3mock logs --tail 50 --follow true
 fluentci run s3mock restart
 fluentci run s3mock stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-s3mock-default -f` in the same project workspace.
 
 ## Default profile
 

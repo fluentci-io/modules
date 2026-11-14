@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run influxdb start --version 2.7
 fluentci run influxdb status
 fluentci run influxdb logs --tail 50
+fluentci run influxdb logs --tail 50 --follow true
 fluentci run influxdb restart
 fluentci run influxdb stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-influxdb-default -f` in the same project workspace.
 
 ## Default profile
 

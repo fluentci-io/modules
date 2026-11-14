@@ -64,12 +64,13 @@ Returns `Native.ServiceResult`.
 
 ## `logs`
 
-Read a bounded snapshot of native service logs without starting a service.
+Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.
 
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `project` | `string` | no | Workspace directory used by every native service manager call. Default: ".". |
 | `name` | `string` | no | Full service name, default module-stripe-mock-default; must start with module-stripe-mock- to scope lifecycle operations. |
-| `tail` | `integer` | no | Maximum recent log lines, from 1 to 10000. Default: 100. |
+| `tail` | `integer` | no | Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100. |
+| `follow` | `boolean` | no | Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false. |
 
 Returns `String`.

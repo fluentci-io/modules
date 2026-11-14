@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run httpbin start --version latest
 fluentci run httpbin status
 fluentci run httpbin logs --tail 50
+fluentci run httpbin logs --tail 50 --follow true
 fluentci run httpbin restart
 fluentci run httpbin stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-httpbin-default -f` in the same project workspace.
 
 ## Default profile
 

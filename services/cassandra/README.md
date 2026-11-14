@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run cassandra start --version 5.0
 fluentci run cassandra status
 fluentci run cassandra logs --tail 50
+fluentci run cassandra logs --tail 50 --follow true
 fluentci run cassandra restart
 fluentci run cassandra stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-cassandra-default -f` in the same project workspace.
 
 ## Default profile
 

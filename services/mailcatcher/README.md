@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run mailcatcher start --version latest
 fluentci run mailcatcher status
 fluentci run mailcatcher logs --tail 50
+fluentci run mailcatcher logs --tail 50 --follow true
 fluentci run mailcatcher restart
 fluentci run mailcatcher stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-mailcatcher-default -f` in the same project workspace.
 
 ## Default profile
 

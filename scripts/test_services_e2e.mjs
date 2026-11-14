@@ -4,7 +4,7 @@ import {readFileSync,writeFileSync,mkdirSync,mkdtempSync,appendFileSync,existsSy
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {spawnSync} from 'node:child_process';
+import {spawn,spawnSync} from 'node:child_process';
 import net from 'node:net';
 import https from 'node:https';
 const root=fileURLToPath(new URL('../',import.meta.url));
@@ -20,7 +20,10 @@ function command(argv,{cwd=root,timeout=900000,allowFailure=false}={}){
  const result=spawnSync(argv[0],argv.slice(1),{cwd,encoding:'utf8',timeout,maxBuffer:64*1024*1024,env:process.env});
  const file=join(logDir,(active??'bootstrap')+'.log');
  appendFileSync(file,'\n$ '+argv.map(a=>JSON.stringify(a)).join(' ')+'\n'+(result.stdout??'')+(result.stderr??''));
- if(!allowFailure&&(result.error||result.status!==0))throw Error(`${argv[0]} failed (${result.error?.message??result.status}); inspect ${file}`);
+ if(!allowFailure&&(result.error||result.status!==0)){
+  console.error(((result.stdout??'')+(result.stderr??'')).split('\n').slice(-100).join('\n'));
+  throw Error(`${argv.slice(0,3).join(' ')} failed (${result.error?.message??result.status??result.signal}); inspect ${file}`);
+ }
  return result;
 }
 function nativeValue(output){
@@ -40,6 +43,30 @@ function invoke(profile,operation,fields={}){
  const argv=['fluentci','run','.',operation,'--project',workspace];
  for(const [key,value]of Object.entries(fields))argv.push('--'+key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+'='+String(value));
  return camel(nativeValue(command(argv,{cwd:join(root,'services',profile.name),timeout:operation==='build'?2100000:720000}).stdout));
+}
+async function verifyFollow(profile,name){
+ // Exercise the real component stream, then interrupt only its viewer process group.
+ const child=spawn('fluentci',['run','.','logs','--project',workspace,'--name',name,'--tail','100','--follow','true'],{cwd:join(root,'services',profile.name),env:process.env,detached:true,stdio:['ignore','pipe','pipe']});
+ let output='',interrupted=false,interruptTimer,deadline,killTimer;
+ const signal=value=>{if(child.pid)try{process.kill(-child.pid,value);}catch(error){if(error.code!=='ESRCH')throw error;}};
+ try{
+  await new Promise((resolvePromise,reject)=>{
+   const record=chunk=>{
+    const text=chunk.toString();appendFileSync(join(logDir,profile.name+'.log'),text);output=(output+text).slice(-65536);
+    if(!interruptTimer&&/Ready to accept connections/i.test(output))interruptTimer=setTimeout(()=>{
+     interrupted=true;signal('SIGINT');
+     killTimer=setTimeout(()=>{signal('SIGKILL');reject(Error('Follow viewer did not exit after interruption'));},10000);
+    },300);
+   };
+   child.stdout.on('data',record);child.stderr.on('data',record);
+   child.once('error',reject);
+   child.once('close',(code,termination)=>interrupted?resolvePromise():reject(Error(`Follow exited before interruption (${code??termination}): ${output}`)));
+   deadline=setTimeout(()=>reject(Error('Follow did not stream Redis readiness logs within 90 seconds')),90000);
+  });
+ }finally{
+  clearTimeout(interruptTimer);clearTimeout(deadline);clearTimeout(killTimer);signal('SIGKILL');
+ }
+ assert.equal(invoke(profile,'status',{name}).state,'ready','interrupting the viewer must leave the service running');
 }
 function containers(name){
  const output=command(['docker','ps','--all','--filter','label=io.fluentci.managed=true','--format','{{.ID}} {{.Names}}']).stdout;
@@ -104,6 +131,9 @@ try{
    await connectivity(profile,started,stateDir);
    assert.equal(invoke(profile,'status',{name}).state,'ready');
    const logs=invoke(profile,'logs',{name,tail:20});assert.equal(typeof logs,'string');
+   if(profile.name==='redis'){
+    await verifyFollow(profile,name);assert.deepEqual(containers(name),first,'following logs must preserve the owned container');
+   }
    const restarted=invoke(profile,'restart',{name});assert.equal(restarted.state,'ready');assert.notDeepEqual(containers(name),first,'restart must replace the container');
    await connectivity(profile,restarted,stateDir);
    assert.equal(invoke(profile,'stop',{name}).state,'stopped');assert.equal(invoke(profile,'stop',{name}).state,'stopped');assert.equal(invoke(profile,'status',{name}).port,0);assert.deepEqual(containers(name),[]);

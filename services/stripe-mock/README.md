@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run stripe-mock start --version latest
 fluentci run stripe-mock status
 fluentci run stripe-mock logs --tail 50
+fluentci run stripe-mock logs --tail 50 --follow true
 fluentci run stripe-mock restart
 fluentci run stripe-mock stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-stripe-mock-default -f` in the same project workspace.
 
 ## Default profile
 

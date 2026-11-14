@@ -373,7 +373,7 @@
       }
     },
     "logs": {
-      "description": "Read a bounded snapshot of native service logs without starting a service.",
+      "description": "Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.",
       "input": {
         "type": "object",
         "properties": {
@@ -391,7 +391,12 @@
             "default": 100,
             "minimum": 1,
             "maximum": 10000,
-            "description": "Maximum recent log lines, from 1 to 10000. Default: 100."
+            "description": "Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100."
+          },
+          "follow": {
+            "type": "boolean",
+            "default": false,
+            "description": "Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false."
           }
         },
         "required": [],

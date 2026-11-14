@@ -8,9 +8,14 @@ FluentCI with the native services apply/status lifecycle API.
 fluentci run etcd start --version v3.6.5
 fluentci run etcd status
 fluentci run etcd logs --tail 50
+fluentci run etcd logs --tail 50 --follow true
 fluentci run etcd restart
 fluentci run etcd stop
 ```
+
+For live logs, use `logs --follow true`. Press Ctrl-C to stop following; the
+background service keeps running. The native shorthand is
+`fluentci logs module-etcd-default -f` in the same project workspace.
 
 ## Default profile
 
