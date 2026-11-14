@@ -21,7 +21,7 @@ background service keeps running. The native shorthand is
 
 - Image: `fluentci/aws-emulator:local` (locally built, not a published image).
 - Primary container port: `9297`; exposed TCP ports: `9297`.
-- Readiness: `tcp: primary TCP endpoint`; startup deadline: `180000` ms.
+- Readiness: `exec: HTTPS health verified with the generated CA`; startup deadline: `180000` ms.
 - Native recurring health check uses the same probe by default.
 - Name: `module-aws-emulator-default`; custom names must start with `module-aws-emulator-`.
 
@@ -97,3 +97,9 @@ Mocked unit/contract tests run in normal module CI. The dedicated Services E2E
 workflow builds every real component, starts/reuses/restarts/stops it through the
 native manager, and checks real protocol connectivity sequentially on one runner.
 No services or images are run by the source generators. License: MIT.
+
+Default readiness and recurring health use curl inside the owned container to
+verify HTTPS `/__admin/health` with its generated CA. A published TCP port alone
+is insufficient because Docker may accept connections before emulator startup.
+The image built by this module installs `curl-minimal`; compatible prebuilt
+images must provide curl and use `/home/emulator` for generated SDK material.

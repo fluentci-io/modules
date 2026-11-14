@@ -48,7 +48,7 @@ export async function serviceSuite(directory){
   const d=f.definitions[0];assert.equal(d.backend,'docker');assert.equal(d.image,p.image+':'+p.version);assert.deepEqual(d.command,name==='aws-emulator'?['-p','9297']:p.command);
   assert.equal(d.restart,'never');assert.equal(d.max_restarts,0);assert.deepEqual(d.readiness,d.health);assert.ok(d.readiness.type);
   if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}'+p.path);
-  if(p.probe==='tcp')assert.equal(d.readiness.address,'${port:'+p.port+'}');
+  if(p.probe==='tcp'&&name!=='aws-emulator')assert.equal(d.readiness.address,'${port:'+p.port+'}');
   assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='services'&&a[2]==='apply'));
   assert.ok(!f.calls.some(a=>a[0]==='docker'&&['run','stop','rm'].includes(a[1])));assert.equal(f.plans.length,0);assert.deepEqual(f.installed,[]);
  });
@@ -57,6 +57,7 @@ export async function serviceSuite(directory){
   native.start({...args('start'),ports:new Just(mapping),readinessPath:new Just('/ci/ready?source=literal'),healthCheck:new Just(false)})();
   const d=f.definitions[0];assert.deepEqual(d.ports,[mapping]);assert.equal(d.health,undefined);
   if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}/ci/ready?source=literal');
+  else if(name==='aws-emulator'){assert.equal(d.readiness.type,'exec');assert.ok(d.readiness.command.includes('https://127.0.0.1:'+p.port+'/__admin/health'));}
   else assert.equal(d.readiness.address,'${port:'+p.port+'}');
  });
  test(name+': lifecycle stays scoped, start is idempotent and stop preserves volumes',()=>{
@@ -113,6 +114,16 @@ export async function serviceSuite(directory){
   const bad=fixture();assert.throws(()=>native.logs({...args('logs'),follow:new Just('true')})());assert.equal(bad.calls.length,0);
  });
  if(name==='aws-emulator'){
+  test('AWS Emulator waits for verified HTTPS health and generated CA at the selected port',()=>{
+   const f=fixture();native.start({...args('start'),port:new Just(9398)})();
+   const d=f.definitions[0];assert.equal(d.readiness.type,'exec');assert.deepEqual(d.health,d.readiness);
+   assert.deepEqual(d.readiness.command,['curl','--fail','--silent','--show-error','--max-time','2','--cacert','/home/emulator/.aws/emulator/9398/ca.pem','https://127.0.0.1:9398/__admin/health']);
+  });
+  test('AWS Emulator reports unreadable material by filename and stops a failed fresh service',()=>{
+   const f=fixture({fail:a=>a[0]==='test'&&a[1]==='-r'&&a[2].endsWith('/ca.pem')});
+   assert.throws(()=>native.start(args('start'))(),/did not create readable .*ca\.pem/);
+   assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='stop'));
+  });
   test('AWS Emulator rejects remapped host ports before setup or host commands',()=>{
    const f=fixture();
    assert.throws(()=>native.start({...args('start'),ports:new Just('42000:'+p.port)})(),/same fixed host and container port/);
@@ -120,7 +131,7 @@ export async function serviceSuite(directory){
   });
   test('AWS Emulator image builder uses official RPMs, native file operations and the correct architecture',()=>{
    const f=fixture();const image=native.build(args('build'))();assert.equal(image,'fluentci/aws-emulator:local');assert.equal(f.plans.length,1);
-   const document=JSON.stringify(f.plans[0]);assert.ok(document.includes('downloads.aws.com/aws-emulator'));assert.ok(document.includes('aws-emulator-x86_64.rpm'));assert.ok(document.includes('write_text'));assert.ok(!document.includes('cargo build'));
+   const document=JSON.stringify(f.plans[0]);assert.ok(document.includes('downloads.aws.com/aws-emulator'));assert.ok(document.includes('aws-emulator-x86_64.rpm'));assert.ok(document.includes('write_text'));assert.ok(document.includes('curl-minimal'));assert.ok(!document.includes('cargo build'));
   });
   test('AWS Emulator validates custom packages before builds and cleans failed post-start checks',()=>{
    let f=fixture();assert.throws(()=>native.build({...args('build'),packageUrl:new Just('https://example.test/pinned.rpm')})());assert.equal(f.calls.length,0);

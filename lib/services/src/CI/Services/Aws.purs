@@ -54,6 +54,7 @@ build setup json = do
       -- JSON-form Dockerfile instructions keep implementation logic in PureScript.
       run args = "RUN " <> stringify (encodeJson args) <> "\n"
       recipe = "FROM public.ecr.aws/amazonlinux/amazonlinux:2023-minimal\nADD " <> (if sha == "" then "" else "--checksum=sha256:" <> sha <> " ") <> url <> " /tmp/aws-emulator.rpm\n"
+        <> run [ "microdnf", "install", "-y", "curl-minimal" ] <> run [ "microdnf", "clean", "all" ]
         <> run [ "rpm", "-i", "/tmp/aws-emulator.rpm" ] <> run [ "rm", "/tmp/aws-emulator.rpm" ]
         <> run [ "mkdir", "-p", "/home/emulator/.aws/emulator" ] <> run [ "chown", "-R", uid <> ":" <> gid, "/home/emulator" ]
         <> "USER " <> uid <> ":" <> gid <> "\nENV HOME=/home/emulator EMULATOR_TELEMETRY=off\nEXPOSE 9297\nENTRYPOINT [\"aws-emulator\", \"-b\", \"0.0.0.0\"]\n"

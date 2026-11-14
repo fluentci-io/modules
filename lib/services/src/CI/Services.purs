@@ -219,7 +219,11 @@ start setup tool json = do
   stateDir <- optional fields "stateDir" ""
   when (tool == "aws-emulator") $ absoluteDirectory stateDir
   when (tool /= "aws-emulator" && stateDir /= "") $ throw "stateDir is specific to AWS Emulator; use volumes for other services"
-  let readiness = if not (A.null readyCommand) || p.probe == "exec" then object [ Tuple "type" (encodeJson "exec"), Tuple "command" (encodeJson (if A.null readyCommand then p.exec else readyCommand)) ]
+  let awsProbe = [ "curl", "--fail", "--silent", "--show-error", "--max-time", "2"
+        , "--cacert", "/home/emulator/.aws/emulator/" <> show primary <> "/ca.pem"
+        , "https://127.0.0.1:" <> show primary <> "/__admin/health" ]
+      readiness = if tool == "aws-emulator" && A.null readyCommand then object [ Tuple "type" (encodeJson "exec"), Tuple "command" (encodeJson awsProbe) ]
+        else if not (A.null readyCommand) || p.probe == "exec" then object [ Tuple "type" (encodeJson "exec"), Tuple "command" (encodeJson (if A.null readyCommand then p.exec else readyCommand)) ]
         else if p.probe == "http" then object [ Tuple "type" (encodeJson "http"), Tuple "url" (encodeJson ("http://${port:" <> show primary <> "}" <> readyPath)), Tuple "status" (encodeJson 200) ]
         else object [ Tuple "type" (encodeJson "tcp"), Tuple "address" (encodeJson ("${port:" <> show primary <> "}")) ]
       selectedCommand = if tool == "aws-emulator" && A.null command then [ "-p", show primary ] else if A.null command then p.command else command
@@ -242,7 +246,9 @@ start setup tool json = do
   when (tool == "aws-emulator") do
     checked <- try do
       let material = stateDir <> "/" <> show primary
-      traverse_ (\file -> void (capture cfg.project [ "test", "-r", material <> "/" <> file ])) [ "ca.pem", "emulator_credentials", "config" ]
+      traverse_ (\file -> catchException
+        (\_ -> throw ("AWS Emulator did not create readable " <> material <> "/" <> file <> "; check image ownership and readiness logs"))
+        (void (capture cfg.project [ "test", "-r", material <> "/" <> file ]))) [ "ca.pem", "emulator_credentials", "config" ]
       void (capture cfg.project [ "curl", "--fail", "--silent", "--show-error", "--max-time", "10", "--cacert", material <> "/ca.pem", started.endpoint <> "/__admin/health" ])
     case checked of
       Right _ -> pure unit
