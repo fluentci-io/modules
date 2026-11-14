@@ -1,0 +1,13 @@
+name = "fluentci_modules_ci"
+version = "0.1.0"
+target = "erlang"
+licences = ["MIT"]
+gleam = ">= 1.19.2"
+
+[dependencies]
+gleam_stdlib = "1.0.5"
+gleam_json = "3.1.0"
+tom = "2.1.0"
+
+[dev-dependencies]
+gleeunit = "1.11.0"

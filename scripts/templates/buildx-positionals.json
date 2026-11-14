@@ -1,0 +1,191 @@
+{
+  "buildx": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "dap": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "debug": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "history": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "imagetools": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "policy": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "bake": {
+    "key": "targets",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Bake targets."
+  },
+  "build": {
+    "key": "context",
+    "ps": "String",
+    "default": ".",
+    "mode": "single",
+    "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest)."
+  },
+  "create": {
+    "key": "endpoint",
+    "ps": "Maybe String",
+    "default": null,
+    "mode": "maybe",
+    "description": "Builder context or endpoint."
+  },
+  "inspect": {
+    "key": "name",
+    "ps": "Maybe String",
+    "default": null,
+    "mode": "maybe",
+    "description": "Builder instance name."
+  },
+  "rm": {
+    "key": "names",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Builder instance names."
+  },
+  "stop": {
+    "key": "name",
+    "ps": "Maybe String",
+    "default": null,
+    "mode": "maybe",
+    "description": "Builder instance name."
+  },
+  "use": {
+    "key": "name",
+    "ps": "String",
+    "default": "",
+    "mode": "single",
+    "description": "Required builder/image name."
+  },
+  "dap_build": {
+    "key": "context",
+    "ps": "String",
+    "default": ".",
+    "mode": "single",
+    "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest)."
+  },
+  "debug_build": {
+    "key": "context",
+    "ps": "String",
+    "default": ".",
+    "mode": "single",
+    "description": "Build context: path, URL or '-' (stdin is not forwarded by the guest)."
+  },
+  "history_inspect": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Subcommand positional arguments; prefer the corresponding named export."
+  },
+  "history_export": {
+    "key": "refs",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Build record references."
+  },
+  "history_import": {
+    "key": "arguments",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Import positional arguments; use the file option instead of interactive stdin."
+  },
+  "history_logs": {
+    "key": "ref",
+    "ps": "Maybe String",
+    "default": null,
+    "mode": "maybe",
+    "description": "Build record reference."
+  },
+  "history_open": {
+    "key": "ref",
+    "ps": "Maybe String",
+    "default": null,
+    "mode": "maybe",
+    "description": "Build record reference."
+  },
+  "history_rm": {
+    "key": "refs",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Build record references."
+  },
+  "history_trace": {
+    "key": "ref",
+    "ps": "Maybe String",
+    "default": null,
+    "mode": "maybe",
+    "description": "Build record reference."
+  },
+  "imagetools_create": {
+    "key": "sources",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Image source references."
+  },
+  "imagetools_inspect": {
+    "key": "name",
+    "ps": "String",
+    "default": "",
+    "mode": "single",
+    "description": "Required builder/image name."
+  },
+  "policy_eval": {
+    "key": "source",
+    "ps": "String",
+    "default": "",
+    "mode": "single",
+    "description": "Required policy evaluation source."
+  },
+  "policy_test": {
+    "key": "path",
+    "ps": "String",
+    "default": ".",
+    "mode": "single",
+    "description": "Policy test directory."
+  },
+  "history_inspect_attachment": {
+    "key": "references",
+    "ps": "Array String",
+    "default": [],
+    "mode": "positional",
+    "description": "Optional REF and DIGEST positional arguments."
+  }
+}

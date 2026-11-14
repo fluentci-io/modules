@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "python3 generate.py --check && node build.mjs",
+    "build": "node build.mjs",
     "test": "node --test test.mjs test/*.test.mjs"
   },
   "devDependencies": {

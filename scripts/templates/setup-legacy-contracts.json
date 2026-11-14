@@ -1,0 +1,453 @@
+{
+  "default": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "pkgx": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "packages": {
+          "type": "string",
+          "description": "Comma-separated packages to install, optionally with native version selectors."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "mise": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "packages": {
+          "type": "string",
+          "description": "Comma-separated packages to install, optionally with native version selectors."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "extism": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "cliVersion": {
+          "type": "string"
+        },
+        "jsVersion": {
+          "type": "string"
+        },
+        "pythonVersion": {
+          "type": "string"
+        },
+        "xtpVersion": {
+          "type": "string"
+        },
+        "binaryenVersion": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "devbox": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "packages": {
+          "type": "string",
+          "description": "Comma-separated packages to install, optionally with native version selectors."
+        },
+        "project": {
+          "type": "string",
+          "default": ".",
+          "description": "Project environment directory to initialize or update."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "uv": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "pythonVersion": {
+          "type": "string",
+          "description": "Optional Python version to install or select; omit for uv-only setup."
+        },
+        "tools": {
+          "type": "string",
+          "description": "Comma-separated tools to install, optionally with native version constraints such as ruff==0.12.0."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "macports": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "packages": {
+          "type": "string",
+          "description": "Comma-separated packages to install, optionally with native version selectors."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "macports-rs": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "packages": {
+          "type": "string",
+          "description": "Comma-separated packages to install, optionally with native version selectors."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "flox": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "packages": {
+          "type": "string",
+          "description": "Comma-separated packages to install, optionally with native version selectors."
+        },
+        "project": {
+          "type": "string",
+          "default": ".",
+          "description": "Project environment directory to initialize or update."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "cachix": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "default": "latest"
+        },
+        "installDir": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "sudo": {
+          "type": "boolean",
+          "default": false
+        },
+        "cache": {
+          "type": "string",
+          "description": "Cachix cache name to enable with cachix use; omit for CLI-only setup."
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

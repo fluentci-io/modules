@@ -70,7 +70,7 @@ bun install --cwd lib/component --frozen-lockfile
 npm ci --prefix build/cmake
 npm run build --prefix build/cmake
 npm test --prefix build/cmake
-node scripts/validate_wasm.mjs build/cmake
+escript scripts/fluentci_modules_ci validate-wasm build/cmake
 ```
 
 The shared build compiles PureScript, reads fresh compiler docs/CoreFn, generates
@@ -97,11 +97,11 @@ and native argument/return shapes that disagree with the source schema.
 Regenerate source contracts before building:
 
 ```sh
-python3 scripts/generate_cli_modules.py
-python3 scripts/generate_setup_tools.py
-python3 containers/buildx/generate.py
-python3 scripts/generate_components.py
-python3 scripts/audit_modules.py
+escript scripts/fluentci_modules_ci generate-cli
+escript scripts/fluentci_modules_ci generate-setup
+escript scripts/fluentci_modules_ci generate-buildx
+escript scripts/fluentci_modules_ci generate-components
+escript scripts/fluentci_modules_ci audit-modules
 ```
 
 After changing shared contracts, rebuild the affected modules. CI builds and

@@ -3,7 +3,7 @@
 The registry contains 246 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
-Regenerate with `python3 scripts/audit_modules.py`; CI checks for drift.
+Regenerate with `escript scripts/fluentci_modules_ci audit-modules`; CI checks for drift.
 
 ## Execution and failure contracts
 

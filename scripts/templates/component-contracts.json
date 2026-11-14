@@ -1,0 +1,3496 @@
+{
+  "setup-default": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify {{tool}}, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"{{tool}}\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"{{tool}}\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "aws-emulator": {
+    "imports": [
+      "import CI.Contract as Contract",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Services as Native",
+      "import CI.Services.Aws as Aws"
+    ],
+    "functions": {
+      "start": {
+        "description": "Start an idempotent background service through FluentCI’s native workspace service manager and wait for readiness.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-aws-emulator-default; must start with module-aws-emulator- to scope lifecycle operations."
+            },
+            "version": {
+              "type": "string",
+              "description": "Docker image version tag. Uses the profile default when omitted; cannot be combined with image."
+            },
+            "image": {
+              "type": "string",
+              "description": "Full Docker image reference, including an optional digest; replaces the default repository and version."
+            },
+            "port": {
+              "type": "integer",
+              "description": "Host port for the primary endpoint; zero allocates an available loopback port. AWS Emulator uses the same nonzero port inside and outside its container. Default: 9297.",
+              "default": 9297
+            },
+            "ports": {
+              "type": "string",
+              "description": "Comma-separated container ports or HOST:CONTAINER bindings. Omit for every profile port with random host bindings. Include the primary port once."
+            },
+            "volumes": {
+              "type": "string",
+              "description": "Comma-separated /CONTAINER_PATH anonymous volumes or SOURCE:/CONTAINER_PATH[:ro|rw] mounts. Explicit named/bind data survives stop."
+            },
+            "env": {
+              "type": "string",
+              "description": "Comma-separated KEY=VALUE test configuration overrides; no JSON object. Use disposable test values because definitions are sent to the manager."
+            },
+            "command": {
+              "type": "string",
+              "description": "Comma-separated foreground command tokens replacing the image command; literal argv, with no shell expansion."
+            },
+            "dependsOn": {
+              "type": "string",
+              "description": "Comma-separated existing native service names whose readiness must be satisfied before startup."
+            },
+            "startupTimeoutMs": {
+              "type": "integer",
+              "description": "Readiness deadline, from 100 to 600000 milliseconds; defaults to the service profile."
+            },
+            "stopTimeoutMs": {
+              "type": "integer",
+              "description": "Graceful shutdown deadline from 100 to 120000 milliseconds. Default: 5000.",
+              "default": 5000
+            },
+            "restartPolicy": {
+              "type": "string",
+              "description": "Native restart policy: never, on_failure or always. Default: \"never\". Allowed values: never, on_failure, always.",
+              "default": "never",
+              "enum": [
+                "never",
+                "on_failure",
+                "always"
+              ]
+            },
+            "maxRestarts": {
+              "type": "integer",
+              "description": "Maximum automatic restarts, from zero to 100. Default: 0.",
+              "default": 0
+            },
+            "healthCheck": {
+              "type": "boolean",
+              "description": "Keep running the readiness probe as the native recurring health check. Default: true.",
+              "default": true
+            },
+            "readinessCommand": {
+              "type": "string",
+              "description": "Comma-separated literal probe command run inside the owned container; overrides the profile probe."
+            },
+            "readinessPath": {
+              "type": "string",
+              "description": "HTTP readiness URL path for profiles using an HTTP probe."
+            },
+            "stateDir": {
+              "type": "string",
+              "description": "Required absolute host directory holding generated credentials and TLS files. Mounted into the emulator and never deleted by stop."
+            }
+          },
+          "required": [
+            "stateDir"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.start (Dependencies.ensureFor \"docker\") \"aws-emulator\" (Contract.input (Contract.encodeInput args))"
+      },
+      "stop": {
+        "description": "Stop only this named service through the native manager; preserve explicitly mounted data. Native dependents are stopped too.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-aws-emulator-default; must start with module-aws-emulator- to scope lifecycle operations."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.stop \"aws-emulator\" (Contract.input (Contract.encodeInput args))"
+      },
+      "restart": {
+        "description": "Restart the existing native service definition and wait for readiness.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-aws-emulator-default; must start with module-aws-emulator- to scope lifecycle operations."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.restart (Dependencies.ensureFor \"docker\") \"aws-emulator\" (Contract.input (Contract.encodeInput args))"
+      },
+      "status": {
+        "description": "Return the service’s native lifecycle state and actual loopback port bindings.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-aws-emulator-default; must start with module-aws-emulator- to scope lifecycle operations."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.status \"aws-emulator\" (Contract.input (Contract.encodeInput args))"
+      },
+      "logs": {
+        "description": "Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-aws-emulator-default; must start with module-aws-emulator- to scope lifecycle operations."
+            },
+            "tail": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1,
+              "maximum": 10000,
+              "description": "Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100."
+            },
+            "follow": {
+              "type": "boolean",
+              "default": false,
+              "description": "Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "string"
+        },
+        "returned": "String",
+        "body": "  Native.logs \"aws-emulator\" (Contract.input (Contract.encodeInput args))"
+      },
+      "build": {
+        "description": "Build the official AWS Emulator package into a local Docker image without starting it.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "image": {
+              "type": "string",
+              "default": "fluentci/aws-emulator:local",
+              "description": "Local image name/tag to build. Default: \"fluentci/aws-emulator:local\"."
+            },
+            "architecture": {
+              "type": "string",
+              "default": "auto",
+              "enum": [
+                "auto",
+                "x86_64",
+                "aarch64"
+              ],
+              "description": "RPM architecture; auto uses the Docker daemon architecture. Default: \"auto\". Allowed values: auto, x86_64, aarch64."
+            },
+            "packageUrl": {
+              "type": "string",
+              "description": "Optional HTTPS URL of a pinned official AWS Emulator RPM; requires packageSha256. Default uses the official latest LTS package."
+            },
+            "packageSha256": {
+              "type": "string",
+              "description": "Lowercase SHA-256 for a pinned RPM; custom URLs require it."
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "default": 1800000,
+              "description": "Image build deadline from 1000 to 3600000 milliseconds. Default: 1800000."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "string"
+        },
+        "returned": "String",
+        "body": "  Aws.build (Dependencies.ensureFor \"docker\") (Contract.input (Contract.encodeInput args))"
+      }
+    },
+    "trailer": ""
+  },
+  "cachix": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Cachix as Native",
+      "import CI.Cachix.Support (unwrap)",
+      "import FluentCI.Plugin as P",
+      "import Data.String.Common (trim)"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Configure a Cachix cache using host credentials.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "cache": {
+              "type": "string",
+              "description": "Cachix cache name; credentials come from CACHIX_AUTH_TOKEN."
+            }
+          },
+          "required": [
+            "cache"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "cache": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "enabled",
+            "cache"
+          ],
+          "additionalProperties": false
+        },
+        "returned": "{ enabled :: Boolean, cache :: String }",
+        "body": "  present <- P.hasEnv \"CACHIX_AUTH_TOKEN\" >>= unwrap\n  token <- if present then P.getEnv \"CACHIX_AUTH_TOKEN\" >>= unwrap else pure \"\"\n  Native.setupWithSetup (Dependencies.ensureFor \"nix\") args.cache\n  pure { enabled: trim token /= \"\", cache: args.cache }"
+      },
+      "push": {
+        "description": "Push the result closure to a Cachix cache using host credentials.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "cache": {
+              "type": "string",
+              "description": "Cachix cache name; credentials come from CACHIX_AUTH_TOKEN."
+            }
+          },
+          "required": [
+            "cache"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "cache": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "enabled",
+            "cache"
+          ],
+          "additionalProperties": false
+        },
+        "returned": "{ enabled :: Boolean, cache :: String }",
+        "body": "  present <- P.hasEnv \"CACHIX_AUTH_TOKEN\" >>= unwrap\n  token <- if present then P.getEnv \"CACHIX_AUTH_TOKEN\" >>= unwrap else pure \"\"\n  Native.pushResultWithSetup (Dependencies.ensureFor \"nix\") args.cache\n  pure { enabled: trim token /= \"\", cache: args.cache }"
+      }
+    },
+    "trailer": ""
+  },
+  "discord": {
+    "imports": [
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Notifications as Native"
+    ],
+    "functions": {
+      "send": {
+        "description": "Send one Discord notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Notification text, passed literally and JSON-encoded internally. Maximum 2000 Unicode characters; no JSON object is accepted."
+            },
+            "webhookEnv": {
+              "type": "string",
+              "default": "DISCORD_WEBHOOK_URL",
+              "description": "Name of the host environment variable holding the credential; pass the variable name, never the secret URL or token. Default: \"DISCORD_WEBHOOK_URL\"."
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 600,
+              "default": 30,
+              "description": "HTTP request timeout in seconds, from 1 to 600. Notifications are sent once without automatic retries. Default: 30."
+            },
+            "username": {
+              "type": "string",
+              "description": "Optional webhook display name, from 1 to 80 Unicode characters."
+            },
+            "avatarUrl": {
+              "type": "string",
+              "description": "Optional HTTPS image URL overriding the webhook avatar."
+            },
+            "threadId": {
+              "type": "string",
+              "description": "Positive numeric Discord thread ID; required for existing forum/media channel threads."
+            },
+            "allowMentions": {
+              "type": "boolean",
+              "default": false,
+              "description": "Allow user, role and everyone mentions explicitly. The default disables all parsed mentions. Default: false."
+            }
+          },
+          "required": [
+            "message"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "sent": {
+              "type": "boolean"
+            },
+            "httpStatus": {
+              "type": "integer"
+            },
+            "messageId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "provider",
+            "sent",
+            "httpStatus",
+            "messageId"
+          ],
+          "additionalProperties": false
+        },
+        "returned": "{ provider :: String, sent :: Boolean, httpStatus :: Int, messageId :: String }",
+        "body": "  Native.discord (Dependencies.ensureFor \"curl\") args"
+      }
+    },
+    "trailer": ""
+  },
+  "dpkg": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Dpkg as Native"
+    ],
+    "functions": {
+      "build": {
+        "description": "Build packages from a Linux dpkg package tree and target architecture.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "description": "Input directory containing the package tree to validate and build."
+            },
+            "arch": {
+              "type": "string",
+              "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+            },
+            "output": {
+              "type": "string",
+              "description": "Destination path for generated packages."
+            }
+          },
+          "required": [
+            "directory",
+            "arch"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "returned": "Array String",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  Native.buildWithSetup (Dependencies.ensureFor \"dpkg\") config"
+      },
+      "validate": {
+        "description": "Validate a Linux dpkg package tree and target architecture.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "description": "Input directory containing the package tree to validate and build."
+            },
+            "arch": {
+              "type": "string",
+              "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+            },
+            "output": {
+              "type": "string",
+              "description": "Destination path for generated packages."
+            }
+          },
+          "required": [
+            "directory",
+            "arch"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "boolean"
+        },
+        "returned": "Boolean",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  Native.validateWithSetup (Dependencies.ensureFor \"dpkg\") config\n  pure true"
+      }
+    },
+    "trailer": ""
+  },
+  "gemfury": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Gemfury as Native",
+      "import FluentCI.Plugin as P",
+      "import Data.String.Common (trim)"
+    ],
+    "functions": {
+      "upload": {
+        "description": "Upload Linux packages to Gemfury using credentials from the host environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "files": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Required comma-separated package paths. Whitespace is trimmed; CSV quotes preserve commas inside a filename. Empty lists and malformed entries are rejected."
+            }
+          },
+          "required": [
+            "files"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "uploaded": {
+              "type": "boolean"
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "uploaded",
+            "files"
+          ],
+          "additionalProperties": false
+        },
+        "returned": "{ uploaded :: Boolean, files :: Array String }",
+        "body": "  files <- Native.decodeFiles args.files\n  present <- P.hasEnv \"FURY_TOKEN\" >>= unwrap\n  token <- if present then P.getEnv \"FURY_TOKEN\" >>= unwrap else pure \"\"\n  Native.uploadFilesWithSetup (Dependencies.ensureFor \"curl\") files\n  pure { uploaded: trim token /= \"\", files }"
+      }
+    },
+    "trailer": "unwrap :: forall a. P.Result a -> Effect a\nunwrap = either (throw <<< P.errorMessage) pure\n"
+  },
+  "service-default": {
+    "imports": [
+      "import CI.Contract as Contract",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Services as Native"
+    ],
+    "functions": {
+      "start": {
+        "description": "Start an idempotent background service through FluentCI’s native workspace service manager and wait for readiness.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-{{tool}}-default; must start with module-{{tool}}- to scope lifecycle operations."
+            },
+            "version": {
+              "type": "string",
+              "description": "Docker image version tag. Uses the profile default when omitted; cannot be combined with image."
+            },
+            "image": {
+              "type": "string",
+              "description": "Full Docker image reference, including an optional digest; replaces the default repository and version."
+            },
+            "port": {
+              "type": "integer",
+              "description": "Host port for the primary endpoint; zero allocates an available loopback port. AWS Emulator uses the same nonzero port inside and outside its container. Default: 0.",
+              "default": 0
+            },
+            "ports": {
+              "type": "string",
+              "description": "Comma-separated container ports or HOST:CONTAINER bindings. Omit for every profile port with random host bindings. Include the primary port once."
+            },
+            "volumes": {
+              "type": "string",
+              "description": "Comma-separated /CONTAINER_PATH anonymous volumes or SOURCE:/CONTAINER_PATH[:ro|rw] mounts. Explicit named/bind data survives stop."
+            },
+            "env": {
+              "type": "string",
+              "description": "Comma-separated KEY=VALUE test configuration overrides; no JSON object. Use disposable test values because definitions are sent to the manager."
+            },
+            "command": {
+              "type": "string",
+              "description": "Comma-separated foreground command tokens replacing the image command; literal argv, with no shell expansion."
+            },
+            "dependsOn": {
+              "type": "string",
+              "description": "Comma-separated existing native service names whose readiness must be satisfied before startup."
+            },
+            "startupTimeoutMs": {
+              "type": "integer",
+              "description": "Readiness deadline, from 100 to 600000 milliseconds; defaults to the service profile."
+            },
+            "stopTimeoutMs": {
+              "type": "integer",
+              "description": "Graceful shutdown deadline from 100 to 120000 milliseconds. Default: 5000.",
+              "default": 5000
+            },
+            "restartPolicy": {
+              "type": "string",
+              "description": "Native restart policy: never, on_failure or always. Default: \"never\". Allowed values: never, on_failure, always.",
+              "default": "never",
+              "enum": [
+                "never",
+                "on_failure",
+                "always"
+              ]
+            },
+            "maxRestarts": {
+              "type": "integer",
+              "description": "Maximum automatic restarts, from zero to 100. Default: 0.",
+              "default": 0
+            },
+            "healthCheck": {
+              "type": "boolean",
+              "description": "Keep running the readiness probe as the native recurring health check. Default: true.",
+              "default": true
+            },
+            "readinessCommand": {
+              "type": "string",
+              "description": "Comma-separated literal probe command run inside the owned container; overrides the profile probe."
+            },
+            "readinessPath": {
+              "type": "string",
+              "description": "HTTP readiness URL path for profiles using an HTTP probe."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.start (Dependencies.ensureFor \"docker\") \"{{tool}}\" (Contract.input (Contract.encodeInput args))"
+      },
+      "stop": {
+        "description": "Stop only this named service through the native manager; preserve explicitly mounted data. Native dependents are stopped too.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-{{tool}}-default; must start with module-{{tool}}- to scope lifecycle operations."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.stop \"{{tool}}\" (Contract.input (Contract.encodeInput args))"
+      },
+      "restart": {
+        "description": "Restart the existing native service definition and wait for readiness.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-{{tool}}-default; must start with module-{{tool}}- to scope lifecycle operations."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.restart (Dependencies.ensureFor \"docker\") \"{{tool}}\" (Contract.input (Contract.encodeInput args))"
+      },
+      "status": {
+        "description": "Return the service’s native lifecycle state and actual loopback port bindings.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-{{tool}}-default; must start with module-{{tool}}- to scope lifecycle operations."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "name",
+            "state",
+            "backend",
+            "host",
+            "port",
+            "endpoint",
+            "ports"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "backend": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer"
+            },
+            "ports": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "containerPort",
+                  "port",
+                  "address"
+                ],
+                "properties": {
+                  "containerPort": {
+                    "type": "integer"
+                  },
+                  "port": {
+                    "type": "integer"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Native.ServiceResult",
+        "body": "  Native.status \"{{tool}}\" (Contract.input (Contract.encodeInput args))"
+      },
+      "logs": {
+        "description": "Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "string",
+              "default": ".",
+              "description": "Workspace directory used by every native service manager call. Default: \".\"."
+            },
+            "name": {
+              "type": "string",
+              "description": "Full service name, default module-{{tool}}-default; must start with module-{{tool}}- to scope lifecycle operations."
+            },
+            "tail": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1,
+              "maximum": 10000,
+              "description": "Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100."
+            },
+            "follow": {
+              "type": "boolean",
+              "default": false,
+              "description": "Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "string"
+        },
+        "returned": "String",
+        "body": "  Native.logs \"{{tool}}\" (Contract.input (Contract.encodeInput args))"
+      }
+    },
+    "trailer": ""
+  },
+  "rpmbuild": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Rpmbuild as Native"
+    ],
+    "functions": {
+      "build": {
+        "description": "Build packages from a Linux rpmbuild package tree and target architecture.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "description": "Input directory containing the package tree to validate and build."
+            },
+            "arch": {
+              "type": "string",
+              "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+            },
+            "output": {
+              "type": "string",
+              "description": "Destination path for generated packages."
+            },
+            "spec": {
+              "type": "string",
+              "description": "RPM spec file inside the package tree."
+            }
+          },
+          "required": [
+            "directory",
+            "arch",
+            "spec"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "returned": "Array String",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  Native.buildWithSetup (Dependencies.ensureFor \"rpmbuild\") config"
+      },
+      "validate": {
+        "description": "Validate a Linux rpmbuild package tree and target architecture.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string",
+              "description": "Input directory containing the package tree to validate and build."
+            },
+            "arch": {
+              "type": "string",
+              "description": "Target package CPU architecture; the payload must already be compiled for this architecture."
+            },
+            "output": {
+              "type": "string",
+              "description": "Destination path for generated packages."
+            },
+            "spec": {
+              "type": "string",
+              "description": "RPM spec file inside the package tree."
+            }
+          },
+          "required": [
+            "directory",
+            "arch",
+            "spec"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "boolean"
+        },
+        "returned": "Boolean",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  Native.validateWithSetup (Dependencies.ensureFor \"rpmbuild\") config\n  pure true"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-android": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup.Android as Native"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install Java (21 by default) through setup-java, verify Android command-line tools, install selected SDK packages, and publish their environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Pinned Google command-line tools archive build ID; nondefault builds require archiveUrl and archiveSha256. Default: \"15859902\".",
+              "default": "15859902"
+            },
+            "javaVersion": {
+              "type": "string",
+              "description": "Java release or supported selector forwarded to the typed setup-java dependency; defaults to Java 21. Default: \"21\".",
+              "default": "21"
+            },
+            "sdkRoot": {
+              "type": "string",
+              "description": "Absolute SDK root; defaults to a per-user directory keyed by the command-line tools build."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated native Android SDK package IDs, such as platform-tools,platforms;android-36,build-tools;36.0.0. Blank installs no packages through this field. Default: \"platform-tools\".",
+              "default": "platform-tools"
+            },
+            "apiLevels": {
+              "type": "string",
+              "description": "Comma-separated API levels or preview names; installs platforms;android-VALUE for each entry."
+            },
+            "buildToolsVersions": {
+              "type": "string",
+              "description": "Comma-separated Android build-tools revisions to install and add to PATH."
+            },
+            "ndkVersions": {
+              "type": "string",
+              "description": "Comma-separated side-by-side NDK revisions to install; ANDROID_NDK_HOME selects the first."
+            },
+            "cmakeVersions": {
+              "type": "string",
+              "description": "Comma-separated SDK CMake revisions to install and add to PATH."
+            },
+            "systemImages": {
+              "type": "string",
+              "description": "Comma-separated complete system-image package IDs; no emulator or virtual device is started."
+            },
+            "packageFile": {
+              "type": "string",
+              "description": "Existing file of newline-separated SDK package IDs, passed to sdkmanager."
+            },
+            "channel": {
+              "type": "integer",
+              "description": "Highest SDK repository channel to include: 0 stable, 1 beta, 2 dev, or 3 canary. Default: 0.",
+              "default": 0
+            },
+            "acceptLicenses": {
+              "type": "boolean",
+              "description": "Accept SDK licenses noninteractively. False uses existing licenses and closed stdin; missing licenses fail installation. Default: true.",
+              "default": true
+            },
+            "proxyType": {
+              "type": "string",
+              "description": "SDK proxy protocol: http or socks; requires proxyHost and proxyPort."
+            },
+            "proxyHost": {
+              "type": "string",
+              "description": "SDK repository proxy hostname or IP address."
+            },
+            "proxyPort": {
+              "type": "integer",
+              "description": "SDK proxy port from 1 to 65535 when a proxy is enabled."
+            },
+            "sdkManagerArgs": {
+              "type": "string",
+              "description": "Additional literal sdkmanager option/value tokens as comma-separated text; cannot change the managed operation or SDK root."
+            },
+            "archiveUrl": {
+              "type": "string",
+              "description": "Optional HTTPS command-line tools ZIP URL for mirrors or alternate builds; requires archiveSha256."
+            },
+            "archiveSha256": {
+              "type": "string",
+              "description": "Lowercase SHA-256 of the alternate ZIP. Default Google downloads use pinned platform checksums."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment",
+            "sdkRoot",
+            "javaVersion",
+            "commandLineToolsBuild"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "sdkRoot": {
+              "type": "string"
+            },
+            "javaVersion": {
+              "type": "string"
+            },
+            "commandLineToolsBuild": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "{ tool :: String, version :: String, binDir :: String, environment :: Array Contract.Variable, sdkRoot :: String, javaVersion :: String, commandLineToolsBuild :: String }",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  result <- Native.setupWith config\n  pure { tool: result.tool, version: result.version, binDir: result.binDir, environment: Contract.variables result.environment, sdkRoot: result.sdkRoot, javaVersion: result.javaVersion, commandLineToolsBuild: result.commandLineToolsBuild }"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-buildx": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify buildx, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"buildx\" (Contract.input (Contract.encodeInput args)))\n  Dependencies.ensureFor \"docker\"\n  Contract.setupResult <$> Setup.install \"buildx\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-bun": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify bun, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "baseline": {
+              "type": "boolean",
+              "description": "Use Bun’s baseline CPU build; defaults to false."
+            },
+            "libc": {
+              "type": "string",
+              "description": "Linux C library variant: auto, gnu, or musl."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"bun\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"bun\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-cachix": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify cachix, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Expected Cachix version from the configured nixpkgs registry entry; latest accepts the packaged version. An explicit version mismatch fails setup."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "cache": {
+              "type": "string",
+              "description": "Cachix cache name to enable with cachix use after installation; omit for CLI-only setup. Public caches need no token; private caches use inherited CACHIX_AUTH_TOKEN."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"cachix\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"cachix\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-determinate-nix": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify determinate-nix, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "init": {
+              "type": "string",
+              "description": "Determinate Nix service integration: systemd or none."
+            },
+            "trustedUsers": {
+              "type": "string",
+              "description": "Comma-separated trusted Nix users or @groups, such as runner,@builders; root is retained. Blank or omitted values add no users. Trust only administrators."
+            },
+            "extraConf": {
+              "type": "string",
+              "description": "Comma-separated single-line Nix key=value settings, passed literally to the installer. Quote CSV entries containing commas. Blank or omitted values add no settings."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  json <- Contract.csvFields [ \"trustedUsers\", \"extraConf\" ] (Contract.encodeInput args)\n  config <- either throw pure (Types.decodeConfig \"determinate-nix\" json)\n  Contract.setupResult <$> Setup.install \"determinate-nix\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-devbox": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify devbox, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager."
+            },
+            "project": {
+              "type": "string",
+              "description": "Project environment directory to initialize or update; defaults to the current directory. Creates or updates the manager manifest and lockfile when packages are supplied."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"devbox\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"devbox\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-elixir": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify elixir, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "otpVersion": {
+              "type": "string",
+              "description": "Erlang/OTP major release matching the Elixir archive."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"elixir\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"elixir\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-extism": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify extism, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "cliVersion": {
+              "type": "string",
+              "description": "Extism CLI release; takes precedence over version."
+            },
+            "jsVersion": {
+              "type": "string",
+              "description": "Extism JavaScript PDK compiler release."
+            },
+            "pythonVersion": {
+              "type": "string",
+              "description": "Extism Python PDK compiler release."
+            },
+            "xtpVersion": {
+              "type": "string",
+              "description": "Expected XTP version; upstream exposes a latest-only download."
+            },
+            "binaryenVersion": {
+              "type": "string",
+              "description": "Binaryen release providing wasm-opt and wasm-merge."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"extism\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"extism\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-flox": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify flox, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager."
+            },
+            "project": {
+              "type": "string",
+              "description": "Project environment directory to initialize or update; defaults to the current directory. Creates or updates the manager manifest and lockfile when packages are supplied."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"flox\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"flox\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-macports": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify macports, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for requested port installs; setup-macports also uses it for its system installer. The macports-rs CLI itself is always installed without sudo."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated MacPorts port names to install, such as git,cmake,python312; omit or leave blank for CLI-only setup. Package versions come from the configured ports tree."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"macports\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"macports\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-macports-rs": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify macports-rs, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for requested port installs; setup-macports also uses it for its system installer. The macports-rs CLI itself is always installed without sudo."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated MacPorts port names to install, such as git,cmake,python312; omit or leave blank for CLI-only setup. Package versions come from the configured ports tree."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"macports-rs\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"macports-rs\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-mise": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify mise, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"mise\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"mise\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-nix": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify nix, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "daemon": {
+              "type": "boolean",
+              "description": "Install Nix in multi-user daemon mode; defaults to true."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"nix\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"nix\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-php": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup.PHP as Native"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify PHP and optional versioned CI tools, then publish their environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "default": "latest",
+              "description": "PHP major/minor prefix or exact upstream release, including prereleases; latest/stable resolves the latest available release. Versions are discovered dynamically by the PHP backend. BSD is limited to native repository packages. Default: \"latest\"."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user prefix for the PHP manager and isolated tool environments; native BSD packages require this to be omitted."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "tools": {
+              "type": "string",
+              "default": "composer",
+              "description": "Comma-separated PHP tools, optionally name:version, such as composer:2,phpunit:11,phpstan. Blank or none skips module tool installation. Supports documented aliases and vendor/package:version with a matching executable name. Default: \"composer\"."
+            },
+            "miseVersion": {
+              "type": "string",
+              "default": "latest",
+              "description": "mise release used to install PHP on Linux/macOS; ignored for native BSD packages. Default: \"latest\"."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Native.setupWith config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-pkgx": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify pkgx, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "packages": {
+              "type": "string",
+              "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"pkgx\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"pkgx\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-pkl": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify pkl, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "libc": {
+              "type": "string",
+              "description": "Linux C library variant: auto, gnu, or musl."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"pkl\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"pkl\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-purescript": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types",
+      "import CI.Setup.PureScript as Native"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify purescript, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "nodeVersion": {
+              "type": "string",
+              "description": "Node.js release or channel to install for the PureScript toolchain."
+            },
+            "bunVersion": {
+              "type": "string",
+              "description": "Bun release to install for the PureScript toolchain."
+            },
+            "npmVersion": {
+              "type": "string",
+              "description": "npm release to install for the PureScript toolchain."
+            },
+            "spagoVersion": {
+              "type": "string",
+              "description": "Spago release to install for the PureScript toolchain."
+            },
+            "nodePackageName": {
+              "type": "string",
+              "description": "Native Node.js package selector for BSD toolchain installation."
+            },
+            "bunPackageName": {
+              "type": "string",
+              "description": "Native Bun package selector for BSD toolchain installation."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment",
+            "nodeVersion",
+            "bunVersion",
+            "npmVersion",
+            "spagoVersion"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "nodeVersion": {
+              "type": "string"
+            },
+            "bunVersion": {
+              "type": "string"
+            },
+            "npmVersion": {
+              "type": "string"
+            },
+            "spagoVersion": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "{ tool :: String, version :: String, binDir :: String, environment :: Array Contract.Variable, nodeVersion :: String, bunVersion :: String, npmVersion :: String, spagoVersion :: String }",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  result <- Native.setupWith config\n  pure (result { environment = Contract.variables result.environment })"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-rust": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup as Setup",
+      "import CI.Setup.Types as Types"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify rust, select its version, and publish its environment for subsequent tasks.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "toolchain": {
+              "type": "string",
+              "description": "Rustup toolchain channel or exact release; alias for version. Both must agree when provided."
+            },
+            "components": {
+              "type": "string",
+              "description": "Comma-separated Rustup components to install, such as rustfmt,clippy; omitted or blank values add no components."
+            },
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated Rust target triples to install, such as wasm32-wasip2,wasm32-unknown-unknown; omitted or blank values add no targets."
+            },
+            "profile": {
+              "type": "string",
+              "description": "Rustup installation profile: minimal (default), default, or complete."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Types.decodeConfig \"rust\" (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Setup.install \"rust\" config"
+      }
+    },
+    "trailer": ""
+  },
+  "setup-uv": {
+    "imports": [
+      "import Prelude",
+      "import CI.Contract as Contract",
+      "import Data.Either (either)",
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import Effect.Exception (throw)",
+      "import CI.Setup.UvEnvironment as Native"
+    ],
+    "functions": {
+      "setup": {
+        "description": "Install and verify uv, optionally configure a Python version and isolated tools, and publish their environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Tool release or supported channel to install; omitted values use the documented default."
+            },
+            "installDir": {
+              "type": "string",
+              "description": "Absolute per-user installation prefix; omit for native package installations."
+            },
+            "packageName": {
+              "type": "string",
+              "description": "Native package or port selector overriding the default repository package name."
+            },
+            "sudo": {
+              "type": "boolean",
+              "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+            },
+            "pythonVersion": {
+              "type": "string",
+              "description": "Optional Python release or interpreter selector such as 3.13 or cpython-3.13.1; omit to retain uv-only setup. BSD selects an existing matching interpreter without downloads."
+            },
+            "tools": {
+              "type": "string",
+              "description": "Comma-separated Python CLI packages with optional single native version constraints, such as ruff==0.12.0,httpie. Blank or omitted values install no tools."
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "required": [
+            "tool",
+            "version",
+            "binDir",
+            "environment"
+          ],
+          "properties": {
+            "tool": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "binDir": {
+              "type": "string"
+            },
+            "environment": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "value"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "returned": "Contract.SetupResult",
+        "body": "  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))\n  Contract.setupResult <$> Native.setupWith config"
+      }
+    },
+    "trailer": ""
+  },
+  "slack": {
+    "imports": [
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Notifications as Native"
+    ],
+    "functions": {
+      "send": {
+        "description": "Send one Slack notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Notification text, passed literally and JSON-encoded internally. Maximum 4000 Unicode characters; no JSON object is accepted."
+            },
+            "webhookEnv": {
+              "type": "string",
+              "default": "SLACK_WEBHOOK_URL",
+              "description": "Name of the host environment variable holding the credential; pass the variable name, never the secret URL or token. Default: \"SLACK_WEBHOOK_URL\"."
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 600,
+              "default": 30,
+              "description": "HTTP request timeout in seconds, from 1 to 600. Notifications are sent once without automatic retries. Default: 30."
+            },
+            "threadTs": {
+              "type": "string",
+              "description": "Existing Slack message timestamp for a threaded reply, such as 1712345678.123456."
+            }
+          },
+          "required": [
+            "message"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "sent": {
+              "type": "boolean"
+            },
+            "httpStatus": {
+              "type": "integer"
+            },
+            "messageId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "provider",
+            "sent",
+            "httpStatus",
+            "messageId"
+          ],
+          "additionalProperties": false
+        },
+        "returned": "{ provider :: String, sent :: Boolean, httpStatus :: Int, messageId :: String }",
+        "body": "  Native.slack (Dependencies.ensureFor \"curl\") args"
+      }
+    },
+    "trailer": ""
+  },
+  "telegram": {
+    "imports": [
+      "import Data.Maybe (Maybe)",
+      "import Effect (Effect)",
+      "import CI.ModuleDependencies as Dependencies",
+      "import CI.Notifications as Native"
+    ],
+    "functions": {
+      "send": {
+        "description": "Send one Telegram notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.",
+        "input": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Notification text, passed literally and JSON-encoded internally. Maximum 4096 Unicode characters; no JSON object is accepted."
+            },
+            "tokenEnv": {
+              "type": "string",
+              "default": "TELEGRAM_BOT_TOKEN",
+              "description": "Name of the host environment variable holding the credential; pass the variable name, never the secret URL or token. Default: \"TELEGRAM_BOT_TOKEN\"."
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 600,
+              "default": 30,
+              "description": "HTTP request timeout in seconds, from 1 to 600. Notifications are sent once without automatic retries. Default: 30."
+            },
+            "chatId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Nonzero numeric Telegram chat ID (including negative group IDs), or an @channel username."
+            },
+            "parseMode": {
+              "type": "string",
+              "enum": [
+                "HTML",
+                "MarkdownV2",
+                "Markdown"
+              ],
+              "description": "Optional Telegram formatting mode; omitted text is plain. Escape markup according to the selected mode. Allowed values: HTML, MarkdownV2, Markdown."
+            },
+            "messageThreadId": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Optional positive forum topic message-thread ID."
+            },
+            "disableNotification": {
+              "type": "boolean",
+              "description": "Send silently when true."
+            },
+            "protectContent": {
+              "type": "boolean",
+              "description": "Protect the message from forwarding and saving when true."
+            },
+            "disableWebPagePreview": {
+              "type": "boolean",
+              "description": "Disable link previews when true."
+            }
+          },
+          "required": [
+            "message",
+            "chatId"
+          ],
+          "additionalProperties": false
+        },
+        "output": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "sent": {
+              "type": "boolean"
+            },
+            "httpStatus": {
+              "type": "integer"
+            },
+            "messageId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "provider",
+            "sent",
+            "httpStatus",
+            "messageId"
+          ],
+          "additionalProperties": false
+        },
+        "returned": "{ provider :: String, sent :: Boolean, httpStatus :: Int, messageId :: String }",
+        "body": "  Native.telegram (Dependencies.ensureFor \"curl\") args"
+      }
+    },
+    "trailer": ""
+  },
+  "cli-setup-container": {
+    "description": "Ensure {{tool}} is installed and verified, reusing an available matching version, and publish its environment.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Tool release or supported channel to install; omitted values use the documented default."
+        },
+        "installDir": {
+          "type": "string",
+          "description": "Absolute per-user installation prefix; omit for native package installations."
+        },
+        "packageName": {
+          "type": "string",
+          "description": "Native package or port selector overriding the default repository package name."
+        },
+        "sudo": {
+          "type": "boolean",
+          "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": [
+        "tool",
+        "version",
+        "binDir",
+        "environment"
+      ],
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "returned": "Contract.SetupResult",
+    "body": "  ContainerSetup.setupWith (Contract.input (Contract.encodeInput args))"
+  },
+  "cli-setup-version-control": {
+    "description": "Ensure {{tool}} is installed and verified, reusing an available matching version, and publish its environment.",
+    "input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Tool release or supported channel to install; omitted values use the documented default."
+        },
+        "installDir": {
+          "type": "string",
+          "description": "Absolute per-user installation prefix; omit for native package installations."
+        },
+        "packageName": {
+          "type": "string",
+          "description": "Native package or port selector overriding the default repository package name."
+        },
+        "sudo": {
+          "type": "boolean",
+          "description": "Use noninteractive sudo for native package or system installation; defaults to false."
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": [
+        "tool",
+        "version",
+        "binDir",
+        "environment"
+      ],
+      "properties": {
+        "tool": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "binDir": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "value"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "returned": "Contract.SetupResult",
+    "body": "  ContainerSetup.setupWith (Contract.input (Contract.encodeInput args))"
+  }
+}

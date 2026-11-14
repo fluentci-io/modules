@@ -5,8 +5,8 @@ execution plans for the tool modules in this repository. Module entry points,
 JSON schemas, and `OPTIONS.md` files are generated from [catalog.json](./catalog.json).
 
 ```sh
-python3 scripts/generate_cli_modules.py
-python3 scripts/generate_cli_modules.py --check
+escript scripts/fluentci_modules_ci generate-cli
+escript scripts/fluentci_modules_ci generate-cli --check
 ```
 
 Run these commands from the repository root. Edit the catalog, regenerate, then

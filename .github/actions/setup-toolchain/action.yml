@@ -1,5 +1,5 @@
 name: Setup CI toolchain
-description: Install the CI toolchain through published FluentCI setup components.
+description: Bootstrap a verified FluentCI CLI, compile BEAM helpers through published Erlang/Gleam modules, and install the CI toolchain.
 inputs:
   profile:
     description: base installs Node, Bun, uv and Python; full also installs PureScript and Spago.
@@ -22,12 +22,67 @@ runs:
           ~/.local/share/uv
           ~/.cache/uv
           ~/Library/Caches/uv
-        key: fluentci-bootstrap-v2-${{ runner.os }}-${{ runner.arch }}-${{ inputs.profile }}-${{ hashFiles('.github/toolchain/versions.json', 'scripts/setup_ci_toolchain.py') }}
+        key: fluentci-bootstrap-v3-${{ runner.os }}-${{ runner.arch }}-${{ inputs.profile }}-${{ hashFiles('.github/toolchain/versions.json', 'scripts/manifest.toml', 'scripts/src/**') }}
+    - name: Bootstrap checksum-verified FluentCI
+      shell: bash
+      run: |
+        case "$RUNNER_OS/$RUNNER_ARCH" in
+          Linux/X64) target=linux-x86_64 ;;
+          Linux/ARM64) target=linux-aarch64 ;;
+          macOS/X64) target=macos-x86_64 ;;
+          macOS/ARM64) target=macos-aarch64 ;;
+          *) echo "Unsupported CI host: $RUNNER_OS/$RUNNER_ARCH" >&2; exit 1 ;;
+        esac
+        config=.github/toolchain/versions.json
+        version=$(jq -er '.fluentci.version' "$config")
+        url=$(jq -er --arg target "$target" '.fluentci.assets[$target].url' "$config")
+        digest=$(jq -er --arg target "$target" '.fluentci.assets[$target].sha256' "$config")
+        prefix="$HOME/.cache/fluentci-ci/cli/$version"
+        mkdir -p "$prefix/bin"
+        archive="$prefix/release.tar.gz"
+        verify_archive() {
+          if command -v sha256sum >/dev/null; then
+            printf '%s  %s\n' "$digest" "$1" | sha256sum --check -
+          else
+            printf '%s  %s\n' "$digest" "$1" | shasum -a 256 --check -
+          fi
+        }
+        if [ ! -f "$archive" ] || ! verify_archive "$archive"; then
+          trap 'rm -f "$archive.part"' EXIT
+          curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' --retry 3 --max-time 120 --max-filesize 134217728 "$url" --output "$archive.part"
+          verify_archive "$archive.part"
+          mv "$archive.part" "$archive"
+        fi
+        tar -xzf "$archive" -C "$prefix/bin" fluentci
+        chmod 755 "$prefix/bin/fluentci"
+        printf '%s\n' "$prefix/bin" >> "$GITHUB_PATH"
+    - name: Install Erlang through FluentCI
+      shell: bash
+      run: |
+        fluentci --check-update=false run @fluentci.io/setup-erlang@0.2.0 setup --version "$(jq -er .beam.erlang .github/toolchain/versions.json)" --install-dir "$RUNNER_TEMP/fluentci-ci-erlang"
+        printf '%s\n' "$RUNNER_TEMP/fluentci-ci-erlang/bin" >> "$GITHUB_PATH"
+    - name: Install Gleam through FluentCI
+      shell: bash
+      run: |
+        fluentci --check-update=false run @fluentci.io/setup-gleam@0.2.0 setup --version "$(jq -er .beam.gleam .github/toolchain/versions.json)" --install-dir "$RUNNER_TEMP/fluentci-ci-gleam"
+        printf '%s\n' "$RUNNER_TEMP/fluentci-ci-gleam/bin" >> "$GITHUB_PATH"
+    - name: Cache BEAM helper dependencies
+      uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+      with:
+        path: scripts/build
+        key: modules-ci-beam-${{ runner.os }}-${{ runner.arch }}-otp29.1.2-gleam1.19.2-${{ hashFiles('scripts/gleam.toml', 'scripts/manifest.toml', 'scripts/src/**', '.github/toolchain/versions.json') }}
+    - name: Compile BEAM escript
+      shell: bash
+      working-directory: scripts
+      run: |
+        gleam build --target erlang --warnings-as-errors
+        gleam export escript
+        git diff --exit-code -- gleam.toml manifest.toml
     - name: Install published setup modules
       shell: bash
       env:
         SETUP_PROFILE: ${{ inputs.profile }}
-      run: python3 scripts/setup_ci_toolchain.py --profile "$SETUP_PROFILE"
+      run: escript scripts/fluentci_modules_ci setup-toolchain --profile "$SETUP_PROFILE"
     - name: Install pinned component build tools
       shell: bash
       run: bun install --cwd lib/component --frozen-lockfile

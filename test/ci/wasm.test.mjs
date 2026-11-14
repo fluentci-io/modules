@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import {createHash} from 'node:crypto';
 import {parse} from '../../lib/component/node_modules/@bytecodealliance/jco/dist/api.js';
 import {annotate} from '../../lib/component/inspection/wasm.mjs';
-import {validateWasm} from '../../scripts/validate_wasm.mjs';
+import {validateWasm} from '../../lib/component/validate-wasm.mjs';
 
 async function fixture(t,{name='setup',description='Return the fixture value.',returnType='s32',schemaType='integer',core=false}={}) {
  const root=await mkdtemp(join(tmpdir(),'fluentci-component-validator-'));t.after(()=>rm(root,{recursive:true,force:true}));await mkdir(join(root,'dist'));

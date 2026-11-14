@@ -16,12 +16,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -88,12 +88,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -154,12 +154,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -280,12 +280,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -391,12 +391,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -467,12 +467,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -562,12 +562,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -648,12 +648,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -757,12 +757,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -833,12 +833,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",
@@ -918,12 +918,12 @@
           "runDir": {
             "type": "string",
             "minLength": 1,
-            "description": "Fresh directory for this invocation\u2019s execution report and task logs; must not already exist."
+            "description": "Fresh directory for this invocation’s execution report and task logs; must not already exist."
           },
           "executable": {
             "type": "string",
             "minLength": 1,
-            "description": "Native CLI executable name or absolute path; defaults to this operation\u2019s tool."
+            "description": "Native CLI executable name or absolute path; defaults to this operation’s tool."
           },
           "timeoutMs": {
             "type": "integer",

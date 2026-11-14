@@ -266,7 +266,7 @@
             "type": "integer",
             "minimum": 1,
             "default": 7,
-            "description": "Minimum score for every reported check (1\u201310)."
+            "description": "Minimum score for every reported check (1–10)."
           }
         },
         "required": [

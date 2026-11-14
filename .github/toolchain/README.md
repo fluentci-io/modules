@@ -1,44 +1,36 @@
 # CI toolchain
 
-CI installs the published `fluentci.io` components `setup-node@0.2.0`,
-`setup-bun@0.2.0`, `setup-uv@0.2.0`, and `setup-purescript@0.2.0`.
-[versions.json](./versions.json) pins module versions, runtime versions, the
-publisher DID, and SHA-256 digests for each bootstrap CLI archive.
+[versions.json](./versions.json) pins FluentCI v0.17.4 archive URLs and SHA-256
+checksums for Linux/macOS on x86_64/aarch64, the registry publisher DID, setup
+component versions, and tool versions.
 
-The runner's existing Python 3.9+ downloads and verifies the CLI archive. No
-`actions/setup-node`, `actions/setup-python`, or `oven-sh/setup-bun` is used.
-uv installs the requested managed Python version. The full profile also uses
-`setup-purescript` to install the compiler, Spago, and npm with explicit versions.
+The composite action first uses the runner's curl, jq, tar, and checksum utility
+to install the verified CLI. It calls published `setup-erlang@0.2.0` and
+`setup-gleam@0.2.0`, publishes their explicit per-job installation paths, then
+compiles `scripts/fluentci_modules_ci` for BEAM with OTP 29.1.2 / Gleam 1.19.2. The
+minimal shell bootstrap breaks the cycle before any escript exists; all later
+bootstrap and environment policy is implemented in Gleam.
 
-The CLI bootstrap is pinned to v0.17.4, including the native service HTTP probe
-validation fix. The helper resolves exact published setup versions over HTTPS,
-verifies the publisher DID and SHA-256, and executes each downloaded component
-file explicitly. It never selects a local source module with the same name or
-builds a setup module during bootstrap. Update the CLI version and all archive
-digests together; component versions remain independently pinned.
+The escript resolves exact published `fluentci.io` components, verifies publisher,
+name, version, SHA-256 and component format, and executes their downloaded files
+explicitly. It never accidentally selects local modules sharing those names.
+The base profile installs Node, Bun, uv and managed Python. The full profile uses
+setup-purescript once to compose Node/Bun, PureScript, Spago and npm, then installs
+uv and managed Python. Module build adapters still use the JavaScript component
+compiler with its frozen Bun lockfile.
 
-All setup results must contain native `bin-dir` and `environment` values. The
-helper applies the returned environment to subsequent component calls, then
-writes the final PATH and environment changes to `GITHUB_PATH` and `GITHUB_ENV`
-for later workflow steps. This includes environment changes from a local setup
-component invoked with `--file` in the smoke job.
+Native setup results must contain validated bin-dir and environment records.
+The helper applies them to subsequent component calls and exports the final
+PATH precedence and changed variables to GITHUB_PATH/GITHUB_ENV, using collision
+resistant delimiters for multiline values. Local setup smoke components use the
+same handoff through `setup-toolchain --file ... -- ...`.
 
-Download caches are separated by OS, architecture, profile, and toolchain configuration.
-Each cached CLI archive and component is checksum-verified before use. Native
-component build dependencies use the frozen Bun lockfile in `lib/component`.
-The existing eight module batches are retained.
+Published 0.2.0 setup modules cannot reliably reuse existing runtime prefixes.
+The helper therefore allocates fresh per-job prefixes, caches verified downloads
+and uv-managed Python data, and avoids installing PureScript prerequisites twice.
+OTP/Gleam bootstrap prefixes are also fresh for each runner job.
 
-Bootstrap logic and environment propagation have isolated tests under `test/ci`.
-Runtime setup, package downloads, and new plugin execution run in CI.
-
-## Published 0.2.0 compatibility
-
-The original setup modules compare a directory probe with `yes`, while the host
-returns `yes\n`. Their false negative breaks reuse of an existing prefix. Source
-installers now trim this output; patched setup releases must be published before
-CI can select that fix from the registry. Until then, bootstrap uses fresh
-per-job installation directories and caches downloads rather than installed
-FluentCI runtime prefixes. The full profile invokes setup-purescript once to
-compose Node/Bun instead of installing its prerequisites a second time.
-
-Managed Python caching remains enabled because uv handles that cache itself.
+CI keeps four module batches per OS and four service build workers on one runner.
+Helper unit tests live in `scripts/test`; SDK fixture tests remain under `test/ci`.
+Runtime setup, plugins, installers, Docker and VM verification run only in CI.
+See [the BEAM helper guide](../../scripts/README.md) for commands and port details.

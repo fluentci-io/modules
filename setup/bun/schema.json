@@ -25,7 +25,7 @@
           },
           "baseline": {
             "type": "boolean",
-            "description": "Use Bun\u2019s baseline CPU build; defaults to false."
+            "description": "Use Bun’s baseline CPU build; defaults to false."
           },
           "libc": {
             "type": "string",

@@ -7,10 +7,9 @@ on:
       - 'services/**'
       - 'lib/services/**'
       - 'test/services/**'
-      - 'test/ci/services_e2e.test.mjs'
       - 'lib/component/**'
-      - 'scripts/test_services_e2e.mjs'
-      - 'scripts/services_e2e_helpers.mjs'
+      - 'scripts/**'
+      - 'test/ci/wasm.test.mjs'
       - '.github/workflows/services-e2e.yml'
       - '.github/actions/setup-toolchain/**'
       - '.github/toolchain/versions.json'
@@ -20,10 +19,9 @@ on:
       - 'services/**'
       - 'lib/services/**'
       - 'test/services/**'
-      - 'test/ci/services_e2e.test.mjs'
       - 'lib/component/**'
-      - 'scripts/test_services_e2e.mjs'
-      - 'scripts/services_e2e_helpers.mjs'
+      - 'scripts/**'
+      - 'test/ci/wasm.test.mjs'
       - '.github/workflows/services-e2e.yml'
       - '.github/actions/setup-toolchain/**'
       - '.github/toolchain/versions.json'
@@ -58,7 +56,7 @@ jobs:
         env:
           SERVICE_LOG_DIR: ${{ runner.temp }}/service-e2e-logs
           SERVICE_BUILD_CONCURRENCY: '4'
-        run: node scripts/test_services_e2e.mjs
+        run: escript scripts/fluentci_modules_ci test-services
       - name: Verify committed files stay unchanged
         run: git diff --exit-code
       - name: Upload service diagnostics

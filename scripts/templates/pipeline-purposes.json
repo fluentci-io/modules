@@ -1,0 +1,23 @@
+{
+  "artifacts": "Publish or retrieve build outputs and release assets.",
+  "build": "Configure, compile, test, or inspect a build graph.",
+  "caching": "Reuse build outputs or compiler results across CI jobs.",
+  "cloud": "Inspect accounts, provision resources, or transfer deployment outputs.",
+  "code-quality": "Upload coverage or run a code quality analysis.",
+  "containers": "Build, tag, publish, or inspect container images and build caches.",
+  "databases": "Manage preview databases, migrations, schema deployments, queries, and database access.",
+  "deployment": "Deploy an application and inspect its rollout or service state.",
+  "formatting": "Format source files or fail CI when formatting differs.",
+  "infrastructure": "Validate, preview, apply, or inspect infrastructure changes.",
+  "linting": "Check source or configuration and fail on lint violations.",
+  "notifications": "Send a typed pipeline notification and verify the service acknowledgement.",
+  "package-management": "Resolve, lock, build, or publish project dependencies.",
+  "packaging": "Validate a Linux package tree and produce an architecture-specific package.",
+  "publishing": "Publish built packages to a package repository.",
+  "secrets": "Inject secrets into child commands or manage secret metadata and files.",
+  "security": "Produce security findings, inventory dependencies, or enforce a security gate.",
+  "services": "Run and supervise a background test dependency with native FluentCI service lifecycle and readiness.",
+  "setup": "Install and verify a prerequisite tool, select its version, and publish PATH.",
+  "version-control": "Check out source, manage refs, publish releases, and orchestrate pull requests and CI runs.",
+  "testing": "Install test dependencies or browsers, run tests, and propagate failures."
+}

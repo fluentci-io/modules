@@ -2,7 +2,7 @@
 
 PureScript service lifecycle and AWS Emulator image-building logic shared by every
 services/* component. Profiles are defined in catalog.json; regenerate their
-PureScript representation with scripts/generate_service_modules.py.
+PureScript representation with `escript scripts/fluentci_modules_ci generate-services`.
 
 Uses FluentCI's native workspace manager API through the documented host exec
 JSON interface. It never uses the legacy asService/process-compose provider,

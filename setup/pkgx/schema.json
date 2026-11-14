@@ -25,7 +25,7 @@
           },
           "packages": {
             "type": "string",
-            "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager\u2019s syntax; omitted or blank values install only the manager."
+            "description": "Comma-separated package selectors, optionally with per-package versions using the selected manager’s syntax; omitted or blank values install only the manager."
           }
         },
         "required": [],

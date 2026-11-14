@@ -364,7 +364,7 @@
           },
           "severities": {
             "type": "string",
-            "description": "Filter by severity. Valid values depend on server mode \u2014 Multi-Quality Rule (MQR) mode: INFO, LOW, MEDIUM, HIGH, BLOCKER; Standard Experience mode: INFO, MINOR, MAJOR, CRITICAL, BLOCKER. Comma-separated values; whitespace is trimmed and entries are passed literally."
+            "description": "Filter by severity. Valid values depend on server mode — Multi-Quality Rule (MQR) mode: INFO, LOW, MEDIUM, HIGH, BLOCKER; Standard Experience mode: INFO, MINOR, MAJOR, CRITICAL, BLOCKER. Comma-separated values; whitespace is trimmed and entries are passed literally."
           },
           "format": {
             "type": "string",

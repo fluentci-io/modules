@@ -3,7 +3,7 @@
   "runtime": "component",
   "exports": {
     "start": {
-      "description": "Start an idempotent background service through FluentCI\u2019s native workspace service manager and wait for readiness.",
+      "description": "Start an idempotent background service through FluentCI’s native workspace service manager and wait for readiness.",
       "input": {
         "type": "object",
         "properties": {
@@ -298,7 +298,7 @@
       }
     },
     "status": {
-      "description": "Return the service\u2019s native lifecycle state and actual loopback port bindings.",
+      "description": "Return the service’s native lifecycle state and actual loopback port bindings.",
       "input": {
         "type": "object",
         "properties": {

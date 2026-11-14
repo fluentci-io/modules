@@ -27,25 +27,25 @@ jobs:
           profile: base
       - name: Validate every registered module
         id: modules
-        run: python scripts/validate_modules.py --github-output
+        run: escript scripts/fluentci_modules_ci validate-modules --github-output
       - name: Test CI validators
         run: |
-          python -m unittest discover -s test/ci -p 'test_*.py' -v
+          escript scripts/fluentci_modules_ci test
           node --test test/ci/*.test.mjs lib/component/test/*.test.mjs
       - name: Check generated Buildx sources and schema
-        run: python containers/buildx/generate.py --check
+        run: escript scripts/fluentci_modules_ci generate-buildx --check
       - name: Check generated CLI sources and schemas
-        run: python scripts/generate_cli_modules.py --check
+        run: escript scripts/fluentci_modules_ci generate-cli --check
       - name: Check generated setup and service sources
         run: |
-          python scripts/generate_setup_tools.py --check
-          python scripts/generate_service_modules.py --check
+          escript scripts/fluentci_modules_ci generate-setup --check
+          escript scripts/fluentci_modules_ci generate-services --check
       - name: Check typed component sources and schemas
-        run: python scripts/generate_components.py --check
+        run: escript scripts/fluentci_modules_ci generate-components --check
       - name: Check typed setup dependencies and source locks
-        run: python scripts/generate_module_dependencies.py --check
+        run: escript scripts/fluentci_modules_ci generate-dependencies --check
       - name: Audit pipeline exports
-        run: python scripts/audit_modules.py --check
+        run: escript scripts/fluentci_modules_ci audit-modules --check
       - name: Lint workflows
         shell: bash
         run: |
@@ -127,7 +127,7 @@ jobs:
         if: toJSON(matrix.security) != '[]'
         shell: bash
         run: |
-          python3 scripts/install_security_test_tools.py --directory "$RUNNER_TEMP/security-tools"
+          escript scripts/fluentci_modules_ci install-security-test-tools --directory "$RUNNER_TEMP/security-tools"
           echo "$RUNNER_TEMP/security-tools" >> "$GITHUB_PATH"
           echo 'FLUENTCI_REQUIRE_SECURITY_TESTS=1' >> "$GITHUB_ENV"
       - name: Install native build integration tools
@@ -149,7 +149,7 @@ jobs:
             */*/.spago
           key: spago-${{ runner.os }}-${{ runner.arch }}-${{ matrix.shard }}-${{ hashFiles('**/spago.lock') }}
       - name: Build and test every module in this batch
-        run: python3 scripts/test_module_batch.py --modules "$MODULE_BATCH" --log-dir "$RUNNER_TEMP/module-logs"
+        run: escript scripts/fluentci_modules_ci test-module-batch --modules-env MODULE_BATCH --log-dir "$RUNNER_TEMP/module-logs"
       - name: Verify the build preserves committed files
         run: git diff --exit-code
       - name: Upload test log and plugin

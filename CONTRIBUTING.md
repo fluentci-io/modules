@@ -56,11 +56,11 @@ by name in `fluentci.toml`.
 
 The cloud, code-quality, container, deployment, formatting, infrastructure,
 linting, secrets, security, testing, and Python/Nix package modules share `lib/cli` and `test/cli`. Edit `lib/cli/catalog.json`, run
-`python3 scripts/generate_cli_modules.py`, and rebuild and test all affected CLI
+`escript scripts/fluentci_modules_ci generate-cli`, and rebuild and test all affected CLI
 modules. CI checks generated entry points, argument references, and schemas.
 Tool installers are described in `lib/setup/tools.json`; regenerate with
-`python3 scripts/generate_setup_tools.py`. Every setup registration uses the
-`setup-` prefix. Run `python3 scripts/audit_modules.py` after adding exports; the
+`escript scripts/fluentci_modules_ci generate-setup`. Every setup registration uses the
+`setup-` prefix. Run `escript scripts/fluentci_modules_ci audit-modules` after adding exports; the
 [export audit](./docs/PIPELINE_AUDIT.md) records their pipeline role.
 
 ## Verification
@@ -76,15 +76,15 @@ For packaging changes, run those tests on Linux and confirm they actually
 execute, then inspect the generated package metadata and payload. Selecting
 a target architecture does not provide a cross-compiler.
 
-For Buildx, edit `buildx-options.json` and regenerate using `python3 generate.py`
+For Buildx, edit `buildx-options.json` and regenerate using `escript ../../scripts/fluentci_modules_ci generate-buildx`
 rather than editing generated command sources or `OPTIONS.md` directly.
-`python3 generate.py --check` checks generated files without rewriting them.
+`escript ../../scripts/fluentci_modules_ci generate-buildx --check` checks generated files without rewriting them.
 
-Run `python3 scripts/generate_components.py` after updating the source catalogs.
+Run `escript scripts/fluentci_modules_ci generate-components` after updating the source catalogs.
 Keep explicit typed argument records, native return types, and source `@param`
 descriptions for every public function. See [components](./docs/COMPONENTS.md).
 
-Run `python3 scripts/validate_modules.py` after changing module metadata or
+Run `escript scripts/fluentci_modules_ci validate-modules` after changing module metadata or
 registration. CI derives its Linux/macOS matrix from this registry and validates
 compiled guest exports; see [the CI guide](./.github/README.md).
 
@@ -116,3 +116,13 @@ to entry points, configuration, or supported platforms so users can migrate.
 
 Contributions are made under the repository's [MIT License](./LICENSE).
 Keep module license files and package license metadata consistent with it.
+
+## BEAM repository helpers
+
+Automation commands are implemented in Gleam under `scripts/src`. Compile with
+`cd scripts && gleam build --target erlang --warnings-as-errors && gleam export escript`.
+Use `escript scripts/fluentci_modules_ci generate-all` after changing reviewed
+catalogs or declarative contract templates, and `check-all` for drift checks.
+Helper regression coverage is in `scripts/test`; CI uses published setup-erlang
+and setup-gleam before compilation. Respect AGENTS.md before running local builds
+or tests. See [scripts/README.md](scripts/README.md) for the full command list.

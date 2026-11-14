@@ -41,6 +41,11 @@ input, structured results, list arguments, building, and validation.
 
 ## Development
 
+Repository automation uses Gleam on BEAM. Compile `scripts/fluentci_modules_ci`
+with Erlang/OTP 29.1.2 and Gleam 1.19.2 before using the commands below; see
+[the helper guide](scripts/README.md). CI provisions both through published
+`setup-erlang` and `setup-gleam` modules.
+
 Install Node.js, Bun, PureScript, and Spago. Initialize the shared component
 compiler once, then build/test individual modules:
 
@@ -49,7 +54,7 @@ bun install --cwd lib/component --frozen-lockfile
 npm ci --prefix packaging/dpkg
 npm run build --prefix packaging/dpkg
 npm test --prefix packaging/dpkg
-node scripts/validate_wasm.mjs packaging/dpkg
+escript scripts/fluentci_modules_ci validate-wasm packaging/dpkg
 ```
 
 Every `dist/plugin.wasm` is a native component with embedded typed contracts.
