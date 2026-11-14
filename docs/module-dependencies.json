@@ -14,6 +14,10 @@
   "aws": [
     "setup-aws"
   ],
+  "aws-emulator": [
+    "setup-docker",
+    "setup-curl"
+  ],
   "azure": [
     "setup-azure"
   ],
@@ -40,8 +44,17 @@
     "setup-nix",
     "setup-cachix"
   ],
+  "caddy": [
+    "setup-docker"
+  ],
+  "cassandra": [
+    "setup-docker"
+  ],
   "checkov": [
     "setup-checkov"
+  ],
+  "clickhouse": [
+    "setup-docker"
   ],
   "cmake": [
     "setup-cmake"
@@ -51,6 +64,9 @@
   ],
   "codecov": [
     "setup-codecov"
+  ],
+  "consul": [
+    "setup-docker"
   ],
   "cosign": [
     "setup-cosign"
@@ -82,6 +98,9 @@
   ],
   "drizzlekit": [
     "setup-drizzlekit"
+  ],
+  "etcd": [
+    "setup-docker"
   ],
   "flipt": [
     "setup-flipt"
@@ -126,8 +145,14 @@
   "helm": [
     "setup-helm"
   ],
+  "httpbin": [
+    "setup-docker"
+  ],
   "infisical": [
     "setup-infisical"
+  ],
+  "influxdb": [
+    "setup-docker"
   ],
   "jfrog-cli": [
     "setup-jfrog-cli"
@@ -138,14 +163,32 @@
   "kubectl": [
     "setup-kubectl"
   ],
+  "mailcatcher": [
+    "setup-docker"
+  ],
+  "mailhog": [
+    "setup-docker"
+  ],
+  "mailpit": [
+    "setup-docker"
+  ],
+  "mariadb": [
+    "setup-docker"
+  ],
   "meson": [
     "setup-meson"
+  ],
+  "mysql": [
+    "setup-docker"
   ],
   "netlify": [
     "setup-netlify"
   ],
   "nexus": [
     "setup-nexus"
+  ],
+  "nginx": [
+    "setup-docker"
   ],
   "ninja": [
     "setup-ninja"
@@ -186,6 +229,9 @@
   "podman": [
     "setup-podman"
   ],
+  "postgres": [
+    "setup-docker"
+  ],
   "prettier": [
     "setup-prettier"
   ],
@@ -207,6 +253,9 @@
   "rclone": [
     "setup-rclone"
   ],
+  "redis": [
+    "setup-docker"
+  ],
   "render": [
     "setup-render"
   ],
@@ -218,6 +267,9 @@
   ],
   "rustfmt": [
     "setup-rustfmt"
+  ],
+  "s3mock": [
+    "setup-docker"
   ],
   "sccache": [
     "setup-sccache"
@@ -260,6 +312,9 @@
   "sqruff": [
     "setup-sqruff"
   ],
+  "stripe-mock": [
+    "setup-docker"
+  ],
   "syft": [
     "setup-syft"
   ],
@@ -283,6 +338,9 @@
   ],
   "turborepo": [
     "setup-turborepo"
+  ],
+  "typesense": [
+    "setup-docker"
   ],
   "ubicloud": [
     "setup-ubicloud"

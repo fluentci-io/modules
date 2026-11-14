@@ -1,0 +1,469 @@
+[
+  {
+    "name": "aws-emulator",
+    "title": "AWS Emulator",
+    "image": "fluentci/aws-emulator",
+    "version": "local",
+    "port": 9297,
+    "ports": [
+      9297
+    ],
+    "scheme": "https",
+    "command": [],
+    "env": {
+      "EMULATOR_TELEMETRY": "off"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Official aws/aws-emulator. Run build first or provide a prebuilt image. stateDir is required; host and container ports match. Generated credentials and TLS material remain in the caller-owned bind directory.",
+    "source": "https://github.com/aws/aws-emulator",
+    "volumes": []
+  },
+  {
+    "name": "caddy",
+    "title": "Caddy",
+    "image": "caddy",
+    "version": "2-alpine",
+    "port": 80,
+    "ports": [
+      80
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/caddy",
+    "volumes": []
+  },
+  {
+    "name": "cassandra",
+    "title": "Cassandra",
+    "image": "cassandra",
+    "version": "5.0",
+    "port": 9042,
+    "ports": [
+      9042
+    ],
+    "scheme": "cassandra",
+    "command": [],
+    "env": {
+      "MAX_HEAP_SIZE": "512M",
+      "HEAP_NEWSIZE": "100M"
+    },
+    "probe": "exec",
+    "path": "/",
+    "exec": [
+      "cqlsh",
+      "-e",
+      "SELECT release_version FROM system.local"
+    ],
+    "timeout": 240000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/cassandra",
+    "volumes": []
+  },
+  {
+    "name": "clickhouse",
+    "title": "ClickHouse",
+    "image": "clickhouse/clickhouse-server",
+    "version": "25.8",
+    "port": 8123,
+    "ports": [
+      8123,
+      9000
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "CLICKHOUSE_USER": "fluentci",
+      "CLICKHOUSE_PASSWORD": "fluentci-test",
+      "CLICKHOUSE_DB": "fluentci_test"
+    },
+    "probe": "http",
+    "path": "/ping",
+    "exec": [],
+    "timeout": 120000,
+    "notes": "",
+    "source": "https://github.com/ClickHouse/ClickHouse/blob/master/docker/server/README.md",
+    "volumes": []
+  },
+  {
+    "name": "consul",
+    "title": "Consul",
+    "image": "hashicorp/consul",
+    "version": "1.21",
+    "port": 8500,
+    "ports": [
+      8500
+    ],
+    "scheme": "http",
+    "command": [
+      "agent",
+      "-dev",
+      "-client=0.0.0.0"
+    ],
+    "env": {},
+    "probe": "exec",
+    "path": "/",
+    "exec": [
+      "consul",
+      "operator",
+      "raft",
+      "list-peers"
+    ],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://developer.hashicorp.com/consul/docs/run/cloud-deployments/docker",
+    "volumes": []
+  },
+  {
+    "name": "etcd",
+    "title": "etcd",
+    "image": "quay.io/coreos/etcd",
+    "version": "v3.6.5",
+    "port": 2379,
+    "ports": [
+      2379
+    ],
+    "scheme": "http",
+    "command": [
+      "/usr/local/bin/etcd",
+      "--listen-client-urls=http://0.0.0.0:2379",
+      "--advertise-client-urls=http://127.0.0.1:2379"
+    ],
+    "env": {},
+    "probe": "exec",
+    "path": "/",
+    "exec": [
+      "/usr/local/bin/etcdctl",
+      "endpoint",
+      "health"
+    ],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://etcd.io/docs/v3.6/op-guide/container/",
+    "volumes": []
+  },
+  {
+    "name": "httpbin",
+    "title": "httpbin",
+    "image": "ghcr.io/mccutchen/go-httpbin",
+    "version": "latest",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/status/200",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://github.com/mccutchen/go-httpbin",
+    "volumes": []
+  },
+  {
+    "name": "influxdb",
+    "title": "InfluxDB",
+    "image": "influxdb",
+    "version": "2.7",
+    "port": 8086,
+    "ports": [
+      8086
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "DOCKER_INFLUXDB_INIT_MODE": "setup",
+      "DOCKER_INFLUXDB_INIT_USERNAME": "fluentci",
+      "DOCKER_INFLUXDB_INIT_PASSWORD": "fluentci-test-password",
+      "DOCKER_INFLUXDB_INIT_ORG": "fluentci",
+      "DOCKER_INFLUXDB_INIT_BUCKET": "fluentci_test",
+      "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN": "fluentci-test-token"
+    },
+    "probe": "exec",
+    "path": "/",
+    "exec": [
+      "influx",
+      "bucket",
+      "list",
+      "--org",
+      "fluentci",
+      "--token",
+      "fluentci-test-token"
+    ],
+    "timeout": 60000,
+    "notes": "When overriding initialization org/token, supply matching readinessCommand values.",
+    "source": "https://docs.influxdata.com/influxdb/v2/install/use-docker-compose/",
+    "volumes": []
+  },
+  {
+    "name": "mailcatcher",
+    "title": "MailCatcher",
+    "image": "sj26/mailcatcher",
+    "version": "latest",
+    "port": 1025,
+    "ports": [
+      1025,
+      1080
+    ],
+    "scheme": "smtp",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://github.com/sj26/mailcatcher",
+    "volumes": []
+  },
+  {
+    "name": "mailhog",
+    "title": "MailHog",
+    "image": "mailhog/mailhog",
+    "version": "v1.0.1",
+    "port": 1025,
+    "ports": [
+      1025,
+      8025
+    ],
+    "scheme": "smtp",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://github.com/mailhog/MailHog",
+    "volumes": []
+  },
+  {
+    "name": "mailpit",
+    "title": "Mailpit",
+    "image": "axllent/mailpit",
+    "version": "latest",
+    "port": 1025,
+    "ports": [
+      1025,
+      8025
+    ],
+    "scheme": "smtp",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://mailpit.axllent.org/docs/install/docker/",
+    "volumes": []
+  },
+  {
+    "name": "mariadb",
+    "title": "MariaDB",
+    "image": "mariadb",
+    "version": "11.4",
+    "port": 3306,
+    "ports": [
+      3306
+    ],
+    "scheme": "mysql",
+    "command": [],
+    "env": {
+      "MARIADB_ROOT_PASSWORD": "fluentci-test",
+      "MARIADB_USER": "fluentci",
+      "MARIADB_PASSWORD": "fluentci-test",
+      "MARIADB_DATABASE": "fluentci_test"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/mariadb",
+    "volumes": []
+  },
+  {
+    "name": "mysql",
+    "title": "MySQL",
+    "image": "mysql",
+    "version": "8.4",
+    "port": 3306,
+    "ports": [
+      3306
+    ],
+    "scheme": "mysql",
+    "command": [],
+    "env": {
+      "MYSQL_ROOT_PASSWORD": "fluentci-test",
+      "MYSQL_USER": "fluentci",
+      "MYSQL_PASSWORD": "fluentci-test",
+      "MYSQL_DATABASE": "fluentci_test"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/mysql",
+    "volumes": []
+  },
+  {
+    "name": "nginx",
+    "title": "NGINX",
+    "image": "nginx",
+    "version": "1.28-alpine",
+    "port": 80,
+    "ports": [
+      80
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/nginx",
+    "volumes": []
+  },
+  {
+    "name": "postgres",
+    "title": "PostgreSQL",
+    "image": "postgres",
+    "version": "17-alpine",
+    "port": 5432,
+    "ports": [
+      5432
+    ],
+    "scheme": "postgresql",
+    "command": [],
+    "env": {
+      "POSTGRES_USER": "fluentci",
+      "POSTGRES_PASSWORD": "fluentci-test",
+      "POSTGRES_DB": "fluentci_test"
+    },
+    "probe": "exec",
+    "path": "/",
+    "exec": [
+      "pg_isready",
+      "-h",
+      "127.0.0.1",
+      "-U",
+      "fluentci",
+      "-d",
+      "fluentci_test"
+    ],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/postgres",
+    "volumes": []
+  },
+  {
+    "name": "redis",
+    "title": "Redis",
+    "image": "redis",
+    "version": "7-alpine",
+    "port": 6379,
+    "ports": [
+      6379
+    ],
+    "scheme": "redis",
+    "command": [
+      "redis-server",
+      "--save",
+      "",
+      "--appendonly",
+      "no"
+    ],
+    "env": {},
+    "probe": "exec",
+    "path": "/",
+    "exec": [
+      "redis-cli",
+      "ping"
+    ],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://hub.docker.com/_/redis",
+    "volumes": []
+  },
+  {
+    "name": "s3mock",
+    "title": "S3Mock",
+    "image": "adobe/s3mock",
+    "version": "latest",
+    "port": 9090,
+    "ports": [
+      9090,
+      9191
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://github.com/adobe/S3Mock",
+    "volumes": []
+  },
+  {
+    "name": "stripe-mock",
+    "title": "Stripe Mock",
+    "image": "stripe/stripe-mock",
+    "version": "latest",
+    "port": 12111,
+    "ports": [
+      12111,
+      12112
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "",
+    "source": "https://github.com/stripe/stripe-mock",
+    "volumes": []
+  },
+  {
+    "name": "typesense",
+    "title": "Typesense",
+    "image": "typesense/typesense",
+    "version": "29.0",
+    "port": 8108,
+    "ports": [
+      8108
+    ],
+    "scheme": "http",
+    "command": [
+      "--data-dir=/data",
+      "--api-key=fluentci-test-key"
+    ],
+    "env": {},
+    "probe": "http",
+    "path": "/health",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Test API key: fluentci-test-key. Mount a writable /data volume if required by the selected image.",
+    "source": "https://typesense.org/docs/guide/install-typesense.html",
+    "volumes": [
+      "/data"
+    ]
+  }
+]

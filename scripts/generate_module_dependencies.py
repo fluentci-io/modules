@@ -23,7 +23,10 @@ def definitions():
             result[name] = [{'alias': 'setup-java', 'program': 'java', 'probe': ['which', 'java']}] if name == 'setup-android' else [{'alias': 'setup-docker', 'program': 'docker', 'probe': ['which', 'docker']}] if name == 'setup-buildx' else []
             continue
         primary = tools.get(name, {}).get('program') or catalog.get(name, {}).get('program')
-        if module['path'].startswith('notifications/'):
+        if module['path'].startswith('services/'):
+            dependencies = [{'alias': 'setup-docker', 'program': 'docker', 'probe': ['docker', 'version']}]
+            if name == 'aws-emulator':dependencies.append({'alias':'setup-curl','program':'curl','probe':['curl','--version']})
+        elif module['path'].startswith('notifications'):
             dependencies = [{'alias': 'setup-curl', 'program': 'curl', 'probe': ['which', 'curl']}]
         elif name == 'nix-publish':
             dependencies = [{'alias': 'setup-nix', 'program': 'nix', 'probe': ['which', 'nix']}, {'alias': 'setup-bun', 'program': 'bun', 'probe': ['which', 'bun']}, {'alias': 'setup-flakehub-push', 'program': 'flakehub-push', 'probe': ['which', 'flakehub-push']}]
@@ -65,7 +68,7 @@ def source(name, requirements):
       '  unless (os == "linux" || os == "macos" || os == "freebsd" || os == "openbsd" || os == "netbsd") $',
       '    throw ("Unsupported setup dependency OS: " <> os)']
     call = lambda d: 'ensure ' + json.dumps(d['alias']) + ' [ ' + ', '.join(json.dumps(x) for x in d['probe']) + ' ]'
-    if name in ['buildx', 'cachix', 'gh', 'glab']:
+    if name in ['buildx', 'cachix', 'gh', 'glab', 'aws-emulator']:
         lines += ['  ' + call(d) for d in requirements]
     elif name == 'nix-publish':
         lines += ['  ' + call(requirements[0])]
@@ -91,7 +94,7 @@ def source(name, requirements):
             lines += ['  when (executable == ' + json.dumps(program) + ') $ ensure ' + json.dumps(main['alias']) + ' [ "which", ' + json.dumps(program) + ' ]']
     for program in {'dpkg':['dpkg','realpath'],'rpmbuild':['rpmspec','rpm','realpath']}.get(name,[]):
         lines += ['  ensure '+json.dumps(requirements[0]['alias'])+' [ \"which\", '+json.dumps(program)+' ]']
-    if name in ['buildx', 'cachix', 'gh', 'glab'] or (len(requirements) == 1 and name not in ['cmake', 'rustfmt']):
+    if name in ['buildx', 'cachix', 'gh', 'glab', 'aws-emulator'] or (len(requirements) == 1 and name not in ['cmake', 'rustfmt']):
         lines = [line.replace('ensureFor executable = do', 'ensureFor _ = do') for line in lines]
     return '\n'.join(lines) + '\n'
 

@@ -25,6 +25,8 @@ class ModuleDependencies(unittest.TestCase):
                     # Webhook/Bot API senders share curl rather than installing
                     # a provider CLI. Keep that prerequisite exact.
                     self.assertEqual(set(dependencies), {'setup-curl'})
+                elif module['path'].startswith('services/'):
+                    self.assertEqual(set(dependencies), {'setup-docker', 'setup-curl'} if module['name']=='aws-emulator' else {'setup-docker'})
                 elif module['name'] == 'nix-publish':
                     self.assertTrue({'setup-nix', 'setup-bun', 'setup-flakehub-push'} <= dependencies.keys())
                 else:

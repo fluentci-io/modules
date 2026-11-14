@@ -1,0 +1,13 @@
+{
+  "module": "clickhouse",
+  "requirements": [
+    {
+      "alias": "setup-docker",
+      "program": "docker",
+      "probe": [
+        "docker",
+        "version"
+      ]
+    }
+  ]
+}

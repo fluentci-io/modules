@@ -34,6 +34,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "aws-emulator"
+version = "0.1.0"
+path = "services/aws-emulator"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "azure"
 version = "0.1.0"
 path = "cloud/azure"
@@ -90,9 +97,30 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "caddy"
+version = "0.1.0"
+path = "services/caddy"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "cassandra"
+version = "0.1.0"
+path = "services/cassandra"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "checkov"
 version = "0.1.0"
 path = "security/checkov"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "clickhouse"
+version = "0.1.0"
+path = "services/clickhouse"
 sdk = "purescript"
 runtime = "component"
 
@@ -114,6 +142,13 @@ runtime = "component"
 name = "codecov"
 version = "0.1.0"
 path = "code-quality/codecov"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "consul"
+version = "0.1.0"
+path = "services/consul"
 sdk = "purescript"
 runtime = "component"
 
@@ -184,6 +219,13 @@ runtime = "component"
 name = "drizzlekit"
 version = "0.1.0"
 path = "databases/drizzlekit"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "etcd"
+version = "0.1.0"
+path = "services/etcd"
 sdk = "purescript"
 runtime = "component"
 
@@ -279,9 +321,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "httpbin"
+version = "0.1.0"
+path = "services/httpbin"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "infisical"
 version = "0.1.0"
 path = "secrets/infisical"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "influxdb"
+version = "0.1.0"
+path = "services/influxdb"
 sdk = "purescript"
 runtime = "component"
 
@@ -307,9 +363,44 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "mailcatcher"
+version = "0.1.0"
+path = "services/mailcatcher"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "mailhog"
+version = "0.1.0"
+path = "services/mailhog"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "mailpit"
+version = "0.1.0"
+path = "services/mailpit"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "mariadb"
+version = "0.1.0"
+path = "services/mariadb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "meson"
 version = "0.1.0"
 path = "build/meson"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "mysql"
+version = "0.1.0"
+path = "services/mysql"
 sdk = "purescript"
 runtime = "component"
 
@@ -324,6 +415,13 @@ runtime = "component"
 name = "nexus"
 version = "0.1.0"
 path = "artifacts/nexus"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "nginx"
+version = "0.1.0"
+path = "services/nginx"
 sdk = "purescript"
 runtime = "component"
 
@@ -412,6 +510,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "postgres"
+version = "0.1.0"
+path = "services/postgres"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "prettier"
 version = "0.1.0"
 path = "formatting/prettier"
@@ -461,6 +566,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "redis"
+version = "0.1.0"
+path = "services/redis"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "render"
 version = "0.1.0"
 path = "deployment/render"
@@ -485,6 +597,13 @@ runtime = "component"
 name = "rustfmt"
 version = "0.1.0"
 path = "formatting/rustfmt"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "s3mock"
+version = "0.1.0"
+path = "services/s3mock"
 sdk = "purescript"
 runtime = "component"
 
@@ -1476,6 +1595,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "stripe-mock"
+version = "0.1.0"
+path = "services/stripe-mock"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "syft"
 version = "0.1.0"
 path = "security/syft"
@@ -1528,6 +1654,13 @@ runtime = "component"
 name = "turborepo"
 version = "0.1.0"
 path = "build/turborepo"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "typesense"
+version = "0.1.0"
+path = "services/typesense"
 sdk = "purescript"
 runtime = "component"
 

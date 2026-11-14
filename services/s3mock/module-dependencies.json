@@ -1,0 +1,13 @@
+{
+  "module": "s3mock",
+  "requirements": [
+    {
+      "alias": "setup-docker",
+      "program": "docker",
+      "probe": [
+        "docker",
+        "version"
+      ]
+    }
+  ]
+}

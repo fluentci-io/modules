@@ -1,0 +1,21 @@
+{
+  "module": "aws-emulator",
+  "requirements": [
+    {
+      "alias": "setup-docker",
+      "program": "docker",
+      "probe": [
+        "docker",
+        "version"
+      ]
+    },
+    {
+      "alias": "setup-curl",
+      "program": "curl",
+      "probe": [
+        "curl",
+        "--version"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "fluentci-service-mailhog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.3"
+  },
+  "license": "MIT"
+}

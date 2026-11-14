@@ -1,0 +1,3 @@
+package:
+  name: fluentci-services-common
+  dependencies: [fluentci-component-contract, argonaut-codecs, argonaut-core, arrays, effect, either, exceptions, fluentci, foldable-traversable, foreign-object, integers, maybe, prelude, strings, tuples]

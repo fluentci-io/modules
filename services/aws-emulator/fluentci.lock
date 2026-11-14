@@ -1,0 +1,9 @@
+{
+  "lockfileVersion": 1,
+  "modules": {
+    "dependency::setup-curl": "path:name = \"setup-curl\"\nruntime = \"component\"\npath = \"../../setup/curl\"\nsdk = \"purescript\"\n",
+    "dependency::setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"../../setup/docker\"\nsdk = \"purescript\"\n"
+  },
+  "packages": {},
+  "git": {}
+}

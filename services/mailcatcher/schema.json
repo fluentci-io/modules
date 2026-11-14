@@ -1,0 +1,405 @@
+{
+  "name": "mailcatcher",
+  "runtime": "component",
+  "exports": {
+    "start": {
+      "description": "Start an idempotent background service through FluentCI\u2019s native workspace service manager and wait for readiness.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "description": "Workspace directory used by every native service manager call. Default: \".\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full service name, default module-mailcatcher-default; must start with module-mailcatcher- to scope lifecycle operations."
+          },
+          "version": {
+            "type": "string",
+            "description": "Docker image version tag. Uses the profile default when omitted; cannot be combined with image."
+          },
+          "image": {
+            "type": "string",
+            "description": "Full Docker image reference, including an optional digest; replaces the default repository and version."
+          },
+          "port": {
+            "type": "integer",
+            "description": "Host port for the primary endpoint; zero allocates an available loopback port. AWS Emulator uses the same nonzero port inside and outside its container. Default: 0.",
+            "default": 0
+          },
+          "ports": {
+            "type": "string",
+            "description": "Comma-separated container ports or HOST:CONTAINER bindings. Omit for every profile port with random host bindings. Include the primary port once."
+          },
+          "volumes": {
+            "type": "string",
+            "description": "Comma-separated /CONTAINER_PATH anonymous volumes or SOURCE:/CONTAINER_PATH[:ro|rw] mounts. Explicit named/bind data survives stop."
+          },
+          "env": {
+            "type": "string",
+            "description": "Comma-separated KEY=VALUE test configuration overrides; no JSON object. Use disposable test values because definitions are sent to the manager."
+          },
+          "command": {
+            "type": "string",
+            "description": "Comma-separated foreground command tokens replacing the image command; literal argv, with no shell expansion."
+          },
+          "dependsOn": {
+            "type": "string",
+            "description": "Comma-separated existing native service names whose readiness must be satisfied before startup."
+          },
+          "startupTimeoutMs": {
+            "type": "integer",
+            "description": "Readiness deadline, from 100 to 600000 milliseconds; defaults to the service profile."
+          },
+          "stopTimeoutMs": {
+            "type": "integer",
+            "description": "Graceful shutdown deadline from 100 to 120000 milliseconds. Default: 5000.",
+            "default": 5000
+          },
+          "restartPolicy": {
+            "type": "string",
+            "description": "Native restart policy: never, on_failure or always. Default: \"never\". Allowed values: never, on_failure, always.",
+            "default": "never",
+            "enum": [
+              "never",
+              "on_failure",
+              "always"
+            ]
+          },
+          "maxRestarts": {
+            "type": "integer",
+            "description": "Maximum automatic restarts, from zero to 100. Default: 0.",
+            "default": 0
+          },
+          "healthCheck": {
+            "type": "boolean",
+            "description": "Keep running the readiness probe as the native recurring health check. Default: true.",
+            "default": true
+          },
+          "readinessCommand": {
+            "type": "string",
+            "description": "Comma-separated literal probe command run inside the owned container; overrides the profile probe."
+          },
+          "readinessPath": {
+            "type": "string",
+            "description": "HTTP readiness URL path for profiles using an HTTP probe."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "name",
+          "state",
+          "backend",
+          "host",
+          "port",
+          "endpoint",
+          "ports"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "containerPort",
+                "port",
+                "address"
+              ],
+              "properties": {
+                "containerPort": {
+                  "type": "integer"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stop": {
+      "description": "Stop only this named service through the native manager; preserve explicitly mounted data. Native dependents are stopped too.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "description": "Workspace directory used by every native service manager call. Default: \".\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full service name, default module-mailcatcher-default; must start with module-mailcatcher- to scope lifecycle operations."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "name",
+          "state",
+          "backend",
+          "host",
+          "port",
+          "endpoint",
+          "ports"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "containerPort",
+                "port",
+                "address"
+              ],
+              "properties": {
+                "containerPort": {
+                  "type": "integer"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "restart": {
+      "description": "Restart the existing native service definition and wait for readiness.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "description": "Workspace directory used by every native service manager call. Default: \".\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full service name, default module-mailcatcher-default; must start with module-mailcatcher- to scope lifecycle operations."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "name",
+          "state",
+          "backend",
+          "host",
+          "port",
+          "endpoint",
+          "ports"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "containerPort",
+                "port",
+                "address"
+              ],
+              "properties": {
+                "containerPort": {
+                  "type": "integer"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "status": {
+      "description": "Return the service\u2019s native lifecycle state and actual loopback port bindings.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "description": "Workspace directory used by every native service manager call. Default: \".\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full service name, default module-mailcatcher-default; must start with module-mailcatcher- to scope lifecycle operations."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "object",
+        "required": [
+          "name",
+          "state",
+          "backend",
+          "host",
+          "port",
+          "endpoint",
+          "ports"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "backend": {
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "containerPort",
+                "port",
+                "address"
+              ],
+              "properties": {
+                "containerPort": {
+                  "type": "integer"
+                },
+                "port": {
+                  "type": "integer"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "logs": {
+      "description": "Read a bounded snapshot of native service logs without starting a service.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "type": "string",
+            "default": ".",
+            "description": "Workspace directory used by every native service manager call. Default: \".\"."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full service name, default module-mailcatcher-default; must start with module-mailcatcher- to scope lifecycle operations."
+          },
+          "tail": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 10000,
+            "description": "Maximum recent log lines, from 1 to 10000. Default: 100."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "output": {
+        "type": "string"
+      }
+    }
+  }
+}

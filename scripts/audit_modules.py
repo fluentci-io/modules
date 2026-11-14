@@ -28,6 +28,7 @@ PURPOSES = {
     'publishing': 'Publish built packages to a package repository.',
     'secrets': 'Inject secrets into child commands or manage secret metadata and files.',
     'security': 'Produce security findings, inventory dependencies, or enforce a security gate.',
+    'services': 'Run and supervise a background test dependency with native FluentCI service lifecycle and readiness.',
     'setup': 'Install and verify a prerequisite tool, select its version, and publish PATH.',
     'version-control': 'Check out source, manage refs, publish releases, and orchestrate pull requests and CI runs.',
     'testing': 'Install test dependencies or browsers, run tests, and propagate failures.',
@@ -48,11 +49,11 @@ def inventory():
         exports = entry_points(ROOT / path)
         if category == 'setup' and module['name'] != 'setup-' + tool:
             raise ValueError(f'{path}: setup registration must use the setup- prefix')
-        if category not in {'setup', 'notifications'} and tool not in setup_tools and path not in catalog:
+        if category not in {'setup', 'notifications', 'services'} and tool not in setup_tools and path not in catalog:
             # Legacy modules have separately reviewed setup companions.
             if tool not in {'cachix', 'gemfury', 'buildx', 'dpkg', 'rpmbuild'}:
                 raise ValueError(f'{path}: missing prerequisite installation contract')
-        prerequisites = ['curl'] if category == 'notifications' else {'nix-publish': ['nix', 'bun', 'flakehub-push']}.get(module['name'], [module['name']])
+        prerequisites = (['docker','curl'] if tool=='aws-emulator' else ['docker']) if category == 'services' else ['curl'] if category == 'notifications' else {'nix-publish': ['nix', 'bun', 'flakehub-push']}.get(module['name'], [module['name']])
         if category != 'setup':
             for prerequisite in prerequisites:
                 if not (ROOT / 'setup' / prerequisite / 'entry.mjs').exists():

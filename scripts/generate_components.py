@@ -125,6 +125,9 @@ def generated():
    if tool=='uv':source+=['import CI.Setup.UvEnvironment as Native']
    if tool=='php':source+=['import CI.Setup.PHP as Native']
   elif category=='notifications':source+=['import CI.Notifications as Native']
+  elif category=='services':
+   source+=['import CI.Services as Native']
+   if name=='aws-emulator':source+=['import CI.Services.Aws as Aws']
   elif name=='buildx':source+=['import Buildx as B','import Buildx.Commands as C']
   elif name in {'dpkg','rpmbuild'}:source+=['import CI.'+('Dpkg' if name=='dpkg' else 'Rpmbuild')+' as Native']
   elif name=='cachix':source+=['import CI.Cachix as Native','import CI.Cachix.Support (unwrap)','import FluentCI.Plugin as P','import Data.String.Common (trim)']
@@ -172,6 +175,37 @@ def generated():
      properties['installDir']['description']='Absolute per-user prefix for the PHP manager and isolated tool environments; native BSD packages require this to be omitted.'
      body=['  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))','  Contract.setupResult <$> Native.setupWith config']
     else:body=[f'  config <- either throw pure (Types.decodeConfig "{tool}" (Contract.input (Contract.encodeInput args)))',f'  Contract.setupResult <$> Setup.install "{tool}" config']
+   elif category=='services':
+    properties={'project':{'type':'string','default':'.','description':'Workspace directory used by every native service manager call.'},'name':{'type':'string','description':f'Full service name, default module-{name}-default; must start with module-{name}- to scope lifecycle operations.'}}
+    binding={'type':'object','required':['containerPort','port','address'],'properties':{'containerPort':{'type':'integer'},'port':{'type':'integer'},'address':{'type':'string'}},'additionalProperties':False}
+    output={'type':'object','required':['name','state','backend','host','port','endpoint','ports'],'properties':{**{key:{'type':'string'} for key in ['name','state','backend','host','endpoint']},'port':{'type':'integer'},'ports':{'type':'array','items':binding}},'additionalProperties':False}
+    returned='Native.ServiceResult'
+    description={'start':'Start an idempotent background service through FluentCI’s native workspace service manager and wait for readiness.','stop':'Stop only this named service through the native manager; preserve explicitly mounted data. Native dependents are stopped too.','restart':'Restart the existing native service definition and wait for readiness.','status':'Return the service’s native lifecycle state and actual loopback port bindings.','logs':'Read a bounded snapshot of native service logs without starting a service.'}.get(function,'Build the official AWS Emulator package into a local Docker image without starting it.')
+    if function=='start':
+     fields={
+      'version':('string',None,'Docker image version tag. Uses the profile default when omitted; cannot be combined with image.'),
+      'image':('string',None,'Full Docker image reference, including an optional digest; replaces the default repository and version.'),
+      'port':('integer',9297 if name=='aws-emulator' else 0,'Host port for the primary endpoint; zero allocates an available loopback port. AWS Emulator uses the same nonzero port inside and outside its container.'),
+      'ports':('string',None,'Comma-separated container ports or HOST:CONTAINER bindings. Omit for every profile port with random host bindings. Include the primary port once.'),
+      'volumes':('string',None,'Comma-separated /CONTAINER_PATH anonymous volumes or SOURCE:/CONTAINER_PATH[:ro|rw] mounts. Explicit named/bind data survives stop.'),
+      'env':('string',None,'Comma-separated KEY=VALUE test configuration overrides; no JSON object. Use disposable test values because definitions are sent to the manager.'),
+      'command':('string',None,'Comma-separated foreground command tokens replacing the image command; literal argv, with no shell expansion.'),
+      'dependsOn':('string',None,'Comma-separated existing native service names whose readiness must be satisfied before startup.'),
+      'startupTimeoutMs':('integer',None,'Readiness deadline, from 100 to 600000 milliseconds; defaults to the service profile.'),
+      'stopTimeoutMs':('integer',5000,'Graceful shutdown deadline from 100 to 120000 milliseconds.'),
+      'restartPolicy':('string','never','Native restart policy: never, on_failure or always.'),
+      'maxRestarts':('integer',0,'Maximum automatic restarts, from zero to 100.'),
+      'healthCheck':('boolean',True,'Keep running the readiness probe as the native recurring health check.'),
+      'readinessCommand':('string',None,'Comma-separated literal probe command run inside the owned container; overrides the profile probe.'),
+      'readinessPath':('string',None,'HTTP readiness URL path for profiles using an HTTP probe.')}
+     if name=='aws-emulator':fields['stateDir']=('string',None,'Required absolute host directory holding generated credentials and TLS files. Mounted into the emulator and never deleted by stop.');required=['stateDir']
+     for key,(kind,default,description_) in fields.items():properties[key]={'type':kind,'description':description_,**({'default':default} if default is not None else {})}
+     properties['restartPolicy']['enum']=['never','on_failure','always']
+    if function=='logs':properties['tail']={'type':'integer','default':100,'minimum':1,'maximum':10000,'description':'Maximum recent log lines, from 1 to 10000.'};output={'type':'string'};returned='String'
+    if function=='build':
+     properties={'project':properties['project'],'image':{'type':'string','default':'fluentci/aws-emulator:local','description':'Local image name/tag to build.'},'architecture':{'type':'string','default':'auto','enum':['auto','x86_64','aarch64'],'description':'RPM architecture; auto uses the Docker daemon architecture.'},'packageUrl':{'type':'string','description':'Optional HTTPS URL of a pinned official AWS Emulator RPM; requires packageSha256. Default uses the official latest LTS package.'},'packageSha256':{'type':'string','description':'Lowercase SHA-256 for a pinned RPM; custom URLs require it.'},'timeoutMs':{'type':'integer','default':1800000,'description':'Image build deadline from 1000 to 3600000 milliseconds.'}};output={'type':'string'};returned='String'
+    args='(Contract.input (Contract.encodeInput args))'
+    body=[f'  '+(f'Aws.build (Dependencies.ensureFor "docker") {args}' if function=='build' else f'Native.{function} '+('(Dependencies.ensureFor "docker") ' if function in ['start','restart'] else '')+f'"{name}" {args}')]
    elif category=='notifications':
     properties={'message':{'type':'string','minLength':1,'description':f'Notification text, passed literally and JSON-encoded internally. Maximum {2000 if name=="discord" else 4096 if name=="telegram" else 4000} Unicode characters; no JSON object is accepted.'}}
     required=['message']
@@ -222,8 +256,9 @@ def generated():
    docs += ['| `'+re.sub(r'([a-z0-9])([A-Z])',r'\1-\2',key).replace('_','-').lower()+'` | `'+prop['type']+'` | '+('yes' if key in required else 'no')+' | '+prop['description'].replace('|','\\|')+' |' for key,prop in properties.items()]
    docs+=['','Returns `'+returned+'`.','']
   if name=='gemfury':source+=['unwrap :: forall a. P.Result a -> Effect a','unwrap = either (throw <<< P.errorMessage) pure','']
-  if module['path'] in catalog or category=='notifications':source=[line for line in source if line not in ['import Data.Either (either)','import Effect.Exception (throw)']]
+  if module['path'] in catalog or category in ['notifications','services']:source=[line for line in source if line not in ['import Data.Either (either)','import Effect.Exception (throw)']]
   if category=='notifications':source=[line for line in source if line not in ['import Prelude','import CI.Contract as Contract']]
+  if category=='services':source=[line for line in source if line!='import Prelude']
   source=[line.replace('import Data.Maybe (Maybe(..))','import Data.Maybe (Maybe)') for line in source]
   if all(not any(key not in value['input']['required'] for key in value['input']['properties']) for value in schemas.values()):source=[line for line in source if line!='import Data.Maybe (Maybe)']
   yield directory/'src/CI/Component.purs','\n'.join(source)
