@@ -52,10 +52,10 @@ export async function serviceSuite(directory){
   assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='services'&&a[2]==='apply'));
   assert.ok(!f.calls.some(a=>a[0]==='docker'&&['run','stop','rm'].includes(a[1])));assert.equal(f.plans.length,0);assert.deepEqual(f.installed,[]);
  });
- if(['http','tcp'].includes(p.probe))test(name+': readiness uses the allocated binding with explicit host ports and custom paths',()=>{
-  const f=fixture();
-  native.start({...args('start'),ports:new Just('42000:'+p.port),readinessPath:new Just('/ci/ready?source=literal'),healthCheck:new Just(false)})();
-  const d=f.definitions[0];assert.deepEqual(d.ports,['42000:'+p.port]);assert.equal(d.health,undefined);
+ if(['http','tcp'].includes(p.probe))test(name+': readiness uses supported explicit port bindings and custom paths',()=>{
+  const f=fixture(),mapping=(name==='aws-emulator'?p.port:42000)+':'+p.port;
+  native.start({...args('start'),ports:new Just(mapping),readinessPath:new Just('/ci/ready?source=literal'),healthCheck:new Just(false)})();
+  const d=f.definitions[0];assert.deepEqual(d.ports,[mapping]);assert.equal(d.health,undefined);
   if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}/ci/ready?source=literal');
   else assert.equal(d.readiness.address,'${port:'+p.port+'}');
  });
@@ -113,6 +113,11 @@ export async function serviceSuite(directory){
   const bad=fixture();assert.throws(()=>native.logs({...args('logs'),follow:new Just('true')})());assert.equal(bad.calls.length,0);
  });
  if(name==='aws-emulator'){
+  test('AWS Emulator rejects remapped host ports before setup or host commands',()=>{
+   const f=fixture();
+   assert.throws(()=>native.start({...args('start'),ports:new Just('42000:'+p.port)})(),/same fixed host and container port/);
+   assert.deepEqual(f.calls,[]);assert.deepEqual(f.installed,[]);
+  });
   test('AWS Emulator image builder uses official RPMs, native file operations and the correct architecture',()=>{
    const f=fixture();const image=native.build(args('build'))();assert.equal(image,'fluentci/aws-emulator:local');assert.equal(f.plans.length,1);
    const document=JSON.stringify(f.plans[0]);assert.ok(document.includes('downloads.aws.com/aws-emulator'));assert.ok(document.includes('aws-emulator-x86_64.rpm'));assert.ok(document.includes('write_text'));assert.ok(!document.includes('cargo build'));

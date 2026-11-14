@@ -6,6 +6,8 @@ on:
     paths:
       - 'services/**'
       - 'lib/services/**'
+      - 'test/services/**'
+      - 'test/ci/services_e2e.test.mjs'
       - 'lib/component/**'
       - 'scripts/test_services_e2e.mjs'
       - 'scripts/services_e2e_helpers.mjs'
@@ -17,6 +19,8 @@ on:
     paths:
       - 'services/**'
       - 'lib/services/**'
+      - 'test/services/**'
+      - 'test/ci/services_e2e.test.mjs'
       - 'lib/component/**'
       - 'scripts/test_services_e2e.mjs'
       - 'scripts/services_e2e_helpers.mjs'
