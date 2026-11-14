@@ -7,7 +7,7 @@ workspace:
   extraPackages:
     fluentci:
       git: https://github.com/fluentci-io/purescript-fluentci.git
-      ref: 954d03568935c26f92434119a110635a41a6fa4c
+      ref: 01e6e6626cd33ddd43106f98bf8bbd1341589a25
     fluentci-component-contract:
       path: ../../lib/component
     fluentci-cli-common:

@@ -2,7 +2,6 @@
 module CI.Component (upload) where
 
 import Prelude
-import CI.Contract as Contract
 import Data.Either (either)
 import Effect (Effect)
 import Effect.Exception (throw)

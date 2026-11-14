@@ -238,9 +238,9 @@ start setup tool json = do
     void (capture cfg.project [ "mkdir", "-p", stateDir ])
   raw <- capture cfg.project [ "fluentci", "services", "apply", "--json", stringify (encodeJson [ definition ]) ]
   response <- either (const (throw "Native service manager returned malformed apply JSON")) pure (jsonParser raw)
-  ok <- either (const (throw "Invalid service apply acknowledgement")) pure (decodeJson response >>= \fields -> getField fields "ok")
+  ok <- either (const (throw "Invalid service apply acknowledgement")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "ok")
   unless ok $ throw "Native service manager refused startup"
-  rows <- either (const (throw "Invalid service apply states")) pure (decodeJson response >>= \fields -> getField fields "services")
+  rows <- either (const (throw "Invalid service apply states")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "services")
   started <- result (p { port = primary }) cfg.name (A.find (\row -> row.name == cfg.name) rows)
   unless (started.state == "ready") $ throw "Native service did not reach readiness"
   when (tool == "aws-emulator") do

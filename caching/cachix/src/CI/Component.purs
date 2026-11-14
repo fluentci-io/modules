@@ -2,10 +2,7 @@
 module CI.Component (setup, push) where
 
 import Prelude
-import CI.Contract as Contract
-import Data.Either (either)
 import Effect (Effect)
-import Effect.Exception (throw)
 import CI.ModuleDependencies as Dependencies
 import CI.Cachix as Native
 import CI.Cachix.Support (unwrap)

@@ -13,7 +13,6 @@ import Data.Array as Array
 import Data.Either (Either(..), either)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as String
-import Data.String.CodeUnits as CU
 import Data.String.Common (trim)
 import Data.String.Pattern (Pattern(..), Replacement(..))
 import Data.String.Regex as Regex

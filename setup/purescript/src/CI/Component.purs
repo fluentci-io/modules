@@ -7,8 +7,6 @@ import Data.Either (either)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Effect.Exception (throw)
-import CI.Setup as Setup
-import CI.Setup.Types as Types
 import CI.Setup.PureScript as Native
 
 -- | Install and verify purescript, select its version, and publish its environment for subsequent tasks.
