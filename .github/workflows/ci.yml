@@ -36,8 +36,9 @@ jobs:
         run: python containers/buildx/generate.py --check
       - name: Check generated CLI sources and schemas
         run: python scripts/generate_cli_modules.py --check
-      - name: Check generated setup sources and schemas
-        run: python scripts/generate_setup_tools.py --check
+      - name: Check generated setup and service sources
+        run: |
+          python scripts/generate_setup_tools.py --check
           python scripts/generate_service_modules.py --check
       - name: Check typed component sources and schemas
         run: python scripts/generate_components.py --check
