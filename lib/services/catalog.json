@@ -109,14 +109,9 @@
       "-client=0.0.0.0"
     ],
     "env": {},
-    "probe": "exec",
-    "path": "/",
-    "exec": [
-      "consul",
-      "operator",
-      "raft",
-      "list-peers"
-    ],
+    "probe": "http",
+    "path": "/v1/operator/raft/configuration",
+    "exec": [],
     "timeout": 60000,
     "notes": "",
     "source": "https://developer.hashicorp.com/consul/docs/run/cloud-deployments/docker",
@@ -138,13 +133,9 @@
       "--advertise-client-urls=http://127.0.0.1:2379"
     ],
     "env": {},
-    "probe": "exec",
-    "path": "/",
-    "exec": [
-      "/usr/local/bin/etcdctl",
-      "endpoint",
-      "health"
-    ],
+    "probe": "http",
+    "path": "/health",
+    "exec": [],
     "timeout": 60000,
     "notes": "",
     "source": "https://etcd.io/docs/v3.6/op-guide/container/",

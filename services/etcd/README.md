@@ -21,7 +21,7 @@ background service keeps running. The native shorthand is
 
 - Image: `quay.io/coreos/etcd:v3.6.5`.
 - Primary container port: `2379`; exposed TCP ports: `2379`.
-- Readiness: `exec: /usr/local/bin/etcdctl endpoint health`; startup deadline: `60000` ms.
+- Readiness: `http://${port:2379}/health` (HTTP 200 on the published host port); startup deadline: `60000` ms.
 - Native recurring health check uses the same probe by default.
 - Name: `module-etcd-default`; custom names must start with `module-etcd-`.
 

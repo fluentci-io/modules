@@ -158,7 +158,7 @@ pub fn open_process(
 pub fn read_process(process: Process, timeout: Int) -> Event
 
 @external(erlang, "ci_native", "signal_process")
-pub fn signal_process(process: Process, signal: String) -> Nil
+pub fn signal_process(process: Process, signal: String) -> Result(Nil, String)
 
 @external(erlang, "ci_native", "monotonic_ms")
 pub fn monotonic_ms() -> Int

@@ -168,8 +168,14 @@ result p name found = do
   when (active && port == 0) $ throw "Native service manager omitted the primary port binding"
   pure { name, state: row.state, backend: "docker", host: "127.0.0.1", port, endpoint, ports: bindings }
 
+owned :: Control -> Effect (Maybe WireStatus)
+owned cfg = do
+  found <- statuses cfg <#> A.find (\row -> row.name == cfg.name)
+  traverse_ (\row -> unless (row.backend == "docker") $ throw "Refusing to operate on a non-Docker service with this module's name") found
+  pure found
+
 current :: Profile -> Control -> Effect ServiceResult
-current p cfg = statuses cfg >>= result p cfg.name <<< A.find (\row -> row.name == cfg.name)
+current p cfg = owned cfg >>= result p cfg.name
 
 start :: Effect Unit -> String -> Json -> Effect ServiceResult
 start setup tool json = do
@@ -230,33 +236,35 @@ start setup tool json = do
       selectedVolumes = A.filter (\volume -> not (A.elem (volumeTarget volume) userTargets)) p.volumes <> volumes <> if tool == "aws-emulator" then [ stateDir <> ":/home/emulator/.aws/emulator" ] else []
       definition = object ([ Tuple "name" (encodeJson cfg.name), Tuple "backend" (encodeJson "docker"), Tuple "image" (encodeJson selected), Tuple "command" (encodeJson selectedCommand), Tuple "env" (encodeJson env), Tuple "ports" (encodeJson ports), Tuple "volumes" (encodeJson selectedVolumes), Tuple "depends_on" (encodeJson depends), Tuple "readiness" readiness, Tuple "restart" (encodeJson policy), Tuple "max_restarts" (encodeJson restarts), Tuple "startup_timeout_ms" (encodeJson startup), Tuple "stop_timeout_ms" (encodeJson shutdown) ] <> if health then [ Tuple "health" readiness ] else [])
   validateHost
-  existing <- current p cfg
+  existing <- owned cfg
   setup
   void (capture cfg.project [ "docker", "info" ])
   when (tool == "aws-emulator") do
     void (capture cfg.project [ "docker", "image", "inspect", selected ])
     void (capture cfg.project [ "mkdir", "-p", stateDir ])
-  raw <- capture cfg.project [ "fluentci", "services", "apply", "--json", stringify (encodeJson [ definition ]) ]
-  response <- either (const (throw "Native service manager returned malformed apply JSON")) pure (jsonParser raw)
-  ok <- either (const (throw "Invalid service apply acknowledgement")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "ok")
-  unless ok $ throw "Native service manager refused startup"
-  rows <- either (const (throw "Invalid service apply states")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "services")
-  started <- result (p { port = primary }) cfg.name (A.find (\row -> row.name == cfg.name) rows)
-  unless (started.state == "ready") $ throw "Native service did not reach readiness"
-  when (tool == "aws-emulator") do
-    checked <- try do
+  checked <- try do
+    raw <- capture cfg.project [ "fluentci", "services", "apply", "--json", stringify (encodeJson [ definition ]) ]
+    response <- either (const (throw "Native service manager returned malformed apply JSON")) pure (jsonParser raw)
+    ok <- either (const (throw "Invalid service apply acknowledgement")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "ok")
+    unless ok $ throw "Native service manager refused startup"
+    rows <- either (const (throw "Invalid service apply states")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "services")
+    started <- result (p { port = primary }) cfg.name (A.find (\row -> row.name == cfg.name) rows)
+    unless (started.state == "ready") $ throw "Native service did not reach readiness"
+    when (tool == "aws-emulator") do
       let material = stateDir <> "/" <> show primary
       traverse_ (\file -> catchException
         (\_ -> throw ("AWS Emulator did not create readable " <> material <> "/" <> file <> "; check image ownership and readiness logs"))
         (void (capture cfg.project [ "test", "-r", material <> "/" <> file ]))) [ "ca.pem", "emulator_credentials", "config" ]
       void (capture cfg.project [ "curl", "--fail", "--silent", "--show-error", "--max-time", "10", "--cacert", material <> "/ca.pem", started.endpoint <> "/__admin/health" ])
-    case checked of
-      Right _ -> pure unit
-      Left error -> do
-        when (A.elem existing.state [ "absent", "stopped" ]) $
-          catchException (const (pure unit)) (void (capture cfg.project [ "fluentci", "stop", cfg.name ]))
-        throw (message error)
-  pure started
+    pure started
+  case checked of
+    Right started -> pure started
+    Left error -> do
+      when (A.elem (fromMaybe "absent" (map _.state existing)) [ "absent", "stopped" ]) $
+        catchException (const (pure unit)) do
+          void (owned cfg)
+          void (capture cfg.project [ "fluentci", "stop", cfg.name ])
+      throw (message error)
 
 status :: String -> Json -> Effect ServiceResult
 status tool json = do
@@ -272,8 +280,12 @@ stop tool json = do
   fields <- input [ "project", "name" ] json
   cfg <- control p fields
   validateHost
-  before <- current p cfg
-  if A.elem before.state [ "absent", "stopped" ] then pure (before { state = "stopped" }) else do
+  before <- owned cfg
+  let state = fromMaybe "absent" (map _.state before)
+  if A.elem state [ "absent", "stopped" ] then do
+    inactive <- result p cfg.name before
+    pure (inactive { state = "stopped" })
+  else do
     void (capture cfg.project [ "fluentci", "stop", cfg.name ])
     stopped <- current p cfg
     unless (A.elem stopped.state [ "stopped", "absent" ]) $ throw "Native service manager did not stop the service"
@@ -285,8 +297,8 @@ restart setup tool json = do
   fields <- input [ "project", "name" ] json
   cfg <- control p fields
   validateHost
-  before <- current p cfg
-  when (before.state == "absent") $ throw "Start this service before restarting it"
+  before <- owned cfg
+  when (fromMaybe "absent" (map _.state before) == "absent") $ throw "Start this service before restarting it"
   setup
   void (capture cfg.project [ "docker", "info" ])
   void (capture cfg.project [ "fluentci", "restart", cfg.name ])
@@ -303,5 +315,5 @@ logs tool json = do
   follow <- optional fields "follow" false
   bounded "tail" 1 10000 tail
   validateHost
-  void (current p cfg)
+  void (owned cfg)
   capture cfg.project ([ "fluentci", "logs", cfg.name, "--tail", show tail ] <> if follow then [ "--follow" ] else [])

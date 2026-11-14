@@ -66,6 +66,43 @@ export async function serviceSuite(directory){
   assert.equal(native.logs(args('logs'))(),'bounded native log\n');assert.equal(native.stop(args('stop'))().state,'stopped');assert.equal(native.stop(args('stop'))().port,0);
   assert.ok(f.definitions[0].volumes.includes('test-data:/data'));assert.ok(!f.calls.some(a=>a.includes('down')||a.includes('volume')||a[0]==='rm'));
  });
+ test(name+': logs and stop remain usable when native ready state has no port bindings',()=>{
+  const f=fixture();const started=native.start(args('start'))();
+  f.states.get(started.name).ports={};
+  assert.throws(()=>native.status(args('status'))(),/omitted the primary port binding/);
+  assert.equal(native.logs(args('logs'))(),'bounded native log\n');
+  const stopped=native.stop(args('stop'))();
+  assert.equal(stopped.state,'stopped');assert.equal(stopped.port,0);
+  assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='stop'&&a[2]===started.name));
+ });
+ test(name+': a missing startup binding cleans a fresh service but preserves an existing service',()=>{
+  const service='module-'+name+'-default';
+  const options={applyResponse:JSON.stringify({ok:true,services:[{name:service,backend:'docker',state:'ready',ports:{}}]})};
+  let f=fixture(options);
+  assert.throws(()=>native.start(args('start'))(),/omitted the primary port binding/);
+  assert.equal(f.states.get(service).state,'stopped');
+  f=fixture(options);
+  f.states.set(service,{name:service,backend:'docker',state:'ready',ports:{[p.port+'/tcp']:'127.0.0.1:32000'}});
+  assert.throws(()=>native.start(args('start'))(),/omitted the primary port binding/);
+  assert.ok(!f.calls.some(a=>a[0]==='fluentci'&&a[1]==='stop'));
+ });
+ test(name+': incomplete bindings cannot bypass Docker ownership checks for logs or stop',()=>{
+  for(const operation of ['logs','stop']){
+   const f=fixture({statusResponse:JSON.stringify([{name:'module-'+name+'-default',state:'ready',backend:'host',ports:{}}])});
+   assert.throws(()=>native[operation](args(operation))(),/non-Docker/);
+   assert.ok(!f.calls.some(a=>a[0]==='fluentci'&&['logs','stop','restart'].includes(a[1])));
+  }
+ });
+ if(name==='consul')test('Consul readiness discovers the current published port and requires a Raft leader',()=>{
+  const f=fixture();native.start(args('start'))();
+  assert.deepEqual(f.definitions[0].readiness,{type:'http',url:'http://${port:8500}/v1/operator/raft/configuration',status:200});
+  assert.deepEqual(f.definitions[0].health,f.definitions[0].readiness);
+ });
+ if(name==='etcd')test('etcd readiness requires its published host endpoint to pass the health check',()=>{
+  const f=fixture();native.start(args('start'))();
+  assert.deepEqual(f.definitions[0].readiness,{type:'http',url:'http://${port:2379}/health',status:200});
+  assert.deepEqual(f.definitions[0].health,f.definitions[0].readiness);
+ });
  test(name+': specific versions and image digests are literal and mutually exclusive',()=>{
   let f=fixture();native.start({...args('start'),version:new Just('test-version')})();assert.equal(f.definitions[0].image,p.image+':test-version');
   const image='registry.example/test@sha256:'+'a'.repeat(64);f=fixture();native.start({...args('start'),image:new Just(image)})();assert.equal(f.definitions[0].image,image);

@@ -69,7 +69,9 @@ avoiding source and setup rebuilds on every operation.
 Service builds use up to 32 BEAM workers; shared dependency preparation and
 composition are serialized. Native service lifecycle tests run sequentially in an
 isolated workspace, check TCP/HTTP/TLS and application protocols, exercise live
-log interruption, and clean up owned services, volumes, and images. Build and E2E commands stream output immediately. Lifecycle operations print
+log interruption, and clean up owned services, volumes, and images. Follow-log
+checks signal the owned FluentCI viewer PID directly and verify that the
+background service keeps running. Build and E2E commands stream output immediately. Lifecycle operations print
 timings, and silent commands emit an idle heartbeat identifying the command, directory, and elapsed time every 30 seconds while
 preserving their original deadlines. Diagnostic
 artifacts contain logs/status, never generated AWS credential file contents.

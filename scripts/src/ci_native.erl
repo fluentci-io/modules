@@ -219,9 +219,12 @@ read_process(Port, Timeout) ->
 signal_process(Port, Signal) ->
     case erlang:port_info(Port,os_pid) of
         {os_pid,Pid} ->
-            Args = ["-"++unicode:characters_to_list(Signal), "--", "-"++integer_to_list(Pid)],
-            _ = execute(<<"kill">>,[text(A)||A<-Args],cwd(),false,true), nil;
-        undefined -> nil
+            Args = ["-"++unicode:characters_to_list(Signal), "--", integer_to_list(Pid)],
+            case execute(<<"kill">>,[text(A)||A<-Args],cwd(),false,true) of
+                {0, _} -> {ok, nil};
+                {_, Error} -> {error, <<"Could not signal owned viewer: ", Error/binary>>}
+            end;
+        undefined -> {ok, nil}
     end.
 monotonic_ms() -> erlang:monotonic_time(millisecond).
 regex(Pattern, Value) ->

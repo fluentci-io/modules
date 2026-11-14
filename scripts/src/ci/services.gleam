@@ -376,6 +376,7 @@ fn follow_read(
   case native.read_process(process, remaining) {
     native.Data(data) -> {
       use _ <- result.try(native.append(log, data))
+      let _ = native.stdout(data)
       let buffer = buffer <> data
       let buffer =
         string.slice(buffer, int.max(0, string.length(buffer) - 65_536), 65_536)
@@ -387,7 +388,7 @@ fn follow_read(
         )
       case ready && !interrupted {
         True -> {
-          let _ = native.signal_process(process, "INT")
+          use _ <- result.try(native.signal_process(process, "INT"))
           follow_read(
             process,
             log,
@@ -402,7 +403,10 @@ fn follow_read(
     native.Exited(_) ->
       c.require(interrupted, "Follow exited before interruption")
     native.TimedOut ->
-      Error("Follow did not stream readiness or exit after interruption")
+      case interrupted {
+        True -> Error("Follow viewer did not exit after SIGINT")
+        False -> Error("Follow did not stream service readiness")
+      }
   }
 }
 
@@ -424,7 +428,11 @@ fn follow(
         #("follow", d.Bool(True)),
       ],
     )
-  use process <- result.try(native.open_process("setsid", argv, root))
+  use process <- result.try(native.open_process(
+    "fluentci",
+    list.drop(argv, 1),
+    root,
+  ))
   let result =
     follow_read(process, log, "", False, native.monotonic_ms() + 90_000)
   let _ = native.signal_process(process, "KILL")

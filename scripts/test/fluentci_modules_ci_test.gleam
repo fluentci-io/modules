@@ -493,3 +493,16 @@ pub fn component_slots_bound_real_concurrent_workers_without_losing_work_test() 
     completed |> should.equal(8)
   })
 }
+
+pub fn viewer_interrupt_targets_the_owned_child_process_test() {
+  let assert Ok(viewer) = native.open_process("sleep", ["60"], native.cwd())
+  let interrupted = native.signal_process(viewer, "INT")
+  let event = native.read_process(viewer, 5000)
+  let _ = native.signal_process(viewer, "KILL")
+  interrupted |> should.equal(Ok(Nil))
+  case event {
+    native.Exited(_) -> True
+    _ -> False
+  }
+  |> should.be_true
+}

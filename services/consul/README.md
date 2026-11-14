@@ -21,7 +21,7 @@ background service keeps running. The native shorthand is
 
 - Image: `hashicorp/consul:1.21`.
 - Primary container port: `8500`; exposed TCP ports: `8500`.
-- Readiness: `exec: consul operator raft list-peers`; startup deadline: `60000` ms.
+- Readiness: `http://${port:8500}/v1/operator/raft/configuration` (HTTP 200 on the published host port; requires a Raft leader); startup deadline: `60000` ms.
 - Native recurring health check uses the same probe by default.
 - Name: `module-consul-default`; custom names must start with `module-consul-`.
 

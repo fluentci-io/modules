@@ -6,7 +6,7 @@ import Data.Argonaut.Decode (class DecodeJson, decodeJson, getField)
 import Data.Argonaut.Encode (encodeJson)
 import Data.Argonaut.Parser (jsonParser)
 import Data.Array as A
-import Data.Either (Either(..), either)
+import Data.Either (either)
 import Data.Foldable (all, traverse_)
 import Data.Int as Int
 import Data.Maybe (Maybe(..), fromMaybe)
