@@ -1,3 +1,5 @@
+import ci/artifacts
+import ci/batch
 import ci/common as c
 import ci/data as d
 import ci/dependencies
@@ -93,14 +95,20 @@ pub fn service_output_separates_strings_logs_and_typed_records_test() {
 }
 
 pub fn native_service_invocations_keep_named_arguments_and_literal_values_test() {
-  services.invocation("redis", "logs", "/tmp/workspace with ' quotes", [
-    #("follow", d.Bool(True)),
-    #("tail", d.Number("20")),
-  ])
+  services.invocation(
+    "/tmp/prebuilt/redis.wasm",
+    "logs",
+    "/tmp/workspace with ' quotes",
+    [
+      #("follow", d.Bool(True)),
+      #("tail", d.Number("20")),
+    ],
+  )
   |> should.equal([
     "fluentci",
     "run",
-    "redis",
+    "--wasm",
+    "/tmp/prebuilt/redis.wasm",
     "logs",
     "--project",
     "/tmp/workspace with ' quotes",
@@ -430,4 +438,29 @@ pub fn unknown_duplicate_and_malformed_helper_options_fail_before_effects_test()
       |> should.be_true
     },
   )
+}
+
+pub fn prebuilt_artifacts_require_one_matching_module_and_absolute_wasm_path_test() {
+  let record =
+    "{\"modules\":[{\"name\":\"redis\",\"wasm\":\"/tmp/composed/redis.wasm\"}]}"
+  artifacts.path("build output\n" <> record <> "\n", "redis")
+  |> should.equal(Ok("/tmp/composed/redis.wasm"))
+  artifacts.path(record, "postgres") |> result.is_error |> should.be_true
+  artifacts.path("{\"modules\":[]}", "redis")
+  |> result.is_error
+  |> should.be_true
+  artifacts.path(
+    "{\"modules\":[{\"name\":\"redis\",\"wasm\":\"relative.wasm\"}]}",
+    "redis",
+  )
+  |> result.is_error
+  |> should.be_true
+}
+
+pub fn module_build_worker_count_is_bounded_test() {
+  batch.concurrency("") |> should.equal(Ok(32))
+  batch.concurrency("32") |> should.equal(Ok(32))
+  list.each(["0", "33", "invalid", "-1"], fn(value) {
+    batch.concurrency(value) |> result.is_error |> should.be_true
+  })
 }

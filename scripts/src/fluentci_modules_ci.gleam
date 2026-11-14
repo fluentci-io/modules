@@ -195,11 +195,11 @@ pub fn dispatch(args: List(String)) -> Result(Nil, String) {
     }
     ["test-services"] -> {
       let workers = case native.env("SERVICE_BUILD_CONCURRENCY") {
-        "" -> Ok(6)
+        "" -> Ok(32)
         value ->
           int.parse(value)
           |> result.map_error(fn(_) {
-            "SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 6"
+            "SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 32"
           })
       }
       use workers <- result.try(workers)

@@ -65,6 +65,7 @@ jobs:
       matrix: ${{ fromJSON(needs.validate.outputs.matrix) }}
     env:
       FLUENTCI_REQUIRE_NATIVE_TESTS: '1'
+      MODULE_BUILD_CONCURRENCY: '32'
       MODULE_BATCH: ${{ toJSON(matrix.modules) }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
@@ -160,6 +161,7 @@ jobs:
           path: |
             ${{ runner.temp }}/module-logs/
             */*/dist/plugin.wasm
+            */*/dist/ci.wasm
           if-no-files-found: warn
           retention-days: 7
 

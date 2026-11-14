@@ -1,3 +1,4 @@
+import ci/artifacts
 import ci/commands
 import ci/common as c
 import ci/data as d
@@ -69,7 +70,7 @@ pub fn invocation(
   fields: List(#(String, d.Value)),
 ) -> List(String) {
   list.append(
-    ["fluentci", "run", name, operation, "--project", project],
+    ["fluentci", "run", "--wasm", name, operation, "--project", project],
     list.map(fields, fn(p) {
       "--"
       <> f.kebab(p.0)
@@ -94,7 +95,12 @@ fn invoke(
   let _ = native.stdout(label <> " started; log: " <> log <> "\n")
   let began = native.monotonic_ms()
   use output <- result.try(commands.logged(
-    invocation(d.s(profile, "name"), operation, project, fields),
+    invocation(
+      root <> "/services/" <> d.s(profile, "name") <> "/dist/ci.wasm",
+      operation,
+      project,
+      fields,
+    ),
     root,
     log,
     case operation {
@@ -147,17 +153,6 @@ fn build(root: String, profile: d.Value, logs: String) -> Result(Nil, String) {
     900_000,
     False,
   ))
-  use _ <- result.try(
-    native.serial(fn() {
-      commands.logged(
-        ["fluentci", "install", "--frozen-lockfile"],
-        directory,
-        log,
-        1_200_000,
-        False,
-      )
-    }),
-  )
   use _ <- result.try(commands.logged(
     ["node", root <> "/lib/component/build-cli.mjs"],
     directory,
@@ -173,17 +168,6 @@ fn build(root: String, profile: d.Value, logs: String) -> Result(Nil, String) {
     False,
   ))
   use _ <- result.try(wasm.run(root, directory))
-  use _ <- result.try(
-    native.serial(fn() {
-      commands.logged(
-        ["fluentci", "run", name, "--help"],
-        root,
-        log,
-        1_200_000,
-        False,
-      )
-    }),
-  )
   let _ = native.stdout("Built service component " <> name <> "\n")
   Ok(Nil)
 }
@@ -197,9 +181,33 @@ fn build_all(
   case profiles {
     [] -> Ok(Nil)
     _ -> {
+      let group = list.take(profiles, workers)
+      let prepared =
+        list.map(group, fn(profile) {
+          let name = d.s(profile, "name")
+          commands.logged(
+            ["fluentci", "install", "--frozen-lockfile"],
+            root <> "/services/" <> name,
+            logs <> "/" <> name <> ".log",
+            1_200_000,
+            False,
+          )
+        })
+      let built =
+        native.parallel(list.zip(group, prepared), fn(pair) {
+          use _ <- result.try(pair.1)
+          build(root, pair.0, logs)
+        })
       let results =
-        native.parallel(list.take(profiles, workers), fn(profile) {
-          build(root, profile, logs)
+        list.map(list.zip(group, built), fn(pair) {
+          use _ <- result.try(pair.1)
+          let name = d.s(pair.0, "name")
+          artifacts.prepare(
+            root,
+            name,
+            root <> "/services/" <> name,
+            logs <> "/" <> name <> ".log",
+          )
         })
       let failures =
         list.filter_map(results, fn(r) {
@@ -406,11 +414,16 @@ fn follow(
   log: String,
 ) -> Result(Nil, String) {
   let argv =
-    invocation(d.s(profile, "name"), "logs", project, [
-      #("name", d.Text(name)),
-      #("tail", d.Number("100")),
-      #("follow", d.Bool(True)),
-    ])
+    invocation(
+      root <> "/services/" <> d.s(profile, "name") <> "/dist/ci.wasm",
+      "logs",
+      project,
+      [
+        #("name", d.Text(name)),
+        #("tail", d.Number("100")),
+        #("follow", d.Bool(True)),
+      ],
+    )
   use process <- result.try(native.open_process("setsid", argv, root))
   let result =
     follow_read(process, log, "", False, native.monotonic_ms() + 90_000)
@@ -541,8 +554,8 @@ fn lifecycle(
 
 pub fn run(root: String, logs: String, workers: Int) -> Result(Nil, String) {
   use _ <- result.try(c.require(
-    workers >= 1 && workers <= 6,
-    "SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 6",
+    workers >= 1 && workers <= 32,
+    "SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 32",
   ))
   use _ <- result.try(native.mkdir(logs))
   use catalog <- result.try(f.json(root <> "/lib/services/catalog.json"))

@@ -57,14 +57,20 @@ Downloads require HTTPS and verified SHA-256 hashes. Published setup components
 also require the pinned publisher DID, name, version, and native component header.
 Fresh setup prefixes preserve compatibility with published 0.2.0 installers.
 
-Service builds use up to six BEAM workers; shared dependency preparation and
+Module batch builds and tests run with 32 workers by default (
+`MODULE_BUILD_CONCURRENCY` accepts 1–32). Each module produces a composed
+`dist/ci.wasm`; subsequent CLI checks use that exact prebuilt artifact.
+Service lifecycle operations, including followed logs, use these files too,
+avoiding source and setup rebuilds on every operation.
+
+Service builds use up to 32 BEAM workers; shared dependency preparation and
 composition are serialized. Native service lifecycle tests run sequentially in an
 isolated workspace, check TCP/HTTP/TLS and application protocols, exercise live
 log interruption, and clean up owned services, volumes, and images. Build and E2E commands stream output immediately. Lifecycle operations print
 timings, and silent commands emit an idle heartbeat every 30 seconds while
 preserving their original deadlines. Diagnostic
 artifacts contain logs/status, never generated AWS credential file contents.
-`SERVICE_BUILD_CONCURRENCY` accepts 1–6; `SERVICE_LOG_DIR` selects diagnostics.
+`SERVICE_BUILD_CONCURRENCY` accepts 1–32; `SERVICE_LOG_DIR` selects diagnostics.
 
 `lib/component/build-cli.mjs` and `inspect-abi.mjs` are small adapters to the
 existing JavaScript component compiler and TypeScript AST APIs. The validator
