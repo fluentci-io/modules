@@ -31,7 +31,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends zip unzip
+      - name: Restore incremental PureScript builds
+        id: purs-build-cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: |
+            setup/*/output
+          key: purs-output-v1-${{ runner.os }}-${{ runner.arch }}-setup-smoke-${{ hashFiles('.github/toolchain/versions.json', '**/spago.lock', '**/spago.yaml') }}-${{ hashFiles('setup/*/src/**', 'lib/*/src/**') }}
+          restore-keys: |
+            purs-output-v1-${{ runner.os }}-${{ runner.arch }}-setup-smoke-${{ hashFiles('.github/toolchain/versions.json', '**/spago.lock', '**/spago.yaml') }}-
       - name: Build runtime setup modules
+        id: module-build
         shell: bash
         run: |
           for runtime in bun deno elixir erlang gh gleam go java android node pkl purescript rust zig; do
@@ -40,6 +50,13 @@ jobs:
             npm run build --prefix "$directory"
             escript scripts/fluentci_modules_ci validate-wasm "$directory"
           done
+      - name: Save incremental PureScript builds
+        if: ${{ !cancelled() && (steps.module-build.outcome == 'success' || steps.module-build.outcome == 'failure') && steps.purs-build-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: |
+            setup/*/output
+          key: ${{ steps.purs-build-cache.outputs.cache-primary-key }}
       - name: Install Erlang through the new component
         run: escript scripts/fluentci_modules_ci setup-toolchain --file setup/erlang/dist/plugin.wasm -- --version 29.1.2
       - name: Verify Erlang and GitHub CLI setup modules

@@ -56,19 +56,15 @@ runs:
         tar -xzf "$archive" -C "$prefix/bin" fluentci
         chmod 755 "$prefix/bin/fluentci"
         printf '%s\n' "$prefix/bin" >> "$GITHUB_PATH"
-        mkdir -p "$RUNNER_TEMP/fluentci-ci-bootstrap"
-        printf '# Isolated registry resolution for the CI bootstrap.\n' > "$RUNNER_TEMP/fluentci-ci-bootstrap/fluentci.toml"
     - name: Install Erlang through FluentCI
       shell: bash
-      working-directory: ${{ runner.temp }}/fluentci-ci-bootstrap
       run: |
-        fluentci --check-update=false run @fluentci.io/setup-erlang@0.2.0 setup --version "$(jq -er .beam.erlang "$GITHUB_WORKSPACE/.github/toolchain/versions.json")" --install-dir "$RUNNER_TEMP/fluentci-ci-erlang"
+        fluentci --check-update=false run --frozen-lockfile @fluentci.io/setup-erlang@0.2.0 setup --version "$(jq -er .beam.erlang "$GITHUB_WORKSPACE/.github/toolchain/versions.json")" --install-dir "$RUNNER_TEMP/fluentci-ci-erlang"
         printf '%s\n' "$RUNNER_TEMP/fluentci-ci-erlang/bin" >> "$GITHUB_PATH"
     - name: Install Gleam through FluentCI
       shell: bash
-      working-directory: ${{ runner.temp }}/fluentci-ci-bootstrap
       run: |
-        fluentci --check-update=false run @fluentci.io/setup-gleam@0.2.0 setup --version "$(jq -er .beam.gleam "$GITHUB_WORKSPACE/.github/toolchain/versions.json")" --install-dir "$RUNNER_TEMP/fluentci-ci-gleam"
+        fluentci --check-update=false run --frozen-lockfile @fluentci.io/setup-gleam@0.2.0 setup --version "$(jq -er .beam.gleam "$GITHUB_WORKSPACE/.github/toolchain/versions.json")" --install-dir "$RUNNER_TEMP/fluentci-ci-gleam"
         printf '%s\n' "$RUNNER_TEMP/fluentci-ci-gleam/bin" >> "$GITHUB_PATH"
     - name: Cache BEAM helper dependencies
       uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5

@@ -10,8 +10,8 @@ to install the verified CLI. It calls published `setup-erlang@0.2.0` and
 compiles `scripts/fluentci_modules_ci` for BEAM with OTP 29.1.2 / Gleam 1.19.2. The
 minimal shell bootstrap breaks the cycle before any escript exists; all later
 bootstrap and environment policy is implemented in Gleam. Registry bootstrap calls
-run in a dedicated workspace under `RUNNER_TEMP`, so resolving Erlang and Gleam
-cannot add packages to the repository’s `fluentci.lock`.
+use `--frozen-lockfile` with the committed Erlang and Gleam package metadata,
+including exact versions and SHA-256 digests. They cannot rewrite the lockfile.
 
 The escript resolves exact published `fluentci.io` components, verifies publisher,
 name, version, SHA-256 and component format, and executes their downloaded files
@@ -36,3 +36,12 @@ CI keeps four module batches per OS and up to 32 service build workers on one ru
 Helper unit tests live in `scripts/test`; SDK fixture tests remain under `test/ci`.
 Runtime setup, plugins, installers, Docker and VM verification run only in CI.
 See [the BEAM helper guide](../../scripts/README.md) for commands and port details.
+
+PureScript compiler output is cached separately from package downloads in module,
+service, and setup smoke jobs. Keys include the runner OS/architecture, pinned
+toolchain, Spago manifests/locks, and source files. Source-only edits restore the
+previous compatible output for incremental compilation; builds and tests still
+run. Available incremental output is saved even when later integration checks fail;
+cancelled runs do not write caches. PureScript checks source freshness on the next
+build, so partial compiler output is safe to reuse. Wasm components are rebuilt
+from the current checkout rather than restored from this compiler cache.
