@@ -55,7 +55,7 @@ jobs:
       - name: Build components in parallel and verify service lifecycles
         env:
           SERVICE_LOG_DIR: ${{ runner.temp }}/service-e2e-logs
-          SERVICE_BUILD_CONCURRENCY: '4'
+          SERVICE_BUILD_CONCURRENCY: '6'
         run: escript scripts/fluentci_modules_ci test-services
       - name: Verify committed files stay unchanged
         run: git diff --exit-code

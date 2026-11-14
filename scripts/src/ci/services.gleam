@@ -90,6 +90,9 @@ fn invoke(
   fields: List(#(String, d.Value)),
   log: String,
 ) -> Result(d.Value, String) {
+  let label = d.s(profile, "name") <> ": " <> operation
+  let _ = native.stdout(label <> " started; log: " <> log <> "\n")
+  let began = native.monotonic_ms()
   use output <- result.try(commands.logged(
     invocation(d.s(profile, "name"), operation, project, fields),
     root,
@@ -100,6 +103,13 @@ fn invoke(
     },
     False,
   ))
+  let _ =
+    native.stdout(
+      label
+      <> " completed in "
+      <> int.to_string(int.max(0, native.monotonic_ms() - began) / 1000)
+      <> "s\n",
+    )
   let expected =
     list.key_find(fields, "image") |> result.unwrap(d.Null) |> d.text
   case operation == "build" && expected != "" {
@@ -531,8 +541,8 @@ fn lifecycle(
 
 pub fn run(root: String, logs: String, workers: Int) -> Result(Nil, String) {
   use _ <- result.try(c.require(
-    workers >= 1 && workers <= 4,
-    "SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 4",
+    workers >= 1 && workers <= 6,
+    "SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 6",
   ))
   use _ <- result.try(native.mkdir(logs))
   use catalog <- result.try(f.json(root <> "/lib/services/catalog.json"))

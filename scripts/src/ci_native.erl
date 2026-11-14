@@ -82,7 +82,13 @@ collect(Port, Stream, Chunks, Size, Deadline) ->
             collect(Port, Stream, [Data | Chunks], Size + byte_size(Data), Deadline);
         {Port, {data, _}} -> port_close(Port), {1, <<"Command output exceeded 64 MiB">>};
         {Port, {exit_status, Code}} -> {Code, iolist_to_binary(lists:reverse(Chunks))}
-    after Remaining -> port_close(Port), {124, <<"Command timeout">>}
+    after min(Remaining, 30000) ->
+        case erlang:monotonic_time(millisecond) >= Deadline of
+            true -> port_close(Port), {124, <<"Command timeout">>};
+            false ->
+                case Stream of true -> io:put_chars(standard_error, "[progress] Command still running (no output for 30 seconds)\n"); false -> ok end,
+                collect(Port, Stream, Chunks, Size, Deadline)
+        end
     end.
 archive_entries(Path) ->
     case erl_tar:table(unicode:characters_to_list(Path), [compressed, verbose]) of

@@ -36,7 +36,7 @@ pub fn run(
   args: List(String),
   directory: String,
 ) -> Result(String, String) {
-  let #(status, output) = native.execute(program, args, directory, False, False)
+  let #(status, output) = native.execute(program, args, directory, True, False)
   case status {
     0 -> Ok(output)
     _ ->

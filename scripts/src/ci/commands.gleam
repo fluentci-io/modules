@@ -18,11 +18,13 @@ pub fn logged(
     log,
     "\n$ " <> d.encode(d.Array(list.map(argv, d.Text))) <> "\n",
   ))
+  let _ =
+    native.stderr("$ " <> d.encode(d.Array(list.map(argv, d.Text))) <> "\n")
   case argv {
     [] -> Error("Empty command")
     [program, ..args] -> {
       let #(code, output) =
-        native.execute_timeout(program, args, directory, False, True, timeout)
+        native.execute_timeout(program, args, directory, True, True, timeout)
       use _ <- result.try(native.append(log, output))
       case code == 0 || allow_failure {
         True -> Ok(output)
