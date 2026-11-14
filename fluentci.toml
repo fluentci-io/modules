@@ -840,7 +840,7 @@ runtime = "component"
 
 [[modules]]
 name = "setup-determinate-nix"
-version = "0.2.1"
+version = "0.2.2"
 path = "setup/determinate-nix"
 sdk = "purescript"
 runtime = "component"
