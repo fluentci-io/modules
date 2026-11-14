@@ -5,6 +5,11 @@ functions backed by FluentCI's native workspace service manager. Docker is the
 service backend; FluentCI supervises its foreground process and owned container.
 There is no docker run -d, legacy asService provider, or external process manager.
 
+Service modules require **FluentCI v0.17.4 or newer**. Dynamic port placeholders
+resolve to the complete loopback address (`127.0.0.1:PORT`). HTTP probes use
+`http://${port:CONTAINER}/path`; TCP probes use `${port:CONTAINER}`. Version
+0.17.4 validates HTTP URLs after placeholder substitution.
+
 ```sh
 fluentci run redis start --version 7-alpine
 fluentci run redis status

@@ -2,7 +2,7 @@
 
 Run a background MailCatcher test service through FluentCI's native workspace
 service manager and Docker backend. Typed PureScript Wasm component; requires
-FluentCI with the native services apply/status lifecycle API.
+FluentCI **v0.17.4+**, with the native services apply/status lifecycle API.
 
 ```sh
 fluentci run mailcatcher start --version latest

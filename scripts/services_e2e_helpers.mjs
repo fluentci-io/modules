@@ -5,6 +5,26 @@ export function serviceInvocation(name,operation,project,fields={}){
  return argv;
 }
 
+export function serviceOutput(operation,output){
+ // The native CLI emits string results verbatim, while records are JSON.
+ // Build returns one image reference after any compiler/host progress lines.
+ if(operation==='build'){
+  const image=output.trimEnd().split('\n').at(-1)?.trim();
+  if(!image)throw Error('Native build did not return an image reference');
+  return image;
+ }
+ if(operation==='logs')return output;
+ const starts=[0];
+ for(let index=0;index<output.length;index++)if(output[index]==='\n')starts.push(index+1);
+ for(const index of starts.reverse()){
+  try{
+   const value=JSON.parse(output.slice(index));
+   if(value&&typeof value==='object'&&!Array.isArray(value)&&typeof value.name==='string'&&typeof value.state==='string')return value;
+  }catch{}
+ }
+ throw Error('Native '+operation+' did not return a JSON service record');
+}
+
 export async function runBuildPool(items,concurrency,build){
  if(!Number.isInteger(concurrency)||concurrency<1||concurrency>4)throw Error('SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 4');
  let index=0,preparation=Promise.resolve();const failures=[];

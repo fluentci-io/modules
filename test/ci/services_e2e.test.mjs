@@ -1,6 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {runBuildPool,serviceInvocation} from '../../scripts/services_e2e_helpers.mjs';
+import {runBuildPool,serviceInvocation,serviceOutput} from '../../scripts/services_e2e_helpers.mjs';
+
+test('native string returns remain text after build progress and logs need no JSON encoding',()=>{
+ assert.equal(serviceOutput('build','> build\nBuild succeeded.\nDocker output\nfluentci/aws-emulator:e2e-123\n'),'fluentci/aws-emulator:e2e-123');
+ assert.equal(serviceOutput('logs','ready\n{not JSON}\n'),'ready\n{not JSON}\n');
+ assert.equal(serviceOutput('logs','123\n'),'123\n');
+ assert.equal(serviceOutput('logs',''),'');
+ assert.throws(()=>serviceOutput('build','\n'),/image reference/);
+});
+
+test('lifecycle records are decoded separately from host progress and reject missing returns',()=>{
+ const record={name:'module-redis-default',state:'ready',ports:[]};
+ assert.deepEqual(serviceOutput('start','build progress\n'+JSON.stringify(record)+'\n'),record);
+ assert.deepEqual(serviceOutput('status','host output\n'+JSON.stringify(record,null,2)+'\n'),record);
+ for(const output of ['', 'build succeeded\n', '{}\n', '"not a record"\n'])assert.throws(()=>serviceOutput('start',output),/JSON service record/);
+});
 
 test('service calls select the registered module and keep the workspace as a literal argument',()=>{
  assert.deepEqual(serviceInvocation('redis','logs',"/tmp/workspace with ' quotes",{follow:true,tail:20}),[

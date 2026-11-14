@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {execFile,spawn,spawnSync} from 'node:child_process';
 import net from 'node:net';
 import https from 'node:https';
-import {runBuildPool,serviceInvocation} from './services_e2e_helpers.mjs';
+import {runBuildPool,serviceInvocation,serviceOutput} from './services_e2e_helpers.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const profiles=JSON.parse(readFileSync(join(root,'lib/services/catalog.json')));
 const buildConcurrency=Number(process.env.SERVICE_BUILD_CONCURRENCY??4);
@@ -64,14 +64,6 @@ async function buildServices(){
  });
  assert.deepEqual(failed.map(({item})=>item.name),[],'Every service component must build before starting E2E');
 }
-function nativeValue(output){
- const starts=[0];
- for(let index=0;index<output.length;index++)if(output[index]==='\n')starts.push(index+1);
- for(const index of starts.reverse()){
-  try{return JSON.parse(output.slice(index));}catch{}
- }
- throw Error('Native component did not return a JSON value');
-}
 function camel(value){
  if(Array.isArray(value))return value.map(camel);
  if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).map(([key,item])=>[key.replace(/-([a-z])/g,(_m,c)=>c.toUpperCase()),camel(item)]));
@@ -79,7 +71,9 @@ function camel(value){
 }
 function invoke(profile,operation,fields={}){
  const argv=serviceInvocation(profile.name,operation,workspace,fields);
- return camel(nativeValue(command(argv,{cwd:root,timeout:operation==='build'?2100000:1200000}).stdout));
+ const output=command(argv,{cwd:root,timeout:operation==='build'?2100000:1200000}).stdout;
+ try{return camel(serviceOutput(operation,output));}
+ catch(error){throw Error(`${profile.name} ${operation}: ${error.message}; inspect ${join(logDir,profile.name+'.log')}`);}
 }
 async function verifyFollow(profile,name){
  // Exercise the real component stream, then interrupt only its viewer process group.
@@ -150,13 +144,14 @@ try{
   active=profile.name;console.log('E2E '+active);
   const name='module-'+profile.name+'-e2e-'+runId;
   const stateDir=join(workspace,'aws-material');const volume='fluentci-services-e2e-'+runId;
-  const fields={name,startupTimeoutMs:600000,stopTimeoutMs:10000};let image;
+  const fields={name,startupTimeoutMs:600000,stopTimeoutMs:10000};let image,startAttempted=false;
   try{
    if(profile.name==='aws-emulator'){
     image='fluentci/aws-emulator:e2e-'+runId;
     assert.equal(invoke(profile,'build',{image}),image);fields.image=image;fields.stateDir=stateDir;
    }else fields.version=profile.version;
    if(profile.name==='redis')fields.volumes=volume+':/data';
+   startAttempted=true;
    const started=invoke(profile,'start',fields);assert.equal(started.name,name);assert.equal(started.state,'ready');
    const first=containers(name);assert.equal(first.length,1,'one owned container');
    const same=invoke(profile,'start',fields);assert.equal(same.port,started.port);assert.deepEqual(containers(name),first,'idempotent start must reuse the same container');
@@ -173,8 +168,10 @@ try{
    console.log(active+' passed');
   }catch(error){failures.push(active);console.error(active+': '+error.message);}
   finally{
-   try{invoke(profile,'logs',{name,tail:100});}catch{}
-   try{invoke(profile,'stop',{name});}catch(error){failures.push(active+' cleanup');console.error(error.message);}
+   if(startAttempted){
+    try{invoke(profile,'logs',{name,tail:100});}catch{}
+    try{invoke(profile,'stop',{name});}catch(error){failures.push(active+' cleanup');console.error(error.message);}
+   }
    if(profile.name==='redis')command(['docker','volume','rm',volume],{allowFailure:true});
    // Only release the exact image used by this test after its owned service stopped.
    command(['docker','image','rm',image??profile.image+':'+profile.version],{allowFailure:true});

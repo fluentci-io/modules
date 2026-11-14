@@ -135,7 +135,7 @@ def generated():
   else:raise ValueError('No typed component migration for '+name)
   if name in ['depot','buildx','flipt']:source+=['import CI.ContainerSetup as ContainerSetup']
   if category=='version-control':source+=['import CI.ToolSetup as ContainerSetup']
-  source+=[''];schemas={};docs=[f'# {name} component functions','',('Requires FluentCI v0.17.3 or newer.' if tool=='android' or category!='setup' else 'Requires FluentCI v0.17.2 or newer.')+' The compiler derives native WIT signatures', 'and embedded help from these typed PureScript functions. Optional arguments may be omitted.','']
+  source+=[''];schemas={};docs=[f'# {name} component functions','',('Requires FluentCI v0.17.4 or newer.' if category=='services' else 'Requires FluentCI v0.17.3 or newer.' if tool=='android' or category!='setup' else 'Requires FluentCI v0.17.2 or newer.')+' The compiler derives native WIT signatures', 'and embedded help from these typed PureScript functions. Optional arguments may be omitted.','']
   for function in exports:
    properties={};required=[];output=copy.deepcopy(EXEC);returned='Contract.ExecutionResult';body=[]
    description=''

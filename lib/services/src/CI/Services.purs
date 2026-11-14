@@ -220,8 +220,8 @@ start setup tool json = do
   when (tool == "aws-emulator") $ absoluteDirectory stateDir
   when (tool /= "aws-emulator" && stateDir /= "") $ throw "stateDir is specific to AWS Emulator; use volumes for other services"
   let readiness = if not (A.null readyCommand) || p.probe == "exec" then object [ Tuple "type" (encodeJson "exec"), Tuple "command" (encodeJson (if A.null readyCommand then p.exec else readyCommand)) ]
-        else if p.probe == "http" then object [ Tuple "type" (encodeJson "http"), Tuple "url" (encodeJson ("http://127.0.0.1:${port:" <> show primary <> "}" <> readyPath)), Tuple "status" (encodeJson 200) ]
-        else object [ Tuple "type" (encodeJson "tcp"), Tuple "address" (encodeJson ("127.0.0.1:${port:" <> show primary <> "}")) ]
+        else if p.probe == "http" then object [ Tuple "type" (encodeJson "http"), Tuple "url" (encodeJson ("http://${port:" <> show primary <> "}" <> readyPath)), Tuple "status" (encodeJson 200) ]
+        else object [ Tuple "type" (encodeJson "tcp"), Tuple "address" (encodeJson ("${port:" <> show primary <> "}")) ]
       selectedCommand = if tool == "aws-emulator" && A.null command then [ "-p", show primary ] else if A.null command then p.command else command
       selectedVolumes = A.filter (\volume -> not (A.elem (volumeTarget volume) userTargets)) p.volumes <> volumes <> if tool == "aws-emulator" then [ stateDir <> ":/home/emulator/.aws/emulator" ] else []
       definition = object ([ Tuple "name" (encodeJson cfg.name), Tuple "backend" (encodeJson "docker"), Tuple "image" (encodeJson selected), Tuple "command" (encodeJson selectedCommand), Tuple "env" (encodeJson env), Tuple "ports" (encodeJson ports), Tuple "volumes" (encodeJson selectedVolumes), Tuple "depends_on" (encodeJson depends), Tuple "readiness" readiness, Tuple "restart" (encodeJson policy), Tuple "max_restarts" (encodeJson restarts), Tuple "startup_timeout_ms" (encodeJson startup), Tuple "stop_timeout_ms" (encodeJson shutdown) ] <> if health then [ Tuple "health" readiness ] else [])

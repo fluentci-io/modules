@@ -47,8 +47,17 @@ export async function serviceSuite(directory){
   assert.equal(result.state,'ready');assert.equal(result.name,'module-'+name+'-default');assert.ok(result.port>0);assert.ok(result.endpoint.includes('127.0.0.1:'));
   const d=f.definitions[0];assert.equal(d.backend,'docker');assert.equal(d.image,p.image+':'+p.version);assert.deepEqual(d.command,name==='aws-emulator'?['-p','9297']:p.command);
   assert.equal(d.restart,'never');assert.equal(d.max_restarts,0);assert.deepEqual(d.readiness,d.health);assert.ok(d.readiness.type);
+  if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}'+p.path);
+  if(p.probe==='tcp')assert.equal(d.readiness.address,'${port:'+p.port+'}');
   assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='services'&&a[2]==='apply'));
   assert.ok(!f.calls.some(a=>a[0]==='docker'&&['run','stop','rm'].includes(a[1])));assert.equal(f.plans.length,0);assert.deepEqual(f.installed,[]);
+ });
+ if(['http','tcp'].includes(p.probe))test(name+': readiness uses the allocated binding with explicit host ports and custom paths',()=>{
+  const f=fixture();
+  native.start({...args('start'),ports:new Just('42000:'+p.port),readinessPath:new Just('/ci/ready?source=literal'),healthCheck:new Just(false)})();
+  const d=f.definitions[0];assert.deepEqual(d.ports,['42000:'+p.port]);assert.equal(d.health,undefined);
+  if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}/ci/ready?source=literal');
+  else assert.equal(d.readiness.address,'${port:'+p.port+'}');
  });
  test(name+': lifecycle stays scoped, start is idempotent and stop preserves volumes',()=>{
   const f=fixture();native.start({...args('start'),volumes:new Just('test-data:/data')})();native.start({...args('start'),volumes:new Just('test-data:/data')})();
