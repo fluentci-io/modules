@@ -116,6 +116,16 @@ pub fn parallel(
 @external(erlang, "ci_native", "serial")
 pub fn serial(work: fn() -> Result(a, String)) -> Result(a, String)
 
+@external(erlang, "ci_native", "cpu_cores")
+pub fn cpu_cores() -> Int
+
+@external(erlang, "ci_native", "with_slots")
+pub fn with_slots(
+  resource: String,
+  limit: Int,
+  work: fn() -> Result(a, String),
+) -> Result(a, String)
+
 @external(erlang, "ci_native", "execute_timeout")
 pub fn execute_timeout(
   program: String,

@@ -1,5 +1,6 @@
 import ci/artifacts
 import ci/batch
+import ci/commands
 import ci/common as c
 import ci/data as d
 import ci/dependencies
@@ -462,5 +463,33 @@ pub fn module_build_worker_count_is_bounded_test() {
   batch.concurrency("32") |> should.equal(Ok(32))
   list.each(["0", "33", "invalid", "-1"], fn(value) {
     batch.concurrency(value) |> result.is_error |> should.be_true
+  })
+}
+
+pub fn component_compilers_have_an_independent_resource_limit_test() {
+  commands.component_limit("", 4) |> should.equal(Ok(4))
+  commands.component_limit("", 1) |> should.equal(Ok(1))
+  commands.component_limit("", 0) |> should.equal(Ok(1))
+  commands.component_limit("", 64) |> should.equal(Ok(32))
+  commands.component_limit("2", 8) |> should.equal(Ok(2))
+  commands.component_limit("32", 4) |> should.equal(Ok(32))
+  list.each(["0", "33", "invalid", "-1"], fn(value) {
+    commands.component_limit(value, 4) |> result.is_error |> should.be_true
+  })
+  native.with_slots("fixture-compiler", 1, fn() { Error("fixture failure") })
+  |> should.equal(Error("fixture failure"))
+  native.with_slots("fixture-compiler", 1, fn() { Ok(42) })
+  |> should.equal(Ok(42))
+}
+
+@external(erlang, "ci_resource_fixture", "concurrency")
+fn resource_concurrency(limit: Int) -> #(Int, Int)
+
+pub fn component_slots_bound_real_concurrent_workers_without_losing_work_test() {
+  list.each([1, 2], fn(limit) {
+    let #(peak, completed) = resource_concurrency(limit)
+    let bounded = peak >= 1 && peak <= limit
+    bounded |> should.be_true
+    completed |> should.equal(8)
   })
 }

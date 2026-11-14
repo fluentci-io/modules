@@ -5,7 +5,7 @@
          platform/0, read/1, write/2, append/2, mkdir/1, remove/1,
          rename/2, copy/2, regular/1, size/1, chmod/2, temp/1, nonce/0,
          sha256/1, read_line/0, stderr/1, stdout/1, halt/1, execute/5,
-         archive_entries/1, archive_member/2, create_archive/2, list_dir/1, is_directory/1, architecture/0, find_executable/1, parallel/2, serial/1, tcp/3, execute_timeout/6, open_process/3, read_process/2, signal_process/2, monotonic_ms/0, regex/2]).
+         archive_entries/1, archive_member/2, create_archive/2, list_dir/1, is_directory/1, architecture/0, cpu_cores/0, find_executable/1, parallel/2, serial/1, with_slots/3, tcp/3, execute_timeout/6, open_process/3, read_process/2, signal_process/2, monotonic_ms/0, regex/2]).
 text(X) -> unicode:characters_to_binary(X).
 error_text(X) -> text(io_lib:format("~tp", [X])).
 result(ok) -> {ok, nil};
@@ -71,23 +71,28 @@ execute_timeout(Program, Args, Cwd, Stream, MergeStderr, Timeout) ->
                 Errors = case MergeStderr of true -> [stderr_to_stdout]; false -> [] end,
                 Port = open_port({spawn_executable, Executable}, [binary, exit_status, use_stdio,
                     {args, [unicode:characters_to_list(A) || A <- Args]}, {cd, unicode:characters_to_list(Cwd)} | Errors]),
-                collect(Port, Stream, [], 0, erlang:monotonic_time(millisecond)+Timeout)
+                Started = erlang:monotonic_time(millisecond),
+                Label = <<Program/binary, " cwd=", Cwd/binary>>,
+                collect(Port, Stream, [], 0, Started+Timeout, Label, Started)
             catch _:Reason -> {127, error_text(Reason)} end
     end.
-collect(Port, Stream, Chunks, Size, Deadline) ->
+collect(Port, Stream, Chunks, Size, Deadline, Label, Started) ->
     Remaining = max(0, Deadline-erlang:monotonic_time(millisecond)),
     receive
         {Port, {data, Data}} when Size + byte_size(Data) =< 67108864 ->
             case Stream of true -> io:put_chars(standard_error, Data); false -> ok end,
-            collect(Port, Stream, [Data | Chunks], Size + byte_size(Data), Deadline);
+            collect(Port, Stream, [Data | Chunks], Size + byte_size(Data), Deadline, Label, Started);
         {Port, {data, _}} -> port_close(Port), {1, <<"Command output exceeded 64 MiB">>};
         {Port, {exit_status, Code}} -> {Code, iolist_to_binary(lists:reverse(Chunks))}
     after min(Remaining, 30000) ->
         case erlang:monotonic_time(millisecond) >= Deadline of
             true -> port_close(Port), {124, <<"Command timeout">>};
             false ->
-                case Stream of true -> io:put_chars(standard_error, "[progress] Command still running (no output for 30 seconds)\n"); false -> ok end,
-                collect(Port, Stream, Chunks, Size, Deadline)
+                case Stream of
+                    true -> io:put_chars(standard_error, io_lib:format("[progress] ~ts elapsed=~Bs; no output for 30 seconds~n", [Label, (erlang:monotonic_time(millisecond)-Started) div 1000]));
+                    false -> ok
+                end,
+                collect(Port, Stream, Chunks, Size, Deadline, Label, Started)
         end
     end.
 archive_entries(Path) ->
@@ -149,6 +154,16 @@ list_dir(Path) ->
     end.
 is_directory(Path) -> case file:read_link_info(Path) of {ok, #file_info{type=directory}} -> true; _ -> false end.
 architecture() -> text(erlang:system_info(system_architecture)).
+cpu_cores() ->
+    _ = erlang:system_info(update_cpu_info),
+    Available = case erlang:system_info(logical_processors_available) of
+        N when is_integer(N), N > 0 -> N;
+        _ -> max(1, erlang:system_info(schedulers_online))
+    end,
+    case erlang:system_info(cpu_quota) of
+        Quota when is_integer(Quota), Quota > 0 -> min(Available, Quota);
+        _ -> Available
+    end.
 find_executable(Name) -> case os:find_executable(unicode:characters_to_list(Name)) of false -> <<>>; P -> text(P) end.
 
 parallel(Items, Fun) ->
@@ -165,6 +180,18 @@ parallel(Items, Fun) ->
         {'DOWN', Monitor, process, Pid, Reason} -> {error, error_text(Reason)}
     end || {Pid, Monitor, Ref} <- Workers].
 serial(Fun) -> global:trans({fluentci_modules_shared_dependencies, self()}, Fun).
+
+with_slots(Resource, Limit, Fun) when is_integer(Limit), Limit >= 1, Limit =< 32 ->
+    Slots = lists:seq(1, Limit),
+    acquire_slot(Resource, Slots, Slots, Fun).
+acquire_slot(Resource, [], Slots, Fun) ->
+    receive after 100 -> acquire_slot(Resource, Slots, Slots, Fun) end;
+acquire_slot(Resource, [Slot | Rest], Slots, Fun) ->
+    case global:trans({{fluentci_ci_resource, Resource, Slot}, self()},
+                      fun() -> {completed, Fun()} end, [node()], 0) of
+        {completed, Value} -> Value;
+        aborted -> acquire_slot(Resource, Rest, Slots, Fun)
+    end.
 tcp(Port, Request, Read) ->
     case gen_tcp:connect("127.0.0.1", Port, [binary, {active,false}], 10000) of
         {ok, Socket} ->

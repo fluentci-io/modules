@@ -116,7 +116,7 @@ fn check(root: String, module: d.Value, logs: String) -> Result(Nil, String) {
       1_200_000,
       False,
     ))
-    use _ <- result.try(commands.logged(
+    use _ <- result.try(commands.compile(
       ["node", root <> "/lib/component/build-cli.mjs"],
       directory,
       log,

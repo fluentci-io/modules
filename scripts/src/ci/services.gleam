@@ -153,7 +153,7 @@ fn build(root: String, profile: d.Value, logs: String) -> Result(Nil, String) {
     900_000,
     False,
   ))
-  use _ <- result.try(commands.logged(
+  use _ <- result.try(commands.compile(
     ["node", root <> "/lib/component/build-cli.mjs"],
     directory,
     log,
