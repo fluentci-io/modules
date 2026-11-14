@@ -17,18 +17,21 @@ fluentci run setup-determinate-nix setup --help
 
 See [COMPONENT.md](./COMPONENT.md) for every named argument, description,
 required flag, and return type. The [schema](./schema.json) describes the same
-contract. Optional values retain the native module defaults. Lists use JSON array
-syntax; boolean arguments accept switches. Native function/flag names use kebab-case.
+contract. Optional values retain the native module defaults. Lists use comma-separated strings; boolean arguments accept switches. Native function/flag names use kebab-case.
 
 ## Custom configuration
 
+CSV arguments require `setup-determinate-nix@0.2.2` or newer.
+
 ```sh
-fluentci run setup-determinate-nix@v0.2.1 setup --sudo --trusted-users '["runner"]' --extra-conf '["max-jobs = auto", "accept-flake-config = true"]'
+fluentci run setup-determinate-nix@0.2.2 setup --sudo --trusted-users runner --extra-conf 'max-jobs = auto,accept-flake-config = true'
 ```
 
 `trusted-users` retains root and accepts user or `@group` names. Trust only users
-who may administer this machine's Nix store. `extra-conf` accepts an array of
+who may administer this machine's Nix store. `extra-conf` accepts comma-separated
 single-line Nix `key = value` settings, passed as literal installer arguments.
+Whitespace around entries is trimmed. Omitted or blank lists add no settings;
+empty entries and malformed values are rejected before host commands.
 These settings apply during a fresh installation. Existing installations reject
 these options instead of silently skipping them; edit `/etc/nix/nix.custom.conf`
 and reload the daemon explicitly for an existing installation.

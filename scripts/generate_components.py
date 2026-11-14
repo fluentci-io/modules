@@ -99,7 +99,7 @@ def setup_props(name):
    'archiveSha256':('string',None,'Lowercase SHA-256 of the alternate ZIP. Default Google downloads use pinned platform checksums.')}
   return {key:dict(type=kind,description=description,**({'default':default} if default is not None else {})) for key,(kind,default,description) in fields.items()}
  props={k:{'type':t} for k,t in [('version','string'),('installDir','string'),('packageName','string'),('sudo','boolean')]}
- extras={'rust':{'toolchain':'string','components':'string','targets':'string','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'array','extraConf':'array'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
+ extras={'rust':{'toolchain':'string','components':'string','targets':'string','profile':'string'},'bun':{'baseline':'boolean','libc':'string'},'pkl':{'libc':'string'},'elixir':{'otpVersion':'string'},'nix':{'daemon':'boolean'},'determinate-nix':{'init':'string','trustedUsers':'string','extraConf':'string'},'extism':{k:'string' for k in ['cliVersion','jsVersion','pythonVersion','xtpVersion','binaryenVersion']},'purescript':{k:'string' for k in ['nodeVersion','bunVersion','npmVersion','spagoVersion','nodePackageName','bunPackageName']}}
  if name=='cachix':extras[name]={'cache':'string'}
  if name=='uv':extras[name]={'pythonVersion':'string','tools':'string'}
  if name=='php':extras[name]={'tools':'string','miseVersion':'string'}
@@ -174,6 +174,10 @@ def generated():
      properties['version'].update(default='latest',description='PHP major/minor prefix or exact upstream release, including prereleases; latest/stable resolves the latest available release. Versions are discovered dynamically by the PHP backend. BSD is limited to native repository packages.')
      properties['installDir']['description']='Absolute per-user prefix for the PHP manager and isolated tool environments; native BSD packages require this to be omitted.'
      body=['  config <- either throw pure (Native.decodeConfig (Contract.input (Contract.encodeInput args)))','  Contract.setupResult <$> Native.setupWith config']
+    elif tool=='determinate-nix':
+     properties['trustedUsers']['description']='Comma-separated trusted Nix users or @groups, such as runner,@builders; root is retained. Blank or omitted values add no users. Trust only administrators.'
+     properties['extraConf']['description']='Comma-separated single-line Nix key=value settings, passed literally to the installer. Quote CSV entries containing commas. Blank or omitted values add no settings.'
+     body=['  json <- Contract.csvFields [ "trustedUsers", "extraConf" ] (Contract.encodeInput args)',f'  config <- either throw pure (Types.decodeConfig "{tool}" json)',f'  Contract.setupResult <$> Setup.install "{tool}" config']
     else:body=[f'  config <- either throw pure (Types.decodeConfig "{tool}" (Contract.input (Contract.encodeInput args)))',f'  Contract.setupResult <$> Setup.install "{tool}" config']
    elif category=='services':
     properties={'project':{'type':'string','default':'.','description':'Workspace directory used by every native service manager call.'},'name':{'type':'string','description':f'Full service name, default module-{name}-default; must start with module-{name}- to scope lifecycle operations.'}}

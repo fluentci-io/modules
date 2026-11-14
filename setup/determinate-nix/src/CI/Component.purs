@@ -16,9 +16,10 @@ import CI.Setup.Types as Types
 -- | @param packageName Native package or port selector overriding the default repository package name.
 -- | @param sudo Use noninteractive sudo for native package or system installation; defaults to false.
 -- | @param init Determinate Nix service integration: systemd or none.
--- | @param trustedUsers Additional trusted Nix users or @groups; root is retained. Only set on trusted machines.
--- | @param extraConf Additional single-line Nix key=value settings passed literally to the installer.
-setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, init :: Maybe String, trustedUsers :: Maybe (Array String), extraConf :: Maybe (Array String) } -> Effect Contract.SetupResult
+-- | @param trustedUsers Comma-separated trusted Nix users or @groups, such as runner,@builders; root is retained. Blank or omitted values add no users. Trust only administrators.
+-- | @param extraConf Comma-separated single-line Nix key=value settings, passed literally to the installer. Quote CSV entries containing commas. Blank or omitted values add no settings.
+setup :: { version :: Maybe String, installDir :: Maybe String, packageName :: Maybe String, sudo :: Maybe Boolean, init :: Maybe String, trustedUsers :: Maybe String, extraConf :: Maybe String } -> Effect Contract.SetupResult
 setup args = do
-  config <- either throw pure (Types.decodeConfig "determinate-nix" (Contract.input (Contract.encodeInput args)))
+  json <- Contract.csvFields [ "trustedUsers", "extraConf" ] (Contract.encodeInput args)
+  config <- either throw pure (Types.decodeConfig "determinate-nix" json)
   Contract.setupResult <$> Setup.install "determinate-nix" config

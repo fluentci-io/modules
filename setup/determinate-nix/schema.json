@@ -28,18 +28,12 @@
             "description": "Determinate Nix service integration: systemd or none."
           },
           "trustedUsers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Additional trusted Nix users or @groups; root is retained. Only set on trusted machines."
+            "type": "string",
+            "description": "Comma-separated trusted Nix users or @groups, such as runner,@builders; root is retained. Blank or omitted values add no users. Trust only administrators."
           },
           "extraConf": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Additional single-line Nix key=value settings passed literally to the installer."
+            "type": "string",
+            "description": "Comma-separated single-line Nix key=value settings, passed literally to the installer. Quote CSV entries containing commas. Blank or omitted values add no settings."
           }
         },
         "required": [],
