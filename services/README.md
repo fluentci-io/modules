@@ -71,4 +71,9 @@ CI's dedicated Services E2E workflow builds and composes all real Wasm modules,
 checks readiness and connectivity, proves idempotent start and real restart,
 reads bounded logs, verifies Redis log streaming and interruption without stopping
 the service, stops every service, and verifies named-volume preservation.
+
+Component builds use four workers on the same runner. Set
+`SERVICE_BUILD_CONCURRENCY` to an integer from 1 to 4 to adjust the pool. Shared
+setup-dependency preparation and composition are serialized to protect their
+build directories. Docker lifecycle checks stay sequential to limit memory use.
 It uses one Ubuntu runner with sequential services and a path-filtered trigger.

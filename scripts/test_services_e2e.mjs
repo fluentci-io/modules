@@ -4,11 +4,14 @@ import {readFileSync,writeFileSync,mkdirSync,mkdtempSync,appendFileSync,existsSy
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {spawn,spawnSync} from 'node:child_process';
+import {execFile,spawn,spawnSync} from 'node:child_process';
 import net from 'node:net';
 import https from 'node:https';
+import {runBuildPool,serviceInvocation} from './services_e2e_helpers.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const profiles=JSON.parse(readFileSync(join(root,'lib/services/catalog.json')));
+const buildConcurrency=Number(process.env.SERVICE_BUILD_CONCURRENCY??4);
+assert.ok(Number.isInteger(buildConcurrency)&&buildConcurrency>=1&&buildConcurrency<=4,'SERVICE_BUILD_CONCURRENCY must be an integer from 1 to 4');
 const logDir=resolve(process.env.SERVICE_LOG_DIR??join(tmpdir(),'fluentci-service-e2e-logs'));
 mkdirSync(logDir,{recursive:true});
 const workspace=realpathSync(mkdtempSync(join(tmpdir(),'fluentci-services-e2e-')));
@@ -26,6 +29,41 @@ function command(argv,{cwd=root,timeout=900000,allowFailure=false}={}){
  }
  return result;
 }
+function buildCommand(argv,{cwd,logName,timeout=900000}){
+ const file=join(logDir,logName+'.log');
+ appendFileSync(file,'\n$ '+argv.map(a=>JSON.stringify(a)).join(' ')+'\n');
+ return new Promise((resolvePromise,reject)=>{
+  execFile(argv[0],argv.slice(1),{cwd,encoding:'utf8',timeout,maxBuffer:64*1024*1024,env:process.env},(error,stdout,stderr)=>{
+   const output=(stdout??'')+(stderr??'');appendFileSync(file,output);
+   if(error){
+    console.error(logName+': '+output.split('\n').slice(-100).join('\n'));
+    reject(Error(`${logName}: ${argv.slice(0,3).join(' ')} failed (${error.message}); inspect ${file}`));
+   }else resolvePromise();
+  });
+ });
+}
+async function buildServices(){
+ // Setup dependencies share source/output directories. Keep their builds and
+ // composition serial while independent service compilation runs in parallel.
+ console.log('Building service components with concurrency '+buildConcurrency);
+ const failed=await runBuildPool(profiles,buildConcurrency,async(profile,serial)=>{
+   const cwd=join(root,'services',profile.name);
+   const options={cwd,logName:profile.name};
+   console.log('Building service component '+profile.name);
+   try{
+    await buildCommand(['npm','ci'],options);
+    await serial(()=>buildCommand(['fluentci','install','--frozen-lockfile'],{...options,timeout:1200000}));
+    // Use the same builder as each build.mjs; interfaces are already prepared.
+    const source=`import {buildModule} from ${JSON.stringify(new URL('../lib/component/build.mjs',import.meta.url).href)}; await buildModule(process.cwd(),{prepareDependencies:false});`;
+    await buildCommand(['node','--input-type=module','--eval',source],{...options,timeout:1200000});
+    await buildCommand(['npm','test'],options);
+    await buildCommand(['node',join(root,'scripts/validate_wasm.mjs'),cwd],options);
+    await serial(()=>buildCommand(['fluentci','run',profile.name,'--help'],{cwd:root,logName:profile.name,timeout:1200000}));
+    console.log('Built service component '+profile.name);
+   }catch(error){console.error(error.message);throw error;}
+ });
+ assert.deepEqual(failed.map(({item})=>item.name),[],'Every service component must build before starting E2E');
+}
 function nativeValue(output){
  const starts=[0];
  for(let index=0;index<output.length;index++)if(output[index]==='\n')starts.push(index+1);
@@ -40,13 +78,13 @@ function camel(value){
  return value;
 }
 function invoke(profile,operation,fields={}){
- const argv=['fluentci','run','.',operation,'--project',workspace];
- for(const [key,value]of Object.entries(fields))argv.push('--'+key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase())+'='+String(value));
- return camel(nativeValue(command(argv,{cwd:join(root,'services',profile.name),timeout:operation==='build'?2100000:720000}).stdout));
+ const argv=serviceInvocation(profile.name,operation,workspace,fields);
+ return camel(nativeValue(command(argv,{cwd:root,timeout:operation==='build'?2100000:1200000}).stdout));
 }
 async function verifyFollow(profile,name){
  // Exercise the real component stream, then interrupt only its viewer process group.
- const child=spawn('fluentci',['run','.','logs','--project',workspace,'--name',name,'--tail','100','--follow','true'],{cwd:join(root,'services',profile.name),env:process.env,detached:true,stdio:['ignore','pipe','pipe']});
+ const argv=serviceInvocation(profile.name,'logs',workspace,{name,tail:100,follow:true});
+ const child=spawn(argv[0],argv.slice(1),{cwd:root,env:process.env,detached:true,stdio:['ignore','pipe','pipe']});
  let output='',interrupted=false,interruptTimer,deadline,killTimer;
  const signal=value=>{if(child.pid)try{process.kill(-child.pid,value);}catch(error){if(error.code!=='ESRCH')throw error;}};
  try{
@@ -107,13 +145,7 @@ async function connectivity(profile,result,stateDir){
 }
 try{
  command(['fluentci','services','apply','--help']);command(['docker','info']);
- // Build each real Wasm source module and type-check/compose its setup dependency.
- for(const profile of profiles){
-  active=profile.name;console.log('Building service component '+active);
-  const cwd=join(root,'services',active);
-  command(['npm','ci'],{cwd});command(['npm','run','build'],{cwd,timeout:1200000});command(['npm','test'],{cwd});
-  command(['node',join(root,'scripts/validate_wasm.mjs'),cwd]);command(['fluentci','run','.','--help'],{cwd});
- }
+ await buildServices();
  for(const profile of profiles){
   active=profile.name;console.log('E2E '+active);
   const name='module-'+profile.name+'-e2e-'+runId;

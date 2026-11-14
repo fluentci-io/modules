@@ -8,6 +8,7 @@ on:
       - 'lib/services/**'
       - 'lib/component/**'
       - 'scripts/test_services_e2e.mjs'
+      - 'scripts/services_e2e_helpers.mjs'
       - '.github/workflows/services-e2e.yml'
       - '.github/actions/setup-toolchain/**'
       - '.github/toolchain/versions.json'
@@ -18,6 +19,7 @@ on:
       - 'lib/services/**'
       - 'lib/component/**'
       - 'scripts/test_services_e2e.mjs'
+      - 'scripts/services_e2e_helpers.mjs'
       - '.github/workflows/services-e2e.yml'
       - '.github/actions/setup-toolchain/**'
       - '.github/toolchain/versions.json'
@@ -48,9 +50,10 @@ jobs:
             setup/docker/.spago
             setup/curl/.spago
           key: services-spago-${{ runner.os }}-${{ hashFiles('services/**/spago.lock', 'setup/docker/spago.lock', 'setup/curl/spago.lock') }}
-      - name: Build and E2E every service sequentially
+      - name: Build components in parallel and verify service lifecycles
         env:
           SERVICE_LOG_DIR: ${{ runner.temp }}/service-e2e-logs
+          SERVICE_BUILD_CONCURRENCY: '4'
         run: node scripts/test_services_e2e.mjs
       - name: Verify committed files stay unchanged
         run: git diff --exit-code
