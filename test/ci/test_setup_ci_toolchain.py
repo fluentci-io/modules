@@ -127,8 +127,11 @@ class ToolchainTests(unittest.TestCase):
         self.assertEqual(set(config['modules']), {'node', 'bun', 'uv', 'purescript'})
         for module in config['modules'].values():
             self.assertRegex(module['version'], r'^\d+\.\d+\.\d+$')
+        self.assertGreaterEqual(tuple(map(int, config['fluentci']['version'].split('.'))), (0, 17, 4),
+                                'Services E2E requires dynamic HTTP probe validation from 0.17.4')
         self.assertEqual(len(config['fluentci']['assets']), 4)
         for asset in config['fluentci']['assets'].values():
+            self.assertIn('/v' + config['fluentci']['version'] + '/fluentci_v' + config['fluentci']['version'] + '_', asset['url'])
             self.assertRegex(asset['sha256'], r'^[0-9a-f]{64}$')
 
 

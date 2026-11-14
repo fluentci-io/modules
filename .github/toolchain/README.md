@@ -10,15 +10,12 @@ The runner's existing Python 3.9+ downloads and verifies the CLI archive. No
 uv installs the requested managed Python version. The full profile also uses
 `setup-purescript` to install the compiler, Spago, and npm with explicit versions.
 
-The released CLI bootstrap is currently v0.17.2. The v0.17.3 source fix has been
-pushed, but that release was not available when this workflow was updated.
-v0.17.2 can execute native components from files but rejects their registry
-downloads during its old core-Wasm validation. The helper therefore resolves an
-exact published version over HTTPS, verifies its publisher DID and SHA-256,
-and executes the downloaded component file explicitly. It never selects a local
-source module with the same name or builds a setup module during bootstrap.
-Update the CLI version and all archive digests together when a newer release is
-available; component versions remain independently pinned.
+The CLI bootstrap is pinned to v0.17.4, including the native service HTTP probe
+validation fix. The helper resolves exact published setup versions over HTTPS,
+verifies the publisher DID and SHA-256, and executes each downloaded component
+file explicitly. It never selects a local source module with the same name or
+builds a setup module during bootstrap. Update the CLI version and all archive
+digests together; component versions remain independently pinned.
 
 All setup results must contain native `bin-dir` and `environment` values. The
 helper applies the returned environment to subsequent component calls, then
