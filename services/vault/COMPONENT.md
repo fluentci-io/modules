@@ -10,7 +10,7 @@ Start an idempotent background service through FluentCI’s native workspace ser
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `project` | `string` | no | Workspace directory used by every native service manager call. Default: ".". |
-| `name` | `string` | no | Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations. |
+| `name` | `string` | no | Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations. |
 | `version` | `string` | no | Docker image version tag. Uses the profile default when omitted; cannot be combined with image. |
 | `image` | `string` | no | Full Docker image reference, including an optional digest; replaces the default repository and version. |
 | `port` | `integer` | no | Host port for the primary endpoint; zero allocates an available loopback port. AWS Emulator uses the same nonzero port inside and outside its container. Default: 0. |
@@ -36,7 +36,7 @@ Stop only this named service through the native manager; preserve explicitly mou
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `project` | `string` | no | Workspace directory used by every native service manager call. Default: ".". |
-| `name` | `string` | no | Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations. |
+| `name` | `string` | no | Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations. |
 
 Returns `Native.ServiceResult`.
 
@@ -47,7 +47,7 @@ Restart the existing native service definition and wait for readiness.
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `project` | `string` | no | Workspace directory used by every native service manager call. Default: ".". |
-| `name` | `string` | no | Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations. |
+| `name` | `string` | no | Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations. |
 
 Returns `Native.ServiceResult`.
 
@@ -58,7 +58,7 @@ Return the service’s native lifecycle state and actual loopback port bindings.
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `project` | `string` | no | Workspace directory used by every native service manager call. Default: ".". |
-| `name` | `string` | no | Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations. |
+| `name` | `string` | no | Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations. |
 
 Returns `Native.ServiceResult`.
 
@@ -69,7 +69,7 @@ Read native service logs; optionally follow new output until interrupted, withou
 | Argument | Type | Required | Description |
 | --- | --- | --- | --- |
 | `project` | `string` | no | Workspace directory used by every native service manager call. Default: ".". |
-| `name` | `string` | no | Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations. |
+| `name` | `string` | no | Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations. |
 | `tail` | `integer` | no | Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100. |
 | `follow` | `boolean` | no | Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false. |
 

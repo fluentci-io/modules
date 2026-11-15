@@ -14,7 +14,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations."
+            "description": "Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations."
           },
           "version": {
             "type": "string",
@@ -159,7 +159,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations."
+            "description": "Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations."
           }
         },
         "required": [],
@@ -234,7 +234,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations."
+            "description": "Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations."
           }
         },
         "required": [],
@@ -309,7 +309,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations."
+            "description": "Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations."
           }
         },
         "required": [],
@@ -384,7 +384,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations."
+            "description": "Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations."
           },
           "tail": {
             "type": "integer",

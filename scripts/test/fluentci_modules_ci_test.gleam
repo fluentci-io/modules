@@ -1,6 +1,7 @@
 import ci/artifacts
 import ci/batch
 import ci/commands
+import ci/components
 import ci/common as c
 import ci/data as d
 import ci/dependencies
@@ -576,4 +577,15 @@ pub fn service_directories_respect_registry_overrides_test() {
     d.Object([#("name", d.Text("redis"))]),
   )
   |> should.equal("/workspace/services/redis")
+}
+
+pub fn component_templates_use_registered_service_names_test() {
+  components.template_tool("service-vault", "services/vault")
+  |> should.equal("service-vault")
+  components.template_tool("redis", "services/redis")
+  |> should.equal("redis")
+  components.template_tool("setup-docker", "setup/docker")
+  |> should.equal("docker")
+  components.template_tool("vault", "secrets/vault")
+  |> should.equal("vault")
 }

@@ -533,6 +533,13 @@ fn render(
   )
 }
 
+pub fn template_tool(name: String, path: String) -> String {
+  case string.starts_with(path, "services/") {
+    True -> name
+    False -> list.last(string.split(path, "/")) |> result.unwrap("")
+  }
+}
+
 pub fn run(root: String, check: Bool) -> Result(Nil, String) {
   use modules <- result.try(f.registry(root))
   use catalog <- result.try(f.json(root <> "/lib/cli/catalog.json"))
@@ -545,7 +552,7 @@ pub fn run(root: String, check: Bool) -> Result(Nil, String) {
   c.all(modules, fn(module) {
     let name = d.s(module, "name")
     let path = d.s(module, "path")
-    let tool = list.last(string.split(path, "/")) |> result.unwrap("")
+    let tool = template_tool(name, path)
     let cli = list.find(d.array(catalog), fn(t) { d.s(t, "name") == name })
     use spec <- result.try(case cli {
       Ok(catalog) -> {

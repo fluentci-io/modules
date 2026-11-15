@@ -9,7 +9,7 @@ import CI.Services as Native
 
 -- | Start an idempotent background service through FluentCI’s native workspace service manager and wait for readiness.
 -- | @param project Workspace directory used by every native service manager call. Default: ".".
--- | @param name Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations.
+-- | @param name Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations.
 -- | @param version Docker image version tag. Uses the profile default when omitted; cannot be combined with image.
 -- | @param image Full Docker image reference, including an optional digest; replaces the default repository and version.
 -- | @param port Host port for the primary endpoint; zero allocates an available loopback port. AWS Emulator uses the same nonzero port inside and outside its container. Default: 0.
@@ -27,34 +27,34 @@ import CI.Services as Native
 -- | @param readinessPath HTTP readiness URL path for profiles using an HTTP probe.
 start :: { project :: Maybe String, name :: Maybe String, version :: Maybe String, image :: Maybe String, port :: Maybe Int, ports :: Maybe String, volumes :: Maybe String, env :: Maybe String, command :: Maybe String, dependsOn :: Maybe String, startupTimeoutMs :: Maybe Int, stopTimeoutMs :: Maybe Int, restartPolicy :: Maybe String, maxRestarts :: Maybe Int, healthCheck :: Maybe Boolean, readinessCommand :: Maybe String, readinessPath :: Maybe String } -> Effect Native.ServiceResult
 start args = do
-  Native.start (Dependencies.ensureFor "docker") "vault" (Contract.input (Contract.encodeInput args))
+  Native.start (Dependencies.ensureFor "docker") "service-vault" (Contract.input (Contract.encodeInput args))
 
 -- | Stop only this named service through the native manager; preserve explicitly mounted data. Native dependents are stopped too.
 -- | @param project Workspace directory used by every native service manager call. Default: ".".
--- | @param name Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations.
+-- | @param name Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations.
 stop :: { project :: Maybe String, name :: Maybe String } -> Effect Native.ServiceResult
 stop args = do
-  Native.stop "vault" (Contract.input (Contract.encodeInput args))
+  Native.stop "service-vault" (Contract.input (Contract.encodeInput args))
 
 -- | Restart the existing native service definition and wait for readiness.
 -- | @param project Workspace directory used by every native service manager call. Default: ".".
--- | @param name Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations.
+-- | @param name Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations.
 restart :: { project :: Maybe String, name :: Maybe String } -> Effect Native.ServiceResult
 restart args = do
-  Native.restart (Dependencies.ensureFor "docker") "vault" (Contract.input (Contract.encodeInput args))
+  Native.restart (Dependencies.ensureFor "docker") "service-vault" (Contract.input (Contract.encodeInput args))
 
 -- | Return the service’s native lifecycle state and actual loopback port bindings.
 -- | @param project Workspace directory used by every native service manager call. Default: ".".
--- | @param name Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations.
+-- | @param name Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations.
 status :: { project :: Maybe String, name :: Maybe String } -> Effect Native.ServiceResult
 status args = do
-  Native.status "vault" (Contract.input (Contract.encodeInput args))
+  Native.status "service-vault" (Contract.input (Contract.encodeInput args))
 
 -- | Read native service logs; optionally follow new output until interrupted, without starting or stopping a service.
 -- | @param project Workspace directory used by every native service manager call. Default: ".".
--- | @param name Full service name, default module-vault-default; must start with module-vault- to scope lifecycle operations.
+-- | @param name Full service name, default module-service-vault-default; must start with module-service-vault- to scope lifecycle operations.
 -- | @param tail Maximum recent log lines, from 1 to 10000, before optional live output. Default: 100.
 -- | @param follow Stream new native service logs until interrupted. Default false returns a bounded snapshot. Interrupting logs leaves the background service running. Default: false.
 logs :: { project :: Maybe String, name :: Maybe String, tail :: Maybe Int, follow :: Maybe Boolean } -> Effect String
 logs args = do
-  Native.logs "vault" (Contract.input (Contract.encodeInput args))
+  Native.logs "service-vault" (Contract.input (Contract.encodeInput args))
