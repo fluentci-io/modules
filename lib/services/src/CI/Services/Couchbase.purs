@@ -22,7 +22,7 @@ import Effect.Exception (throw)
 import Foreign.Object as O
 
 optional :: forall a. DecodeJson a => O.Object Json -> String -> a -> Effect a
-optional fields key fallback = either (throw <<< show) (pure <<< fromMaybe fallback) (getFieldOptional fields key)
+optional values key fallback = either (throw <<< show) (pure <<< fromMaybe fallback) (getFieldOptional values key)
 
 fields :: Array String -> Json -> Effect (O.Object Json)
 fields allowed json = do
