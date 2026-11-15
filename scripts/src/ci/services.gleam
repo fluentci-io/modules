@@ -84,7 +84,7 @@ pub fn invocation(
   )
 }
 
-fn service_directory(root: String, profile: d.Value) -> String {
+pub fn service_directory(root: String, profile: d.Value) -> String {
   root
   <> "/services/"
   <> case d.s(profile, "directory") {
@@ -197,7 +197,7 @@ fn build_all(
           let name = d.s(profile, "name")
           commands.logged(
             ["fluentci", "install", "--frozen-lockfile"],
-            root <> "/services/" <> name,
+            service_directory(root, profile),
             logs <> "/" <> name <> ".log",
             1_200_000,
             False,
@@ -215,7 +215,7 @@ fn build_all(
           artifacts.prepare(
             root,
             name,
-            root <> "/services/" <> name,
+            service_directory(root, pair.0),
             logs <> "/" <> name <> ".log",
           )
         })

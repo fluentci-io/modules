@@ -561,3 +561,19 @@ pub fn readme_named_functions_preserve_native_results_and_language_pipes_test() 
   string.contains(text, "dependency_ffi") |> should.be_false
   string.contains(text, "@external") |> should.be_false
 }
+
+pub fn service_directories_respect_registry_overrides_test() {
+  services.service_directory(
+    "/workspace",
+    d.Object([
+      #("name", d.Text("service-vault")),
+      #("directory", d.Text("vault")),
+    ]),
+  )
+  |> should.equal("/workspace/services/vault")
+  services.service_directory(
+    "/workspace",
+    d.Object([#("name", d.Text("redis"))]),
+  )
+  |> should.equal("/workspace/services/redis")
+}

@@ -411,9 +411,16 @@ pub fn run(root: String, check: Bool) -> Result(Nil, String) {
         list.fold(
           [
             "/fluentci_modules/",
+            "/.sdk/",
             "/.fluentci/dependencies/",
             "/.fluentci/dependencies.add.guard",
             "/fluentci.lock.guard",
+            "/src/FluentCI/Modules/",
+            "/src/fluentci_modules/",
+            "/src/FluentciModules*.res",
+            "/src/FluentciModules*.mjs",
+            "/src/FluentciModules*.res.mjs",
+            "/lib/fluentci_modules/",
           ],
           ignore,
           fn(text, line) {
