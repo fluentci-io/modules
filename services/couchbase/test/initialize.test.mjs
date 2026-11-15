@@ -1,10 +1,11 @@
 import '../../../test/dependencies/loader.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import * as module from '../output/CI.Component/index.js';
 import {Just,Nothing} from '../output/Data.Maybe/index.js';
 import {readFileSync} from 'node:fs';
 import {fixture} from '../../../test/cli/host.mjs';
+// Load component imports only after the dependency resolver hook is registered.
+const module=await import('../output/CI.Component/index.js');
 const schema=JSON.parse(readFileSync(new URL('../schema.json',import.meta.url)));
 const args=(fn,patch={})=>Object.fromEntries(Object.keys(schema.exports[fn].input.properties).map(key=>[key,Object.hasOwn(patch,key)?new Just(patch[key]):Nothing.value]));
 function host(options={}){
