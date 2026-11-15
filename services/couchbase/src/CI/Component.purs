@@ -90,4 +90,4 @@ create_bucket args = do
 -- | @param password Disposable test administrator password. Default fluentci-test-password; passed as a literal curl credential.
 configure_network :: { project :: Maybe String, name :: Maybe String, username :: Maybe String, password :: Maybe String } -> Effect String
 configure_network args = do
-Couchbase.configureNetwork (Dependencies.ensureFor "curl") (Contract.input (Contract.encodeInput args))
+  Couchbase.configureNetwork (Dependencies.ensureFor "curl") (Contract.input (Contract.encodeInput args))

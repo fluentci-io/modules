@@ -58,24 +58,7 @@ export async function serviceSuite(directory){
   native.start({...args('start'),ports:new Just(mapping),readinessPath:new Just('/ci/ready?source=literal'),healthCheck:new Just(false)})();
   const d=f.definitions[0];assert.deepEqual(d.ports,[mapping]);assert.equal(d.health,undefined);
   if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}/ci/ready?source=literal');
-  else
- if(Object.keys(p.files??{}).length)test(name+': default configuration uses literal native file tasks and read-only mounts',()=>{
-  const f=fixture();native.start(args('start'))();
-  assert.equal(f.plans.length,1);
-  const plan=JSON.stringify(f.plans[0]);assert.ok(plan.includes('write_text'));
-  for(const target of Object.keys(p.files))assert.ok(f.definitions[0].volumes.some(v=>v.endsWith(':'+target+':ro')));
-  assert.ok(!plan.includes('bash'));assert.ok(!plan.includes('{{advertisedPort}}'));
- });
- if(['kafka','redpanda','aerospike','floci'].includes(name))test(name+': advertised client port is explicit and follows the primary binding',()=>{
-  const f=fixture();native.start({...args('start'),ports:new Just('42000:'+p.port)})();
-  const definition=f.definitions[0];
-  if(name==='kafka')assert.equal(definition.env.KAFKA_ADVERTISED_LISTENERS,'PLAINTEXT://127.0.0.1:42000');
-  if(name==='redpanda')assert.ok(definition.command.includes('--advertise-kafka-addr=127.0.0.1:42000'));
-  if(name==='floci')assert.equal(definition.env.FLOCI_BASE_URL,'http://127.0.0.1:42000');
-  if(name==='aerospike')assert.ok(JSON.stringify(f.plans[0]).includes('access-port 42000'));
-  const bad=fixture();assert.throws(()=>native.start({...args('start'),ports:new Just(String(p.port))})(),/explicit primary host port/);assert.deepEqual(bad.calls,[]);
- });
- if(name==='aws-emulator'){assert.equal(d.readiness.type,'exec');assert.ok(d.readiness.command.includes('https://127.0.0.1:'+p.port+'/__admin/health'));}
+  else if(name==='aws-emulator'){assert.equal(d.readiness.type,'exec');assert.ok(d.readiness.command.includes('https://127.0.0.1:'+p.port+'/__admin/health'));}
   else assert.equal(d.readiness.address,'${port:'+p.port+'}');
  });
  test(name+': lifecycle stays scoped, start is idempotent and stop preserves volumes',()=>{

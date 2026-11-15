@@ -4411,7 +4411,7 @@
           "type": "string"
         },
         "returned": "String",
-        "body": "Couchbase.configureNetwork (Dependencies.ensureFor \"curl\") (Contract.input (Contract.encodeInput args))"
+        "body": "  Couchbase.configureNetwork (Dependencies.ensureFor \"curl\") (Contract.input (Contract.encodeInput args))"
       }
     },
     "trailer": ""
