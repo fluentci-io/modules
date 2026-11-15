@@ -6,9 +6,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "aerospike"
+version = "0.1.0"
+path = "services/aerospike"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "apko"
 version = "0.1.0"
 path = "containers/apko"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "arangodb"
+version = "0.1.0"
+path = "services/arangodb"
 sdk = "purescript"
 runtime = "component"
 
@@ -118,6 +132,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "chroma"
+version = "0.1.0"
+path = "services/chroma"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "clickhouse"
 version = "0.1.0"
 path = "services/clickhouse"
@@ -128,6 +149,13 @@ runtime = "component"
 name = "cmake"
 version = "0.1.0"
 path = "build/cmake"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "cockroachdb"
+version = "0.1.0"
+path = "services/cockroachdb"
 sdk = "purescript"
 runtime = "component"
 
@@ -160,6 +188,20 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "couchbase"
+version = "0.1.0"
+path = "services/couchbase"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "couchdb"
+version = "0.1.0"
+path = "services/couchdb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "coveralls"
 version = "0.1.0"
 path = "code-quality/coveralls"
@@ -167,9 +209,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "cratedb"
+version = "0.1.0"
+path = "services/cratedb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "cypress"
 version = "0.1.0"
 path = "testing/cypress"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "databend"
+version = "0.1.0"
+path = "services/databend"
 sdk = "purescript"
 runtime = "component"
 
@@ -202,6 +258,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "doltdb"
+version = "0.1.0"
+path = "services/doltdb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "doppler"
 version = "0.1.0"
 path = "secrets/doppler"
@@ -223,6 +286,20 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "dynamodb"
+version = "0.1.0"
+path = "services/dynamodb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "elasticsearch"
+version = "0.1.0"
+path = "services/elasticsearch"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "etcd"
 version = "0.1.0"
 path = "services/etcd"
@@ -233,6 +310,13 @@ runtime = "component"
 name = "flipt"
 version = "0.1.0"
 path = "deployment/flipt"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "floci"
+version = "0.1.0"
+path = "services/floci"
 sdk = "purescript"
 runtime = "component"
 
@@ -349,9 +433,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "kafka"
+version = "0.1.0"
+path = "services/kafka"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "kamal"
 version = "0.1.0"
 path = "deployment/kamal"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "keycloak"
+version = "0.1.0"
+path = "services/keycloak"
 sdk = "purescript"
 runtime = "component"
 
@@ -398,9 +496,37 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "microcks"
+version = "0.1.0"
+path = "services/microcks"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "mongodb"
+version = "0.1.0"
+path = "services/mongodb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "mysql"
 version = "0.1.0"
 path = "services/mysql"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "nats"
+version = "0.1.0"
+path = "services/nats"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "neo4j"
+version = "0.1.0"
+path = "services/neo4j"
 sdk = "purescript"
 runtime = "component"
 
@@ -461,6 +587,20 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "openfga"
+version = "0.1.0"
+path = "services/openfga"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "openldap"
+version = "0.1.0"
+path = "services/openldap"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "opentofu"
 version = "0.1.0"
 path = "infrastructure/opentofu"
@@ -475,9 +615,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "orientdb"
+version = "0.1.0"
+path = "services/orientdb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "pgroll"
 version = "0.1.0"
 path = "databases/pgroll"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "pinecone"
+version = "0.1.0"
+path = "services/pinecone"
 sdk = "purescript"
 runtime = "component"
 
@@ -517,6 +671,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "presto"
+version = "0.1.0"
+path = "services/presto"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "prettier"
 version = "0.1.0"
 path = "formatting/prettier"
@@ -545,6 +706,27 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "qdrant"
+version = "0.1.0"
+path = "services/qdrant"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "questdb"
+version = "0.1.0"
+path = "services/questdb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "rabbitmq"
+version = "0.1.0"
+path = "services/rabbitmq"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "railpack"
 version = "0.1.0"
 path = "containers/railpack"
@@ -555,6 +737,13 @@ runtime = "component"
 name = "railway"
 version = "0.1.0"
 path = "deployment/railway"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "ravendb"
+version = "0.1.0"
+path = "services/ravendb"
 sdk = "purescript"
 runtime = "component"
 
@@ -573,9 +762,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "redpanda"
+version = "0.1.0"
+path = "services/redpanda"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "render"
 version = "0.1.0"
 path = "deployment/render"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "rethinkdb"
+version = "0.1.0"
+path = "services/rethinkdb"
 sdk = "purescript"
 runtime = "component"
 
@@ -622,9 +825,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "scylladb"
+version = "0.1.0"
+path = "services/scylladb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "semgrep"
 version = "0.1.0"
 path = "security/semgrep"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "service-vault"
+version = "0.1.0"
+path = "services/vault"
 sdk = "purescript"
 runtime = "component"
 
@@ -1448,6 +1665,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "setup-tigerbeetle"
+version = "0.1.0"
+path = "setup/tigerbeetle"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "setup-trivy"
 version = "0.1.0"
 path = "setup/trivy"
@@ -1553,9 +1777,23 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "smocker"
+version = "0.1.0"
+path = "services/smocker"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "snyk"
 version = "0.1.0"
 path = "security/snyk"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "solr"
+version = "0.1.0"
+path = "services/solr"
 sdk = "purescript"
 runtime = "component"
 
@@ -1602,6 +1840,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "surrealdb"
+version = "0.1.0"
+path = "services/surrealdb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "syft"
 version = "0.1.0"
 path = "security/syft"
@@ -1623,6 +1868,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "temporal"
+version = "0.1.0"
+path = "services/temporal"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "terraform"
 version = "0.1.0"
 path = "infrastructure/terraform"
@@ -1633,6 +1885,41 @@ runtime = "component"
 name = "terragrunt"
 version = "0.1.0"
 path = "infrastructure/terragrunt"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "tidb"
+version = "0.1.0"
+path = "services/tidb"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "tigerbeetle"
+version = "0.1.0"
+path = "services/tigerbeetle"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "timeplus"
+version = "0.1.0"
+path = "services/timeplus"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "timescale"
+version = "0.1.0"
+path = "services/timescale"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "trino"
+version = "0.1.0"
+path = "services/trino"
 sdk = "purescript"
 runtime = "component"
 
@@ -1679,6 +1966,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "valkey"
+version = "0.1.0"
+path = "services/valkey"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "vault"
 version = "0.1.0"
 path = "secrets/vault"
@@ -1700,6 +1994,20 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "weaviate"
+version = "0.1.0"
+path = "services/weaviate"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "wiremock"
+version = "0.1.0"
+path = "services/wiremock"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "wrangler"
 version = "0.1.0"
 path = "deployment/wrangler"
@@ -1717,5 +2025,12 @@ runtime = "component"
 name = "yamllint"
 version = "0.1.0"
 path = "linting/yamllint"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
+name = "yugabytedb"
+version = "0.1.0"
+path = "services/yugabytedb"
 sdk = "purescript"
 runtime = "component"

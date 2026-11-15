@@ -42,6 +42,8 @@ jobs:
           escript scripts/fluentci_modules_ci generate-services --check
       - name: Check typed component sources and schemas
         run: escript scripts/fluentci_modules_ci generate-components --check
+      - name: Check multilingual README examples
+        run: escript scripts/fluentci_modules_ci generate-readmes --check
       - name: Check typed setup dependencies and source locks
         run: escript scripts/fluentci_modules_ci generate-dependencies --check
       - name: Audit pipeline exports

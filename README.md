@@ -39,6 +39,15 @@ Functions use native named arguments and return typed values. Run
 The [component guide](./docs/COMPONENTS.md) covers migration from JSON plugin
 input, structured results, list arguments, building, and validation.
 
+## Compose modules in code
+
+FluentCI 0.17.5 generates named pipeline bindings from component dependencies.
+Every module README includes `fluentci add` instructions and examples for
+PureScript, Gleam, Elixir, ClojureScript, ReScript, Python, and TypeScript.
+The examples use generated functions and native pipeline operations without
+handwritten FFI or CLI subprocesses. See [composition support](docs/COMPOSITION.md)
+for typed result chaining, cleanup, and the initial implementation's limitations.
+
 ## Development
 
 Repository automation uses Gleam on BEAM. Compile `scripts/fluentci_modules_ci`
@@ -70,7 +79,9 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | Module | Purpose | Component functions |
 | --- | --- | --- |
 | [actionlint](./linting/actionlint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/actionlint/COMPONENT.md) |
+| [aerospike](./services/aerospike/README.md) | Run Aerospike with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/aerospike/COMPONENT.md) |
 | [apko](./containers/apko/README.md) | Run a native command with literal arguments. | `run`, `version`, `build`, [typed contract](./containers/apko/COMPONENT.md) |
+| [arangodb](./services/arangodb/README.md) | Run ArangoDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/arangodb/COMPONENT.md) |
 | [argocd](./deployment/argocd/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `app-get`, [typed contract](./deployment/argocd/COMPONENT.md) |
 | [artifactory](./artifacts/artifactory/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/artifactory/COMPONENT.md) |
 | [aws](./cloud/aws/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `identity`, [typed contract](./cloud/aws/COMPONENT.md) |
@@ -86,23 +97,33 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [caddy](./services/caddy/README.md) | Run Caddy with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/caddy/COMPONENT.md) |
 | [cassandra](./services/cassandra/README.md) | Run Cassandra with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/cassandra/COMPONENT.md) |
 | [checkov](./security/checkov/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/checkov/COMPONENT.md) |
+| [chroma](./services/chroma/README.md) | Run Chroma with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/chroma/COMPONENT.md) |
 | [clickhouse](./services/clickhouse/README.md) | Run ClickHouse with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/clickhouse/COMPONENT.md) |
 | [cmake](./build/cmake/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `configure`, [typed contract](./build/cmake/COMPONENT.md) |
+| [cockroachdb](./services/cockroachdb/README.md) | Run CockroachDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/cockroachdb/COMPONENT.md) |
 | [codacy](./code-quality/codacy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `help`, `upload`, [typed contract](./code-quality/codacy/COMPONENT.md) |
 | [codecov](./code-quality/codecov/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/codecov/COMPONENT.md) |
 | [consul](./services/consul/README.md) | Run Consul with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/consul/COMPONENT.md) |
 | [cosign](./security/cosign/README.md) | Sign images and release files; enforce key or keyless signature verification. | `sign`, `sign-blob`, `verify`, `verify-key`, `verify-blob`, `verify-blob-key`, `run`, `version`, [typed contract](./security/cosign/COMPONENT.md) |
+| [couchbase](./services/couchbase/README.md) | Run Couchbase with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, `initialize`, `create-bucket`, `configure-network`, [typed contract](./services/couchbase/COMPONENT.md) |
+| [couchdb](./services/couchdb/README.md) | Run CouchDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/couchdb/COMPONENT.md) |
 | [coveralls](./code-quality/coveralls/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./code-quality/coveralls/COMPONENT.md) |
+| [cratedb](./services/cratedb/README.md) | Run CrateDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/cratedb/COMPONENT.md) |
 | [cypress](./testing/cypress/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/cypress/COMPONENT.md) |
+| [databend](./services/databend/README.md) | Run Databend with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/databend/COMPONENT.md) |
 | [depot](./containers/depot/README.md) | Build container images with Depot remote builders. | `setup`, `build`, `bake`, [typed contract](./containers/depot/COMPONENT.md) |
 | [digitalocean](./cloud/digitalocean/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `account-get`, [typed contract](./cloud/digitalocean/COMPONENT.md) |
 | [discord](./notifications/discord/README.md) | Send typed Discord webhook notifications and verify delivery. | `send`, [typed contract](./notifications/discord/COMPONENT.md) |
 | [docker](./containers/docker/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/docker/COMPONENT.md) |
+| [doltdb](./services/doltdb/README.md) | Run Dolt with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/doltdb/COMPONENT.md) |
 | [doppler](./secrets/doppler/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/doppler/COMPONENT.md) |
 | [dpkg](./packaging/dpkg/README.md) | Build packages from a Linux dpkg package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/dpkg/COMPONENT.md) |
 | [drizzlekit](./databases/drizzlekit/README.md) | Generate, check and apply SQL migrations. | `run`, `version`, `migrate`, [typed contract](./databases/drizzlekit/COMPONENT.md) |
+| [dynamodb](./services/dynamodb/README.md) | Run DynamoDB Local with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/dynamodb/COMPONENT.md) |
+| [elasticsearch](./services/elasticsearch/README.md) | Run Elasticsearch with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/elasticsearch/COMPONENT.md) |
 | [etcd](./services/etcd/README.md) | Run etcd with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/etcd/COMPONENT.md) |
 | [flipt](./deployment/flipt/README.md) | Validate feature flags, evaluate flags, and run Flipt migrations. | `setup`, `validate`, `evaluate`, [typed contract](./deployment/flipt/COMPONENT.md) |
+| [floci](./services/floci/README.md) | Run Floci with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/floci/COMPONENT.md) |
 | [flyctl](./deployment/flyctl/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/flyctl/COMPONENT.md) |
 | [garden](./deployment/garden/README.md) | Build, deploy, test and clean up Garden project environments. | `run`, `build`, `deploy`, `test`, [typed contract](./deployment/garden/COMPONENT.md) |
 | [gcloud](./cloud/gcloud/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `config-list`, [typed contract](./cloud/gcloud/COMPONENT.md) |
@@ -119,14 +140,20 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [infisical](./secrets/infisical/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/infisical/COMPONENT.md) |
 | [influxdb](./services/influxdb/README.md) | Run InfluxDB with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/influxdb/COMPONENT.md) |
 | [jfrog-cli](./artifacts/jfrog-cli/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/jfrog-cli/COMPONENT.md) |
+| [kafka](./services/kafka/README.md) | Run Apache Kafka with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/kafka/COMPONENT.md) |
 | [kamal](./deployment/kamal/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/kamal/COMPONENT.md) |
+| [keycloak](./services/keycloak/README.md) | Run Keycloak with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/keycloak/COMPONENT.md) |
 | [kubectl](./deployment/kubectl/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `apply`, [typed contract](./deployment/kubectl/COMPONENT.md) |
 | [mailcatcher](./services/mailcatcher/README.md) | Run MailCatcher with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/mailcatcher/COMPONENT.md) |
 | [mailhog](./services/mailhog/README.md) | Run MailHog with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/mailhog/COMPONENT.md) |
 | [mailpit](./services/mailpit/README.md) | Run Mailpit with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/mailpit/COMPONENT.md) |
 | [mariadb](./services/mariadb/README.md) | Run MariaDB with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/mariadb/COMPONENT.md) |
 | [meson](./build/meson/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `configure`, [typed contract](./build/meson/COMPONENT.md) |
+| [microcks](./services/microcks/README.md) | Run Microcks with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/microcks/COMPONENT.md) |
+| [mongodb](./services/mongodb/README.md) | Run MongoDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/mongodb/COMPONENT.md) |
 | [mysql](./services/mysql/README.md) | Run MySQL with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/mysql/COMPONENT.md) |
+| [nats](./services/nats/README.md) | Run NATS with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/nats/COMPONENT.md) |
+| [neo4j](./services/neo4j/README.md) | Run Neo4j with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/neo4j/COMPONENT.md) |
 | [netlify](./deployment/netlify/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/netlify/COMPONENT.md) |
 | [nexus](./artifacts/nexus/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `upload`, [typed contract](./artifacts/nexus/COMPONENT.md) |
 | [nginx](./services/nginx/README.md) | Run NGINX with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/nginx/COMPONENT.md) |
@@ -135,30 +162,43 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [nix-publish](./publishing/nix-publish/README.md) | Publish Nix flakes to FlakeHub or Flakestry. | `flakehub`, `flakestry`, [typed contract](./publishing/nix-publish/COMPONENT.md) |
 | [nx](./build/nx/README.md) | Run workspace targets, affected builds and CI checks. | `run-many`, `affected`, `run-target`, [typed contract](./build/nx/COMPONENT.md) |
 | [openbao](./secrets/openbao/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/openbao/COMPONENT.md) |
+| [openfga](./services/openfga/README.md) | Run OpenFGA with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/openfga/COMPONENT.md) |
+| [openldap](./services/openldap/README.md) | Run OpenLDAP with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/openldap/COMPONENT.md) |
 | [opentofu](./infrastructure/opentofu/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/opentofu/COMPONENT.md) |
 | [oras](./artifacts/oras/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `push`, [typed contract](./artifacts/oras/COMPONENT.md) |
+| [orientdb](./services/orientdb/README.md) | Run OrientDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/orientdb/COMPONENT.md) |
 | [pgroll](./databases/pgroll/README.md) | Run PostgreSQL schema migrations, backfills, and rollout checks. | `migrate`, [typed contract](./databases/pgroll/COMPONENT.md) |
+| [pinecone](./services/pinecone/README.md) | Run Pinecone Local with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/pinecone/COMPONENT.md) |
 | [planetscale](./databases/planetscale/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./databases/planetscale/COMPONENT.md) |
 | [playwright](./testing/playwright/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./testing/playwright/COMPONENT.md) |
 | [plumber](./security/plumber/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `analyze`, [typed contract](./security/plumber/COMPONENT.md) |
 | [podman](./containers/podman/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/podman/COMPONENT.md) |
 | [postgres](./services/postgres/README.md) | Run PostgreSQL with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/postgres/COMPONENT.md) |
+| [presto](./services/presto/README.md) | Run Presto with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/presto/COMPONENT.md) |
 | [prettier](./formatting/prettier/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/prettier/COMPONENT.md) |
 | [prisma](./databases/prisma/README.md) | Validate schemas, generate clients and deploy migrations. | `run`, `version`, `migrate-deploy`, [typed contract](./databases/prisma/COMPONENT.md) |
 | [protolint](./linting/protolint/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/protolint/COMPONENT.md) |
 | [pulumi](./infrastructure/pulumi/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `preview`, [typed contract](./infrastructure/pulumi/COMPONENT.md) |
+| [qdrant](./services/qdrant/README.md) | Run Qdrant with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/qdrant/COMPONENT.md) |
+| [questdb](./services/questdb/README.md) | Run QuestDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/questdb/COMPONENT.md) |
+| [rabbitmq](./services/rabbitmq/README.md) | Run RabbitMQ with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/rabbitmq/COMPONENT.md) |
 | [railpack](./containers/railpack/README.md) | Run a native command with literal arguments. | `run`, `version`, `prepare`, [typed contract](./containers/railpack/COMPONENT.md) |
 | [railway](./deployment/railway/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `up`, [typed contract](./deployment/railway/COMPONENT.md) |
+| [ravendb](./services/ravendb/README.md) | Run RavenDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/ravendb/COMPONENT.md) |
 | [rclone](./artifacts/rclone/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `copy`, [typed contract](./artifacts/rclone/COMPONENT.md) |
 | [redis](./services/redis/README.md) | Run Redis with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/redis/COMPONENT.md) |
+| [redpanda](./services/redpanda/README.md) | Run Redpanda with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/redpanda/COMPONENT.md) |
 | [render](./deployment/render/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `services`, [typed contract](./deployment/render/COMPONENT.md) |
+| [rethinkdb](./services/rethinkdb/README.md) | Run RethinkDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/rethinkdb/COMPONENT.md) |
 | [rpmbuild](./packaging/rpmbuild/README.md) | Build packages from a Linux rpmbuild package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/rpmbuild/COMPONENT.md) |
 | [ruff](./linting/ruff/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `check`, [typed contract](./linting/ruff/COMPONENT.md) |
 | [rustfmt](./formatting/rustfmt/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/rustfmt/COMPONENT.md) |
 | [s3mock](./services/s3mock/README.md) | Run S3Mock with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/s3mock/COMPONENT.md) |
 | [sccache](./caching/sccache/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `start-server`, [typed contract](./caching/sccache/COMPONENT.md) |
 | [scorecard](./security/scorecard/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/scorecard/COMPONENT.md) |
+| [scylladb](./services/scylladb/README.md) | Run ScyllaDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/scylladb/COMPONENT.md) |
 | [semgrep](./security/semgrep/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/semgrep/COMPONENT.md) |
+| [service-vault](./services/vault/README.md) | Run Vault with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/vault/COMPONENT.md) |
 | [setup-actionlint](./setup/actionlint/README.md) | Install and verify actionlint, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/actionlint/COMPONENT.md) |
 | [setup-android](./setup/android/README.md) | Install Java and a customizable Android SDK for Linux/macOS CI. | `setup`, [typed contract](./setup/android/COMPONENT.md) |
 | [setup-apko](./setup/apko/README.md) | Install and verify apko, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/apko/COMPONENT.md) |
@@ -240,10 +280,10 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-openbao](./setup/openbao/README.md) | Install and verify openbao, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/openbao/COMPONENT.md) |
 | [setup-opentofu](./setup/opentofu/README.md) | Install and verify opentofu, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/opentofu/COMPONENT.md) |
 | [setup-oras](./setup/oras/README.md) | Install and verify oras, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/oras/COMPONENT.md) |
+| [setup-pgroll](./setup/pgroll/README.md) | Install and verify pgroll and publish PATH. | `setup`, [typed contract](./setup/pgroll/COMPONENT.md) |
 | [setup-php](./setup/php/README.md) | Install a PHP version and isolated versioned CI tools; publish PATH. | `setup`, [typed contract](./setup/php/COMPONENT.md) |
 | [setup-pkgx](./setup/pkgx/README.md) | Install pkgx, optionally install versioned packages, and publish their environment. | `setup`, [typed contract](./setup/pkgx/COMPONENT.md) |
 | [setup-pkl](./setup/pkl/README.md) | Install and verify pkl, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/pkl/COMPONENT.md) |
-| [setup-pgroll](./setup/pgroll/README.md) | Install and verify pgroll and publish PATH. | `setup`, [typed contract](./setup/pgroll/COMPONENT.md) |
 | [setup-planetscale](./setup/planetscale/README.md) | Install and verify the PlanetScale CLI and publish PATH. | `setup`, [typed contract](./setup/planetscale/COMPONENT.md) |
 | [setup-playwright](./setup/playwright/README.md) | Install and verify playwright, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/playwright/COMPONENT.md) |
 | [setup-plumber](./setup/plumber/README.md) | Install and verify plumber, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/plumber/COMPONENT.md) |
@@ -276,6 +316,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-terraform](./setup/terraform/README.md) | Install and verify terraform, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/terraform/COMPONENT.md) |
 | [setup-terragrunt](./setup/terragrunt/README.md) | Install and verify terragrunt, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/terragrunt/COMPONENT.md) |
 | [setup-tg](./setup/tg/README.md) | Install and verify tg, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/tg/COMPONENT.md) |
+| [setup-tigerbeetle](./setup/tigerbeetle/README.md) | Install a verified prebuilt TigerBeetle release and publish its environment. | `setup`, [typed contract](./setup/tigerbeetle/COMPONENT.md) |
 | [setup-trivy](./setup/trivy/README.md) | Install and verify trivy, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/trivy/COMPONENT.md) |
 | [setup-trufflehog](./setup/trufflehog/README.md) | Install and verify trufflehog, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/trufflehog/COMPONENT.md) |
 | [setup-turborepo](./setup/turborepo/README.md) | Install and verify turborepo, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/turborepo/COMPONENT.md) |
@@ -291,30 +332,43 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [setup-zig](./setup/zig/README.md) | Install and verify zig, select its version, and publish its environment for subsequent tasks. | `setup`, [typed contract](./setup/zig/COMPONENT.md) |
 | [shellcheck](./linting/shellcheck/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/shellcheck/COMPONENT.md) |
 | [slack](./notifications/slack/README.md) | Send typed Slack incoming-webhook notifications and threaded replies. | `send`, [typed contract](./notifications/slack/COMPONENT.md) |
+| [smocker](./services/smocker/README.md) | Run Smocker with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/smocker/COMPONENT.md) |
 | [snyk](./security/snyk/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `setup`, [typed contract](./security/snyk/COMPONENT.md) |
+| [solr](./services/solr/README.md) | Run Apache Solr with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/solr/COMPONENT.md) |
 | [sonarqube](./code-quality/sonarqube/README.md) | Run SonarQube CLI analysis, quality gates, APIs, architecture, and integrations. | 49 functions, [typed contract](./code-quality/sonarqube/COMPONENT.md) |
 | [sonarqube-scanner](./code-quality/sonarqube-scanner/README.md) | Submit full-project SonarScanner analysis and optionally wait for the quality gate. | `run`, `version`, `scan`, [typed contract](./code-quality/sonarqube-scanner/COMPONENT.md) |
 | [spin](./deployment/spin/README.md) | Build Spin apps, publish OCI artifacts and deploy through plugins. | `build`, `registry-push`, `cloud-deploy`, [typed contract](./deployment/spin/COMPONENT.md) |
 | [sqlfluff](./linting/sqlfluff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqlfluff/COMPONENT.md) |
 | [sqruff](./linting/sqruff/README.md) | Run a native command with literal arguments. | `run`, `version`, `lint`, [typed contract](./linting/sqruff/COMPONENT.md) |
 | [stripe-mock](./services/stripe-mock/README.md) | Run Stripe Mock with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/stripe-mock/COMPONENT.md) |
+| [surrealdb](./services/surrealdb/README.md) | Run SurrealDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/surrealdb/COMPONENT.md) |
 | [syft](./security/syft/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `scan`, [typed contract](./security/syft/COMPONENT.md) |
 | [tangled-artifacts](./artifacts/tangled-artifacts/README.md) | Execute arbitrary literal CLI arguments. | `run`, `upload`, [typed contract](./artifacts/tangled-artifacts/COMPONENT.md) |
 | [telegram](./notifications/telegram/README.md) | Send typed Telegram bot notifications with formatting and delivery options. | `send`, [typed contract](./notifications/telegram/COMPONENT.md) |
+| [temporal](./services/temporal/README.md) | Run Temporal with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/temporal/COMPONENT.md) |
 | [terraform](./infrastructure/terraform/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `init`, [typed contract](./infrastructure/terraform/COMPONENT.md) |
 | [terragrunt](./infrastructure/terragrunt/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `hcl-fmt`, [typed contract](./infrastructure/terragrunt/COMPONENT.md) |
+| [tidb](./services/tidb/README.md) | Run TiDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/tidb/COMPONENT.md) |
+| [tigerbeetle](./services/tigerbeetle/README.md) | Run TigerBeetle with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/tigerbeetle/COMPONENT.md) |
+| [timeplus](./services/timeplus/README.md) | Run Timeplus with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/timeplus/COMPONENT.md) |
+| [timescale](./services/timescale/README.md) | Run TimescaleDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/timescale/COMPONENT.md) |
+| [trino](./services/trino/README.md) | Run Trino with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/trino/COMPONENT.md) |
 | [trivy](./security/trivy/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trivy/COMPONENT.md) |
 | [trufflehog](./security/trufflehog/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `filesystem`, [typed contract](./security/trufflehog/COMPONENT.md) |
 | [turborepo](./build/turborepo/README.md) | Run cached tasks, affected builds and workspace pruning. | `run-tasks`, `affected`, `prune`, [typed contract](./build/turborepo/COMPONENT.md) |
 | [typesense](./services/typesense/README.md) | Run Typesense with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/typesense/COMPONENT.md) |
 | [ubicloud](./cloud/ubicloud/README.md) | Manage cloud resources through all 123 reviewed ubi commands; requires UBI_TOKEN. | `vm-list`, `pg-create`, `kc-kubeconfig`, [typed contract](./cloud/ubicloud/COMPONENT.md) |
 | [uv](./package-management/uv/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `sync`, [typed contract](./package-management/uv/COMPONENT.md) |
+| [valkey](./services/valkey/README.md) | Run Valkey with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/valkey/COMPONENT.md) |
 | [vault](./secrets/vault/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `status`, [typed contract](./secrets/vault/COMPONENT.md) |
 | [vercel](./deployment/vercel/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/vercel/COMPONENT.md) |
 | [wasmer](./deployment/wasmer/README.md) | Publish Wasm packages and manage Wasmer Edge deployments. | `publish`, `deploy`, `app-get`, [typed contract](./deployment/wasmer/COMPONENT.md) |
+| [weaviate](./services/weaviate/README.md) | Run Weaviate with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/weaviate/COMPONENT.md) |
+| [wiremock](./services/wiremock/README.md) | Run WireMock with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/wiremock/COMPONENT.md) |
 | [wrangler](./deployment/wrangler/README.md) | Run a Wrangler operation with literal arguments. | `run`, `version`, `deploy`, [typed contract](./deployment/wrangler/COMPONENT.md) |
 | [xata](./databases/xata/README.md) | Manage preview database branches, migrations, and native CLI workflows. | `run`, `branch-create`, [typed contract](./databases/xata/COMPONENT.md) |
 | [yamllint](./linting/yamllint/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `lint`, [typed contract](./linting/yamllint/COMPONENT.md) |
+| [yugabytedb](./services/yugabytedb/README.md) | Run YugabyteDB with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/yugabytedb/COMPONENT.md) |
 
 Each module has its own dependencies, build scripts, tests, and documentation.
 Source APIs also expose helpers for composition in PureScript pipelines.

@@ -49,3 +49,161 @@ are derived from the PureScript source and embedded in the Wasm component.
 
 CI runs the mocked installer, typed argument, setup dependency, and command-plan
 regression suites. License: MIT.
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add flipt --path /path/to/fluentci-modules/deployment/flipt
+```
+
+For a published module, use `fluentci add @fluentci.io/flipt@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `setup` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Flipt as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.setup (Dependency.setupArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/flipt as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.setup(dependency.setup_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Flipt, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.setup(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.flipt :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/setup {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesFlipt.setup(FluentciModulesFlipt.setupArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import flipt as dependency
+
+
+def run() -> str:
+    prepared = dependency.setup(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/flipt/index";
+
+export function run(): string {
+  const prepared = dependency.setup(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `setup` | Ensure flipt is installed and verified, reusing an available matching version, and publish its environment. |
+| `run` | Run any Flipt CLI command as literal native arguments. |
+| `version` | Report the installed Flipt version. |
+| `validate` | Validate flag-state YAML and fail the pipeline on validation issues. |
+| `migrate` | Run pending Flipt v2 analytics database migrations with the selected server configuration. |
+| `license_check` | Check the configured Flipt Pro license status with the native licensing service. |
+| `evaluate` | Evaluate a feature flag once without watch mode; upstream evaluation failures propagate. |
+<!-- /generated:language-examples -->

@@ -26,3 +26,162 @@ All public lists are comma-separated strings. Whitespace around entries is trimm
 Each invocation requires a fresh `--run-dir`. Failed tasks or native command errors fail the module. Cache hits retain native behavior. Successful calls return typed `outcome`, `run-dir`, `report-path`, `stdout-path` and `stderr-path`; structured native output is read from stdout or requested output files. Use comma-separated `--artifacts NAME=PATH` to collect files, and archive output directories before collecting them. The task environment sets `CI=true`. Credentials stay inherited rather than being copied into command arguments; protect logs and reports containing task output.
 
 [Official CLI reference](https://turborepo.dev/docs/reference/run) · [MIT wrapper license](./LICENSE).
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add turborepo --path /path/to/fluentci-modules/build/turborepo
+```
+
+For a published module, use `fluentci add @fluentci.io/turborepo@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `version` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Turborepo as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.version (Dependency.versionArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/turborepo as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.version(dependency.version_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Turborepo, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.version(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.turborepo :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/version {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesTurborepo.version(FluentciModulesTurborepo.versionArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import turborepo as dependency
+
+
+def run() -> str:
+    prepared = dependency.version(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/turborepo/index";
+
+export function run(): string {
+  const prepared = dependency.version(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `run` | Run arbitrary literal Turbo CLI arguments. |
+| `version` | Print the Turbo CLI version. |
+| `run_tasks` | Run selected workspace tasks with native dependency ordering and caching. |
+| `affected` | Run tasks only in affected packages; requires the Git comparison history. |
+| `dry_run` | Print a JSON task plan without executing workspace tasks. |
+| `prune` | Generate a partial workspace and pruned lockfile for a package. |
+| `list_packages` | Inspect packages, dependencies and tasks without executing tasks. |
+| `info` | Print Turbo environment diagnostics. |
+<!-- /generated:language-examples -->

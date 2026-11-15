@@ -15,19 +15,22 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String as S
 import Data.String.CodeUnits as CU
 import Data.String.Common (trim)
-import Data.String.Pattern (Pattern(..))
+import Data.String.Pattern (Pattern(..), Replacement(..))
 import Data.String.Regex as Regex
 import Data.String.Regex.Flags (noFlags)
 import Data.Traversable (traverse)
 import Data.Tuple (Tuple(..))
 import Effect (Effect)
 import Effect.Exception (catchException, message, throw, try)
+import FluentCI.Host.Client (RunOutcome(..))
+import FluentCI.Host.Files as Files
+import FluentCI.Host.Plan as Plan
 import FluentCI.Plugin as P
 import Foreign.Object as O
 
 type Binding = { containerPort :: Int, port :: Int, address :: String }
 type ServiceResult = { name :: String, state :: String, backend :: String, host :: String, port :: Int, endpoint :: String, ports :: Array Binding }
-type Profile = { name :: String, image :: String, version :: String, port :: Int, ports :: Array Int, command :: Array String, env :: O.Object String, probe :: String, path :: String, exec :: Array String, timeout :: Int, scheme :: String, volumes :: Array String }
+type Profile = { name :: String, image :: String, version :: String, port :: Int, ports :: Array Int, command :: Array String, env :: O.Object String, probe :: String, path :: String, exec :: Array String, timeout :: Int, scheme :: String, volumes :: Array String, files :: O.Object String }
 type WireStatus = { name :: String, state :: String, backend :: String, ports :: O.Object String }
 type Control = { project :: String, name :: String }
 
@@ -134,7 +137,7 @@ environment p entries = do
     Nothing -> throw "env entries must be KEY=VALUE"
     Just index -> do
       let key = CU.take index entry
-      valid <- matches "^[A-Za-z_][A-Za-z0-9_]*$" key
+      valid <- matches "^[A-Za-z_][A-Za-z0-9_.-]*$" key
       unless valid $ throw "Invalid environment variable name"
       pure (Tuple key (CU.drop (index + 1) entry))) entries
   let keys = map (\(Tuple key _) -> key) pairs
@@ -177,6 +180,25 @@ owned cfg = do
 current :: Profile -> Control -> Effect ServiceResult
 current p cfg = owned cfg >>= result p cfg.name
 
+-- Generated config files are literal native filesystem tasks, never shell programs.
+configFiles :: Control -> O.Object String -> Int -> Effect (Array String)
+configFiles cfg files advertised = if A.null (O.keys files) then pure [] else do
+  directory <- trim <$> capture cfg.project [ "pwd" ]
+  absoluteDirectory directory
+  let relative = ".fluentci/service-files/" <> cfg.name
+  void (capture cfg.project [ "mkdir", "-p", directory <> "/" <> relative ])
+  temp <- trim <$> capture cfg.project [ "mktemp", "-d", "/tmp/fluentci-service-files.XXXXXXXX" ]
+  unless (S.startsWith (Pattern "/tmp/fluentci-service-files.") temp && not (S.contains (Pattern "\n") temp) && not (S.contains (Pattern "/../") temp)) $ throw "Invalid configuration task directory"
+  let entries = A.mapWithIndex (\index target -> { source: relative <> "/" <> show index <> "-" <> show advertised <> ".conf", id: "config-" <> show index, target, content: fromMaybe "" (O.lookup target files) }) (O.keys files)
+      tasks = map (\entry -> Files.writeText entry.id entry.source (S.replaceAll (Pattern "{{advertisedPort}}") (Replacement (show advertised)) entry.content) true directory) entries
+      cleanup = catchException (const (pure unit)) (void (capture cfg.project [ "rm", "-rf", "--", temp ]))
+  checked <- try do
+    report <- P.runPlan (temp <> "/run") (Plan.plan tasks) >>= unwrap
+    unless (report.outcome == Just RunSucceeded) $ throw "Service configuration write failed"
+    pure (map (\entry -> directory <> "/" <> entry.source <> ":" <> entry.target <> ":ro") entries)
+  cleanup
+  either (throw <<< message) pure checked
+
 start :: Effect Unit -> String -> Json -> Effect ServiceResult
 start setup tool json = do
   p <- profile tool
@@ -190,21 +212,33 @@ start setup tool json = do
   unless tagValid $ throw "Invalid image version tag"
   let selected = if image == "" then p.image <> ":" <> version else image
   validateImage selected
-  hostPort <- optional fields "port" (if tool == "aws-emulator" then 9297 else 0)
+  hostPort <- optional fields "port" (if A.elem tool [ "aws-emulator", "kafka", "redpanda", "aerospike", "floci" ] then p.port else 0)
   bounded "port" (if tool == "aws-emulator" then 1 else 0) 65535 hostPort
   let primary = if tool == "aws-emulator" then hostPort else p.port
   suppliedPorts <- csv fields "ports"
-  let ports = if A.null suppliedPorts then map (\port -> if port == p.port && hostPort > 0 then show hostPort <> ":" <> show primary else show port) p.ports else suppliedPorts
+  let ports = if A.null suppliedPorts then map (\port -> if tool == "pinecone" then show port <> ":" <> show port else if port == p.port && hostPort > 0 then show hostPort <> ":" <> show primary else show port) p.ports else suppliedPorts
+  when (tool == "pinecone" && hostPort /= 0 && hostPort /= p.port) $ throw "Pinecone Local requires identical advertised host/container ports"
+  when (tool == "pinecone") $ traverse_ (\entry -> case S.split (Pattern ":") entry of
+    [ external, internal ] | external == internal -> pure unit
+    _ -> throw "Pinecone Local requires identical advertised host/container ports") ports
   targets <- traverse containerPort ports
   unless (A.elem primary targets && A.length targets == A.length (A.nub targets)) $ throw "ports must include the primary port exactly once, without duplicate container ports"
   when (tool == "aws-emulator" && ports /= [ show primary <> ":" <> show primary ]) $ throw "AWS Emulator requires the same fixed host and container port"
+  let advertisedService = A.elem tool [ "kafka", "redpanda", "aerospike", "floci" ]
+  advertised <- if not advertisedService then pure hostPort else case A.find (\entry -> A.last (S.split (Pattern ":") entry) == Just (show primary)) ports of
+    Just mapping -> case S.split (Pattern ":") mapping of
+      [ explicit, _ ] -> portNumber explicit
+      _ -> throw "This service needs an explicit primary host port so clients receive a usable advertised address"
+    Nothing -> throw "Missing advertised primary port"
   volumes <- csv fields "volumes"
   traverse_ validateVolume volumes
   let volumeTarget value = fromMaybe value (A.index (S.split (Pattern ":") value) 1)
       userTargets = map volumeTarget volumes
   unless (A.length userTargets == A.length (A.nub userTargets)) $ throw "Duplicate container volume target"
   when (tool == "aws-emulator" && A.elem "/home/emulator/.aws/emulator" userTargets) $ throw "Use stateDir for AWS Emulator credential material"
-  env <- csv fields "env" >>= environment p
+  userEnvironment <- csv fields "env"
+  let advertisedEnv = if tool == "kafka" then O.singleton "KAFKA_ADVERTISED_LISTENERS" ("PLAINTEXT://127.0.0.1:" <> show advertised) else if tool == "floci" then O.singleton "FLOCI_BASE_URL" ("http://127.0.0.1:" <> show advertised) else O.empty
+  env <- environment (p { env = O.union advertisedEnv p.env }) userEnvironment
   command <- csv fields "command"
   depends <- csv fields "dependsOn"
   traverse_ (\name -> do
@@ -232,18 +266,22 @@ start setup tool json = do
         else if not (A.null readyCommand) || p.probe == "exec" then object [ Tuple "type" (encodeJson "exec"), Tuple "command" (encodeJson (if A.null readyCommand then p.exec else readyCommand)) ]
         else if p.probe == "http" then object [ Tuple "type" (encodeJson "http"), Tuple "url" (encodeJson ("http://${port:" <> show primary <> "}" <> readyPath)), Tuple "status" (encodeJson 200) ]
         else object [ Tuple "type" (encodeJson "tcp"), Tuple "address" (encodeJson ("${port:" <> show primary <> "}")) ]
-      selectedCommand = if tool == "aws-emulator" && A.null command then [ "-p", show primary ] else if A.null command then p.command else command
+      selectedCommand = if tool == "aws-emulator" && A.null command then [ "-p", show primary ] else if tool == "redpanda" && A.null command then p.command <> [ "--advertise-kafka-addr=127.0.0.1:" <> show advertised ] else if A.null command then p.command else command
       selectedVolumes = A.filter (\volume -> not (A.elem (volumeTarget volume) userTargets)) p.volumes <> volumes <> if tool == "aws-emulator" then [ stateDir <> ":/home/emulator/.aws/emulator" ] else []
       definition = object ([ Tuple "name" (encodeJson cfg.name), Tuple "backend" (encodeJson "docker"), Tuple "image" (encodeJson selected), Tuple "command" (encodeJson selectedCommand), Tuple "env" (encodeJson env), Tuple "ports" (encodeJson ports), Tuple "volumes" (encodeJson selectedVolumes), Tuple "depends_on" (encodeJson depends), Tuple "readiness" readiness, Tuple "restart" (encodeJson policy), Tuple "max_restarts" (encodeJson restarts), Tuple "startup_timeout_ms" (encodeJson startup), Tuple "stop_timeout_ms" (encodeJson shutdown) ] <> if health then [ Tuple "health" readiness ] else [])
   validateHost
   existing <- owned cfg
   setup
   void (capture cfg.project [ "docker", "info" ])
+  fileMounts <- configFiles cfg (O.filterWithKey (\target _ -> not (A.elem target userTargets)) p.files) advertised
+  let configuredDefinition = case decodeJson definition of
+        Right value -> object (map (\key -> Tuple key (fromMaybe (encodeJson "") (O.lookup key value))) (A.filter (_ /= "volumes") (O.keys value)) <> [ Tuple "volumes" (encodeJson (selectedVolumes <> fileMounts)) ])
+        Left _ -> definition
   when (tool == "aws-emulator") do
     void (capture cfg.project [ "docker", "image", "inspect", selected ])
     void (capture cfg.project [ "mkdir", "-p", stateDir ])
   checked <- try do
-    raw <- capture cfg.project [ "fluentci", "services", "apply", "--json", stringify (encodeJson [ definition ]) ]
+    raw <- capture cfg.project [ "fluentci", "services", "apply", "--json", stringify (encodeJson [ configuredDefinition ]) ]
     response <- either (const (throw "Native service manager returned malformed apply JSON")) pure (jsonParser raw)
     ok <- either (const (throw "Invalid service apply acknowledgement")) pure (decodeJson response >>= \acknowledgement -> getField acknowledgement "ok")
     unless ok $ throw "Native service manager refused startup"

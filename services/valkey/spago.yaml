@@ -1,0 +1,14 @@
+package:
+  name: fluentci-service-valkey
+  dependencies: [effect, either, exceptions, fluentci, fluentci-component-contract, fluentci-services-common, maybe, prelude]
+workspace:
+  packageSet:
+    registry: 81.11.0
+  extraPackages:
+    fluentci:
+      git: https://github.com/fluentci-io/purescript-fluentci.git
+      ref: 01e6e6626cd33ddd43106f98bf8bbd1341589a25
+    fluentci-component-contract:
+      path: ../../lib/component
+    fluentci-services-common:
+      path: ../../lib/services

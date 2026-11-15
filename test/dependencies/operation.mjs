@@ -11,7 +11,7 @@ export function dependencyOperation(cli, schema, omitted) {
   const field = command.fields.find(field => field.key === key);
   const sample = field?.sample ?? property.enum?.[0] ?? property.default;
   if (sample === undefined || sample === null) throw Error(`${cli.name}.${command.name}: missing fixture sample for ${key}`);
-  return [key, sample];
+  return [key, property.type==='string'&&Array.isArray(sample)?sample.map(v=>'"'+v.replaceAll('"','""')+'"').join(','):sample];
  }));
  return {name: command.name, input};
 }

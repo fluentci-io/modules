@@ -2370,6 +2370,29 @@
     "tagPrefix": "v"
   },
   {
+    "name": "tigerbeetle",
+    "title": "TigerBeetle",
+    "program": "tigerbeetle",
+    "backend": "github",
+    "package": "",
+    "repository": "tigerbeetle/tigerbeetle",
+    "asset": "tigerbeetle-{tigerplatform}.zip",
+    "format": "zip",
+    "member": "tigerbeetle",
+    "versionArgs": [
+      "version"
+    ],
+    "checkVersion": true,
+    "defaultVersion": "0.17.9",
+    "linuxPackage": "",
+    "macPackage": "",
+    "freebsdPackage": "",
+    "openbsdPackage": "",
+    "netbsdPackage": "",
+    "notes": "Official prebuilt Linux x86_64/aarch64 and universal macOS binaries; no source compilation. Downloads require a SHA-256 digest from official release metadata.",
+    "tagPrefix": ""
+  },
+  {
     "name": "trivy",
     "title": "Trivy",
     "program": "trivy",

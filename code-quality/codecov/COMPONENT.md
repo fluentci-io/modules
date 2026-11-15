@@ -13,8 +13,8 @@ Execute arbitrary literal CLI arguments.
 | `run-dir` | `string` | yes | Fresh directory for this invocation’s execution report and task logs; must not already exist. |
 | `executable` | `string` | no | Native CLI executable name or absolute path; defaults to this operation’s tool. |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
-| `artifacts` | `array` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. |
-| `arguments` | `array` | yes | Literal native CLI argument tokens, passed without shell expansion. |
+| `artifacts` | `string` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
+| `arguments` | `string` | yes | Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -28,7 +28,7 @@ Print the CLI version.
 | `run-dir` | `string` | yes | Fresh directory for this invocation’s execution report and task logs; must not already exist. |
 | `executable` | `string` | no | Native CLI executable name or absolute path; defaults to this operation’s tool. |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
-| `artifacts` | `array` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. |
+| `artifacts` | `string` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -42,9 +42,9 @@ Create a Codecov report and upload existing coverage files, failing on upload er
 | `run-dir` | `string` | yes | Fresh directory for this invocation’s execution report and task logs; must not already exist. |
 | `executable` | `string` | no | Native CLI executable name or absolute path; defaults to this operation’s tool. |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
-| `artifacts` | `array` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. |
-| `files` | `array` | yes | Files selected for the native operation; paths are passed literally without shell expansion. |
-| `flags` | `array` | no | Flags supplied to the codecov upload operation. |
+| `artifacts` | `string` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
+| `files` | `string` | yes | Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
+| `flags` | `string` | no | Flags supplied to the codecov upload operation. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
 | `name` | `string` | no | Name supplied to the codecov upload operation. |
 | `commit` | `string` | no | Commit supplied to the codecov upload operation. |
 | `disable-search` | `boolean` | no | Disable Search supplied to the codecov upload operation. |

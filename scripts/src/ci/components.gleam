@@ -176,6 +176,44 @@ fn cli_functions(
               ])
           },
         )
+      let lists = case
+        list.contains(
+          ["codecov", "coveralls", "rustfmt", "semgrep", "tangled-artifacts"],
+          name,
+        )
+      {
+        True ->
+          list.filter_map(d.fields(props), fn(p) {
+            case d.s(p.1, "type") {
+              "array" -> Ok(p.0)
+              _ -> Error(Nil)
+            }
+          })
+        False -> []
+      }
+      let props =
+        d.Object(
+          list.map(d.fields(props), fn(p) {
+            #(p.0, case list.contains(lists, p.0) {
+              True ->
+                d.Object([
+                  #("type", d.Text("string")),
+                  #(
+                    "description",
+                    d.Text(
+                      string.replace(
+                        description(common, p.0, p.1, name <> " " <> name_),
+                        " Default: [].",
+                        " Default: none.",
+                      )
+                      <> " Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.",
+                    ),
+                  ),
+                ])
+              False -> p.1
+            })
+          }),
+        )
       let props =
         d.Object(
           list.map(d.fields(props), fn(p) {
@@ -194,7 +232,14 @@ fn cli_functions(
         <> case d.bool(d.get(tool, "csvLists")) {
           True ->
             "Native.csvInput (Contract.input (Contract.encodeInput args)) >>= Contract.cliInput"
-          False -> "Contract.cliInput (Contract.encodeInput args)"
+          False ->
+            case lists {
+              [] -> "Contract.cliInput (Contract.encodeInput args)"
+              _ ->
+                "Contract.csvFields [ "
+                <> string.join(list.map(lists, d.quote), ", ")
+                <> " ] (Contract.encodeInput args) >>= Contract.cliInput"
+            }
         }
         <> "\n  Native.executeWithSetup Dependencies.ensureFor "
         <> d.quote(name)

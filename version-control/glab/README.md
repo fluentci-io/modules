@@ -81,3 +81,175 @@ are embedded in the compiled component.
 
 CI builds the component and runs contract, installer, dependency, and literal-argument
 regression suites. License: MIT.
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add glab --path /path/to/fluentci-modules/version-control/glab
+```
+
+For a published module, use `fluentci add @fluentci.io/glab@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `setup` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Glab as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.setup (Dependency.setupArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/glab as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.setup(dependency.setup_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Glab, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.setup(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.glab :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/setup {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesGlab.setup(FluentciModulesGlab.setupArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import glab as dependency
+
+
+def run() -> str:
+    prepared = dependency.setup(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/glab/index";
+
+export function run(): string {
+  const prepared = dependency.setup(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `setup` | Ensure glab is installed and verified, reusing an available matching version, and publish its environment. |
+| `run` | Run any native glab command with literal argv. |
+| `version` | Report the installed glab CLI version. |
+| `auth_status` | Check inherited GitLab authentication without interactive login. |
+| `repo_view` | Inspect GitLab repository metadata without opening a browser. |
+| `mr_create` | Create a noninteractive merge request with explicit title and description. |
+| `mr_view` | Read a merge request and its state. |
+| `mr_list` | List merge requests in a machine-readable format. |
+| `mr_checkout` | Check out a merge request locally. |
+| `mr_note` | Publish a pipeline comment on a merge request. |
+| `mr_merge` | Merge a selected merge request; source branch deletion remains opt-in. |
+| `release_create` | Create a GitLab release and attach optional assets; existing releases are protected by default. |
+| `release_upload` | Upload files to an existing GitLab release. |
+| `release_download` | Download selected GitLab release assets. |
+| `ci_run` | Create a GitLab pipeline with named variables or inputs. |
+| `ci_status` | Inspect or watch a GitLab pipeline status. |
+| `ci_get` | Read detailed pipeline information. |
+| `ci_retry` | Retry one explicitly selected GitLab CI job, optionally within a selected pipeline. |
+| `ci_cancel` | Cancel one explicitly selected pipeline using glab ci cancel pipeline. |
+| `ci_lint` | Validate GitLab CI configuration using the native server lint API. |
+| `api` | Call the authenticated GitLab API with scalar fields or a body file. |
+<!-- /generated:language-examples -->

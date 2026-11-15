@@ -23,3 +23,165 @@ Public lists use comma-separated strings; `--streams stdout,stderr` repeats the 
 Every call requires a fresh `--run-dir`. Failures and timeouts propagate as module errors. Success returns typed `outcome`, `run-dir`, `report-path`, `stdout-path` and `stderr-path`; native JSON or tables are read from the stdout file. Collect files with CSV `--artifacts NAME=PATH`. Logs do not watch unless requested; use a bounded `--timeout-ms` for streaming. Protect logs and reports containing application environment or secret data.
 
 [Official Edge CLI reference](https://docs.wasmer.io/edge/cli/) · [Registry publishing](https://docs.wasmer.io/registry/cli/) · [MIT wrapper license](./LICENSE).
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add wasmer --path /path/to/fluentci-modules/deployment/wasmer
+```
+
+For a published module, use `fluentci add @fluentci.io/wasmer@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `version` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Wasmer as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.version (Dependency.versionArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/wasmer as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.version(dependency.version_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Wasmer, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.version(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.wasmer :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/version {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesWasmer.version(FluentciModulesWasmer.versionArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import wasmer as dependency
+
+
+def run() -> str:
+    prepared = dependency.version(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/wasmer/index";
+
+export function run(): string {
+  const prepared = dependency.version(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `run` | Execute additional Wasmer CLI commands with literal CSV arguments. |
+| `version` | Print the installed Wasmer version. |
+| `deploy` | Deploy an application to Wasmer Edge without interactive prompts. |
+| `publish` | Publish a local package to the Wasmer registry without prompts. |
+| `validate` | Validate a local WebAssembly file before publishing. |
+| `app_list` | List accessible Wasmer Edge applications. |
+| `app_get` | Inspect a Wasmer Edge application. |
+| `app_logs` | Retrieve logs without continuous watching by default. |
+| `app_delete` | Delete the explicitly identified application; destructive native operation. |
+| `deployments_list` | Inspect deployment history for an application. |
+| `version_activate` | Activate a selected unique version ID for rollback or promotion. |
+<!-- /generated:language-examples -->

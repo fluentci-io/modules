@@ -12,10 +12,21 @@ export async function componentSuite(directory) {
  const cli=catalog.find(tool=>tool.name===schema.name);
  const sample=(key,prop,command)=>{
    const field=command?.fields.find(field=>field.key===key);
-   return field?.choices?.[0]??field?.sample??prop.default??(prop.type==='array'?['literal-value']:prop.type==='boolean'?true:prop.type==='integer'?2:key==='runDir'?'/tmp/component-run':'literal-value');
+   const value=field?.choices?.[0]??field?.sample??prop.default??(prop.type==='array'?['literal-value']:prop.type==='boolean'?true:prop.type==='integer'?2:key==='runDir'?'/tmp/component-run':'literal-value');
+   return prop.type==='string'&&Array.isArray(value)?value.map(v=>'"'+v.replaceAll('"','""')+'"').join(','):value;
  };
  const args=(contract,command)=>Object.fromEntries(Object.entries(contract.input.properties).map(([key,prop])=>[key,contract.input.required.includes(key)?sample(key,prop,command):Nothing.value]));
  for(const [name,contract]of Object.entries(schema.exports)) {
+   const csvFields=Object.entries(contract.input.properties).filter(([,prop])=>prop.type==='string'&&prop.description?.includes('CSV quotes preserve literal commas.'));
+   for(const [key] of csvFields) test('typed component '+name+': rejects malformed CSV '+key+' before effects',()=>{
+    const command=cli?.commands.find(command=>command.name===name);
+    for(const malformed of ['one,,two','one,','"unterminated']) {
+     const input=args(contract,command);
+     input[key]=contract.input.required.includes(key)?malformed:new Just(malformed);
+     const f=fixture();assert.throws(()=>native[name](input)());
+     assert.equal(f.calls.length,0);assert.equal(f.plans.length,0);
+    }
+   });
    test('typed component '+name+': native arguments and return value',()=>{
     const command=cli?.commands.find(command=>command.name===name);
     const input=args(contract,command);

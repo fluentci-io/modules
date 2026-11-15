@@ -29,7 +29,8 @@ export async function serviceSuite(directory){
     const row=states.get(argv[2]);if(!row)throw Error('Unknown service');row.state=argv[1]==='stop'?'stopped':'ready';return row.name+': '+row.state;
    }
    if(argv[0]==='fluentci'&&argv[1]==='logs')return 'bounded native log\n';
-   if(argv[0]==='mktemp')return '/tmp/fluentci-aws-image.fixture';
+   if(argv[0]==='pwd')return '/fixture/project';
+   if(argv[0]==='mktemp')return argv.at(-1).replace('XXXXXXXX','fixture');
    if(argv[0]==='id')return '1001';
    if(argv[0]==='docker'&&argv[1]==='info')return argv.includes('--format')?'x86_64':'Docker daemon ready';
    return undefined;
@@ -45,26 +46,44 @@ export async function serviceSuite(directory){
  test(name+': start uses native service apply, Docker foreground supervision and real port bindings',()=>{
   const f=fixture();const result=native.start(args('start'))();
   assert.equal(result.state,'ready');assert.equal(result.name,'module-'+name+'-default');assert.ok(result.port>0);assert.ok(result.endpoint.includes('127.0.0.1:'));
-  const d=f.definitions[0];assert.equal(d.backend,'docker');assert.equal(d.image,p.image+':'+p.version);assert.deepEqual(d.command,name==='aws-emulator'?['-p','9297']:p.command);
+  const d=f.definitions[0];assert.equal(d.backend,'docker');assert.equal(d.image,p.image+':'+p.version);assert.deepEqual(d.command,name==='aws-emulator'?['-p','9297']:name==='redpanda'?[...p.command,'--advertise-kafka-addr=127.0.0.1:'+p.port]:p.command);
   assert.equal(d.restart,'never');assert.equal(d.max_restarts,0);assert.deepEqual(d.readiness,d.health);assert.ok(d.readiness.type);
   if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}'+p.path);
   if(p.probe==='tcp'&&name!=='aws-emulator')assert.equal(d.readiness.address,'${port:'+p.port+'}');
   assert.ok(f.calls.some(a=>a[0]==='fluentci'&&a[1]==='services'&&a[2]==='apply'));
-  assert.ok(!f.calls.some(a=>a[0]==='docker'&&['run','stop','rm'].includes(a[1])));assert.equal(f.plans.length,0);assert.deepEqual(f.installed,[]);
+  assert.ok(!f.calls.some(a=>a[0]==='docker'&&['run','stop','rm'].includes(a[1])));assert.equal(f.plans.length,Object.keys(p.files??{}).length?1:0);assert.deepEqual(f.installed,[]);
  });
  if(['http','tcp'].includes(p.probe))test(name+': readiness uses supported explicit port bindings and custom paths',()=>{
-  const f=fixture(),mapping=(name==='aws-emulator'?p.port:42000)+':'+p.port;
+  const f=fixture(),mapping=(['aws-emulator','pinecone'].includes(name)?p.port:42000)+':'+p.port;
   native.start({...args('start'),ports:new Just(mapping),readinessPath:new Just('/ci/ready?source=literal'),healthCheck:new Just(false)})();
   const d=f.definitions[0];assert.deepEqual(d.ports,[mapping]);assert.equal(d.health,undefined);
   if(p.probe==='http')assert.equal(d.readiness.url,'http://${port:'+p.port+'}/ci/ready?source=literal');
-  else if(name==='aws-emulator'){assert.equal(d.readiness.type,'exec');assert.ok(d.readiness.command.includes('https://127.0.0.1:'+p.port+'/__admin/health'));}
+  else
+ if(Object.keys(p.files??{}).length)test(name+': default configuration uses literal native file tasks and read-only mounts',()=>{
+  const f=fixture();native.start(args('start'))();
+  assert.equal(f.plans.length,1);
+  const plan=JSON.stringify(f.plans[0]);assert.ok(plan.includes('write_text'));
+  for(const target of Object.keys(p.files))assert.ok(f.definitions[0].volumes.some(v=>v.endsWith(':'+target+':ro')));
+  assert.ok(!plan.includes('bash'));assert.ok(!plan.includes('{{advertisedPort}}'));
+ });
+ if(['kafka','redpanda','aerospike','floci'].includes(name))test(name+': advertised client port is explicit and follows the primary binding',()=>{
+  const f=fixture();native.start({...args('start'),ports:new Just('42000:'+p.port)})();
+  const definition=f.definitions[0];
+  if(name==='kafka')assert.equal(definition.env.KAFKA_ADVERTISED_LISTENERS,'PLAINTEXT://127.0.0.1:42000');
+  if(name==='redpanda')assert.ok(definition.command.includes('--advertise-kafka-addr=127.0.0.1:42000'));
+  if(name==='floci')assert.equal(definition.env.FLOCI_BASE_URL,'http://127.0.0.1:42000');
+  if(name==='aerospike')assert.ok(JSON.stringify(f.plans[0]).includes('access-port 42000'));
+  const bad=fixture();assert.throws(()=>native.start({...args('start'),ports:new Just(String(p.port))})(),/explicit primary host port/);assert.deepEqual(bad.calls,[]);
+ });
+ if(name==='aws-emulator'){assert.equal(d.readiness.type,'exec');assert.ok(d.readiness.command.includes('https://127.0.0.1:'+p.port+'/__admin/health'));}
   else assert.equal(d.readiness.address,'${port:'+p.port+'}');
  });
  test(name+': lifecycle stays scoped, start is idempotent and stop preserves volumes',()=>{
   const f=fixture();native.start({...args('start'),volumes:new Just('test-data:/data')})();native.start({...args('start'),volumes:new Just('test-data:/data')})();
   assert.equal(f.states.size,1);assert.equal(native.status(args('status'))().state,'ready');assert.equal(native.restart(args('restart'))().state,'ready');
   assert.equal(native.logs(args('logs'))(),'bounded native log\n');assert.equal(native.stop(args('stop'))().state,'stopped');assert.equal(native.stop(args('stop'))().port,0);
-  assert.ok(f.definitions[0].volumes.includes('test-data:/data'));assert.ok(!f.calls.some(a=>a.includes('down')||a.includes('volume')||a[0]==='rm'));
+  assert.ok(f.definitions[0].volumes.includes('test-data:/data'));assert.ok(!f.calls.some(a=>a.includes('down')||a.includes('volume')));
+  assert.ok(f.calls.filter(a=>a[0]==='rm').every(a=>a.at(-1).startsWith('/tmp/fluentci-service-files.')));
  });
  test(name+': logs and stop remain usable when native ready state has no port bindings',()=>{
   const f=fixture();const started=native.start(args('start'))();
@@ -117,7 +136,7 @@ export async function serviceSuite(directory){
  });
  test(name+': missing prerequisites are installed and rechecked before native startup',()=>{
   const ready=new Set();const f=fixture({install:alias=>ready.add(alias),fail:argv=>requirements.some(r=>!ready.has(r.alias)&&JSON.stringify(argv)===JSON.stringify(r.probe))});
-  native.start(args('start'))();assert.deepEqual(f.installed,requirements.map(r=>r.alias));assert.equal(f.definitions.length,1);
+  native.start(args('start'))();assert.deepEqual(f.installed,requirements.filter(r=>name!=='couchbase'||r.program!=='curl').map(r=>r.alias));assert.equal(f.definitions.length,1);
  });
  test(name+': unavailable daemon, malformed replies, and failed readiness never return success',()=>{
   for(const options of [{fail:a=>a[0]==='docker'&&a[1]==='info'},{applyResponse:'{'},{applyResponse:'{}'},{applyResponse:'{"ok":"yes","services":[]}'},{applyResponse:'{"ok":true,"services":null}'},{refused:true},{state:'failed'},{state:'running'}]){
@@ -149,6 +168,23 @@ export async function serviceSuite(directory){
   assert.equal(f.states.get('module-'+name+'-default').state,'ready');assert.equal(f.definitions.length,1);
   assert.ok(!f.calls.slice(before).some(a=>['stop','restart','apply'].includes(a[1])));
   const bad=fixture();assert.throws(()=>native.logs({...args('logs'),follow:new Just('true')})());assert.equal(bad.calls.length,0);
+ });
+
+ if(Object.keys(p.files??{}).length)test(name+': default configuration uses literal native file tasks and read-only mounts',()=>{
+  const f=fixture();native.start(args('start'))();
+  assert.equal(f.plans.length,1);
+  const plan=JSON.stringify(f.plans[0]);assert.ok(plan.includes('write_text'));
+  for(const target of Object.keys(p.files))assert.ok(f.definitions[0].volumes.some(v=>v.endsWith(':'+target+':ro')));
+  assert.ok(!plan.includes('bash'));assert.ok(!plan.includes('{{advertisedPort}}'));
+ });
+ if(['kafka','redpanda','aerospike','floci'].includes(name))test(name+': advertised client port is explicit and follows the primary binding',()=>{
+  const f=fixture();native.start({...args('start'),ports:new Just('42000:'+p.port)})();
+  const definition=f.definitions[0];
+  if(name==='kafka')assert.equal(definition.env.KAFKA_ADVERTISED_LISTENERS,'PLAINTEXT://127.0.0.1:42000');
+  if(name==='redpanda')assert.ok(definition.command.includes('--advertise-kafka-addr=127.0.0.1:42000'));
+  if(name==='floci')assert.equal(definition.env.FLOCI_BASE_URL,'http://127.0.0.1:42000');
+  if(name==='aerospike')assert.ok(JSON.stringify(f.plans[0]).includes('access-port 42000'));
+  const bad=fixture();assert.throws(()=>native.start({...args('start'),ports:new Just(String(p.port))})(),/explicit primary host port/);assert.deepEqual(bad.calls,[]);
  });
  if(name==='aws-emulator'){
   test('AWS Emulator waits for verified HTTPS health and generated CA at the selected port',()=>{

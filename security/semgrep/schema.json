@@ -30,20 +30,12 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "description": "Literal native CLI argument tokens, passed without shell expansion."
+            "type": "string",
+            "description": "Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -109,11 +101,8 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -178,20 +167,12 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "config": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "description": "Named configuration selected by the native tool."
+            "type": "string",
+            "description": "Named configuration selected by the native tool. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "output": {
             "type": "string",
@@ -208,12 +189,8 @@
             "description": "Sarif supplied to the semgrep scan operation."
           },
           "exclude": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "description": "Exclude supplied to the semgrep scan operation."
+            "type": "string",
+            "description": "Exclude supplied to the semgrep scan operation. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "jobs": {
             "type": "integer",
@@ -221,15 +198,8 @@
             "description": "Jobs supplied to the semgrep scan operation."
           },
           "paths": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "default": [
-              "."
-            ],
-            "description": "Paths supplied to the semgrep scan operation. Default: [\".\"]."
+            "type": "string",
+            "description": "Paths supplied to the semgrep scan operation. Default: [\".\"]. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -295,11 +265,8 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "json": {
             "type": "boolean",

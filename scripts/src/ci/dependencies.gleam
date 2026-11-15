@@ -44,15 +44,24 @@ pub fn definitions(
       }
     False ->
       case string.starts_with(path, "services/") {
-        True -> [
-          requirement("setup-docker", "docker", ["docker", "version"]),
-          ..case name {
-            "aws-emulator" -> [
-              requirement("setup-curl", "curl", ["curl", "--version"]),
+        True ->
+          case name {
+            "tigerbeetle" -> [
+              requirement("setup-tigerbeetle", "tigerbeetle", [
+                "tigerbeetle",
+                "version",
+              ]),
             ]
-            _ -> []
+            _ -> [
+              requirement("setup-docker", "docker", ["docker", "version"]),
+              ..case name {
+                "aws-emulator" | "couchbase" -> [
+                  requirement("setup-curl", "curl", ["curl", "--version"]),
+                ]
+                _ -> []
+              }
+            ]
           }
-        ]
         False ->
           case string.starts_with(path, "notifications/") {
             True -> [requirement("setup-curl", "curl", ["which", "curl"])]

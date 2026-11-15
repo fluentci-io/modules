@@ -1,0 +1,13 @@
+{
+  "module": "rabbitmq",
+  "requirements": [
+    {
+      "alias": "setup-docker",
+      "program": "docker",
+      "probe": [
+        "docker",
+        "version"
+      ]
+    }
+  ]
+}

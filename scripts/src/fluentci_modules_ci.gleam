@@ -10,6 +10,7 @@ import ci/data as d
 import ci/dependencies
 import ci/files as f
 import ci/native
+import ci/readmes
 import ci/registry
 import ci/security
 import ci/services
@@ -50,7 +51,8 @@ pub fn generate(root: String, check: Bool) -> Result(Nil, String) {
   use _ <- result.try(buildx.run(root, check))
   use _ <- result.try(components.run(root, check))
   use _ <- result.try(dependencies.run(root, check))
-  audit.run(root, check)
+  use _ <- result.try(audit.run(root, check))
+  readmes.run(root, check)
 }
 
 pub fn validate_options(
@@ -66,6 +68,7 @@ pub fn validate_options(
         "generate-cli"
         | "generate-setup"
         | "generate-services"
+        | "generate-readmes"
         | "generate-components"
         | "generate-dependencies"
         | "audit-modules" -> ["--check"]
@@ -129,7 +132,7 @@ pub fn dispatch(args: List(String)) -> Result(Nil, String) {
     [] | ["--help"] -> {
       let _ =
         native.stdout(
-          "Usage: escript scripts/fluentci_modules_ci COMMAND [options]\nCommands: generate-all, check-all, generate-cli, generate-setup, generate-services, generate-buildx, generate-components, generate-dependencies, audit-modules, validate-modules, validate-wasm DIRECTORY, inspect-wasm DIRECTORY, setup-toolchain, install-security-test-tools, test-module-batch, test-services, test, export-setup-env\n",
+          "Usage: escript scripts/fluentci_modules_ci COMMAND [options]\nCommands: generate-all, check-all, generate-cli, generate-setup, generate-services, generate-buildx, generate-components, generate-readmes, generate-dependencies, audit-modules, validate-modules, validate-wasm DIRECTORY, inspect-wasm DIRECTORY, setup-toolchain, install-security-test-tools, test-module-batch, test-services, test, export-setup-env\n",
         )
       Ok(Nil)
     }
@@ -148,6 +151,8 @@ pub fn dispatch(args: List(String)) -> Result(Nil, String) {
       })
       buildx.run(root, list.contains(options, "--check"))
     }
+    ["generate-readmes", ..options] ->
+      readmes.run(root, list.contains(options, "--check"))
     ["generate-components", ..options] ->
       components.run(root, list.contains(options, "--check"))
     ["generate-dependencies", ..options] ->

@@ -13,11 +13,11 @@ import CI.CLI as Native
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
--- | @param arguments Literal native CLI argument tokens, passed without shell expansion.
-run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param arguments Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "arguments" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "codecov" "run" json
 
 -- | Print the CLI version.
@@ -25,10 +25,10 @@ run args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
-version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String } -> Effect Contract.ExecutionResult
 version args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "codecov" "version" json
 
 -- | Create a Codecov report and upload existing coverage files, failing on upload errors.
@@ -36,13 +36,13 @@ version args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
--- | @param files Files selected for the native operation; paths are passed literally without shell expansion.
--- | @param flags Flags supplied to the codecov upload operation.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param files Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param flags Flags supplied to the codecov upload operation. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param name Name supplied to the codecov upload operation.
 -- | @param commit Commit supplied to the codecov upload operation.
 -- | @param disableSearch Disable Search supplied to the codecov upload operation.
-upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), files :: Array String, flags :: Maybe (Array String), name :: Maybe String, commit :: Maybe String, disableSearch :: Maybe Boolean } -> Effect Contract.ExecutionResult
+upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, files :: String, flags :: Maybe String, name :: Maybe String, commit :: Maybe String, disableSearch :: Maybe Boolean } -> Effect Contract.ExecutionResult
 upload args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "files", "flags" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "codecov" "upload" json

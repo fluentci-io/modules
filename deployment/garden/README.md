@@ -25,3 +25,169 @@ Environment selection uses Garden's `NAMESPACE.ENVIRONMENT` syntax. `--yes` is o
 Each invocation requires a fresh `--run-dir`. Native failures, including failed builds and tests, fail the module call. A successful call returns typed `outcome`, `run-dir`, `report-path`, `stdout-path` and `stderr-path`. `--output json` writes Garden's structured result into the returned stdout file; it does not change the module's return type. Collect generated outputs with comma-separated `--artifacts NAME=PATH` declarations.
 
 [Official CLI reference](https://docs.garden.io/reference/commands) · [MIT wrapper license](./LICENSE).
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add garden --path /path/to/fluentci-modules/deployment/garden
+```
+
+For a published module, use `fluentci add @fluentci.io/garden@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `build` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Garden as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.build (Dependency.buildArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/garden as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.build(dependency.build_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Garden, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.build(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.garden :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/build {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesGarden.build(FluentciModulesGarden.buildArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import garden as dependency
+
+
+def run() -> str:
+    prepared = dependency.build(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/garden/index";
+
+export function run(): string {
+  const prepared = dependency.build(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `run` | Execute arbitrary Garden commands with literal CSV arguments. |
+| `version` | Print the installed Garden version. |
+| `build` | Build selected actions and their build dependencies. |
+| `deploy` | Deploy selected actions using the Garden dependency graph. |
+| `test` | Run selected Test actions, including required build and runtime dependencies. |
+| `run_actions` | Execute named Run actions and dependencies for migrations, seed jobs or integration tasks. |
+| `workflow` | Execute a project-defined workflow in the selected environment. |
+| `status` | Inspect provider and action status for the selected environment. |
+| `outputs` | Resolve project outputs, including configured runtime output references. |
+| `graph` | Inspect the project dependency graph. |
+| `config` | Inspect resolved project configuration. |
+| `publish` | Build and publish selected artifacts to configured registries. |
+| `logs` | Collect deployment logs without following by default. |
+| `cleanup_deploy` | Remove selected deployments; omitted names targets all eligible deployments in this project environment. |
+| `cleanup_namespace` | Clean the project environment namespace; explicitly select the intended environment. |
+<!-- /generated:language-examples -->

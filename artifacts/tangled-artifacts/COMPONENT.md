@@ -13,8 +13,8 @@ Execute arbitrary literal CLI arguments.
 | `run-dir` | `string` | yes | Fresh directory for this invocation’s execution report and task logs; must not already exist. |
 | `executable` | `string` | no | Native CLI executable name or absolute path; defaults to this operation’s tool. |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
-| `artifacts` | `array` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. |
-| `arguments` | `array` | yes | Literal native CLI argument tokens, passed without shell expansion. |
+| `artifacts` | `string` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
+| `arguments` | `string` | yes | Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
 
 Returns `Contract.ExecutionResult`.
 
@@ -28,10 +28,10 @@ Upload files as assets attached to an existing annotated Tangled tag.
 | `run-dir` | `string` | yes | Fresh directory for this invocation’s execution report and task logs; must not already exist. |
 | `executable` | `string` | no | Native CLI executable name or absolute path; defaults to this operation’s tool. |
 | `timeout-ms` | `integer` | no | Maximum task duration in milliseconds; defaults to 900000. Default: 900000. |
-| `artifacts` | `array` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. |
+| `artifacts` | `string` | no | Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
 | `username` | `string` | yes | Username supplied to the tangled-artifacts upload operation. |
 | `tag` | `string` | yes | Tag supplied to the tangled-artifacts upload operation. |
 | `repository` | `string` | yes | Repository supplied to the tangled-artifacts upload operation. |
-| `files` | `array` | yes | Files selected for the native operation; paths are passed literally without shell expansion. |
+| `files` | `string` | yes | Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas. |
 
 Returns `Contract.ExecutionResult`.

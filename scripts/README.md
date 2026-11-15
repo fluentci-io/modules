@@ -33,6 +33,8 @@ escript scripts/fluentci_modules_ci validate-modules
 - `generate-dependencies`: installer imports, manifests, frozen source locks,
   dependency regression wrappers, and prerequisite inventory.
 - `audit-modules`: reviewed pipeline purposes and export inventory.
+- `generate-readmes`: contract-derived examples in PureScript, Gleam, Elixir,
+  ClojureScript, ReScript, Python and TypeScript for every registered module.
 
 Each individual generator supports `--check`. Templates hold declarative
 contracts and static source/prose fragments; schemas and executable source remain

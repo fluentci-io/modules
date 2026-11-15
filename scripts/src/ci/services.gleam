@@ -12,7 +12,8 @@ import gleam/string
 
 pub fn value(operation: String, output: String) -> Result(d.Value, String) {
   case operation {
-    "logs" -> Ok(d.Text(output))
+    "logs" | "initialize" | "create_bucket" | "configure_network" ->
+      Ok(d.Text(output))
     "build" -> {
       let image =
         string.trim_end(output)
@@ -83,6 +84,15 @@ pub fn invocation(
   )
 }
 
+fn service_directory(root: String, profile: d.Value) -> String {
+  root
+  <> "/services/"
+  <> case d.s(profile, "directory") {
+    "" -> d.s(profile, "name")
+    value -> value
+  }
+}
+
 fn invoke(
   root: String,
   project: String,
@@ -96,7 +106,7 @@ fn invoke(
   let began = native.monotonic_ms()
   use output <- result.try(commands.logged(
     invocation(
-      root <> "/services/" <> d.s(profile, "name") <> "/dist/ci.wasm",
+      service_directory(root, profile) <> "/dist/ci.wasm",
       operation,
       project,
       fields,
@@ -143,7 +153,7 @@ fn invoke(
 
 fn build(root: String, profile: d.Value, logs: String) -> Result(Nil, String) {
   let name = d.s(profile, "name")
-  let directory = root <> "/services/" <> name
+  let directory = service_directory(root, profile)
   let log = logs <> "/" <> name <> ".log"
   let _ = native.stdout("Building service component " <> name <> "\n")
   use _ <- result.try(commands.logged(
@@ -256,6 +266,85 @@ fn containers(
   )
 }
 
+fn identities(
+  root: String,
+  project: String,
+  profile: d.Value,
+  name: String,
+  log: String,
+) -> Result(List(String), String) {
+  case d.s(profile, "backend") {
+    "host" -> {
+      use output <- result.try(commands.logged(
+        ["fluentci", "services", "status", "--json"],
+        project,
+        log,
+        10_000,
+        False,
+      ))
+      use rows <- result.try(d.parse(output))
+      Ok(
+        list.filter_map(d.array(rows), fn(row) {
+          case d.s(row, "name") == name && d.integer(d.get(row, "pid")) > 0 {
+            True -> Ok(int.to_string(d.integer(d.get(row, "pid"))))
+            False -> Error(Nil)
+          }
+        }),
+      )
+    }
+    _ -> containers(root, name, log)
+  }
+}
+
+fn initialize(
+  root: String,
+  project: String,
+  profile: d.Value,
+  name: String,
+  log: String,
+) -> Result(Nil, String) {
+  case d.s(profile, "name") {
+    "pinecone" -> {
+      use record <- result.try(invoke(
+        root,
+        project,
+        profile,
+        "status",
+        [#("name", d.Text(name))],
+        log,
+      ))
+      c.all(["fluentci-first", "fluentci-second"], fn(index) {
+        let payload =
+          "{\"name\":\""
+          <> index
+          <> "\",\"dimension\":2,\"metric\":\"cosine\",\"spec\":{\"serverless\":{\"cloud\":\"aws\",\"region\":\"us-east-1\"}}}"
+        http(root, d.s(record, "endpoint") <> "/indexes", log, [
+          "--header",
+          "Api-Key: pclocal",
+          "--header",
+          "Content-Type: application/json",
+          "--data-binary",
+          payload,
+        ])
+        |> result.map(fn(_) { Nil })
+      })
+    }
+    "couchbase" ->
+      c.all(["initialize", "create_bucket", "configure_network"], fn(operation) {
+        invoke(
+          root,
+          project,
+          profile,
+          operation,
+          [#("name", d.Text(name))],
+          log,
+        )
+        |> result.map(fn(_) { Nil })
+      })
+    _ -> Ok(Nil)
+  }
+}
+
 fn http(
   root: String,
   url: String,
@@ -294,7 +383,7 @@ fn connectivity(
     }),
   )
   use _ <- result.try(case d.s(profile, "name") {
-    "redis" -> {
+    "redis" | "valkey" -> {
       use output <- result.try(native.tcp(port, "PING\r\n", True))
       c.require(string.contains(output, "PONG"), "Unexpected Redis response")
     }
@@ -419,7 +508,7 @@ fn follow(
 ) -> Result(Nil, String) {
   let argv =
     invocation(
-      root <> "/services/" <> d.s(profile, "name") <> "/dist/ci.wasm",
+      service_directory(root, profile) <> "/dist/ci.wasm",
       "logs",
       project,
       [
@@ -455,13 +544,14 @@ fn lifecycle(
     d.s(started, "name") == name && d.s(started, "state") == "ready",
     "Service did not become ready",
   ))
-  use first <- result.try(containers(root, name, log))
+  use _ <- result.try(initialize(root, project, profile, name, log))
+  use first <- result.try(identities(root, project, profile, name, log))
   use _ <- result.try(c.require(
     list.length(first) == 1,
-    "Expected one owned service container",
+    "Expected one owned service process or container",
   ))
   use same <- result.try(invoke(root, project, profile, "start", fields, log))
-  use second <- result.try(containers(root, name, log))
+  use second <- result.try(identities(root, project, profile, name, log))
   use _ <- result.try(c.require(
     d.get(same, "port") == d.get(started, "port") && first == second,
     "Idempotent start did not reuse its container",
@@ -498,7 +588,7 @@ fn lifecycle(
         control,
         log,
       ))
-      use containers <- result.try(containers(root, name, log))
+      use containers <- result.try(identities(root, project, profile, name, log))
       c.require(
         d.s(status, "state") == "ready" && containers == first,
         "Following logs changed service lifecycle",
@@ -514,11 +604,12 @@ fn lifecycle(
     control,
     log,
   ))
-  use changed <- result.try(containers(root, name, log))
+  use changed <- result.try(identities(root, project, profile, name, log))
   use _ <- result.try(c.require(
     d.s(restarted, "state") == "ready" && changed != first,
     "Restart did not replace the container",
   ))
+  use _ <- result.try(initialize(root, project, profile, name, log))
   use _ <- result.try(connectivity(root, profile, restarted, state, log))
   use _ <- result.try(
     c.all([0, 1], fn(_) {
@@ -541,10 +632,10 @@ fn lifecycle(
     control,
     log,
   ))
-  use containers <- result.try(containers(root, name, log))
+  use containers <- result.try(identities(root, project, profile, name, log))
   use _ <- result.try(c.require(
     d.integer(d.get(status, "port")) == 0 && containers == [],
-    "Service container leaked after stop",
+    "Service process or container leaked after stop",
   ))
   case d.s(profile, "name") {
     "redis" ->
@@ -630,6 +721,10 @@ pub fn run(root: String, logs: String, workers: Int) -> Result(Nil, String) {
               fields,
               list.append([#("version", d.get(profile, "version"))], case tool {
                 "redis" -> [#("volumes", d.Text(volume <> ":/data"))]
+                "tigerbeetle" -> [
+                  #("stateDir", d.Text(project <> "/tigerbeetle")),
+                  #("port", d.Number("13000")),
+                ]
                 _ -> []
               }),
             ))
@@ -684,14 +779,17 @@ pub fn run(root: String, logs: String, workers: Int) -> Result(Nil, String) {
           }
           _ -> Nil
         }
-        let _ =
-          commands.logged(
-            ["docker", "image", "rm", image],
-            root,
-            log,
-            10_000,
-            True,
-          )
+        let _ = case d.s(profile, "backend") {
+          "host" -> Ok("")
+          _ ->
+            commands.logged(
+              ["docker", "image", "rm", image],
+              root,
+              log,
+              10_000,
+              True,
+            )
+        }
         case tested {
           Ok(_) -> {
             let _ = native.stdout(tool <> " passed\n")

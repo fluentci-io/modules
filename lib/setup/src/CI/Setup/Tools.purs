@@ -154,6 +154,7 @@ substitute host version template = foldl (\value pair -> String.replaceAll (Patt
     , { key: "{rustos}", value: if mac then "apple-darwin" else "unknown-linux-musl" }
     , { key: "{rustosmusl}", value: if mac then "apple-darwin" else "unknown-linux-musl" }
     , { key: "{bazelarch}", value: if arm then "arm64" else "x86_64" }
+    , { key: "{tigerplatform}", value: if mac then "universal-macos" else host.arch <> "-linux" }
     , { key: "{cmakeplatform}", value: if mac then "macos-universal" else "linux-" <> if arm then "aarch64" else "x86_64" }
     , { key: "{ninjaplatform}", value: if mac then "mac" else if arm then "linux-aarch64" else "linux" }
     , { key: "{flyos}", value: if mac then "macOS" else "Linux" }
@@ -246,7 +247,7 @@ githubRelease tool host requested = do
           _ -> throw ("Invalid " <> tool.name <> " release checksum")
       else pure ""
     Just value -> pure value
-  when (Array.elem tool.name [ "garden", "depot", "flipt" ]) $
+  when (Array.elem tool.name [ "garden", "depot", "flipt", "tigerbeetle" ]) $
     unless (CU.length digest == 64 && all (\c -> (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) (CU.toCharArray digest)) $
       throw (tool.name <> " release must provide a valid SHA-256 checksum")
   pure { version, url: asset.browser_download_url, sha256: digest }
@@ -332,8 +333,8 @@ ensureRuntime tool host = do
 install :: String -> Host -> Config -> Effect Result
 install name host config = do
   tool <- lookup name
-  when (Array.elem name [ "depot", "flipt" ] && host.os /= "linux" && host.os /= "macos") $ throw (name <> " supports Linux and macOS only")
-  reusable <- if Array.elem name [ "depot", "buildx", "flipt", "glab" ] && config.installDir == "" && config.packageName == "" && not config.sudo then try do
+  when (Array.elem name [ "depot", "flipt", "tigerbeetle" ] && host.os /= "linux" && host.os /= "macos") $ throw (name <> " supports Linux and macOS only")
+  reusable <- if Array.elem name [ "depot", "buildx", "flipt", "glab", "tigerbeetle" ] && config.installDir == "" && config.packageName == "" && not config.sudo then try do
     executable <- H.findExecutable (if name == "buildx" then "docker" else tool.program)
     unless (String.startsWith (Pattern "/") executable) $ throw "Executable not found"
     text <- H.capture (if name == "buildx" then [ executable, "buildx", "version" ] else [ executable, if name == "flipt" then "--version" else "version" ])

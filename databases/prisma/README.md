@@ -24,3 +24,172 @@ No destructive approval is enabled by default. Explicit force/data-loss/reset ar
 Optional `--arguments` appends literal tokens for flags beyond the named contract. Lists use comma-separated strings; whitespace is trimmed and empty entries are rejected. For a token containing a comma, use CSV double quotes inside the argument string. No shell evaluation occurs.
 
 [Official CLI documentation](https://www.prisma.io/docs/orm/v7/reference/prisma-cli-reference) · [MIT license](./LICENSE).
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add prisma --path /path/to/fluentci-modules/databases/prisma
+```
+
+For a published module, use `fluentci add @fluentci.io/prisma@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `version` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Prisma as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.version (Dependency.versionArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/prisma as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.version(dependency.version_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Prisma, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.version(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.prisma :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/version {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesPrisma.version(FluentciModulesPrisma.versionArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import prisma as dependency
+
+
+def run() -> str:
+    prepared = dependency.version(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/prisma/index";
+
+export function run(): string {
+  const prepared = dependency.version(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `run` | Execute literal Prisma CLI arguments, including version-specific features. |
+| `version` | Print the Prisma CLI and engine versions. |
+| `init` | Initialize a Prisma project; configure the datasource explicitly for unattended jobs. |
+| `generate` | Generate project clients from the Prisma schema without applying migrations. |
+| `validate` | Validate the project Prisma schema. |
+| `format` | Format schemas or fail a formatting check without writing changes. |
+| `db_pull` | Introspect the database; print avoids rewriting the project schema. |
+| `db_push` | Synchronize schema without migrations; data loss and reset flags are explicit. |
+| `db_seed` | Run the project seed command configured in Prisma config. |
+| `db_execute` | Execute an existing SQL script using the configured datasource. |
+| `migrate_deploy` | Apply pending committed migrations noninteractively in deployment pipelines. |
+| `migrate_status` | Report migration status; propagate divergence and pending-migration failures. |
+| `migrate_dev` | Create and apply development migrations; use migrate-deploy for production. |
+| `migrate_reset` | Reset a disposable development database; destructive confirmation is explicit. |
+| `migrate_resolve` | Record a migration as applied or rolled back; choose exactly one in Prisma. |
+| `migrate_diff` | Compare schema sources; native Prisma requires exactly one from and one to source. |
+| `debug` | Print Prisma diagnostic information for troubleshooting. |
+| `studio` | Run the long-lived Studio server within a scoped service lifecycle. |
+<!-- /generated:language-examples -->

@@ -13,11 +13,11 @@ import CI.CLI as Native
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
--- | @param arguments Literal native CLI argument tokens, passed without shell expansion.
-run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param arguments Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "arguments" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "semgrep" "run" json
 
 -- | Print the CLI version.
@@ -25,10 +25,10 @@ run args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
-version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String } -> Effect Contract.ExecutionResult
 version args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "semgrep" "version" json
 
 -- | Scan with explicit rule configurations and fail when findings are present.
@@ -36,17 +36,17 @@ version args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
--- | @param config Named configuration selected by the native tool.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param config Named configuration selected by the native tool. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param output Destination path for generated packages.
 -- | @param json Json supplied to the semgrep scan operation. Default: true.
 -- | @param sarif Sarif supplied to the semgrep scan operation.
--- | @param exclude Exclude supplied to the semgrep scan operation.
+-- | @param exclude Exclude supplied to the semgrep scan operation. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param jobs Jobs supplied to the semgrep scan operation.
--- | @param paths Paths supplied to the semgrep scan operation. Default: ["."].
-scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), config :: Array String, output :: Maybe String, json :: Maybe Boolean, sarif :: Maybe Boolean, exclude :: Maybe (Array String), jobs :: Maybe Int, paths :: Maybe (Array String) } -> Effect Contract.ExecutionResult
+-- | @param paths Paths supplied to the semgrep scan operation. Default: ["."]. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+scan :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, config :: String, output :: Maybe String, json :: Maybe Boolean, sarif :: Maybe Boolean, exclude :: Maybe String, jobs :: Maybe Int, paths :: Maybe String } -> Effect Contract.ExecutionResult
 scan args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "config", "exclude", "paths" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "semgrep" "scan" json
 
 -- | Run Semgrep platform CI using the configured project policy.
@@ -54,10 +54,10 @@ scan args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param json Json supplied to the semgrep ci operation. Default: true.
 -- | @param output Destination path for generated packages.
-ci :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), json :: Maybe Boolean, output :: Maybe String } -> Effect Contract.ExecutionResult
+ci :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, json :: Maybe Boolean, output :: Maybe String } -> Effect Contract.ExecutionResult
 ci args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "semgrep" "ci" json

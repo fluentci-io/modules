@@ -2,8 +2,14 @@
   "actionlint": [
     "setup-actionlint"
   ],
+  "aerospike": [
+    "setup-docker"
+  ],
   "apko": [
     "setup-apko"
+  ],
+  "arangodb": [
+    "setup-docker"
   ],
   "argocd": [
     "setup-argocd"
@@ -53,11 +59,17 @@
   "checkov": [
     "setup-checkov"
   ],
+  "chroma": [
+    "setup-docker"
+  ],
   "clickhouse": [
     "setup-docker"
   ],
   "cmake": [
     "setup-cmake"
+  ],
+  "cockroachdb": [
+    "setup-docker"
   ],
   "codacy": [
     "setup-codacy"
@@ -71,12 +83,25 @@
   "cosign": [
     "setup-cosign"
   ],
+  "couchbase": [
+    "setup-docker",
+    "setup-curl"
+  ],
+  "couchdb": [
+    "setup-docker"
+  ],
   "coveralls": [
     "setup-coveralls"
+  ],
+  "cratedb": [
+    "setup-docker"
   ],
   "cypress": [
     "setup-cypress",
     "setup-bun"
+  ],
+  "databend": [
+    "setup-docker"
   ],
   "depot": [
     "setup-depot"
@@ -90,6 +115,9 @@
   "docker": [
     "setup-docker"
   ],
+  "doltdb": [
+    "setup-docker"
+  ],
   "doppler": [
     "setup-doppler"
   ],
@@ -99,11 +127,20 @@
   "drizzlekit": [
     "setup-drizzlekit"
   ],
+  "dynamodb": [
+    "setup-docker"
+  ],
+  "elasticsearch": [
+    "setup-docker"
+  ],
   "etcd": [
     "setup-docker"
   ],
   "flipt": [
     "setup-flipt"
+  ],
+  "floci": [
+    "setup-docker"
   ],
   "flyctl": [
     "setup-flyctl"
@@ -157,8 +194,14 @@
   "jfrog-cli": [
     "setup-jfrog-cli"
   ],
+  "kafka": [
+    "setup-docker"
+  ],
   "kamal": [
     "setup-kamal"
+  ],
+  "keycloak": [
+    "setup-docker"
   ],
   "kubectl": [
     "setup-kubectl"
@@ -178,7 +221,19 @@
   "meson": [
     "setup-meson"
   ],
+  "microcks": [
+    "setup-docker"
+  ],
+  "mongodb": [
+    "setup-docker"
+  ],
   "mysql": [
+    "setup-docker"
+  ],
+  "nats": [
+    "setup-docker"
+  ],
+  "neo4j": [
     "setup-docker"
   ],
   "netlify": [
@@ -207,14 +262,26 @@
   "openbao": [
     "setup-openbao"
   ],
+  "openfga": [
+    "setup-docker"
+  ],
+  "openldap": [
+    "setup-docker"
+  ],
   "opentofu": [
     "setup-opentofu"
   ],
   "oras": [
     "setup-oras"
   ],
+  "orientdb": [
+    "setup-docker"
+  ],
   "pgroll": [
     "setup-pgroll"
+  ],
+  "pinecone": [
+    "setup-docker"
   ],
   "planetscale": [
     "setup-planetscale"
@@ -232,6 +299,9 @@
   "postgres": [
     "setup-docker"
   ],
+  "presto": [
+    "setup-docker"
+  ],
   "prettier": [
     "setup-prettier"
   ],
@@ -244,11 +314,23 @@
   "pulumi": [
     "setup-pulumi"
   ],
+  "qdrant": [
+    "setup-docker"
+  ],
+  "questdb": [
+    "setup-docker"
+  ],
+  "rabbitmq": [
+    "setup-docker"
+  ],
   "railpack": [
     "setup-railpack"
   ],
   "railway": [
     "setup-railway"
+  ],
+  "ravendb": [
+    "setup-docker"
   ],
   "rclone": [
     "setup-rclone"
@@ -256,8 +338,14 @@
   "redis": [
     "setup-docker"
   ],
+  "redpanda": [
+    "setup-docker"
+  ],
   "render": [
     "setup-render"
+  ],
+  "rethinkdb": [
+    "setup-docker"
   ],
   "rpmbuild": [
     "setup-rpmbuild"
@@ -278,8 +366,14 @@
     "setup-scorecard",
     "setup-bun"
   ],
+  "scylladb": [
+    "setup-docker"
+  ],
   "semgrep": [
     "setup-semgrep"
+  ],
+  "service-vault": [
+    "setup-docker"
   ],
   "setup-android": [
     "setup-java"
@@ -293,9 +387,15 @@
   "slack": [
     "setup-curl"
   ],
+  "smocker": [
+    "setup-docker"
+  ],
   "snyk": [
     "setup-snyk",
     "setup-bun"
+  ],
+  "solr": [
+    "setup-docker"
   ],
   "sonarqube": [
     "setup-sonarqube"
@@ -315,6 +415,9 @@
   "stripe-mock": [
     "setup-docker"
   ],
+  "surrealdb": [
+    "setup-docker"
+  ],
   "syft": [
     "setup-syft"
   ],
@@ -324,11 +427,29 @@
   "telegram": [
     "setup-curl"
   ],
+  "temporal": [
+    "setup-docker"
+  ],
   "terraform": [
     "setup-terraform"
   ],
   "terragrunt": [
     "setup-terragrunt"
+  ],
+  "tidb": [
+    "setup-docker"
+  ],
+  "tigerbeetle": [
+    "setup-tigerbeetle"
+  ],
+  "timeplus": [
+    "setup-docker"
+  ],
+  "timescale": [
+    "setup-docker"
+  ],
+  "trino": [
+    "setup-docker"
   ],
   "trivy": [
     "setup-trivy"
@@ -348,6 +469,9 @@
   "uv": [
     "setup-uv"
   ],
+  "valkey": [
+    "setup-docker"
+  ],
   "vault": [
     "setup-vault"
   ],
@@ -357,6 +481,12 @@
   "wasmer": [
     "setup-wasmer"
   ],
+  "weaviate": [
+    "setup-docker"
+  ],
+  "wiremock": [
+    "setup-docker"
+  ],
   "wrangler": [
     "setup-wrangler"
   ],
@@ -365,5 +495,8 @@
   ],
   "yamllint": [
     "setup-yamllint"
+  ],
+  "yugabytedb": [
+    "setup-docker"
   ]
 }

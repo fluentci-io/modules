@@ -1,0 +1,13 @@
+{
+  "module": "tigerbeetle",
+  "requirements": [
+    {
+      "alias": "setup-tigerbeetle",
+      "program": "tigerbeetle",
+      "probe": [
+        "tigerbeetle",
+        "version"
+      ]
+    }
+  ]
+}

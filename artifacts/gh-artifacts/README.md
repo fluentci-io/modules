@@ -59,3 +59,160 @@ See [dependency behavior and publishing](../../docs/MODULE_DEPENDENCIES.md) for
 command-specific prerequisites, validation, credential skips, and CI coverage.
 
 The public module name is `gh-artifacts`, with the companion `setup-gh-artifacts`. List arguments such as `files`, `name`, `pattern`, `arguments` and `artifacts` accept comma-separated strings. Whitespace is trimmed; malformed CSV and empty entries are rejected before host commands. CSV double quotes preserve literal commas inside a token. The native `gh` command, official `@actions/artifact` package and `FLUENTCI_GH_ARTIFACT_CLIENT` environment variable keep their existing names.
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add gh-artifacts --path /path/to/fluentci-modules/artifacts/gh-artifacts
+```
+
+For a published module, use `fluentci add @fluentci.io/gh-artifacts@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `upload` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.GhArtifacts as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.upload (Dependency.uploadArgs { "name": "example", "files": "dist/app.deb,dist/app.rpm" })
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/gh_artifacts as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.upload(dependency.upload_args("example", "dist/app.deb,dist/app.rpm"))
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.GhArtifacts, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.upload(%{"name" => "example", "files" => "dist/app.deb,dist/app.rpm"})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.gh-artifacts :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/upload {:name "example", :files "dist/app.deb,dist/app.rpm"})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesGhArtifacts.upload(FluentciModulesGhArtifacts.uploadArgs(~name="example", ~files="dist/app.deb,dist/app.rpm"))
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import gh_artifacts as dependency
+
+
+def run() -> str:
+    prepared = dependency.upload(
+        pipeline("ci").workdir("."), {"name": "example", "files": "dist/app.deb,dist/app.rpm"}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/gh-artifacts/index";
+
+export function run(): string {
+  const prepared = dependency.upload(
+    flow.workdir(flow.pipeline("ci"), "."), {"name":"example","files":"dist/app.deb,dist/app.rpm"}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `run` | Execute arbitrary literal CLI arguments. |
+| `version` | Print the CLI version. |
+| `upload` | Upload job artifacts using GitHub Actions runtime credentials and the official artifact client. |
+| `download` | download |
+| `release_upload` | release upload |
+| `release_download` | release download |
+<!-- /generated:language-examples -->

@@ -38,3 +38,278 @@ Some upstream operations require a password, bearer token or HTTP headers as pos
 Command availability and allowed values are server-defined. Coverage is pinned to the source revision in [upstream-commands.json](./upstream-commands.json); the official quickstart documents a smaller subset. Use `help --recursive` to inspect your server, and `run --arguments=vm,list` for server extensions beyond this reviewed inventory. The module does not invoke a live API during its fixture tests.
 
 [Official CLI quickstart](https://www.ubicloud.com/docs/quick-start/cli) · [Upstream client](https://github.com/ubicloud/cli) · [MIT wrapper license](./LICENSE).
+
+<!-- generated:language-examples -->
+## Compose this module from code
+
+Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+**caller module's directory**, add the dependency:
+
+```sh
+fluentci add ubicloud --path /path/to/fluentci-modules/cloud/ubicloud
+```
+
+For a published module, use `fluentci add @fluentci.io/ubicloud@VERSION` with an
+available version. Commit the caller's manifest and lockfile. FluentCI generates
+named bindings from the installed component's WIT; no handwritten FFI or CLI
+subprocess is needed. Include generated source directories in the caller's SDK
+project. The callee can use a different SDK from the caller.
+
+These examples append `version` and a native Git check to one pipeline.
+Replace sample paths and identifiers with your own. Optional arguments use the
+callee's defaults, and public list fields use comma-separated strings. See
+[COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
+
+The 0.17.5 composition API is an initial foundation. These examples follow its
+generated API; full cross-SDK compilation and execution coverage is still pending.
+See [composition support and limitations](../../docs/COMPOSITION.md).
+
+
+
+### PureScript
+
+```purescript
+module Main where
+
+import Prelude
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.Ubicloud as Dependency
+
+run :: Effect String
+run =
+  Flow.pipeline "ci"
+    # Flow.workdir "."
+    # Dependency.version (Dependency.versionArgs)
+    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flow.run
+```
+
+### Gleam
+
+```gleam
+import fluentci/flow
+import fluentci_modules/ubicloud as dependency
+
+pub fn run() -> String {
+  flow.pipeline("ci")
+  |> flow.workdir(".")
+  |> dependency.version(dependency.version_args())
+  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.run
+}
+```
+
+Use Gleam's JavaScript target for the Wasm guest. BEAM escripts used for repository
+automation are separate from component guests.
+
+### Elixir
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.Ubicloud, as: Dependency
+
+  defplugin run do
+    Flow.pipeline("ci")
+    |> Flow.workdir(".")
+    |> Dependency.version(%{})
+    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flow.stdout()
+  end
+end
+```
+
+Elixir compiles this sequence to Rust/Wasm. Its initial Flow API does not yet
+provide the typed result callbacks or cleanup combinators of the other examples.
+
+### ClojureScript
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.ubicloud :as dependency]))
+
+(defn run []
+  (-> (flow/pipeline "ci")
+      (flow/workdir ".")
+      (dependency/version {})
+      (flow/exec ["git" "diff" "--exit-code"])
+      flow/run!))
+```
+
+### ReScript
+
+```rescript
+let run = (): string =>
+  Flow.pipeline("ci")
+  ->Flow.workdir(".")
+  ->FluentciModulesUbicloud.version(FluentciModulesUbicloud.versionArgs)
+  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.run
+```
+
+### Python
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import ubicloud as dependency
+
+
+def run() -> str:
+    prepared = dependency.version(
+        pipeline("ci").workdir("."), {}
+    )
+    return prepared.exec("git", "diff", "--exit-code").run()
+```
+
+### TypeScript
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as dependency from "./fluentci_modules/ubicloud/index";
+
+export function run(): string {
+  const prepared = dependency.version(
+    flow.workdir(flow.pipeline("ci"), "."), {}
+  );
+  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+}
+```
+
+Python and TypeScript use named calls rather than inventing a pipe operator.
+Functions return a pipeline carrying their typed result. Use a generated result
+callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
+module needs a preceding result; use Flow's map operation to select a result field.
+Execution begins at `run` (or the Elixir plugin terminal), in declared order.
+
+### Exported functions
+
+| Function | Purpose |
+| --- | --- |
+| `run` | Execute additional ubi CLI commands with literal CSV arguments. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ai_api_key_create` | Create an inference API key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ai_api_key_list` | List inference API keys. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ai_api_key_destroy` | Destroy an inference API key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ai_api_key_show` | Show details for an inference API key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ai_endpoint_list` | List inference endpoints. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `al_search` | Search project audit log entries in CSV format. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_list` | List firewall resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_add_rule` | Add a firewall rule. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_attach_subnet` | Attach a private subnet to a firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_create` | Create a firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_delete_rule` | Remove a firewall rule. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_destroy` | Destroy firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_detach_subnet` | Detach a private subnet from a firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_modify_rule` | Modify a firewall rule. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_rename` | Rename firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_show` | Show details for a firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `fw_update_description` | Update the description for a firewall. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `gh_installation_list` | List GitHub installations. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `gh_installation_list_repositories` | List GitHub repositories for an installation. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `gh_list_cache_entries` | List cache entries for a GitHub repository. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `gh_remove_all_cache_entries` | Remove all cache entries for a GitHub repository. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `gh_remove_cache_entry` | Remove cache entry for a GitHub repository. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `help` | Get command help. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_list` | List Kubernetes cluster resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_create_nodepool` | Create a nodepool on a Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_create` | Create a Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_destroy_nodepool` | Destroy a nodepool of a Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_destroy` | Destroy Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_kubeconfig` | Print kubeconfig.yaml for a Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_rename` | Rename Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_resize_nodepool` | Resize a Kubernetes cluster nodepool. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_retire_node` | Retire a worker node from a Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_show` | Show details for a Kubernetes cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_upgrade_nodepool` | Upgrade a nodepool of a Kubernetes cluster to the cluster's version. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `kc_upgrade` | Upgrade a Kubernetes cluster to the next supported version. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_list` | List load balancer resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_attach_vm` | Attach a virtual machine to a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_create` | Create a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_destroy` | Destroy load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_detach_vm` | Detach a virtual machine from a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_disable_ssl_certificate` | Disable the SSL certificate for a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_enable_ssl_certificate` | Enable the SSL certificate for a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_rename` | Rename load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_show` | Show details for a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `lb_update` | Update a load balancer. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_list` | List machine image resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_create_version` | Create a new version of a machine image from a stopped VM. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_create` | Create a machine image from a stopped VM. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_destroy_version` | Destroy a non-latest version of a machine image. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_destroy` | Destroy machine image. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_list_versions` | List versions of a machine image. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_rename` | Rename machine image. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_set_latest` | Set the latest version of a machine image. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `mi_show` | Show details for a machine image. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_list` | List PostgreSQL database resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_bearer_metric_destination` | Add a PostgreSQL metric destination using bearer token authentication. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_cert_auth_user` | Add user to list of users authenticating with client certificate authentication. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_config_entries` | Add configuration entries to a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_firewall_rule` | Add a PostgreSQL firewall rule. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_metric_destination` | Add a PostgreSQL metric destination. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_otlp_log_destination` | Add an OTLP HTTP log destination to a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_pgbouncer_config_entries` | Add pgbouncer configuration entries to a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_add_syslog_log_destination` | Add a syslog (RFC 5424 over TLS) log destination to a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_ca_certificates` | Print CA certificates for a PostgreSQL database (if available). Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_create_backup_credentials` | Create temporary, read-only credentials for downloading PostgreSQL backups. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_create_client_cert_keypair` | Create client certificate keypair with given common name, expiring after a duration of seconds. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_create_read_replica` | Create a read replica for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_create` | Create a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_delete_firewall_rule` | Delete a PostgreSQL firewall rule. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_delete_log_destination` | Delete a PostgreSQL log destination. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_delete_metric_destination` | Delete a PostgreSQL metric destination. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_destroy` | Destroy PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_get_logs` | Fetch logs for a PostgreSQL database in CSV format. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_list_backups` | List backups for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_list_servers` | List servers for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_modify_firewall_rule` | Modify a PostgreSQL firewall rule. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_modify` | Modify a PostgreSQL database cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_pg_dump` | Dump a single PostgreSQL database using `pg_dump`. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_pg_dumpall` | Dump a entire PostgreSQL database cluster using `pg_dumpall`. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_promote_read_replica` | Promote a read replica PostgreSQL database to a primary. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_psql` | Connect to a PostgreSQL database using `psql`. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_recycle` | Request recycle of primary. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_remove_cert_auth_user` | Remove user from list of users authenticating with client certificate authentication. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_remove_config_entries` | Remove configuration entries from a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_remove_pgbouncer_config_entries` | Remove pgbouncer configuration entries from a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_rename` | Rename PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_reset_superuser_password` | Reset the superuser password for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_restart` | Restart a PostgreSQL database cluster. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_restore` | Restore a PostgreSQL database backup to a new database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_set_maintenance_window` | Set the maintenance window for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_show_config` | Show configuration for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_show_default_config` | Show default configuration for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_show_pgbouncer_config` | Show pgbouncer configuration for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_show_upgrade_status` | Show the status of a major version upgrade of the PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_show` | Show details for a PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `pg_upgrade` | Schedule a major version upgrade of the PostgreSQL database. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_list` | List private subnet resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_connect` | Connect a private subnet to another private subnet. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_create` | Create a private subnet. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_destroy` | Destroy private subnet. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_disconnect` | Disconnect a private subnet from another private subnet. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_rename` | Rename private subnet. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `ps_show` | Show details for a private subnet. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `sk_list` | List SSH public keys. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `sk_create` | Register an SSH public key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `sk_destroy` | Destroy an SSH public key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `sk_rename` | Rename an SSH public key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `sk_show` | Show details for an SSH public key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `sk_update` | Update an SSH public key. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `version` | Display CLI program version. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_list` | List virtual machine resources. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_create` | Create a virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_destroy` | Destroy virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_rename` | Rename virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_restart` | Restart a virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_scp` | Copy files to or from virtual machine using `scp`. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_serial_log` | Show a virtual machine's serial console log, fetching it if needed. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_set_maintenance_window` | Set the maintenance window for a virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_sftp` | Copy files to or from virtual machine using `sftp`. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_show` | Show details for a virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_ssh` | Connect to a virtual machine using `ssh`. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_start` | Start a virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+| `vm_stop` | Stop a virtual machine. Requires a nonempty UBI_TOKEN environment variable, including help and version. |
+<!-- /generated:language-examples -->

@@ -30,20 +30,12 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "description": "Literal native CLI argument tokens, passed without shell expansion."
+            "type": "string",
+            "description": "Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -109,11 +101,8 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -178,11 +167,8 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "edition": {
             "type": "string",
@@ -206,13 +192,8 @@
             "description": "Named configuration selected by the native tool."
           },
           "files": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "description": "Files selected for the native operation; paths are passed literally without shell expansion."
+            "type": "string",
+            "description": "Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -278,11 +259,8 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "edition": {
             "type": "string",
@@ -301,13 +279,8 @@
             "description": "Config Path supplied to the rustfmt check operation."
           },
           "files": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1,
-            "description": "Files selected for the native operation; paths are passed literally without shell expansion."
+            "type": "string",
+            "description": "Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           }
         },
         "required": [
@@ -373,11 +346,8 @@
             "description": "Maximum task duration in milliseconds; defaults to 900000. Default: 900000."
           },
           "artifacts": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique."
+            "type": "string",
+            "description": "Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas."
           },
           "all": {
             "type": "boolean",

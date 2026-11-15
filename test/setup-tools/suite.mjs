@@ -26,7 +26,7 @@ export async function suite(name,directory){
     if(url.includes('api.github.com')){
      const selected=tools.find(t=>t.repository&&url.includes('/repos/'+t.repository+'/'))??tool;
      const releaseVersion=selected.name==='binaryen'?'125':actual;
-     return JSON.stringify({tag_name:selected.tagPrefix+releaseVersion,assets:[{name:substitute(normalized)(releaseVersion)(selected.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:options.digest??(['macports-rs','garden'].includes(selected.name)?'sha256:'+'a'.repeat(64):null)}]});
+     return JSON.stringify({tag_name:selected.tagPrefix+releaseVersion,assets:[{name:substitute(normalized)(releaseVersion)(selected.asset),browser_download_url:'https://github.com/fixture/tool.tar.gz',digest:options.digest??(['macports-rs','garden','tigerbeetle'].includes(selected.name)?'sha256:'+'a'.repeat(64):null)}]});
     }
     if(url.includes('xata-cli-versions.s3.amazonaws.com'))return JSON.stringify({version:actual,targets:{[`${normalized.os==='macos'?'darwin':'linux'}-${normalized.arch==='aarch64'?'arm64':'x64'}`]:{url:'https://xata-cli-versions.s3.amazonaws.com/versions/'+actual+'-latest/xata',sha256sum:options.digest??'a'.repeat(64)}}});
     if(url.includes('clojure')||url.includes('stable.txt'))return actual;
@@ -52,7 +52,7 @@ export async function suite(name,directory){
   for(const os of ['freebsd','openbsd','netbsd']){
    const f=fixture({os});
    if(name==='macports-rs'){assert.throws(plugin.setup,/macOS-only/);assert.equal(f.calls.length,0);continue;}
-   if(name==='prisma'){assert.throws(plugin.setup,/Linux and macOS only/);assert.equal(f.calls.length,0);continue;}
+   if(['prisma','tigerbeetle'].includes(name)){assert.throws(plugin.setup,/Linux and macOS only/);assert.equal(f.calls.length,0);continue;}
    if(['dpkg','rpmbuild','nix-package'].includes(name)){assert.throws(plugin.setup,/Linux/);continue;}
    plugin.setup();assert.ok(f.calls.some(a=>['pkg','pkg_add','pkgin'].includes(a[0])));
    assert.ok(!f.calls.some(a=>a[0]==='curl'));

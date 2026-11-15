@@ -7,6 +7,7 @@ import ci/dependencies
 import ci/download
 import ci/files as f
 import ci/native
+import ci/readmes
 import ci/registry
 import ci/services
 import ci/setup
@@ -505,4 +506,57 @@ pub fn viewer_interrupt_targets_the_owned_child_process_test() {
     _ -> False
   }
   |> should.be_true
+}
+
+pub fn readme_examples_compose_real_functions_with_named_csv_arguments_test() {
+  let assert Ok(schema) =
+    d.parse(
+      "{\"name\":\"fixture\",\"exports\":{\"upload\":{\"input\":{\"required\":[\"files\"],\"properties\":{\"files\":{\"type\":\"string\"}}}}}}",
+    )
+  readmes.example(schema)
+  |> should.equal(
+    Ok(#("upload", d.Object([#("files", d.Text("dist/app.deb,dist/app.rpm"))]))),
+  )
+}
+
+pub fn readme_example_sections_are_idempotent_and_preserve_authored_text_test() {
+  let section =
+    "<!-- generated:language-examples -->\nexample\n<!-- /generated:language-examples -->\n"
+  let assert Ok(document) =
+    readmes.render("# Title\n\nAuthored documentation.\n", section)
+  readmes.render(document, section) |> should.equal(Ok(document))
+  string.starts_with(document, "# Title\n\nAuthored documentation.")
+  |> should.be_true
+  readmes.render("<!-- generated:language-examples -->", section)
+  |> result.is_error
+  |> should.be_true
+}
+
+pub fn readme_named_functions_preserve_native_results_and_language_pipes_test() {
+  let assert Ok(template) = c.text("templates/readme-languages.md")
+  let assert Ok(schema) =
+    d.parse(
+      "{\"name\":\"redis\",\"exports\":{\"start\":{\"input\":{\"required\":[],\"properties\":{\"name\":{\"type\":\"string\"}}},\"output\":{\"type\":\"object\",\"properties\":{\"endpoint\":{\"type\":\"string\"}}}}}}",
+    )
+  let module =
+    d.Object([#("name", d.Text("redis")), #("path", d.Text("services/redis"))])
+  let assert Ok(text) = readmes.section(template, module, schema)
+  list.each(
+    [
+      "fluentci add redis --path",
+      "# Dependency.start (Dependency.startArgs)",
+      "|> dependency.start(dependency.start_args())",
+      "->FluentciModulesRedis.start(FluentciModulesRedis.startArgs)",
+      "dependency/start",
+      "flow.run(flow.exec(prepared,",
+      "Flow.stdout()",
+    ],
+    fn(fragment) { string.contains(text, fragment) |> should.be_true },
+  )
+  string.contains(text, "invoke") |> should.be_false
+  string.contains(text, "fluentci run") |> should.be_false
+  string.contains(text, "{{") |> should.be_false
+  string.contains(text, "foreign import") |> should.be_false
+  string.contains(text, "dependency_ffi") |> should.be_false
+  string.contains(text, "@external") |> should.be_false
 }

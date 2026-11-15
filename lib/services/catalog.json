@@ -1,5 +1,56 @@
 [
   {
+    "name": "aerospike",
+    "title": "Aerospike",
+    "image": "aerospike/aerospike-server",
+    "version": "latest",
+    "port": 3000,
+    "ports": [
+      3000
+    ],
+    "scheme": "aerospike",
+    "command": [
+      "--config-file",
+      "/etc/aerospike/aerospike.conf"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node test namespace with 512 MiB memory storage. An explicit primary host port (default 3000) is advertised to clients; --port changes it. The generated config advertises 127.0.0.1 for host-based CI clients.",
+    "source": "https://github.com/aerospike/aerospike-server.docker",
+    "volumes": [],
+    "files": {
+      "/etc/aerospike/aerospike.conf": "service {\n  cluster-name fluentci\n}\nlogging {\n  console {\n    context any info\n  }\n}\nnetwork {\n  service {\n    address any\n    port 3000\n    access-address 127.0.0.1\n    access-port {{advertisedPort}}\n  }\n  heartbeat {\n    mode mesh\n    port 3002\n    interval 150\n    timeout 10\n  }\n  fabric {\n    port 3001\n  }\n}\nnamespace test {\n  replication-factor 1\n  default-ttl 0\n  storage-engine memory {\n    data-size 512M\n  }\n}\n"
+    }
+  },
+  {
+    "name": "arangodb",
+    "title": "ArangoDB",
+    "image": "arangodb",
+    "version": "3.12",
+    "port": 8529,
+    "ports": [
+      8529
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "ARANGO_ROOT_PASSWORD": "fluentci-test-password"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Test administrator root / fluentci-test-password. Use authenticated requests; the default probe checks the published TCP endpoint.",
+    "source": "https://docs.arango.ai/arangodb/stable/operations/installation/docker/",
+    "volumes": [
+      "/var/lib/arangodb3"
+    ],
+    "files": {}
+  },
+  {
     "name": "aws-emulator",
     "title": "AWS Emulator",
     "image": "fluentci/aws-emulator",
@@ -19,7 +70,8 @@
     "timeout": 180000,
     "notes": "Official aws/aws-emulator. Run build first or provide a prebuilt image. stateDir is required; host and container ports match. Generated credentials and TLS material remain in the caller-owned bind directory.",
     "source": "https://github.com/aws/aws-emulator",
-    "volumes": []
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "caddy",
@@ -39,7 +91,8 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://hub.docker.com/_/caddy",
-    "volumes": []
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "cassandra",
@@ -66,7 +119,33 @@
     "timeout": 240000,
     "notes": "",
     "source": "https://hub.docker.com/_/cassandra",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "chroma",
+    "title": "Chroma",
+    "image": "chromadb/chroma",
+    "version": "1.5.3",
+    "port": 8000,
+    "ports": [
+      8000
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "ANONYMIZED_TELEMETRY": "false"
+    },
+    "probe": "http",
+    "path": "/api/v2/heartbeat",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "",
+    "source": "https://cookbook.chromadb.dev/running/running-chroma/",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
   },
   {
     "name": "clickhouse",
@@ -91,7 +170,39 @@
     "timeout": 120000,
     "notes": "",
     "source": "https://github.com/ClickHouse/ClickHouse/blob/master/docker/server/README.md",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "cockroachdb",
+    "title": "CockroachDB",
+    "image": "cockroachdb/cockroach",
+    "version": "v25.4.0",
+    "port": 26257,
+    "ports": [
+      26257,
+      8080
+    ],
+    "scheme": "postgresql",
+    "command": [
+      "start-single-node",
+      "--insecure",
+      "--listen-addr=0.0.0.0:26257",
+      "--http-addr=0.0.0.0:8080",
+      "--cache=128MiB",
+      "--max-sql-memory=128MiB"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single insecure test node. Connect as root without a password; use defaultdb or create a test database.",
+    "source": "https://www.cockroachlabs.com/docs/stable/start-a-local-cluster-in-docker",
+    "volumes": [
+      "/cockroach/cockroach-data"
+    ],
+    "files": {}
   },
   {
     "name": "consul",
@@ -115,7 +226,193 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://developer.hashicorp.com/consul/docs/run/cloud-deployments/docker",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "couchbase",
+    "title": "Couchbase",
+    "image": "couchbase",
+    "version": "community-7.6.2",
+    "port": 8091,
+    "ports": [
+      8091,
+      11210
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/pools",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Start exposes the management API. Call initialize, then create-bucket to prepare KV tests, and configure-network to advertise the actual published ports to host SDK clients. Defaults use a single-node KV cluster and disposable credentials.",
+    "source": "https://docs.couchbase.com/server/current/install/getting-started-docker.html",
+    "volumes": [
+      "/opt/couchbase/var"
+    ],
+    "files": {}
+  },
+  {
+    "name": "couchdb",
+    "title": "CouchDB",
+    "image": "couchdb",
+    "version": "3",
+    "port": 5984,
+    "ports": [
+      5984
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "COUCHDB_USER": "admin",
+      "COUCHDB_PASSWORD": "fluentci-test-password"
+    },
+    "probe": "http",
+    "path": "/_up",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Test administrator admin / fluentci-test-password. Create application databases through the authenticated HTTP API; configure system databases if using replication.",
+    "source": "https://docs.couchdb.org/en/stable/install/docker.html",
+    "volumes": [
+      "/opt/couchdb/data"
+    ],
+    "files": {}
+  },
+  {
+    "name": "cratedb",
+    "title": "CrateDB",
+    "image": "crate",
+    "version": "latest",
+    "port": 4200,
+    "ports": [
+      4200,
+      5432
+    ],
+    "scheme": "http",
+    "command": [
+      "crate",
+      "-Cdiscovery.type=single-node",
+      "-Cnetwork.host=0.0.0.0"
+    ],
+    "env": {
+      "CRATE_HEAP_SIZE": "512m"
+    },
+    "probe": "http",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node test cluster. HTTP SQL API on 4200 and PostgreSQL wire protocol on 5432; default user crate.",
+    "source": "https://docs.cratedb.com/projects/guide/install/container/docker.html",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
+  },
+  {
+    "name": "databend",
+    "title": "Databend",
+    "image": "datafuselabs/databend",
+    "version": "latest",
+    "port": 8000,
+    "ports": [
+      8000
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "QUERY_DEFAULT_USER": "databend",
+      "QUERY_DEFAULT_PASSWORD": "fluentci-test-password"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Test SQL user databend / fluentci-test-password. HTTP query endpoint /v1/query; use sslmode=disable for local clients.",
+    "source": "https://docs.databend.com/guides/self-hosted/quickstart",
+    "volumes": [
+      "/var/lib/databend"
+    ],
+    "files": {}
+  },
+  {
+    "name": "doltdb",
+    "title": "Dolt",
+    "image": "dolthub/dolt-sql-server",
+    "version": "latest",
+    "port": 3306,
+    "ports": [
+      3306
+    ],
+    "scheme": "mysql",
+    "command": [],
+    "env": {
+      "DOLT_ROOT_HOST": "%",
+      "DOLT_ROOT_PASSWORD": "fluentci-test-password"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "MySQL-compatible test server. User root / fluentci-test-password; create a database from the client to initialize versioned SQL state.",
+    "source": "https://www.dolthub.com/docs/introduction/installation/docker/",
+    "volumes": [
+      "/var/lib/dolt"
+    ],
+    "files": {}
+  },
+  {
+    "name": "dynamodb",
+    "title": "DynamoDB Local",
+    "image": "amazon/dynamodb-local",
+    "version": "latest",
+    "port": 8000,
+    "ports": [
+      8000
+    ],
+    "scheme": "http",
+    "command": [
+      "-jar",
+      "DynamoDBLocal.jar",
+      "-inMemory",
+      "-sharedDb"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "In-memory shared test database. Configure AWS clients with this endpoint, a test region, and disposable access key/secret; no AWS account is needed.",
+    "source": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "elasticsearch",
+    "title": "Elasticsearch",
+    "image": "docker.elastic.co/elasticsearch/elasticsearch",
+    "version": "8.15.0",
+    "port": 9200,
+    "ports": [
+      9200
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "discovery.type": "single-node",
+      "xpack.security.enabled": "false",
+      "ES_JAVA_OPTS": "-Xms512m -Xmx512m"
+    },
+    "probe": "http",
+    "path": "/_cluster/health?wait_for_status=yellow&timeout=1s",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node disposable test cluster with security disabled. Override env for authenticated deployments.",
+    "source": "https://www.elastic.co/search-labs/tutorials/install-elasticsearch/docker",
+    "volumes": [
+      "/usr/share/elasticsearch/data"
+    ],
+    "files": {}
   },
   {
     "name": "etcd",
@@ -139,7 +436,31 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://etcd.io/docs/v3.6/op-guide/container/",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "floci",
+    "title": "Floci",
+    "image": "floci/floci",
+    "version": "latest",
+    "port": 4566,
+    "ports": [
+      4566
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "FLOCI_STORAGE_MODE": "memory"
+    },
+    "probe": "http",
+    "path": "/_localstack/health",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "In-memory AWS API emulator. Docker-backed Lambda/ECS features require an explicit Docker socket mount; it is not mounted by default. The primary host port defaults to 4566; --port selects another explicit port and configures FLOCI_BASE_URL so returned AWS resource URLs use the reachable endpoint.",
+    "source": "https://github.com/floci-io/floci",
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "httpbin",
@@ -159,7 +480,8 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://github.com/mccutchen/go-httpbin",
-    "volumes": []
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "influxdb",
@@ -194,7 +516,71 @@
     "timeout": 60000,
     "notes": "When overriding initialization org/token, supply matching readinessCommand values.",
     "source": "https://docs.influxdata.com/influxdb/v2/install/use-docker-compose/",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "kafka",
+    "title": "Apache Kafka",
+    "image": "apache/kafka",
+    "version": "4.1.0",
+    "port": 9092,
+    "ports": [
+      9092
+    ],
+    "scheme": "kafka",
+    "command": [],
+    "env": {
+      "KAFKA_NODE_ID": "1",
+      "KAFKA_PROCESS_ROLES": "broker,controller",
+      "KAFKA_LISTENERS": "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093",
+      "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT",
+      "KAFKA_CONTROLLER_LISTENER_NAMES": "CONTROLLER",
+      "KAFKA_CONTROLLER_QUORUM_VOTERS": "1@127.0.0.1:9093",
+      "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR": "1",
+      "KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR": "1",
+      "KAFKA_TRANSACTION_STATE_LOG_MIN_ISR": "1",
+      "KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS": "0",
+      "KAFKA_HEAP_OPTS": "-Xms256m -Xmx512m",
+      "CLUSTER_ID": "MkU3OEVBNTcwNTJENDM2Qk"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node KRaft test broker. The primary host port defaults to 9092 and is advertised to clients; use --port to select another explicit host port.",
+    "source": "https://github.com/apache/kafka/blob/trunk/docs/getting-started/docker.md",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "keycloak",
+    "title": "Keycloak",
+    "image": "quay.io/keycloak/keycloak",
+    "version": "26.8.2",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [
+      "start-dev"
+    ],
+    "env": {
+      "KC_BOOTSTRAP_ADMIN_USERNAME": "admin",
+      "KC_BOOTSTRAP_ADMIN_PASSWORD": "fluentci-test-password",
+      "JAVA_OPTS_APPEND": "-Xms128m -Xmx512m"
+    },
+    "probe": "http",
+    "path": "/realms/master",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Development-only embedded database and admin / fluentci-test-password. Start waits for the master realm; import test realms with mounted files and command overrides.",
+    "source": "https://www.keycloak.org/getting-started/getting-started-docker",
+    "volumes": [
+      "/opt/keycloak/data"
+    ],
+    "files": {}
   },
   {
     "name": "mailcatcher",
@@ -215,7 +601,8 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://github.com/sj26/mailcatcher",
-    "volumes": []
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "mailhog",
@@ -236,7 +623,8 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://github.com/mailhog/MailHog",
-    "volumes": []
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "mailpit",
@@ -257,7 +645,8 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://mailpit.axllent.org/docs/install/docker/",
-    "volumes": []
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "mariadb",
@@ -282,7 +671,57 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://hub.docker.com/_/mariadb",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "microcks",
+    "title": "Microcks",
+    "image": "quay.io/microcks/microcks-uber",
+    "version": "latest-native",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "JAVA_OPTIONS": "-Xms128m -Xmx512m"
+    },
+    "probe": "http",
+    "path": "/api/health",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Standalone Uber distribution for API mocks, without external Keycloak/MongoDB dependencies.",
+    "source": "https://microcks.io/documentation/explanations/deployment-options/",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "mongodb",
+    "title": "MongoDB",
+    "image": "mongo",
+    "version": "8.0",
+    "port": 27017,
+    "ports": [
+      27017
+    ],
+    "scheme": "mongodb",
+    "command": [],
+    "env": {
+      "MONGO_INITDB_ROOT_USERNAME": "root",
+      "MONGO_INITDB_ROOT_PASSWORD": "fluentci-test-password"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Test credentials root / fluentci-test-password; use authSource=admin. The published listener becomes available after image initialization.",
+    "source": "https://hub.docker.com/_/mongo",
+    "volumes": [
+      "/data/db"
+    ],
+    "files": {}
   },
   {
     "name": "mysql",
@@ -307,7 +746,67 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://hub.docker.com/_/mysql",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "nats",
+    "title": "NATS",
+    "image": "nats",
+    "version": "2-alpine",
+    "port": 4222,
+    "ports": [
+      4222,
+      8222
+    ],
+    "scheme": "nats",
+    "command": [
+      "--jetstream",
+      "--http_port",
+      "8222",
+      "--store_dir",
+      "/data"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node JetStream test server. Client traffic on 4222 and HTTP monitoring on 8222.",
+    "source": "https://docs.nats.io/running-a-nats-service/running/nats_docker",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
+  },
+  {
+    "name": "neo4j",
+    "title": "Neo4j",
+    "image": "neo4j",
+    "version": "5-community",
+    "port": 7474,
+    "ports": [
+      7474,
+      7687
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "NEO4J_AUTH": "neo4j/fluentci-test-password",
+      "NEO4J_server_memory_heap_initial__size": "256M",
+      "NEO4J_server_memory_heap_max__size": "512M",
+      "NEO4J_server_memory_pagecache_size": "128M"
+    },
+    "probe": "http",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "HTTP management on 7474; Bolt on 7687. Test credentials neo4j / fluentci-test-password.",
+    "source": "https://neo4j.com/docs/operations-manual/current/docker/introduction/",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
   },
   {
     "name": "nginx",
@@ -327,7 +826,118 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://hub.docker.com/_/nginx",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "openfga",
+    "title": "OpenFGA",
+    "image": "openfga/openfga",
+    "version": "latest",
+    "port": 8080,
+    "ports": [
+      8080,
+      8081
+    ],
+    "scheme": "http",
+    "command": [
+      "run"
+    ],
+    "env": {
+      "OPENFGA_DATASTORE_ENGINE": "memory",
+      "OPENFGA_PLAYGROUND_ENABLED": "false"
+    },
+    "probe": "http",
+    "path": "/healthz",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "In-memory authorization datastore. HTTP API on 8080 and gRPC on 8081; create stores/models through the API.",
+    "source": "https://openfga.dev/docs/getting-started/setup-openfga/docker",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "openldap",
+    "title": "OpenLDAP",
+    "image": "osixia/openldap",
+    "version": "1.5.0",
+    "port": 389,
+    "ports": [
+      389
+    ],
+    "scheme": "ldap",
+    "command": [],
+    "env": {
+      "LDAP_ORGANISATION": "FluentCI",
+      "LDAP_DOMAIN": "example.test",
+      "LDAP_ADMIN_PASSWORD": "fluentci-test-password",
+      "LDAP_CONFIG_PASSWORD": "fluentci-config-password",
+      "LDAP_TLS": "false"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Disposable LDAP directory dc=example,dc=test. Bind as cn=admin,dc=example,dc=test with fluentci-test-password; TLS is disabled for local test traffic.",
+    "source": "https://github.com/osixia/container-openldap",
+    "volumes": [
+      "/var/lib/ldap",
+      "/etc/ldap/slapd.d"
+    ],
+    "files": {}
+  },
+  {
+    "name": "orientdb",
+    "title": "OrientDB",
+    "image": "orientdb",
+    "version": "3.2",
+    "port": 2480,
+    "ports": [
+      2480,
+      2424
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "ORIENTDB_ROOT_PASSWORD": "fluentci-test-password",
+      "ORIENTDB_OPTS_MEMORY": "-Xms128M -Xmx512M"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Test user root / fluentci-test-password. HTTP/Studio on 2480 and binary clients on 2424.",
+    "source": "https://orientdb.dev/docs/3.2.x/gettingstarted/Tutorial-Run-the-server.html",
+    "volumes": [
+      "/orientdb/databases"
+    ],
+    "files": {}
+  },
+  {
+    "name": "pinecone",
+    "title": "Pinecone Local",
+    "image": "ghcr.io/pinecone-io/pinecone-local",
+    "version": "latest",
+    "port": 5080,
+    "ports": [
+      5080,
+      5081,
+      5082
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "PORT": "5080",
+      "PINECONE_HOST": "127.0.0.1"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Legacy in-memory Pinecone Local emulator, which upstream retired on October 7, 2026. API key pclocal is a test placeholder. Control API on 5080, first two created indexes on 5081/5082. Those ports must be published identically because index addresses are advertised. Expose additional identical ports with --ports before creating more indexes; Docker image availability and CPU support are upstream constraints.",
+    "source": "https://docs.pinecone.io/guides/production/mock-the-api",
+    "volumes": [],
+    "files": {}
   },
   {
     "name": "postgres",
@@ -359,7 +969,136 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://hub.docker.com/_/postgres",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "presto",
+    "title": "Presto",
+    "image": "prestodb/presto",
+    "version": "latest",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/v1/info",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single coordinator/worker test server. Supply catalogs as read-only mounted configuration when querying external databases.",
+    "source": "https://www.prestodb.io/docs/current/installation/deploy-docker.html",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "qdrant",
+    "title": "Qdrant",
+    "image": "qdrant/qdrant",
+    "version": "latest",
+    "port": 6333,
+    "ports": [
+      6333,
+      6334
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/readyz",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node vector database. REST on 6333 and gRPC on 6334, without authentication for disposable tests. Create collections through the API after readiness.",
+    "source": "https://qdrant.tech/documentation/quickstart/",
+    "volumes": [
+      "/qdrant/storage"
+    ],
+    "files": {}
+  },
+  {
+    "name": "questdb",
+    "title": "QuestDB",
+    "image": "questdb/questdb",
+    "version": "10.2.0",
+    "port": 9000,
+    "ports": [
+      9000,
+      8812,
+      9003
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "QDB_PG_USER": "fluentci",
+      "QDB_PG_PASSWORD": "fluentci-test-password"
+    },
+    "probe": "http",
+    "path": "/status",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Time-series SQL database. HTTP SQL, console and ingestion on 9000, PostgreSQL wire on 8812, minimal health server on 9003. Test PostgreSQL credentials fluentci / fluentci-test-password. Prefer HTTP ingestion rather than legacy ILP TCP.",
+    "source": "https://questdb.com/docs/deployment/docker/",
+    "volumes": [
+      "/var/lib/questdb"
+    ],
+    "files": {}
+  },
+  {
+    "name": "rabbitmq",
+    "title": "RabbitMQ",
+    "image": "rabbitmq",
+    "version": "4-management",
+    "port": 5672,
+    "ports": [
+      5672,
+      15672
+    ],
+    "scheme": "amqp",
+    "command": [],
+    "env": {
+      "RABBITMQ_DEFAULT_USER": "fluentci",
+      "RABBITMQ_DEFAULT_PASS": "fluentci-test-password"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "AMQP on 5672 and authenticated management API on 15672. Test credentials fluentci / fluentci-test-password.",
+    "source": "https://www.rabbitmq.com/docs/download",
+    "volumes": [
+      "/var/lib/rabbitmq"
+    ],
+    "files": {}
+  },
+  {
+    "name": "ravendb",
+    "title": "RavenDB",
+    "image": "ravendb/ravendb",
+    "version": "latest",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {
+      "RAVEN_Setup_Mode": "None",
+      "RAVEN_ServerUrl": "http://0.0.0.0:8080",
+      "RAVEN_Security_UnsecuredAccessAllowed": "PrivateNetwork",
+      "RAVEN_License_Eula_Accepted": "true"
+    },
+    "probe": "http",
+    "path": "/setup/alive",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node unsecured development server with the setup wizard disabled. The default image configuration accepts the RavenDB EULA via RAVEN_License_Eula_Accepted=true; review upstream terms before running it. Use authenticated licensed configuration for other deployments. Create databases explicitly through the client; image data lives under /var/lib/ravendb/data.",
+    "source": "https://docs.ravendb.net/guides/setting-up-ravendb-with-docker-and-https",
+    "volumes": [
+      "/var/lib/ravendb/data"
+    ],
+    "files": {}
   },
   {
     "name": "redis",
@@ -388,7 +1127,66 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://hub.docker.com/_/redis",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "redpanda",
+    "title": "Redpanda",
+    "image": "docker.redpanda.com/redpandadata/redpanda",
+    "version": "latest",
+    "port": 9092,
+    "ports": [
+      9092,
+      9644
+    ],
+    "scheme": "kafka",
+    "command": [
+      "redpanda",
+      "start",
+      "--mode=dev-container",
+      "--smp=1",
+      "--memory=512M",
+      "--reserve-memory=0M",
+      "--kafka-addr=0.0.0.0:9092"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node Kafka-compatible test broker. The primary host port defaults to 9092 and is advertised to clients; --port overrides it. Admin API on 9644.",
+    "source": "https://docs.redpanda.com/current/get-started/quick-start/",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "rethinkdb",
+    "title": "RethinkDB",
+    "image": "rethinkdb",
+    "version": "2.4",
+    "port": 28015,
+    "ports": [
+      28015,
+      8080
+    ],
+    "scheme": "rethinkdb",
+    "command": [
+      "rethinkdb",
+      "--bind",
+      "all"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node document database. Driver protocol on 28015 and web administration on 8080. Default admin account has an empty password for disposable tests. Cluster internode traffic is not published.",
+    "source": "https://rethinkdb.com/docs/docker/",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
   },
   {
     "name": "s3mock",
@@ -409,7 +1207,119 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://github.com/adobe/S3Mock",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "scylladb",
+    "title": "ScyllaDB",
+    "image": "scylladb/scylla",
+    "version": "6.2.3",
+    "port": 9042,
+    "ports": [
+      9042
+    ],
+    "scheme": "cassandra",
+    "command": [
+      "--smp",
+      "1",
+      "--memory",
+      "1G",
+      "--overprovisioned",
+      "1",
+      "--developer-mode",
+      "1"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 300000,
+    "notes": "Single-node CQL test instance with one CPU and a 1 GiB memory target. No production host tuning is performed.",
+    "source": "https://docs.scylladb.com/manual/stable/operating-scylla/procedures/tips/best-practices-scylla-on-docker.html",
+    "volumes": [
+      "/var/lib/scylla"
+    ],
+    "files": {}
+  },
+  {
+    "name": "service-vault",
+    "title": "Vault",
+    "image": "hashicorp/vault",
+    "version": "1.20",
+    "port": 8200,
+    "ports": [
+      8200
+    ],
+    "scheme": "http",
+    "command": [
+      "server",
+      "-dev",
+      "-dev-root-token-id=fluentci-root-token",
+      "-dev-listen-address=0.0.0.0:8200"
+    ],
+    "env": {
+      "SKIP_SETCAP": "true"
+    },
+    "probe": "http",
+    "path": "/v1/sys/health",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Disposable in-memory development Vault, initialized and unsealed automatically. Test root token fluentci-root-token. Registered as service-vault to avoid colliding with the existing vault secrets operations module.",
+    "source": "https://developer.hashicorp.com/vault/docs/commands/server",
+    "volumes": [],
+    "files": {},
+    "directory": "vault"
+  },
+  {
+    "name": "smocker",
+    "title": "Smocker",
+    "image": "ghcr.io/smocker-dev/smocker",
+    "version": "latest",
+    "port": 8081,
+    "ports": [
+      8081,
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/version",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Administration API on 8081; application mock traffic on 8080. Register mocks through POST /mocks on the returned administration endpoint, then point the application at the returned 8080 binding. No mock responses are preconfigured.",
+    "source": "https://smocker.dev/docs/technical-documentation/api",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "solr",
+    "title": "Apache Solr",
+    "image": "solr",
+    "version": "9-slim",
+    "port": 8983,
+    "ports": [
+      8983
+    ],
+    "scheme": "http",
+    "command": [
+      "solr-precreate",
+      "fluentci"
+    ],
+    "env": {
+      "SOLR_HEAP": "512m"
+    },
+    "probe": "http",
+    "path": "/solr/fluentci/admin/ping",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Standalone server with a precreated fluentci core. Readiness checks that core, not just the server listener.",
+    "source": "https://solr.apache.org/guide/solr/latest/deployment-guide/solr-in-docker.html",
+    "volumes": [
+      "/var/solr"
+    ],
+    "files": {}
   },
   {
     "name": "stripe-mock",
@@ -430,7 +1340,194 @@
     "timeout": 60000,
     "notes": "",
     "source": "https://github.com/stripe/stripe-mock",
-    "volumes": []
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "surrealdb",
+    "title": "SurrealDB",
+    "image": "surrealdb/surrealdb",
+    "version": "v2.3.10",
+    "port": 8000,
+    "ports": [
+      8000
+    ],
+    "scheme": "http",
+    "command": [
+      "start",
+      "--bind",
+      "0.0.0.0:8000",
+      "--user",
+      "root",
+      "--pass",
+      "fluentci-test-password",
+      "memory"
+    ],
+    "env": {},
+    "probe": "http",
+    "path": "/health",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Authenticated, in-memory test database. Connect as root / fluentci-test-password and select your test namespace and database. Override --version for another compatible release, and --command for different native startup options.",
+    "source": "https://surrealdb.com/docs/surrealdb/installation/running/docker",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "temporal",
+    "title": "Temporal",
+    "image": "temporalio/temporal",
+    "version": "latest",
+    "port": 7233,
+    "ports": [
+      7233,
+      8233
+    ],
+    "scheme": "grpc",
+    "command": [
+      "server",
+      "start-dev",
+      "--ip",
+      "0.0.0.0",
+      "--port",
+      "7233",
+      "--ui-port",
+      "8233"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Embedded development server with an in-memory SQLite database and default namespace. gRPC on 7233 and Web UI on 8233. No PostgreSQL, Cassandra, or separate UI container is required. Use the returned binding as your worker/client address.",
+    "source": "https://github.com/temporalio/cli#run-via-docker",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "tidb",
+    "title": "TiDB",
+    "image": "pingcap/tidb",
+    "version": "v8.5.4",
+    "port": 4000,
+    "ports": [
+      4000,
+      10080
+    ],
+    "scheme": "mysql",
+    "command": [
+      "--store=unistore",
+      "--path=",
+      "--host=0.0.0.0",
+      "--port=4000",
+      "--status=10080"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node, in-memory unistore for MySQL-compatible integration tests, without PD or TiKV. Connect as root without a password. This profile does not exercise distributed storage or durability.",
+    "source": "https://docs.pingcap.com/tidb/stable/command-line-flags-for-tidb-configuration/",
+    "volumes": [],
+    "files": {}
+  },
+  {
+    "name": "tigerbeetle",
+    "title": "TigerBeetle",
+    "image": "",
+    "version": "0.17.9",
+    "port": 3000,
+    "ports": [
+      3000
+    ],
+    "scheme": "tigerbeetle",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Native host service using a SHA-256-verified prebuilt binary from setup-tigerbeetle. Requires an absolute stateDir; formats one development replica without overwriting existing data. Linux/macOS only. No Docker container or source build.",
+    "source": "https://docs.tigerbeetle.com/quick-start/",
+    "volumes": [],
+    "files": {},
+    "backend": "host"
+  },
+  {
+    "name": "timeplus",
+    "title": "Timeplus",
+    "image": "d.timeplus.com/timeplus-io/proton",
+    "version": "latest",
+    "port": 3218,
+    "ports": [
+      3218,
+      8123,
+      8463
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/proton/info",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Uses Timeplus Proton, the open-source streaming SQL engine, so CI needs no Enterprise trial activation. User default has an empty password. HTTP streaming API on 3218, ClickHouse-compatible HTTP on 8123, native streaming clients on 8463. Enterprise is a separate distribution: override image, ports, command and readiness together, and supply its license/configuration explicitly.",
+    "source": "https://docs.timeplus.com/proton",
+    "volumes": [
+      "/var/lib/proton"
+    ],
+    "files": {}
+  },
+  {
+    "name": "timescale",
+    "title": "TimescaleDB",
+    "image": "timescale/timescaledb",
+    "version": "latest-pg17",
+    "port": 5432,
+    "ports": [
+      5432
+    ],
+    "scheme": "postgresql",
+    "command": [],
+    "env": {
+      "POSTGRES_USER": "fluentci",
+      "POSTGRES_PASSWORD": "fluentci-test-password",
+      "POSTGRES_DB": "fluentci_test"
+    },
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "PostgreSQL 17 with TimescaleDB available. Connect to fluentci_test as fluentci / fluentci-test-password and enable the timescaledb extension in test migrations.",
+    "source": "https://docs.timescale.com/self-hosted/latest/install/installation-docker/",
+    "volumes": [
+      "/var/lib/postgresql/data"
+    ],
+    "files": {}
+  },
+  {
+    "name": "trino",
+    "title": "Trino",
+    "image": "trinodb/trino",
+    "version": "484",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/v1/info",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node SQL query server; mount catalog files for external connectors. Default client user can be any test username. The generated JVM config bounds the heap to 1 GiB instead of reserving most runner memory; override the /etc/trino/jvm.config mount to tune it.",
+    "source": "https://trino.io/docs/current/installation/containers.html",
+    "volumes": [],
+    "files": {
+      "/etc/trino/jvm.config": "-server\n-agentpath:/usr/lib/trino/bin/libjvmkill.so\n-Xms256M\n-Xmx1G\n-XX:G1HeapRegionSize=32M\n-XX:+ExplicitGCInvokesConcurrent\n-XX:+HeapDumpOnOutOfMemoryError\n-XX:+ExitOnOutOfMemoryError\n-XX:-OmitStackTraceInFastThrow\n-XX:ReservedCodeCacheSize=256M\n-XX:PerMethodRecompilationCutoff=10000\n-XX:PerBytecodeRecompilationCutoff=10000\n-Djdk.attach.allowAttachSelf=true\n-Djdk.nio.maxCachedBufferSize=2000000\n"
+    }
   },
   {
     "name": "typesense",
@@ -455,6 +1552,118 @@
     "source": "https://typesense.org/docs/guide/install-typesense.html",
     "volumes": [
       "/data"
-    ]
+    ],
+    "files": {}
+  },
+  {
+    "name": "valkey",
+    "title": "Valkey",
+    "image": "valkey/valkey",
+    "version": "8-alpine",
+    "port": 6379,
+    "ports": [
+      6379
+    ],
+    "scheme": "redis",
+    "command": [],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Single-node Redis-compatible cache, without authentication for disposable local tests. Readiness checks the actual published TCP binding; the E2E workflow also requires a PONG response. Use command overrides for passwords or persistence options.",
+    "source": "https://valkey.io/topics/installation/",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
+  },
+  {
+    "name": "weaviate",
+    "title": "Weaviate",
+    "image": "cr.weaviate.io/semitechnologies/weaviate",
+    "version": "1.31.4",
+    "port": 8080,
+    "ports": [
+      8080,
+      50051
+    ],
+    "scheme": "http",
+    "command": [
+      "--host",
+      "0.0.0.0",
+      "--port",
+      "8080",
+      "--scheme",
+      "http"
+    ],
+    "env": {
+      "AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED": "true",
+      "PERSISTENCE_DATA_PATH": "/var/lib/weaviate",
+      "DEFAULT_VECTORIZER_MODULE": "none",
+      "CLUSTER_HOSTNAME": "node1",
+      "QUERY_DEFAULTS_LIMIT": "25",
+      "GOMEMLIMIT": "512MiB"
+    },
+    "probe": "http",
+    "path": "/v1/.well-known/ready",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "Single-node vector database, with anonymous access for disposable tests and no external vectorizer. Supply vectors from the test or configure your own modules. HTTP API on 8080 and gRPC on 50051; use both returned bindings in SDK clients.",
+    "source": "https://docs.weaviate.io/deploy/installation-guides/docker-installation",
+    "volumes": [
+      "/var/lib/weaviate"
+    ],
+    "files": {}
+  },
+  {
+    "name": "wiremock",
+    "title": "WireMock",
+    "image": "wiremock/wiremock",
+    "version": "3.13.2",
+    "port": 8080,
+    "ports": [
+      8080
+    ],
+    "scheme": "http",
+    "command": [],
+    "env": {},
+    "probe": "http",
+    "path": "/__admin/health",
+    "exec": [],
+    "timeout": 180000,
+    "notes": "HTTP mock server. Mount mappings and __files under /home/wiremock, or register stubs through the admin API.",
+    "source": "https://wiremock.org/docs/standalone/docker/",
+    "volumes": [
+      "/home/wiremock"
+    ],
+    "files": {}
+  },
+  {
+    "name": "yugabytedb",
+    "title": "YugabyteDB",
+    "image": "yugabytedb/yugabyte",
+    "version": "2026.1.3.0-b100",
+    "port": 5433,
+    "ports": [
+      5433,
+      9042,
+      15433
+    ],
+    "scheme": "postgresql",
+    "command": [
+      "bin/yugabyted",
+      "start",
+      "--background=false"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 300000,
+    "notes": "Single-node YugabyteDB test universe. YSQL on 5433, YCQL on 9042, UI on 15433. No persistent volume is selected by default because node identity changes on container replacement.",
+    "source": "https://docs.yugabyte.com/stable/quick-start/docker/",
+    "volumes": [],
+    "files": {}
   }
 ]

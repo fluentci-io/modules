@@ -13,11 +13,11 @@ import CI.CLI as Native
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
--- | @param arguments Literal native CLI argument tokens, passed without shell expansion.
-run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param arguments Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "arguments" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "rustfmt" "run" json
 
 -- | Print the CLI version.
@@ -25,10 +25,10 @@ run args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
-version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String) } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+version :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String } -> Effect Contract.ExecutionResult
 version args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "rustfmt" "version" json
 
 -- | Format explicit Rust source files.
@@ -36,14 +36,14 @@ version args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param edition Edition supplied to the rustfmt format operation. Allowed values: 2015, 2018, 2021, 2024.
 -- | @param configPath Config Path supplied to the rustfmt format operation.
 -- | @param config Named configuration selected by the native tool.
--- | @param files Files selected for the native operation; paths are passed literally without shell expansion.
-format :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), edition :: Maybe String, configPath :: Maybe String, config :: Maybe String, files :: Array String } -> Effect Contract.ExecutionResult
+-- | @param files Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+format :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, edition :: Maybe String, configPath :: Maybe String, config :: Maybe String, files :: String } -> Effect Contract.ExecutionResult
 format args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "files" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "rustfmt" "format" json
 
 -- | Check explicit Rust source files.
@@ -51,13 +51,13 @@ format args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param edition Edition supplied to the rustfmt check operation. Allowed values: 2015, 2018, 2021, 2024.
 -- | @param configPath Config Path supplied to the rustfmt check operation.
--- | @param files Files selected for the native operation; paths are passed literally without shell expansion.
-check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), edition :: Maybe String, configPath :: Maybe String, files :: Array String } -> Effect Contract.ExecutionResult
+-- | @param files Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+check :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, edition :: Maybe String, configPath :: Maybe String, files :: String } -> Effect Contract.ExecutionResult
 check args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "files" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "rustfmt" "check" json
 
 -- | Format a Cargo package or workspace.
@@ -65,11 +65,11 @@ check args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param all All supplied to the rustfmt cargo_fmt operation.
 -- | @param check Check supplied to the rustfmt cargo_fmt operation.
 -- | @param manifestPath Manifest Path supplied to the rustfmt cargo_fmt operation.
-cargo_fmt :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), all :: Maybe Boolean, check :: Maybe Boolean, manifestPath :: Maybe String } -> Effect Contract.ExecutionResult
+cargo_fmt :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, all :: Maybe Boolean, check :: Maybe Boolean, manifestPath :: Maybe String } -> Effect Contract.ExecutionResult
 cargo_fmt args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "rustfmt" "cargo_fmt" json

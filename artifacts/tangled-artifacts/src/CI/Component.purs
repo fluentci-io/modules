@@ -13,11 +13,11 @@ import CI.CLI as Native
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
--- | @param arguments Literal native CLI argument tokens, passed without shell expansion.
-run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), arguments :: Array String } -> Effect Contract.ExecutionResult
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+-- | @param arguments Literal native CLI argument tokens, passed without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+run :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, arguments :: String } -> Effect Contract.ExecutionResult
 run args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "arguments" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "tangled-artifacts" "run" json
 
 -- | Upload files as assets attached to an existing annotated Tangled tag.
@@ -25,12 +25,12 @@ run args = do
 -- | @param runDir Fresh directory for this invocation’s execution report and task logs; must not already exist.
 -- | @param executable Native CLI executable name or absolute path; defaults to this operation’s tool.
 -- | @param timeoutMs Maximum task duration in milliseconds; defaults to 900000. Default: 900000.
--- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique.
+-- | @param artifacts Output artifacts to collect as NAME=PATH entries; names must be unique. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
 -- | @param username Username supplied to the tangled-artifacts upload operation.
 -- | @param tag Tag supplied to the tangled-artifacts upload operation.
 -- | @param repository Repository supplied to the tangled-artifacts upload operation.
--- | @param files Files selected for the native operation; paths are passed literally without shell expansion.
-upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe (Array String), username :: String, tag :: String, repository :: String, files :: Array String } -> Effect Contract.ExecutionResult
+-- | @param files Files selected for the native operation; paths are passed literally without shell expansion. Comma-separated values; whitespace is trimmed and empty entries are rejected. CSV quotes preserve literal commas.
+upload :: { project :: Maybe String, runDir :: String, executable :: Maybe String, timeoutMs :: Maybe Int, artifacts :: Maybe String, username :: String, tag :: String, repository :: String, files :: String } -> Effect Contract.ExecutionResult
 upload args = do
-  json <- Contract.cliInput (Contract.encodeInput args)
+  json <- Contract.csvFields [ "artifacts", "files" ] (Contract.encodeInput args) >>= Contract.cliInput
   Native.executeWithSetup Dependencies.ensureFor "tangled-artifacts" "upload" json
