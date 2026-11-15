@@ -9,7 +9,7 @@ export function browserSuite(tool, plugin) {
   if (!['playwright','cypress'].includes(tool.name)) return;
   const tools=process.env.FLUENTCI_BROWSER_TOOLS;
   const required=process.env.FLUENTCI_REQUIRE_BROWSER_TESTS==='1';
-  test('native '+tool.name+' runs browser assertions and propagates test failures', {skip:!tools&&!required,timeout:300000},()=>{
+  test('native '+tool.name+' runs browser assertions and propagates test failures', {skip:!tools&&!required,timeout:900000},()=>{
     assert.ok(tools,'Set FLUENTCI_BROWSER_TOOLS to the npm installation prefix');
     const packageName=tool.name==='playwright'?'@playwright/test':'cypress';
     const version=JSON.parse(readFileSync(resolve(tools,'node_modules',packageName,'package.json'),'utf8')).version;
@@ -29,9 +29,15 @@ export function browserSuite(tool, plugin) {
       assert.ok(existsSync(executable));
       function invoke(command,fields={},failure=false) {
         const runDir=join(project,'run-'+counter++);
-        const f=fixture({native:true,input:{project,executable,runDir,timeoutMs:120000,...fields}});
+        const f=fixture({native:true,input:{project,executable,runDir,timeoutMs:300000,...fields}});
         if(failure) {
-          assert.throws(plugin[command],/failed/);
+          try {assert.throws(plugin[command],/failed/);} catch(error) {
+            const logs=['stdout','stderr'].map(suffix=>{
+              const path=join(runDir,tool.name+'.'+suffix);
+              return existsSync(path)?readFileSync(path,'utf8'):'';
+            }).join('\n');
+            throw Error(error.message+'\n'+logs);
+          }
           assert.equal(f.output.length,0);
         } else {
           try {plugin[command]();} catch(error) {
@@ -58,7 +64,7 @@ export function browserSuite(tool, plugin) {
         const failed=invoke('test',{tests:['smoke.spec.cjs'],workers:1,retries:0,reporter:'line'},true);
         assert.match(readFileSync(join(failed,'playwright.stdout'),'utf8'),/1 failed/);
       } else {
-        writeFileSync(join(project,'cypress.config.cjs'),'module.exports = {video: false, screenshotOnRunFailure: false, e2e: {supportFile: false, specPattern: "*.cy.js"}};\n');
+        writeFileSync(join(project,'cypress.config.cjs'),'module.exports = {video: false, screenshotOnRunFailure: false, retries: 0, e2e: {supportFile: false, specPattern: "*.cy.js"}};\n');
         const spec=join(project,'smoke.cy.js');
         writeFileSync(spec,'describe("local browser",()=>{it("renders local content",()=>{cy.document().then(doc=>{doc.body.innerHTML="<h1>module passed</h1>";});cy.get("h1").should("have.text","module passed");});});\n');
         invoke('verify');

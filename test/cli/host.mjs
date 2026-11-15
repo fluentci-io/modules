@@ -47,9 +47,9 @@ export function fixture(options = {}) {
             const result = spawnSync(task.program, task.args, {
               cwd: task.cwd, env: { ...process.env, ...environment, ...task.env }, encoding: "utf8", timeout: task.timeout_ms,
             });
+            writeFileSync(join(request.run_dir, task.id + '.stdout'), result.stdout ?? '');
+            writeFileSync(join(request.run_dir, task.id + '.stderr'), result.stderr ?? '');
             if (result.error) throw result.error;
-            writeFileSync(join(request.run_dir, task.id + '.stdout'), result.stdout);
-            writeFileSync(join(request.run_dir, task.id + '.stderr'), result.stderr);
             if (result.status !== 0) report.outcome = "failed";
           }
           writeFileSync(join(request.run_dir, 'result.json'), JSON.stringify(report));

@@ -146,12 +146,10 @@ fn prepare(root: String, module: d.Value, logs: String) -> Result(Nil, String) {
     f.safe_name(name) && f.module_path(path),
     "Invalid module batch identity",
   ))
-  use _ <- result.try(commands.logged(
-    ["fluentci", "install", "--frozen-lockfile"],
+  use _ <- result.try(commands.prepare_dependencies(
     root <> "/" <> path,
     logs <> "/" <> name <> ".log",
     1_200_000,
-    False,
   ))
   Ok(Nil)
 }

@@ -13,6 +13,38 @@ pub fn logged(
   timeout: Int,
   allow_failure: Bool,
 ) -> Result(String, String) {
+  logged_attempts(argv, directory, log, timeout, allow_failure, 0)
+}
+
+pub fn prepare_dependencies(
+  directory: String,
+  log: String,
+  timeout: Int,
+) -> Result(String, String) {
+  logged_attempts(
+    ["fluentci", "install", "--frozen-lockfile"],
+    directory,
+    log,
+    timeout,
+    False,
+    2,
+  )
+}
+
+pub fn retryable_dns_failure(output: String) -> Bool {
+  string.contains(output, "Could not resolve host:")
+  || string.contains(output, "Temporary failure in name resolution")
+  || string.contains(output, "getaddrinfo EAI_AGAIN")
+}
+
+fn logged_attempts(
+  argv: List(String),
+  directory: String,
+  log: String,
+  timeout: Int,
+  allow_failure: Bool,
+  retries: Int,
+) -> Result(String, String) {
   use _ <- result.try(native.mkdir(f.parent(log)))
   use _ <- result.try(native.append(
     log,
@@ -26,27 +58,48 @@ pub fn logged(
       let #(code, output) =
         native.execute_timeout(program, args, directory, True, True, timeout)
       use _ <- result.try(native.append(log, output))
-      case code == 0 || allow_failure {
-        True -> Ok(output)
-        False -> {
-          let _ =
-            native.stderr(
-              string.slice(
-                output,
-                int.max(0, string.length(output) - 12_000),
-                12_000,
-              )
-              <> "\n",
-            )
-          Error(
-            program
-            <> " failed ("
-            <> int.to_string(code)
-            <> "), inspect "
-            <> log,
+      case code != 0 && retries > 0 && retryable_dns_failure(output) {
+        True -> {
+          let message = "Retrying dependency preparation after a DNS failure\n"
+          let _ = native.stderr(message)
+          use _ <- result.try(native.append(log, message))
+          logged_attempts(
+            argv,
+            directory,
+            log,
+            timeout,
+            allow_failure,
+            retries - 1,
           )
         }
+        False -> finish_logged(program, code, output, log, allow_failure)
       }
+    }
+  }
+}
+
+fn finish_logged(
+  program: String,
+  code: Int,
+  output: String,
+  log: String,
+  allow_failure: Bool,
+) -> Result(String, String) {
+  case code == 0 || allow_failure {
+    True -> Ok(output)
+    False -> {
+      let _ =
+        native.stderr(
+          string.slice(
+            output,
+            int.max(0, string.length(output) - 12_000),
+            12_000,
+          )
+          <> "\n",
+        )
+      Error(
+        program <> " failed (" <> int.to_string(code) <> "), inspect " <> log,
+      )
     }
   }
 }

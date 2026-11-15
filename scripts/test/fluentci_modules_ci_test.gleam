@@ -1,8 +1,8 @@
 import ci/artifacts
 import ci/batch
 import ci/commands
-import ci/components
 import ci/common as c
+import ci/components
 import ci/data as d
 import ci/dependencies
 import ci/download
@@ -588,4 +588,17 @@ pub fn component_templates_use_registered_service_names_test() {
   |> should.equal("docker")
   components.template_tool("vault", "secrets/vault")
   |> should.equal("vault")
+}
+
+pub fn dependency_preparation_retries_only_dns_failures_test() {
+  commands.retryable_dns_failure("fatal: Could not resolve host: github.com")
+  |> should.be_true
+  commands.retryable_dns_failure("getaddrinfo EAI_AGAIN github.com")
+  |> should.be_true
+  commands.retryable_dns_failure(
+    "PureScript compilation failed: ModuleNotFound",
+  )
+  |> should.be_false
+  commands.retryable_dns_failure("fluentci.lock is missing or out of date")
+  |> should.be_false
 }

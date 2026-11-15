@@ -65,14 +65,14 @@ export async function suite(name,directory){
   for(const os of ['windows','solaris']){const f=fixture({os});assert.throws(plugin.setup,/Unsupported/);assert.equal(f.calls.length,0);}
  });
  test(name+': failures never publish a successful setup',()=>{
-  const f=fixture({fail:args=>args[0]==='which'});assert.throws(plugin.setup);assert.equal(f.output.length,0);assert.equal(f.updates.length,0);
+  const f=fixture({input:{installDir:'/tmp/setup-failure'},fail:args=>args[0]==='which'});assert.throws(plugin.setup);assert.equal(f.output.length,0);assert.equal(f.updates.length,0);
  });
  if(!['native','nix','rustfmt','aws'].includes(tool.backend))test(name+': reuses a verified existing per-user installation',()=>{
   const f=fixture({existing:true,input:{installDir:"/tmp/tool ' literal"}});plugin.setup();assert.ok(!f.calls.some(a=>a[0]==='curl'&&a.includes('--output')));
  });
  if(tool.backend==='github')test(name+': rejects wrong archives and cleans up failed installations',()=>{
   for(const options of [...(['raw','gz'].includes(tool.format)?[]:[{matches:''}]),{digest:'sha256:'+'b'.repeat(64)}]){
-   const f=fixture(options);assert.throws(plugin.setup);assert.ok(f.calls.some(a=>a[0]==='rm'));assert.equal(f.updates.length,0);
+   const f=fixture({...options,input:{installDir:'/tmp/setup-invalid-archive'}});assert.throws(plugin.setup);assert.ok(f.calls.some(a=>a[0]==='rm'));assert.equal(f.updates.length,0);
   }
  });
 }
