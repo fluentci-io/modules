@@ -141,7 +141,7 @@ command-specific prerequisites, validation, credential skips, and CI coverage.
 <!-- generated:language-examples -->
 ## Compose this module from code
 
-Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+Requires FluentCI **0.17.6 or newer** for generated pipeline bindings. From your
 **caller module's directory**, add the dependency:
 
 ```sh
@@ -159,8 +159,8 @@ Replace sample paths and identifiers with your own. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
-The 0.17.5 composition API is an initial foundation. These examples follow its
-generated API; full cross-SDK compilation and execution coverage is still pending.
+These examples use the generated composition API and builder chaining in
+FluentCI 0.17.6; full cross-SDK compilation and execution coverage is still pending.
 See [composition support and limitations](../../docs/COMPOSITION.md).
 
 
@@ -194,7 +194,7 @@ pub fn run() -> String {
   flow.pipeline("ci")
   |> flow.workdir(".")
   |> dependency.check(dependency.check_args())
-  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.exec("git", ["diff", "--exit-code"])
   |> flow.run
 }
 ```
@@ -257,10 +257,13 @@ from fluentci_modules import nix_publish as dependency
 
 
 def run() -> str:
-    prepared = dependency.check(
-        pipeline("ci").workdir("."), {}
+    return (
+        pipeline("ci")
+        .workdir(".")
+        .pipe(dependency.check, {})
+        .exec("git", "diff", "--exit-code")
+        .run()
     )
-    return prepared.exec("git", "diff", "--exit-code").run()
 ```
 
 ### TypeScript
@@ -270,14 +273,16 @@ import * as flow from "./fluentci_modules/flow";
 import * as dependency from "./fluentci_modules/nix-publish/index";
 
 export function run(): string {
-  const prepared = dependency.check(
-    flow.workdir(flow.pipeline("ci"), "."), {}
-  );
-  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+  return flow.pipeline("ci")
+    .workdir(".")
+    .pipe(dependency.check, {})
+    .exec(["git", "diff", "--exit-code"])
+    .run();
 }
 ```
 
-Python and TypeScript use named calls rather than inventing a pipe operator.
+Python and TypeScript use FluentCI builder chains: `.pipe(module.function, args)`
+composes generated module functions with `.workdir`, `.env`, and `.exec`.
 Functions return a pipeline carrying their typed result. Use a generated result
 callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
 module needs a preceding result; use Flow's map operation to select a result field.

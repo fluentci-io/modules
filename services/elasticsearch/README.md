@@ -52,7 +52,7 @@ Docker must be available, locally or through the caller's Docker context.
 <!-- generated:language-examples -->
 ## Compose this module from code
 
-Requires FluentCI **0.17.5 or newer** for generated pipeline bindings. From your
+Requires FluentCI **0.17.6 or newer** for generated pipeline bindings. From your
 **caller module's directory**, add the dependency:
 
 ```sh
@@ -70,8 +70,8 @@ Replace sample paths and identifiers with your own. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
-The 0.17.5 composition API is an initial foundation. These examples follow its
-generated API; full cross-SDK compilation and execution coverage is still pending.
+These examples use the generated composition API and builder chaining in
+FluentCI 0.17.6; full cross-SDK compilation and execution coverage is still pending.
 See [composition support and limitations](../../docs/COMPOSITION.md).
 
 For services, register `stop` with the same project/name in failure-safe cleanup before running tests. A later ordinary `stop` step will be skipped when a preceding step fails. This short example starts the service using its default scoped name; it is not a complete service lifecycle. Elixir Flow does not yet offer failure-safe cleanup.
@@ -105,7 +105,7 @@ pub fn run() -> String {
   flow.pipeline("ci")
   |> flow.workdir(".")
   |> dependency.start(dependency.start_args())
-  |> flow.exec(["git", "diff", "--exit-code"])
+  |> flow.exec("git", ["diff", "--exit-code"])
   |> flow.run
 }
 ```
@@ -168,10 +168,13 @@ from fluentci_modules import elasticsearch as dependency
 
 
 def run() -> str:
-    prepared = dependency.start(
-        pipeline("ci").workdir("."), {}
+    return (
+        pipeline("ci")
+        .workdir(".")
+        .pipe(dependency.start, {})
+        .exec("git", "diff", "--exit-code")
+        .run()
     )
-    return prepared.exec("git", "diff", "--exit-code").run()
 ```
 
 ### TypeScript
@@ -181,14 +184,16 @@ import * as flow from "./fluentci_modules/flow";
 import * as dependency from "./fluentci_modules/elasticsearch/index";
 
 export function run(): string {
-  const prepared = dependency.start(
-    flow.workdir(flow.pipeline("ci"), "."), {}
-  );
-  return flow.run(flow.exec(prepared, ["git", "diff", "--exit-code"]));
+  return flow.pipeline("ci")
+    .workdir(".")
+    .pipe(dependency.start, {})
+    .exec(["git", "diff", "--exit-code"])
+    .run();
 }
 ```
 
-Python and TypeScript use named calls rather than inventing a pipe operator.
+Python and TypeScript use FluentCI builder chains: `.pipe(module.function, args)`
+composes generated module functions with `.workdir`, `.env`, and `.exec`.
 Functions return a pipeline carrying their typed result. Use a generated result
 callback (`With`/`_with`, or a callback argument in TypeScript/Python) when a later
 module needs a preceding result; use Flow's map operation to select a result field.

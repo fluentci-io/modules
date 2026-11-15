@@ -22,7 +22,9 @@ Generated imports live under `FluentCI.Modules`, alongside `FluentCI.Flow`.
 Each module function takes named arguments and a pipeline, returning a pipeline
 carrying its typed result. `#` is ordinary PureScript application; Gleam and
 Elixir use `|>`, ReScript uses `->`, and ClojureScript uses thread-first `->`.
-Python and TypeScript use named calls.
+Python and TypeScript use builder chains in FluentCI 0.17.6 or newer:
+`.pipe(dependency.function, args)` composes named module operations with
+`.workdir()`, `.env()`, `.exec()`, `.map()`, `.ensuring()`, and `.run()`.
 
 Use the generated argument builder to supply required fields and initialize
 optional fields. For example, `SetupCmake.setupArgs` initializes all optional
@@ -73,8 +75,7 @@ Elixir and Rust Flow do not yet expose equivalent cleanup combinators.
 The published module's direct WIT/CLI contract remains unchanged. Generated
 bindings are caller-side source, not a new required public module argument.
 The initial generators expect a named argument record for most SDKs. Rust
-positional dependency support was fixed after the first 0.17.5 release build;
-ensure the installed artifact includes that fix if importing positional APIs.
+positional dependency support is included in 0.17.6.
 Resource, variant, and flags contracts still need additional generator support.
 Do not assume automatic DAG caching or parallel scheduling for opaque module calls.
 

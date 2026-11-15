@@ -41,12 +41,326 @@ input, structured results, list arguments, building, and validation.
 
 ## Compose modules in code
 
-FluentCI 0.17.5 generates named pipeline bindings from component dependencies.
-Every module README includes `fluentci add` instructions and examples for
-PureScript, Gleam, Elixir, ClojureScript, ReScript, Python, and TypeScript.
-The examples use generated functions and native pipeline operations without
-handwritten FFI or CLI subprocesses. See [composition support](docs/COMPOSITION.md)
-for typed result chaining, cleanup, and the initial implementation's limitations.
+This pipeline installs Bun, starts PostgreSQL and Redis, checks the application
+with Biome, and runs integration tests. It calls four independent modules and
+native FluentCI commands in one sequence. The modules are written in PureScript;
+your caller can use any SDK below.
+
+Use **FluentCI 0.17.6 or newer**. From your caller module's directory, register
+these dependencies (replace `/path/to/fluentci-modules` with your checkout):
+
+```sh
+fluentci add setup-bun --path /path/to/fluentci-modules/setup/bun
+fluentci add postgres --path /path/to/fluentci-modules/services/postgres
+fluentci add redis --path /path/to/fluentci-modules/services/redis
+fluentci add biome --path /path/to/fluentci-modules/linting/biome
+```
+
+For published versions, use `fluentci add @fluentci.io/MODULE@VERSION` instead.
+FluentCI generates the named imports and argument builders used below; no
+handwritten FFI or CLI subprocess is needed. Include generated source directories
+in your caller's SDK project and commit its manifest and lockfile.
+
+Run from the application checkout, with a working Docker daemon, a Bun lockfile,
+Biome configuration, and tests that read `DATABASE_URL` and `REDIS_URL`. This
+example uses disposable PostgreSQL credentials and fixed loopback ports
+`15432`/`16379`. Use a separate workspace, names, and ports for concurrent jobs.
+Service startup waits for readiness. `biome.check` installs its missing CLI through
+its setup dependency; its omitted run directory is allocated by the Flow binding.
+
+The `ensuring` callbacks below stop both services even if installation, linting,
+or tests fail. Each cleanup is registered separately so one failed stop does not
+prevent the other. Elixir's current limitation is explained with its example.
+Python and TypeScript use the builder chaining API released in FluentCI 0.17.6.
+Full cross-SDK execution verification remains pending. See [support details](docs/COMPOSITION.md).
+
+<details open>
+<summary>PureScript</summary>
+
+```purescript
+module Main where
+
+import Prelude
+import Data.Maybe (Maybe(..))
+import Effect (Effect)
+import FluentCI.Flow as Flow
+import FluentCI.Modules.SetupBun as Bun
+import FluentCI.Modules.Postgres as Postgres
+import FluentCI.Modules.Redis as Redis
+import FluentCI.Modules.Biome as Biome
+
+run :: Effect String
+run =
+  Flow.pipeline "integration"
+    # Flow.workdir "."
+    # Flow.ensuring (void $ Flow.pipeline "cleanup-postgres"
+        # Postgres.stop (Postgres.stopArgs { name = Just "module-postgres-ci" })
+        # Flow.run)
+    # Flow.ensuring (void $ Flow.pipeline "cleanup-redis"
+        # Redis.stop (Redis.stopArgs { name = Just "module-redis-ci" })
+        # Flow.run)
+    # Bun.setup (Bun.setupArgs { version = Just "1.4.3" })
+    # Postgres.start (Postgres.startArgs
+        { name = Just "module-postgres-ci", version = Just "17-alpine", port = Just 15432 })
+    # Redis.start (Redis.startArgs
+        { name = Just "module-redis-ci", version = Just "7-alpine", port = Just 16379 })
+    # Flow.env "DATABASE_URL" "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test"
+    # Flow.env "REDIS_URL" "redis://127.0.0.1:16379"
+    # Flow.exec [ "bun", "install", "--frozen-lockfile" ]
+    # Biome.check Biome.checkArgs
+    # Flow.exec [ "bun", "test" ]
+    # Flow.run
+```
+
+</details>
+
+<details>
+<summary>Gleam</summary>
+
+```gleam
+import gleam/option.{Some}
+import fluentci/flow
+import fluentci_modules/setup_bun as bun
+import fluentci_modules/postgres
+import fluentci_modules/redis
+import fluentci_modules/biome
+
+pub fn run() -> String {
+  flow.pipeline("integration")
+  |> flow.workdir(".")
+  |> flow.ensuring(fn() {
+    let _ = flow.pipeline("cleanup-postgres")
+      |> postgres.stop(postgres.StopArgs(..postgres.stop_args(), name: Some("module-postgres-ci")))
+      |> flow.run
+    Nil
+  })
+  |> flow.ensuring(fn() {
+    let _ = flow.pipeline("cleanup-redis")
+      |> redis.stop(redis.StopArgs(..redis.stop_args(), name: Some("module-redis-ci")))
+      |> flow.run
+    Nil
+  })
+  |> bun.setup(bun.SetupArgs(..bun.setup_args(), version: Some("1.4.3")))
+  |> postgres.start(postgres.StartArgs(..postgres.start_args(),
+    name: Some("module-postgres-ci"), version: Some("17-alpine"), port: Some(15432)))
+  |> redis.start(redis.StartArgs(..redis.start_args(),
+    name: Some("module-redis-ci"), version: Some("7-alpine"), port: Some(16379)))
+  |> flow.env("DATABASE_URL", "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test")
+  |> flow.env("REDIS_URL", "redis://127.0.0.1:16379")
+  |> flow.exec("bun", ["install", "--frozen-lockfile"])
+  |> biome.check(biome.check_args())
+  |> flow.exec("bun", ["test"])
+  |> flow.run
+}
+```
+
+Use the JavaScript target for the Gleam Wasm guest; BEAM escripts are a separate
+repository-automation target. Record constructor names come from the installed
+WIT contract; inspect generated bindings if using a different module version.
+
+</details>
+
+<details>
+<summary>Elixir</summary>
+
+```elixir
+defmodule Main do
+  use FluentCI.Plugin
+  alias FluentCI.Flow
+  alias FluentCI.Modules.{SetupBun, Postgres, Redis, Biome}
+
+  defplugin run do
+    Flow.pipeline("integration")
+    |> Flow.workdir(".")
+    |> SetupBun.setup(%{version: "1.4.3"})
+    |> Postgres.start(%{name: "module-postgres-ci", version: "17-alpine", port: 15432})
+    |> Redis.start(%{name: "module-redis-ci", version: "7-alpine", port: 16379})
+    |> Flow.exec(["bun", "install", "--frozen-lockfile"])
+    |> Biome.check(%{})
+    |> Flow.env("DATABASE_URL", "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test")
+    |> Flow.env("REDIS_URL", "redis://127.0.0.1:16379")
+    |> Flow.exec(["bun", "test"])
+    |> Flow.stdout()
+  end
+
+  defplugin stop_redis do
+    Flow.pipeline("cleanup-redis")
+    |> Redis.stop(%{name: "module-redis-ci"})
+    |> Flow.stdout()
+  end
+
+  defplugin stop_postgres do
+    Flow.pipeline("cleanup-postgres")
+    |> Postgres.stop(%{name: "module-postgres-ci"})
+    |> Flow.stdout()
+  end
+end
+```
+
+**Elixir requires runner-managed cleanup:** configure both cleanup exports as
+independent always-run steps in the same workspace, even if `run` fails. The
+current Elixir Flow DSL has no `ensuring`; an ordinary trailing stop operation or
+an Elixir `try/after` around DSL construction cannot provide runtime cleanup.
+
+</details>
+
+<details>
+<summary>ClojureScript</summary>
+
+```clojure
+(ns main.plugin
+  (:require [fluentci.flow :as flow]
+            [fluentci-modules.setup-bun :as bun]
+            [fluentci-modules.postgres :as postgres]
+            [fluentci-modules.redis :as redis]
+            [fluentci-modules.biome :as biome]))
+
+(defn run []
+  (-> (flow/pipeline "integration")
+      (flow/workdir ".")
+      (flow/ensuring #(-> (flow/pipeline "cleanup-postgres")
+                         (postgres/stop {:name "module-postgres-ci"}) flow/run!))
+      (flow/ensuring #(-> (flow/pipeline "cleanup-redis")
+                         (redis/stop {:name "module-redis-ci"}) flow/run!))
+      (bun/setup {:version "1.4.3"})
+      (postgres/start {:name "module-postgres-ci" :version "17-alpine" :port 15432})
+      (redis/start {:name "module-redis-ci" :version "7-alpine" :port 16379})
+      (flow/env "DATABASE_URL" "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test")
+      (flow/env "REDIS_URL" "redis://127.0.0.1:16379")
+      (flow/exec ["bun" "install" "--frozen-lockfile"])
+      (biome/check {})
+      (flow/exec ["bun" "test"])
+      flow/run!))
+```
+
+</details>
+
+<details>
+<summary>ReScript</summary>
+
+```rescript
+module Bun = FluentciModulesSetupBun
+module Postgres = FluentciModulesPostgres
+module Redis = FluentciModulesRedis
+module Biome = FluentciModulesBiome
+
+let run = (): string =>
+  Flow.pipeline("integration")
+  ->Flow.workdir(".")
+  ->Flow.ensuring(() => {
+    Flow.pipeline("cleanup-postgres")
+    ->Postgres.stop({...Postgres.stopArgs, "name": Some("module-postgres-ci")})
+    ->Flow.run->ignore
+  })
+  ->Flow.ensuring(() => {
+    Flow.pipeline("cleanup-redis")
+    ->Redis.stop({...Redis.stopArgs, "name": Some("module-redis-ci")})
+    ->Flow.run->ignore
+  })
+  ->Bun.setup({...Bun.setupArgs, "version": Some("1.4.3")})
+  ->Postgres.start({...Postgres.startArgs, "name": Some("module-postgres-ci"),
+    "version": Some("17-alpine"), "port": Some(15432)})
+  ->Redis.start({...Redis.startArgs, "name": Some("module-redis-ci"),
+    "version": Some("7-alpine"), "port": Some(16379)})
+  ->Flow.env("DATABASE_URL", "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test")
+  ->Flow.env("REDIS_URL", "redis://127.0.0.1:16379")
+  ->Flow.exec(["bun", "install", "--frozen-lockfile"])
+  ->Biome.check(Biome.checkArgs)
+  ->Flow.exec(["bun", "test"])
+  ->Flow.run
+```
+
+</details>
+
+<details>
+<summary>Python</summary>
+
+```python
+from fluentci.flow import pipeline
+from fluentci_modules import setup_bun, postgres, redis, biome
+
+
+def stop_postgres() -> None:
+    (pipeline("cleanup-postgres")
+     .pipe(postgres.stop, {"name": "module-postgres-ci"})
+     .run())
+
+
+def stop_redis() -> None:
+    (pipeline("cleanup-redis")
+     .pipe(redis.stop, {"name": "module-redis-ci"})
+     .run())
+
+
+def run() -> str:
+    return (
+        pipeline("integration")
+        .workdir(".")
+        .ensuring(stop_postgres)
+        .ensuring(stop_redis)
+        .pipe(setup_bun.setup, {"version": "1.4.3"})
+        .pipe(postgres.start, {
+            "name": "module-postgres-ci", "version": "17-alpine", "port": 15432,
+        })
+        .pipe(redis.start, {
+            "name": "module-redis-ci", "version": "7-alpine", "port": 16379,
+        })
+        .env("DATABASE_URL", "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test")
+        .env("REDIS_URL", "redis://127.0.0.1:16379")
+        .exec("bun", "install", "--frozen-lockfile")
+        .pipe(biome.check, {})
+        .exec("bun", "test")
+        .run()
+    )
+```
+
+</details>
+
+<details>
+<summary>TypeScript</summary>
+
+```typescript
+import * as flow from "./fluentci_modules/flow";
+import * as bun from "./fluentci_modules/setup-bun/index";
+import * as postgres from "./fluentci_modules/postgres/index";
+import * as redis from "./fluentci_modules/redis/index";
+import * as biome from "./fluentci_modules/biome/index";
+
+export function run(): string {
+  return flow.pipeline("integration")
+    .workdir(".")
+    .ensuring(() => {
+      flow.pipeline("cleanup-postgres")
+        .pipe(postgres.stop, {name: "module-postgres-ci"})
+        .run();
+    })
+    .ensuring(() => {
+      flow.pipeline("cleanup-redis")
+        .pipe(redis.stop, {name: "module-redis-ci"})
+        .run();
+    })
+    .pipe(bun.setup, {version: "1.4.3"})
+    .pipe(postgres.start, {
+      name: "module-postgres-ci", version: "17-alpine", port: 15432,
+    })
+    .pipe(redis.start, {
+      name: "module-redis-ci", version: "7-alpine", port: 16379,
+    })
+    .env("DATABASE_URL", "postgresql://fluentci:fluentci-test@127.0.0.1:15432/fluentci_test")
+    .env("REDIS_URL", "redis://127.0.0.1:16379")
+    .exec(["bun", "install", "--frozen-lockfile"])
+    .pipe(biome.check, {})
+    .exec(["bun", "test"])
+    .run();
+}
+```
+
+</details>
+
+All module calls remain deferred until the terminal operation. The service
+versions, names, and ports above are ordinary typed arguments. Other modules can
+be inserted the same way; public list arguments such as package selectors remain
+comma-separated strings. No module function here launches `fluentci run`.
 
 ## Development
 

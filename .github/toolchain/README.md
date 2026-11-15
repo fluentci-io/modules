@@ -1,6 +1,6 @@
 # CI toolchain
 
-[versions.json](./versions.json) pins FluentCI v0.17.5 archive URLs and SHA-256
+[versions.json](./versions.json) pins FluentCI v0.17.6 archive URLs and SHA-256
 checksums for Linux/macOS on x86_64/aarch64, the registry publisher DID, setup
 component versions, and tool versions.
 

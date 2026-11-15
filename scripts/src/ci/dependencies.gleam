@@ -485,6 +485,41 @@ pub fn run(root: String, check: Bool) -> Result(Nil, String) {
       }
     }),
   )
+  // Local workspace modules are not lock declarations. Their manifest
+  // dependencies are; retain downloaded registry pins and other lock data.
+  use root_lock <- result.try(f.json(root <> "/fluentci.lock"))
+  let root_declarations =
+    list.flat_map(modules, fn(module) {
+      let path = d.s(module, "path")
+      list.map(d.array(d.get(graph, d.s(module, "name"))), fn(requirement) {
+        let alias = d.s(requirement, "alias")
+        #(
+          "dependency:" <> path <> ":" <> alias,
+          d.Text(
+            "path:"
+            <> declaration(
+              alias,
+              path <> "/" <> relative(module_path(modules, alias), path),
+            ),
+          ),
+        )
+      })
+    })
+    |> list.sort(fn(a, b) { string.compare(a.0, b.0) })
+  use _ <- result.try(f.generated(
+    root <> "/fluentci.lock",
+    d.pretty(
+      d.Object(
+        list.map(d.fields(root_lock), fn(field) {
+          case field.0 {
+            "modules" -> #("modules", d.Object(root_declarations))
+            _ -> field
+          }
+        }),
+      ),
+    ),
+    check,
+  ))
   let inventory =
     d.Object(
       list.filter_map(d.fields(graph), fn(p) {
