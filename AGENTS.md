@@ -14,3 +14,15 @@
 
 - Do not run builds, tests, FluentCI plugins, installers, or VMs locally unless
   the user explicitly authorizes it. Leave runtime verification to CI.
+
+# Module registry and generated documentation
+
+- When adding, removing, or renaming a module, update
+  `docs/PIPELINE_AUDIT.md` in the same change. Keep its module count, registry
+  order, paths, and public function inventory aligned with `fluentci.toml` and
+  the module's exports.
+- Include all affected generated files, dependency locks, catalogs, and README
+  inventories in the change; do not leave regeneration drift for CI to discover.
+- Respect the local execution restriction above. When generators cannot be run,
+  mirror their output with static edits and inspect consistency; leave generator
+  checks and runtime verification to CI.

@@ -1,6 +1,6 @@
 # Pipeline module audit
 
-The registry contains 291 modules. This inventory covers every public
+The registry contains 292 modules. This inventory covers every public
 native component function, including diagnostics and literal-argument escape hatches.
 Modules require FluentCI v0.17.2+ and use typed named arguments and native returns.
 Regenerate with `escript scripts/fluentci_modules_ci audit-modules`; CI checks for drift.
@@ -97,6 +97,7 @@ BSD package routing is fixture-tested; availability varies by OS release and rep
 | [doltdb](../services/doltdb/README.md) | Run and supervise a background test dependency with native FluentCI service lifecycle and readiness. | `start` (pipeline operation), `stop` (pipeline operation), `restart` (pipeline operation), `status` (pipeline operation), `logs` (pipeline operation) |
 | [doppler](../secrets/doppler/README.md) | Inject secrets into child commands or manage secret metadata and files. | `run` (escape hatch), `version` (diagnostic), `run-command` (pipeline operation), `names` (pipeline operation), `upload` (pipeline operation) |
 | [dpkg](../packaging/dpkg/README.md) | Validate a Linux package tree and produce an architecture-specific package. | `build` (pipeline operation), `validate` (pipeline operation) |
+| [dragonfly](../services/dragonfly/README.md) | Run and supervise a background test dependency with native FluentCI service lifecycle and readiness. | `start` (pipeline operation), `stop` (pipeline operation), `restart` (pipeline operation), `status` (pipeline operation), `logs` (pipeline operation) |
 | [drizzlekit](../databases/drizzlekit/README.md) | Manage preview databases, migrations, schema deployments, queries, and database access. | `run` (escape hatch), `version` (diagnostic), `generate` (pipeline operation), `migrate` (pipeline operation), `push` (pipeline operation), `pull` (pipeline operation), `check` (pipeline operation), `up` (pipeline operation), `export-sql` (pipeline operation), `studio` (pipeline operation) |
 | [dynamodb](../services/dynamodb/README.md) | Run and supervise a background test dependency with native FluentCI service lifecycle and readiness. | `start` (pipeline operation), `stop` (pipeline operation), `restart` (pipeline operation), `status` (pipeline operation), `logs` (pipeline operation) |
 | [elasticsearch](../services/elasticsearch/README.md) | Run and supervise a background test dependency with native FluentCI service lifecycle and readiness. | `start` (pipeline operation), `stop` (pipeline operation), `restart` (pipeline operation), `status` (pipeline operation), `logs` (pipeline operation) |
