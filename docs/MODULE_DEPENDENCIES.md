@@ -51,7 +51,7 @@ artifact hashes. Generated bindings and installed dependency artifacts are ignor
 and the dependency inventory. Component generation keeps public signatures and
 return types aligned. CI checks these generated files and the dependency graph,
 builds the real imported WIT interfaces, composes each dependency-bearing module
-through its CLI help in CI without running installers, and runs host fixtures for missing tools,
+through its CLI help in nightly/manual full CI without running installers, and runs host fixtures for missing tools,
 available tools, installer errors, post-install availability, overrides, and input
 validation. Regression bundles use test-only dependency imports; the published
 Wasm uses real native component imports. The opt-in Android live workflow continues

@@ -77,7 +77,17 @@ fn build_all(
       let results =
         list.map(list.zip(group, built), fn(pair) {
           use _ <- result.try(pair.1)
-          finish(root, pair.0, logs)
+          case native.env("FLUENTCI_TEST_PROFILE") {
+            "essential" -> {
+              let _ =
+                native.stdout(
+                  d.s(pair.0, "name")
+                  <> " passed (build, unit tests, typed component validation)\n",
+                )
+              Ok(Nil)
+            }
+            _ -> finish(root, pair.0, logs)
+          }
         })
       let failures =
         list.filter_map(results, fn(value) {

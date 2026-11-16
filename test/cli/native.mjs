@@ -10,6 +10,10 @@ import { securitySuite } from './security.mjs';
 import { buildSuite } from './build.mjs';
 
 export function nativeSuite(tool, plugin) {
+  if (process.env.FLUENTCI_TEST_PROFILE === 'essential') {
+    test('native integration: scheduled/manual full CI', {skip:true},()=>{});
+    return;
+  }
   browserSuite(tool, plugin);
   securitySuite(tool, plugin);
   buildSuite(tool, plugin);

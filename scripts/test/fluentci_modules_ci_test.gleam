@@ -602,3 +602,23 @@ pub fn dependency_preparation_retries_only_dns_failures_test() {
   commands.retryable_dns_failure("fluentci.lock is missing or out of date")
   |> should.be_false
 }
+
+pub fn service_smoke_selection_and_full_shards_test() {
+  let profiles =
+    list.map(
+      ["postgres", "redis", "caddy", "cassandra", "service-vault"],
+      fn(name) { d.Object([#("name", d.Text(name))]) },
+    )
+  services.selected_profiles(profiles, "smoke", 0, 1)
+  |> should.equal(Ok(list.take(profiles, 3)))
+  let assert Ok(first) = services.selected_profiles(profiles, "full", 0, 2)
+  let assert Ok(second) = services.selected_profiles(profiles, "full", 1, 2)
+  list.length(list.append(first, second)) |> should.equal(5)
+  list.length(list.unique(list.append(first, second))) |> should.equal(5)
+  services.selected_profiles(profiles, "full", 2, 2)
+  |> result.is_error
+  |> should.be_true
+  services.selected_profiles(profiles, "unknown", 0, 1)
+  |> result.is_error
+  |> should.be_true
+}

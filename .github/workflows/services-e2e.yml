@@ -2,6 +2,13 @@ name: Services E2E
 
 on:
   workflow_dispatch:
+    inputs:
+      full:
+        description: Run the full service catalog (otherwise run smoke services)
+        type: boolean
+        default: false
+  schedule:
+    - cron: '30 2 * * *'
   pull_request:
     paths:
       - 'services/**'
@@ -30,14 +37,22 @@ permissions:
   contents: read
 
 concurrency:
-  group: services-e2e-${{ github.ref }}
+  group: services-e2e-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
   services:
-    name: All service components and native lifecycle
+    name: Service lifecycle shard ${{ matrix.shard }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON((github.event_name == 'schedule' || inputs.full == true) && '[0,1,2,3,4,5,6,7]' || '[0]') }}
+    env:
+      SERVICE_TEST_PROFILE: ${{ (github.event_name == 'schedule' || inputs.full == true) && 'full' || 'smoke' }}
+      SERVICE_TEST_SHARD: ${{ matrix.shard }}
+      SERVICE_TEST_SHARDS: ${{ (github.event_name == 'schedule' || inputs.full == true) && '8' || '1' }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: ./.github/actions/setup-toolchain
@@ -59,9 +74,9 @@ jobs:
           path: |
             services/*/output
             setup/*/output
-          key: purs-output-v1-${{ runner.os }}-${{ runner.arch }}-services-${{ hashFiles('.github/toolchain/versions.json', '**/spago.lock', '**/spago.yaml') }}-${{ hashFiles('services/*/src/**', 'setup/*/src/**', 'lib/*/src/**') }}
+          key: purs-output-v1-${{ runner.os }}-${{ runner.arch }}-services-${{ env.SERVICE_TEST_PROFILE }}-${{ matrix.shard }}-${{ hashFiles('.github/toolchain/versions.json', '**/spago.lock', '**/spago.yaml') }}-${{ hashFiles('services/*/src/**', 'setup/*/src/**', 'lib/*/src/**') }}
           restore-keys: |
-            purs-output-v1-${{ runner.os }}-${{ runner.arch }}-services-${{ hashFiles('.github/toolchain/versions.json', '**/spago.lock', '**/spago.yaml') }}-
+            purs-output-v1-${{ runner.os }}-${{ runner.arch }}-services-${{ env.SERVICE_TEST_PROFILE }}-${{ matrix.shard }}-${{ hashFiles('.github/toolchain/versions.json', '**/spago.lock', '**/spago.yaml') }}-
       - name: Build components in parallel and verify service lifecycles
         id: module-build
         env:
@@ -82,7 +97,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
-          name: service-e2e-logs
+          name: service-e2e-logs-${{ matrix.shard }}
           path: ${{ runner.temp }}/service-e2e-logs/
           if-no-files-found: warn
           retention-days: 7

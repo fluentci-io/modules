@@ -7,6 +7,10 @@ import { tmpdir } from 'node:os';
 import { fixture } from './host.mjs';
 
 export function securitySuite(tool, plugin) {
+  if (process.env.FLUENTCI_TEST_PROFILE === 'essential') {
+    test('security integration: scheduled/manual full CI', {skip:true},()=>{});
+    return;
+  }
   if (!['betterleaks','gitleaks','syft'].includes(tool.name)) return;
   const available=spawnSync('which',[tool.program],{encoding:'utf8'}).status===0;
   const required=process.env.FLUENTCI_REQUIRE_SECURITY_TESTS==='1';

@@ -7,6 +7,10 @@ import { spawn, spawnSync } from 'node:child_process';
 import { fixture } from './host.mjs';
 
 export function artifactSuite(tool, plugin) {
+  if (process.env.FLUENTCI_TEST_PROFILE === 'essential') {
+    test('artifacts integration: scheduled/manual full CI', {skip:true},()=>{});
+    return;
+  }
   if(tool.name==='nexus') {
     test('Nexus RAW transfers real files and rejects HTTP failures', async()=>{
       const server=spawn(process.execPath,['--input-type=module','-e',`

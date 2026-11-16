@@ -6,6 +6,10 @@ import { tmpdir } from 'node:os';
 import { fixture } from './host.mjs';
 
 export function browserSuite(tool, plugin) {
+  if (process.env.FLUENTCI_TEST_PROFILE === 'essential') {
+    test('browser integration: scheduled/manual full CI', {skip:true},()=>{});
+    return;
+  }
   if (!['playwright','cypress'].includes(tool.name)) return;
   const tools=process.env.FLUENTCI_BROWSER_TOOLS;
   const required=process.env.FLUENTCI_REQUIRE_BROWSER_TESTS==='1';

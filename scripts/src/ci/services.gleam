@@ -651,6 +651,41 @@ fn lifecycle(
   }
 }
 
+pub fn selected_profiles(
+  profiles: List(d.Value),
+  mode: String,
+  shard: Int,
+  shards: Int,
+) -> Result(List(d.Value), String) {
+  use _ <- result.try(c.require(
+    list.contains(["", "full", "smoke"], mode),
+    "SERVICE_TEST_PROFILE must be smoke or full",
+  ))
+  use _ <- result.try(c.require(
+    shards >= 1 && shards <= 64 && shard >= 0 && shard < shards,
+    "Invalid service shard index or count",
+  ))
+  let selected = case mode {
+    "smoke" ->
+      list.filter(profiles, fn(profile) {
+        list.contains(["postgres", "redis", "caddy"], d.s(profile, "name"))
+      })
+    _ -> profiles
+  }
+  Ok(
+    list.index_map(selected, fn(profile, index) { #(profile, index) })
+    |> list.filter(fn(pair) { pair.1 % shards == shard })
+    |> list.map(fn(pair) { pair.0 }),
+  )
+}
+
+fn shard_number(key: String, fallback: Int) -> Result(Int, String) {
+  case native.env(key) {
+    "" -> Ok(fallback)
+    value -> int.parse(value) |> result.map_error(fn(_) { "Invalid " <> key })
+  }
+}
+
 pub fn run(root: String, logs: String, workers: Int) -> Result(Nil, String) {
   use _ <- result.try(c.require(
     workers >= 1 && workers <= 32,
@@ -658,7 +693,21 @@ pub fn run(root: String, logs: String, workers: Int) -> Result(Nil, String) {
   ))
   use _ <- result.try(native.mkdir(logs))
   use catalog <- result.try(f.json(root <> "/lib/services/catalog.json"))
-  let profiles = d.array(catalog)
+  use shard <- result.try(shard_number("SERVICE_TEST_SHARD", 0))
+  use shards <- result.try(shard_number("SERVICE_TEST_SHARDS", 1))
+  use profiles <- result.try(selected_profiles(
+    d.array(catalog),
+    native.env("SERVICE_TEST_PROFILE"),
+    shard,
+    shards,
+  ))
+  use _ <- result.try(c.require(profiles != [], "No services selected"))
+  let _ =
+    native.stdout(
+      "Selected services: "
+      <> string.join(list.map(profiles, fn(p) { d.s(p, "name") }), ", ")
+      <> "\n",
+    )
   use _ <- result.try(c.stream(
     "fluentci",
     ["services", "apply", "--help"],

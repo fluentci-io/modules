@@ -5,12 +5,19 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      full:
+        description: Include native integrations and composed component smoke tests
+        type: boolean
+        default: false
+  schedule:
+    - cron: '0 2 * * *'
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
@@ -66,6 +73,7 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.validate.outputs.matrix) }}
     env:
+      FLUENTCI_TEST_PROFILE: ${{ (github.event_name == 'schedule' || inputs.full == true) && 'full' || 'essential' }}
       FLUENTCI_REQUIRE_NATIVE_TESTS: '1'
       MODULE_BUILD_CONCURRENCY: '32'
       MODULE_BATCH: ${{ toJSON(matrix.modules) }}
@@ -78,7 +86,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends dpkg-dev rpm zip unzip
       - name: Install formatter and linter integration tools
-        if: matrix.formatters
+        if: env.FLUENTCI_TEST_PROFILE == 'full' && (matrix.formatters)
         shell: bash
         run: |
           python3 -m venv "$RUNNER_TEMP/cli-python"
@@ -100,13 +108,13 @@ jobs:
           fi
           echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
       - name: Require uv integration tests
-        if: matrix.uv
+        if: env.FLUENTCI_TEST_PROFILE == 'full' && (matrix.uv)
         run: echo 'FLUENTCI_REQUIRE_CLI_NATIVE_TESTS=1' >> "$GITHUB_ENV"
       - name: Require upload adapter tests
-        if: matrix.bun
+        if: env.FLUENTCI_TEST_PROFILE == 'full' && (matrix.bun)
         run: echo 'FLUENTCI_REQUIRE_ARTIFACT_TESTS=1' >> "$GITHUB_ENV"
       - name: Install browser testing tools with Bun
-        if: matrix.browser
+        if: env.FLUENTCI_TEST_PROFILE == 'full' && (matrix.browser)
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/browser-tools"
@@ -127,14 +135,14 @@ jobs:
             echo 'FLUENTCI_REQUIRE_BROWSER_TESTS=1'
           } >> "$GITHUB_ENV"
       - name: Install offline security integration tools
-        if: toJSON(matrix.security) != '[]'
+        if: env.FLUENTCI_TEST_PROFILE == 'full' && (toJSON(matrix.security) != '[]')
         shell: bash
         run: |
           escript scripts/fluentci_modules_ci install-security-test-tools --directory "$RUNNER_TEMP/security-tools"
           echo "$RUNNER_TEMP/security-tools" >> "$GITHUB_PATH"
           echo 'FLUENTCI_REQUIRE_SECURITY_TESTS=1' >> "$GITHUB_ENV"
       - name: Install native build integration tools
-        if: matrix.build
+        if: env.FLUENTCI_TEST_PROFILE == 'full' && (matrix.build)
         shell: bash
         run: |
           if [ "$RUNNER_OS" = Linux ]; then
@@ -172,15 +180,13 @@ jobs:
           key: ${{ steps.purs-build-cache.outputs.cache-primary-key }}
       - name: Verify the build preserves committed files
         run: git diff --exit-code
-      - name: Upload test log and plugin
+      - name: Upload test diagnostics
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: modules-${{ matrix.shard }}-${{ matrix.os }}
           path: |
             ${{ runner.temp }}/module-logs/
-            */*/dist/plugin.wasm
-            */*/dist/ci.wasm
           if-no-files-found: warn
           retention-days: 7
 

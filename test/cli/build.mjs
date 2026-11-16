@@ -7,6 +7,10 @@ import { join } from 'node:path';
 import { fixture } from './host.mjs';
 
 export function buildSuite(tool, plugin) {
+  if (process.env.FLUENTCI_TEST_PROFILE === 'essential') {
+    test('build integration: scheduled/manual full CI', {skip:true},()=>{});
+    return;
+  }
   if (!['cmake','meson','ninja','sccache'].includes(tool.name)) return;
   const available=spawnSync('which',[tool.program]).status===0 && spawnSync('which',['cc']).status===0;
   test('native '+tool.name+' produces a build artifact and propagates build failures', {skip:!available&&process.env.FLUENTCI_REQUIRE_BUILD_TESTS!=='1'},()=>{
