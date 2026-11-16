@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `scan` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Scan an image, directory, or SBOM and fail on the configured severity threshold.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Grype as Dependency
+import FluentCI.Modules.Grype as Grype
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "grype-scan"
     # Flow.workdir "."
-    # Dependency.scan (Dependency.scanArgs { "source": "." })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Grype.scan (Grype.scanArgs { "source": "ghcr.io/acme/api:1.0.0" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/grype as dependency
+import fluentci_modules/grype
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("grype-scan")
   |> flow.workdir(".")
-  |> dependency.scan(dependency.scan_args("."))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> grype.scan(grype.scan_args("ghcr.io/acme/api:1.0.0"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Grype, as: Dependency
+  alias FluentCI.Modules.Grype
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("grype-scan")
     |> Flow.workdir(".")
-    |> Dependency.scan(%{"source" => "."})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Grype.scan(%{"source" => "ghcr.io/acme/api:1.0.0"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.grype :as dependency]))
+            [fluentci-modules.grype :as grype]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "grype-scan")
       (flow/workdir ".")
-      (dependency/scan {:source "."})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (grype/scan {:source "ghcr.io/acme/api:1.0.0"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("grype-scan")
   ->Flow.workdir(".")
-  ->FluentciModulesGrype.scan(FluentciModulesGrype.scanArgs(~source="."))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesGrype.scan(FluentciModulesGrype.scanArgs(~source="ghcr.io/acme/api:1.0.0"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import grype as dependency
+from fluentci_modules import grype
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("grype-scan")
         .workdir(".")
-        .pipe(dependency.scan, {"source": "."})
-        .exec("git", "diff", "--exit-code")
+        .pipe(grype.scan, {"source": "ghcr.io/acme/api:1.0.0"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/grype/index";
+import * as grype from "./fluentci_modules/grype/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("grype-scan")
     .workdir(".")
-    .pipe(dependency.scan, {"source":"."})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(grype.scan, {"source":"ghcr.io/acme/api:1.0.0"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

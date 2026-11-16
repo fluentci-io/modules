@@ -64,8 +64,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start mongodb for integration tests using mongo:8.0. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -83,14 +85,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Mongodb as Dependency
+import FluentCI.Modules.Mongodb as Mongodb
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "mongodb-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Mongodb.start (Mongodb.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -98,13 +100,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/mongodb as dependency
+import fluentci_modules/mongodb
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("mongodb-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> mongodb.start(mongodb.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -118,13 +120,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Mongodb, as: Dependency
+  alias FluentCI.Modules.Mongodb
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("mongodb-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Mongodb.start(%{})
     |> Flow.stdout()
   end
 end
@@ -138,13 +139,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.mongodb :as dependency]))
+            [fluentci-modules.mongodb :as mongodb]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "mongodb-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (mongodb/start {})
       flow/run!))
 ```
 
@@ -152,10 +152,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("mongodb-start")
   ->Flow.workdir(".")
   ->FluentciModulesMongodb.start(FluentciModulesMongodb.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -163,15 +163,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import mongodb as dependency
+from fluentci_modules import mongodb
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("mongodb-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(mongodb.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -180,13 +180,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/mongodb/index";
+import * as mongodb from "./fluentci_modules/mongodb/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("mongodb-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(mongodb.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

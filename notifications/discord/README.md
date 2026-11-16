@@ -61,8 +61,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `send` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Send one Discord notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -80,14 +82,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Discord as Dependency
+import FluentCI.Modules.Discord as Discord
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "discord-send"
     # Flow.workdir "."
-    # Dependency.send (Dependency.sendArgs { "message": "CI pipeline completed" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Discord.send (Discord.sendArgs { "message": "Release v1.0.0 deployed to staging: https://staging.example.com" })
+    # Flow.map (\result -> result.messageId)
     # Flow.run
 ```
 
@@ -95,13 +97,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/discord as dependency
+import fluentci_modules/discord
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("discord-send")
   |> flow.workdir(".")
-  |> dependency.send(dependency.send_args("CI pipeline completed"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> discord.send(discord.send_args("Release v1.0.0 deployed to staging: https://staging.example.com"))
+  |> flow.map(fn(result) { result.message_id })
   |> flow.run
 }
 ```
@@ -115,13 +117,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Discord, as: Dependency
+  alias FluentCI.Modules.Discord
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("discord-send")
     |> Flow.workdir(".")
-    |> Dependency.send(%{"message" => "CI pipeline completed"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Discord.send(%{"message" => "Release v1.0.0 deployed to staging: https://staging.example.com"})
     |> Flow.stdout()
   end
 end
@@ -135,13 +136,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.discord :as dependency]))
+            [fluentci-modules.discord :as discord]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "discord-send")
       (flow/workdir ".")
-      (dependency/send {:message "CI pipeline completed"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (discord/send {:message "Release v1.0.0 deployed to staging: https://staging.example.com"})
       flow/run!))
 ```
 
@@ -149,10 +149,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("discord-send")
   ->Flow.workdir(".")
-  ->FluentciModulesDiscord.send(FluentciModulesDiscord.sendArgs(~message="CI pipeline completed"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesDiscord.send(FluentciModulesDiscord.sendArgs(~message="Release v1.0.0 deployed to staging: https://staging.example.com"))
+  ->Flow.map(result => result.messageId)
   ->Flow.run
 ```
 
@@ -160,15 +160,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import discord as dependency
+from fluentci_modules import discord
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("discord-send")
         .workdir(".")
-        .pipe(dependency.send, {"message": "CI pipeline completed"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(discord.send, {"message": "Release v1.0.0 deployed to staging: https://staging.example.com"})
+        .map(lambda result: result.message_id)
         .run()
     )
 ```
@@ -177,13 +177,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/discord/index";
+import * as discord from "./fluentci_modules/discord/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("discord-send")
     .workdir(".")
-    .pipe(dependency.send, {"message":"CI pipeline completed"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(discord.send, {"message":"Release v1.0.0 deployed to staging: https://staging.example.com"})
+    .map(result => result.messageId)
     .run();
 }
 ```

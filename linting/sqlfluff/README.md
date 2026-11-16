@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Lint SQL and fail the pipeline on violations or parsing errors.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Sqlfluff as Dependency
+import FluentCI.Modules.Sqlfluff as Sqlfluff
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "sqlfluff-lint"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Sqlfluff.lint (Sqlfluff.lintArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/sqlfluff as dependency
+import fluentci_modules/sqlfluff
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("sqlfluff-lint")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> sqlfluff.lint(sqlfluff.lint_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Sqlfluff, as: Dependency
+  alias FluentCI.Modules.Sqlfluff
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("sqlfluff-lint")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Sqlfluff.lint(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.sqlfluff :as dependency]))
+            [fluentci-modules.sqlfluff :as sqlfluff]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "sqlfluff-lint")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (sqlfluff/lint {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("sqlfluff-lint")
   ->Flow.workdir(".")
-  ->FluentciModulesSqlfluff.version(FluentciModulesSqlfluff.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesSqlfluff.lint(FluentciModulesSqlfluff.lintArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import sqlfluff as dependency
+from fluentci_modules import sqlfluff
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("sqlfluff-lint")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(sqlfluff.lint, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/sqlfluff/index";
+import * as sqlfluff from "./fluentci_modules/sqlfluff/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("sqlfluff-lint")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(sqlfluff.lint, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

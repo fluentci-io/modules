@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload a file to a Nexus raw-repository URL.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Nexus as Dependency
+import FluentCI.Modules.Nexus as Nexus
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "nexus-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "file": "dist/artifact.tar.gz", "url": "https://example.com/webhook" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Nexus.upload (Nexus.uploadArgs { "file": "dist/app.tar.gz", "url": "https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/nexus as dependency
+import fluentci_modules/nexus
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("nexus-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("dist/artifact.tar.gz", "https://example.com/webhook"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> nexus.upload(nexus.upload_args("dist/app.tar.gz", "https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Nexus, as: Dependency
+  alias FluentCI.Modules.Nexus
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("nexus-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"file" => "dist/artifact.tar.gz", "url" => "https://example.com/webhook"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Nexus.upload(%{"file" => "dist/app.tar.gz", "url" => "https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.nexus :as dependency]))
+            [fluentci-modules.nexus :as nexus]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "nexus-upload")
       (flow/workdir ".")
-      (dependency/upload {:file "dist/artifact.tar.gz", :url "https://example.com/webhook"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (nexus/upload {:file "dist/app.tar.gz", :url "https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("nexus-upload")
   ->Flow.workdir(".")
-  ->FluentciModulesNexus.upload(FluentciModulesNexus.uploadArgs(~file="dist/artifact.tar.gz", ~url="https://example.com/webhook"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesNexus.upload(FluentciModulesNexus.uploadArgs(~file="dist/app.tar.gz", ~url="https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import nexus as dependency
+from fluentci_modules import nexus
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("nexus-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"file": "dist/artifact.tar.gz", "url": "https://example.com/webhook"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(nexus.upload, {"file": "dist/app.tar.gz", "url": "https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/nexus/index";
+import * as nexus from "./fluentci_modules/nexus/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("nexus-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"file":"dist/artifact.tar.gz","url":"https://example.com/webhook"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(nexus.upload, {"file":"dist/app.tar.gz","url":"https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

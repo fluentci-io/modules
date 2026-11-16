@@ -61,8 +61,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `send` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Send one Telegram notification through curl and verify its delivery acknowledgement. Credentials come from the host environment.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -80,14 +82,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Telegram as Dependency
+import FluentCI.Modules.Telegram as Telegram
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "telegram-send"
     # Flow.workdir "."
-    # Dependency.send (Dependency.sendArgs { "message": "CI pipeline completed", "chatId": "example-chat-id" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Telegram.send (Telegram.sendArgs { "message": "Release v1.0.0 deployed to staging: https://staging.example.com", "chatId": "-1001234567890" })
+    # Flow.map (\result -> result.messageId)
     # Flow.run
 ```
 
@@ -95,13 +97,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/telegram as dependency
+import fluentci_modules/telegram
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("telegram-send")
   |> flow.workdir(".")
-  |> dependency.send(dependency.send_args("CI pipeline completed", "example-chat-id"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> telegram.send(telegram.send_args("Release v1.0.0 deployed to staging: https://staging.example.com", "-1001234567890"))
+  |> flow.map(fn(result) { result.message_id })
   |> flow.run
 }
 ```
@@ -115,13 +117,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Telegram, as: Dependency
+  alias FluentCI.Modules.Telegram
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("telegram-send")
     |> Flow.workdir(".")
-    |> Dependency.send(%{"message" => "CI pipeline completed", "chat_id" => "example-chat-id"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Telegram.send(%{"message" => "Release v1.0.0 deployed to staging: https://staging.example.com", "chat_id" => "-1001234567890"})
     |> Flow.stdout()
   end
 end
@@ -135,13 +136,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.telegram :as dependency]))
+            [fluentci-modules.telegram :as telegram]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "telegram-send")
       (flow/workdir ".")
-      (dependency/send {:message "CI pipeline completed", :chatId "example-chat-id"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (telegram/send {:message "Release v1.0.0 deployed to staging: https://staging.example.com", :chatId "-1001234567890"})
       flow/run!))
 ```
 
@@ -149,10 +149,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("telegram-send")
   ->Flow.workdir(".")
-  ->FluentciModulesTelegram.send(FluentciModulesTelegram.sendArgs(~message="CI pipeline completed", ~chatId="example-chat-id"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesTelegram.send(FluentciModulesTelegram.sendArgs(~message="Release v1.0.0 deployed to staging: https://staging.example.com", ~chatId="-1001234567890"))
+  ->Flow.map(result => result.messageId)
   ->Flow.run
 ```
 
@@ -160,15 +160,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import telegram as dependency
+from fluentci_modules import telegram
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("telegram-send")
         .workdir(".")
-        .pipe(dependency.send, {"message": "CI pipeline completed", "chat_id": "example-chat-id"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(telegram.send, {"message": "Release v1.0.0 deployed to staging: https://staging.example.com", "chat_id": "-1001234567890"})
+        .map(lambda result: result.message_id)
         .run()
     )
 ```
@@ -177,13 +177,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/telegram/index";
+import * as telegram from "./fluentci_modules/telegram/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("telegram-send")
     .workdir(".")
-    .pipe(dependency.send, {"message":"CI pipeline completed","chatId":"example-chat-id"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(telegram.send, {"message":"Release v1.0.0 deployed to staging: https://staging.example.com","chatId":"-1001234567890"})
+    .map(result => result.messageId)
     .run();
 }
 ```

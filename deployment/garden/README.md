@@ -42,8 +42,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Build selected actions and their build dependencies.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -61,14 +63,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Garden as Dependency
+import FluentCI.Modules.Garden as Garden
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "garden-build"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Garden.build (Garden.buildArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -76,13 +78,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/garden as dependency
+import fluentci_modules/garden
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("garden-build")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> garden.build(garden.build_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -96,13 +98,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Garden, as: Dependency
+  alias FluentCI.Modules.Garden
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("garden-build")
     |> Flow.workdir(".")
-    |> Dependency.build(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Garden.build(%{})
     |> Flow.stdout()
   end
 end
@@ -116,13 +117,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.garden :as dependency]))
+            [fluentci-modules.garden :as garden]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "garden-build")
       (flow/workdir ".")
-      (dependency/build {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (garden/build {})
       flow/run!))
 ```
 
@@ -130,10 +130,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("garden-build")
   ->Flow.workdir(".")
   ->FluentciModulesGarden.build(FluentciModulesGarden.buildArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -141,15 +141,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import garden as dependency
+from fluentci_modules import garden
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("garden-build")
         .workdir(".")
-        .pipe(dependency.build, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(garden.build, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -158,13 +158,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/garden/index";
+import * as garden from "./fluentci_modules/garden/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("garden-build")
     .workdir(".")
-    .pipe(dependency.build, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(garden.build, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

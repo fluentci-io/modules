@@ -63,8 +63,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start nats for integration tests using nats:2-alpine. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -82,14 +84,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Nats as Dependency
+import FluentCI.Modules.Nats as Nats
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "nats-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Nats.start (Nats.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -97,13 +99,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/nats as dependency
+import fluentci_modules/nats
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("nats-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> nats.start(nats.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -117,13 +119,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Nats, as: Dependency
+  alias FluentCI.Modules.Nats
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("nats-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Nats.start(%{})
     |> Flow.stdout()
   end
 end
@@ -137,13 +138,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.nats :as dependency]))
+            [fluentci-modules.nats :as nats]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "nats-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (nats/start {})
       flow/run!))
 ```
 
@@ -151,10 +151,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("nats-start")
   ->Flow.workdir(".")
   ->FluentciModulesNats.start(FluentciModulesNats.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -162,15 +162,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import nats as dependency
+from fluentci_modules import nats
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("nats-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(nats.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -179,13 +179,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/nats/index";
+import * as nats from "./fluentci_modules/nats/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("nats-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(nats.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

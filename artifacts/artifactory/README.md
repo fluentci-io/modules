@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload build artifacts using a configured JFrog server.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Artifactory as Dependency
+import FluentCI.Modules.Artifactory as Artifactory
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "artifactory-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "pattern": "example-pattern", "target": "example-target" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Artifactory.upload (Artifactory.uploadArgs { "pattern": "dist/*.tar.gz", "target": "releases/api/1.0.0/" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/artifactory as dependency
+import fluentci_modules/artifactory
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("artifactory-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("example-pattern", "example-target"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> artifactory.upload(artifactory.upload_args("dist/*.tar.gz", "releases/api/1.0.0/"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Artifactory, as: Dependency
+  alias FluentCI.Modules.Artifactory
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("artifactory-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"pattern" => "example-pattern", "target" => "example-target"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Artifactory.upload(%{"pattern" => "dist/*.tar.gz", "target" => "releases/api/1.0.0/"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.artifactory :as dependency]))
+            [fluentci-modules.artifactory :as artifactory]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "artifactory-upload")
       (flow/workdir ".")
-      (dependency/upload {:pattern "example-pattern", :target "example-target"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (artifactory/upload {:pattern "dist/*.tar.gz", :target "releases/api/1.0.0/"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("artifactory-upload")
   ->Flow.workdir(".")
-  ->FluentciModulesArtifactory.upload(FluentciModulesArtifactory.uploadArgs(~pattern="example-pattern", ~target="example-target"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesArtifactory.upload(FluentciModulesArtifactory.uploadArgs(~pattern="dist/*.tar.gz", ~target="releases/api/1.0.0/"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import artifactory as dependency
+from fluentci_modules import artifactory
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("artifactory-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"pattern": "example-pattern", "target": "example-target"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(artifactory.upload, {"pattern": "dist/*.tar.gz", "target": "releases/api/1.0.0/"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/artifactory/index";
+import * as artifactory from "./fluentci_modules/artifactory/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("artifactory-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"pattern":"example-pattern","target":"example-target"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(artifactory.upload, {"pattern":"dist/*.tar.gz","target":"releases/api/1.0.0/"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

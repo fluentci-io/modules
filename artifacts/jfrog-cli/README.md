@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload build artifacts using a configured JFrog server.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.JfrogCli as Dependency
+import FluentCI.Modules.JfrogCli as JfrogCli
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "jfrog-cli-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "pattern": "example-pattern", "target": "example-target" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # JfrogCli.upload (JfrogCli.uploadArgs { "pattern": "dist/*.tar.gz", "target": "releases/api/1.0.0/" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/jfrog_cli as dependency
+import fluentci_modules/jfrog_cli
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("jfrog-cli-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("example-pattern", "example-target"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> jfrog_cli.upload(jfrog_cli.upload_args("dist/*.tar.gz", "releases/api/1.0.0/"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.JfrogCli, as: Dependency
+  alias FluentCI.Modules.JfrogCli
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("jfrog-cli-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"pattern" => "example-pattern", "target" => "example-target"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> JfrogCli.upload(%{"pattern" => "dist/*.tar.gz", "target" => "releases/api/1.0.0/"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.jfrog-cli :as dependency]))
+            [fluentci-modules.jfrog-cli :as jfrog_cli]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "jfrog-cli-upload")
       (flow/workdir ".")
-      (dependency/upload {:pattern "example-pattern", :target "example-target"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (jfrog_cli/upload {:pattern "dist/*.tar.gz", :target "releases/api/1.0.0/"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("jfrog-cli-upload")
   ->Flow.workdir(".")
-  ->FluentciModulesJfrogCli.upload(FluentciModulesJfrogCli.uploadArgs(~pattern="example-pattern", ~target="example-target"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesJfrogCli.upload(FluentciModulesJfrogCli.uploadArgs(~pattern="dist/*.tar.gz", ~target="releases/api/1.0.0/"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import jfrog_cli as dependency
+from fluentci_modules import jfrog_cli
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("jfrog-cli-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"pattern": "example-pattern", "target": "example-target"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(jfrog_cli.upload, {"pattern": "dist/*.tar.gz", "target": "releases/api/1.0.0/"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/jfrog-cli/index";
+import * as jfrog_cli from "./fluentci_modules/jfrog-cli/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("jfrog-cli-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"pattern":"example-pattern","target":"example-target"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(jfrog_cli.upload, {"pattern":"dist/*.tar.gz","target":"releases/api/1.0.0/"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

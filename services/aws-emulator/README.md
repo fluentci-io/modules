@@ -120,8 +120,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start aws-emulator for integration tests using fluentci/aws-emulator:local. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -139,14 +141,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.AwsEmulator as Dependency
+import FluentCI.Modules.AwsEmulator as AwsEmulator
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "aws-emulator-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs { "stateDir": "/tmp/fluentci-example-data" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # AwsEmulator.start (AwsEmulator.startArgs { "stateDir": "/tmp/ci-aws-emulator" })
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -154,13 +156,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/aws_emulator as dependency
+import fluentci_modules/aws_emulator
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("aws-emulator-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args("/tmp/fluentci-example-data"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> aws_emulator.start(aws_emulator.start_args("/tmp/ci-aws-emulator"))
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -174,13 +176,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.AwsEmulator, as: Dependency
+  alias FluentCI.Modules.AwsEmulator
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("aws-emulator-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{"state_dir" => "/tmp/fluentci-example-data"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> AwsEmulator.start(%{"state_dir" => "/tmp/ci-aws-emulator"})
     |> Flow.stdout()
   end
 end
@@ -194,13 +195,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.aws-emulator :as dependency]))
+            [fluentci-modules.aws-emulator :as aws_emulator]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "aws-emulator-start")
       (flow/workdir ".")
-      (dependency/start {:stateDir "/tmp/fluentci-example-data"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (aws_emulator/start {:stateDir "/tmp/ci-aws-emulator"})
       flow/run!))
 ```
 
@@ -208,10 +208,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("aws-emulator-start")
   ->Flow.workdir(".")
-  ->FluentciModulesAwsEmulator.start(FluentciModulesAwsEmulator.startArgs(~stateDir="/tmp/fluentci-example-data"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesAwsEmulator.start(FluentciModulesAwsEmulator.startArgs(~stateDir="/tmp/ci-aws-emulator"))
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -219,15 +219,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import aws_emulator as dependency
+from fluentci_modules import aws_emulator
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("aws-emulator-start")
         .workdir(".")
-        .pipe(dependency.start, {"state_dir": "/tmp/fluentci-example-data"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(aws_emulator.start, {"state_dir": "/tmp/ci-aws-emulator"})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -236,13 +236,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/aws-emulator/index";
+import * as aws_emulator from "./fluentci_modules/aws-emulator/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("aws-emulator-start")
     .workdir(".")
-    .pipe(dependency.start, {"stateDir":"/tmp/fluentci-example-data"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(aws_emulator.start, {"stateDir":"/tmp/ci-aws-emulator"})
+    .map(result => result.endpoint)
     .run();
 }
 ```

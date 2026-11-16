@@ -41,8 +41,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `check` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Check generated migrations for collisions before merging.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -60,14 +62,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Drizzlekit as Dependency
+import FluentCI.Modules.Drizzlekit as Drizzlekit
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "drizzlekit-check"
     # Flow.workdir "."
-    # Dependency.check (Dependency.checkArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Drizzlekit.check (Drizzlekit.checkArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -75,13 +77,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/drizzlekit as dependency
+import fluentci_modules/drizzlekit
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("drizzlekit-check")
   |> flow.workdir(".")
-  |> dependency.check(dependency.check_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> drizzlekit.check(drizzlekit.check_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -95,13 +97,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Drizzlekit, as: Dependency
+  alias FluentCI.Modules.Drizzlekit
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("drizzlekit-check")
     |> Flow.workdir(".")
-    |> Dependency.check(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Drizzlekit.check(%{})
     |> Flow.stdout()
   end
 end
@@ -115,13 +116,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.drizzlekit :as dependency]))
+            [fluentci-modules.drizzlekit :as drizzlekit]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "drizzlekit-check")
       (flow/workdir ".")
-      (dependency/check {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (drizzlekit/check {})
       flow/run!))
 ```
 
@@ -129,10 +129,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("drizzlekit-check")
   ->Flow.workdir(".")
   ->FluentciModulesDrizzlekit.check(FluentciModulesDrizzlekit.checkArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -140,15 +140,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import drizzlekit as dependency
+from fluentci_modules import drizzlekit
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("drizzlekit-check")
         .workdir(".")
-        .pipe(dependency.check, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(drizzlekit.check, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -157,13 +157,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/drizzlekit/index";
+import * as drizzlekit from "./fluentci_modules/drizzlekit/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("drizzlekit-check")
     .workdir(".")
-    .pipe(dependency.check, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(drizzlekit.check, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

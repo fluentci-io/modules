@@ -545,16 +545,18 @@ pub fn readme_named_functions_preserve_native_results_and_language_pipes_test() 
   list.each(
     [
       "fluentci add redis --path",
-      "# Dependency.start (Dependency.startArgs)",
-      "|> dependency.start(dependency.start_args())",
+      "# Redis.start (Redis.startArgs)",
+      "|> redis.start(redis.start_args())",
       "->FluentciModulesRedis.start(FluentciModulesRedis.startArgs)",
-      "dependency/start",
-      ".pipe(dependency.start, {})",
-      ".exec([\"git\", \"diff\", \"--exit-code\"])",
+      "redis/start",
+      ".pipe(redis.start, {})",
+      "Flow.map (\\result -> result.endpoint)",
       "Flow.stdout()",
     ],
     fn(fragment) { string.contains(text, fragment) |> should.be_true },
   )
+  string.contains(text, "--exit-code") |> should.be_false
+  string.contains(text, " as dependency") |> should.be_false
   string.contains(text, "invoke") |> should.be_false
   string.contains(text, "fluentci run") |> should.be_false
   string.contains(text, "{{") |> should.be_false
@@ -619,6 +621,27 @@ pub fn service_smoke_selection_and_full_shards_test() {
   |> result.is_error
   |> should.be_true
   services.selected_profiles(profiles, "unknown", 0, 1)
+  |> result.is_error
+  |> should.be_true
+}
+
+pub fn readme_scenarios_select_module_operations_and_require_arguments_test() {
+  let assert Ok(schema) =
+    d.parse(
+      "{\"name\":\"git\",\"exports\":{\"setup\":{},\"clone\":{\"input\":{\"required\":[\"runDir\",\"url\"]}}},\"readmeExample\":{\"operation\":\"clone\",\"arguments\":{\"url\":\"https://github.com/acme/api.git\"}}}",
+    )
+  readmes.example(schema)
+  |> should.equal(
+    Ok(#(
+      "clone",
+      d.Object([#("url", d.Text("https://github.com/acme/api.git"))]),
+    )),
+  )
+  readmes.example(d.put(
+    schema,
+    "readmeExample",
+    d.Object([#("operation", d.Text("clone")), #("arguments", d.Object([]))]),
+  ))
   |> result.is_error
   |> should.be_true
 }

@@ -82,8 +82,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start typesense for integration tests using typesense/typesense:29.0. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -101,14 +103,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Typesense as Dependency
+import FluentCI.Modules.Typesense as Typesense
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "typesense-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Typesense.start (Typesense.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -116,13 +118,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/typesense as dependency
+import fluentci_modules/typesense
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("typesense-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> typesense.start(typesense.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -136,13 +138,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Typesense, as: Dependency
+  alias FluentCI.Modules.Typesense
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("typesense-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Typesense.start(%{})
     |> Flow.stdout()
   end
 end
@@ -156,13 +157,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.typesense :as dependency]))
+            [fluentci-modules.typesense :as typesense]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "typesense-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (typesense/start {})
       flow/run!))
 ```
 
@@ -170,10 +170,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("typesense-start")
   ->Flow.workdir(".")
   ->FluentciModulesTypesense.start(FluentciModulesTypesense.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -181,15 +181,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import typesense as dependency
+from fluentci_modules import typesense
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("typesense-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(typesense.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -198,13 +198,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/typesense/index";
+import * as typesense from "./fluentci_modules/typesense/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("typesense-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(typesense.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

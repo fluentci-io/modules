@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `analyze` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Audit GitHub Actions/GitLab CI with a score gate and failing provider/collection errors.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Plumber as Dependency
+import FluentCI.Modules.Plumber as Plumber
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "plumber-analyze"
     # Flow.workdir "."
-    # Dependency.analyze (Dependency.analyzeArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Plumber.analyze (Plumber.analyzeArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/plumber as dependency
+import fluentci_modules/plumber
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("plumber-analyze")
   |> flow.workdir(".")
-  |> dependency.analyze(dependency.analyze_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> plumber.analyze(plumber.analyze_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Plumber, as: Dependency
+  alias FluentCI.Modules.Plumber
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("plumber-analyze")
     |> Flow.workdir(".")
-    |> Dependency.analyze(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Plumber.analyze(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.plumber :as dependency]))
+            [fluentci-modules.plumber :as plumber]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "plumber-analyze")
       (flow/workdir ".")
-      (dependency/analyze {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (plumber/analyze {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("plumber-analyze")
   ->Flow.workdir(".")
   ->FluentciModulesPlumber.analyze(FluentciModulesPlumber.analyzeArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import plumber as dependency
+from fluentci_modules import plumber
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("plumber-analyze")
         .workdir(".")
-        .pipe(dependency.analyze, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(plumber.analyze, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/plumber/index";
+import * as plumber from "./fluentci_modules/plumber/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("plumber-analyze")
     .workdir(".")
-    .pipe(dependency.analyze, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(plumber.analyze, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

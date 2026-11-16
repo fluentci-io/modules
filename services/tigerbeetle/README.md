@@ -51,8 +51,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start tigerbeetle for integration tests using the prebuilt native binary. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -70,14 +72,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Tigerbeetle as Dependency
+import FluentCI.Modules.Tigerbeetle as Tigerbeetle
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "tigerbeetle-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs { "stateDir": "/tmp/fluentci-example-data" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Tigerbeetle.start (Tigerbeetle.startArgs { "stateDir": "/tmp/ci-tigerbeetle" })
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -85,13 +87,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/tigerbeetle as dependency
+import fluentci_modules/tigerbeetle
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("tigerbeetle-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args("/tmp/fluentci-example-data"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> tigerbeetle.start(tigerbeetle.start_args("/tmp/ci-tigerbeetle"))
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -105,13 +107,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Tigerbeetle, as: Dependency
+  alias FluentCI.Modules.Tigerbeetle
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("tigerbeetle-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{"state_dir" => "/tmp/fluentci-example-data"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Tigerbeetle.start(%{"state_dir" => "/tmp/ci-tigerbeetle"})
     |> Flow.stdout()
   end
 end
@@ -125,13 +126,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.tigerbeetle :as dependency]))
+            [fluentci-modules.tigerbeetle :as tigerbeetle]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "tigerbeetle-start")
       (flow/workdir ".")
-      (dependency/start {:stateDir "/tmp/fluentci-example-data"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (tigerbeetle/start {:stateDir "/tmp/ci-tigerbeetle"})
       flow/run!))
 ```
 
@@ -139,10 +139,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("tigerbeetle-start")
   ->Flow.workdir(".")
-  ->FluentciModulesTigerbeetle.start(FluentciModulesTigerbeetle.startArgs(~stateDir="/tmp/fluentci-example-data"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesTigerbeetle.start(FluentciModulesTigerbeetle.startArgs(~stateDir="/tmp/ci-tigerbeetle"))
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -150,15 +150,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import tigerbeetle as dependency
+from fluentci_modules import tigerbeetle
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("tigerbeetle-start")
         .workdir(".")
-        .pipe(dependency.start, {"state_dir": "/tmp/fluentci-example-data"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(tigerbeetle.start, {"state_dir": "/tmp/ci-tigerbeetle"})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -167,13 +167,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/tigerbeetle/index";
+import * as tigerbeetle from "./fluentci_modules/tigerbeetle/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("tigerbeetle-start")
     .workdir(".")
-    .pipe(dependency.start, {"stateDir":"/tmp/fluentci-example-data"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(tigerbeetle.start, {"stateDir":"/tmp/ci-tigerbeetle"})
+    .map(result => result.endpoint)
     .run();
 }
 ```

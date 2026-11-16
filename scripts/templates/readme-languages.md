@@ -14,8 +14,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `{{function}}` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+{{scenario}}
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -31,30 +33,30 @@ See [composition support and limitations](../../docs/COMPOSITION.md).
 module Main where
 
 import Prelude
-import Effect (Effect)
+{{purs_extra_imports}}import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.{{module_pascal}} as Dependency
+import FluentCI.Modules.{{module_pascal}} as {{module_pascal}}
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "{{pipeline_name}}"
     # Flow.workdir "."
-    # Dependency.{{js_function}} ({{purs_arguments}})
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # {{module_pascal}}.{{js_function}} ({{purs_arguments}})
+    # Flow.map (\result -> {{purs_projection}})
     # Flow.run
 ```
 
 ### Gleam
 
 ```gleam
-import fluentci/flow
-import fluentci_modules/{{python_alias}} as dependency
+{{gleam_extra_imports}}import fluentci/flow
+import fluentci_modules/{{python_alias}}
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("{{pipeline_name}}")
   |> flow.workdir(".")
-  |> dependency.{{python_function}}(dependency.{{python_function}}_args({{gleam_required}}))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> {{python_alias}}.{{python_function}}({{python_alias}}.{{python_function}}_args({{gleam_required}}))
+  |> flow.map(fn(result) { {{gleam_projection}} })
   |> flow.run
 }
 ```
@@ -68,13 +70,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.{{module_pascal}}, as: Dependency
+  alias FluentCI.Modules.{{module_pascal}}
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("{{pipeline_name}}")
     |> Flow.workdir(".")
-    |> Dependency.{{python_function}}({{elixir_arguments}})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> {{module_pascal}}.{{python_function}}({{elixir_arguments}})
     |> Flow.stdout()
   end
 end
@@ -88,13 +89,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.{{module}} :as dependency]))
+            [fluentci-modules.{{module}} :as {{python_alias}}]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "{{pipeline_name}}")
       (flow/workdir ".")
-      (dependency/{{function_kebab}} {{cljs_arguments}})
-      (flow/exec ["git" "diff" "--exit-code"])
+      ({{python_alias}}/{{function_kebab}} {{cljs_arguments}})
       flow/run!))
 ```
 
@@ -102,10 +102,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("{{pipeline_name}}")
   ->Flow.workdir(".")
   ->FluentciModules{{module_pascal}}.{{js_function}}({{rescript_arguments}})
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => {{rescript_projection}})
   ->Flow.run
 ```
 
@@ -113,15 +113,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import {{python_alias}} as dependency
+from fluentci_modules import {{python_alias}}
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("{{pipeline_name}}")
         .workdir(".")
-        .pipe(dependency.{{python_function}}, {{python_arguments}})
-        .exec("git", "diff", "--exit-code")
+        .pipe({{python_alias}}.{{python_function}}, {{python_arguments}})
+        .map(lambda result: {{python_projection}})
         .run()
     )
 ```
@@ -130,13 +130,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/{{module}}/index";
+import * as {{python_alias}} from "./fluentci_modules/{{module}}/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("{{pipeline_name}}")
     .workdir(".")
-    .pipe(dependency.{{js_function}}, {{js_object}})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe({{python_alias}}.{{js_function}}, {{js_object}})
+    .map(result => {{js_projection}})
     .run();
 }
 ```

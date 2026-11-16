@@ -66,8 +66,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Validate flag-state YAML and fail the pipeline on validation issues.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -85,14 +87,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Flipt as Dependency
+import FluentCI.Modules.Flipt as Flipt
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "flipt-validate"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Flipt.validate (Flipt.validateArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -100,13 +102,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/flipt as dependency
+import fluentci_modules/flipt
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("flipt-validate")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> flipt.validate(flipt.validate_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -120,13 +122,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Flipt, as: Dependency
+  alias FluentCI.Modules.Flipt
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("flipt-validate")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Flipt.validate(%{})
     |> Flow.stdout()
   end
 end
@@ -140,13 +141,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.flipt :as dependency]))
+            [fluentci-modules.flipt :as flipt]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "flipt-validate")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (flipt/validate {})
       flow/run!))
 ```
 
@@ -154,10 +154,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("flipt-validate")
   ->Flow.workdir(".")
-  ->FluentciModulesFlipt.setup(FluentciModulesFlipt.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesFlipt.validate(FluentciModulesFlipt.validateArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -165,15 +165,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import flipt as dependency
+from fluentci_modules import flipt
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("flipt-validate")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(flipt.validate, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -182,13 +182,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/flipt/index";
+import * as flipt from "./fluentci_modules/flipt/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("flipt-validate")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(flipt.validate, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

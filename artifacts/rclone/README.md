@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `check` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Verify transferred artifact content against the source.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Rclone as Dependency
+import FluentCI.Modules.Rclone as Rclone
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "rclone-check"
     # Flow.workdir "."
-    # Dependency.check (Dependency.checkArgs { "source": ".", "destination": "example-destination" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Rclone.check (Rclone.checkArgs { "source": ".", "destination": "s3:ci-artifacts/releases/1.0.0" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/rclone as dependency
+import fluentci_modules/rclone
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("rclone-check")
   |> flow.workdir(".")
-  |> dependency.check(dependency.check_args(".", "example-destination"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> rclone.check(rclone.check_args(".", "s3:ci-artifacts/releases/1.0.0"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Rclone, as: Dependency
+  alias FluentCI.Modules.Rclone
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("rclone-check")
     |> Flow.workdir(".")
-    |> Dependency.check(%{"source" => ".", "destination" => "example-destination"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Rclone.check(%{"source" => ".", "destination" => "s3:ci-artifacts/releases/1.0.0"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.rclone :as dependency]))
+            [fluentci-modules.rclone :as rclone]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "rclone-check")
       (flow/workdir ".")
-      (dependency/check {:source ".", :destination "example-destination"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (rclone/check {:source ".", :destination "s3:ci-artifacts/releases/1.0.0"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("rclone-check")
   ->Flow.workdir(".")
-  ->FluentciModulesRclone.check(FluentciModulesRclone.checkArgs(~source=".", ~destination="example-destination"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesRclone.check(FluentciModulesRclone.checkArgs(~source=".", ~destination="s3:ci-artifacts/releases/1.0.0"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import rclone as dependency
+from fluentci_modules import rclone
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("rclone-check")
         .workdir(".")
-        .pipe(dependency.check, {"source": ".", "destination": "example-destination"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(rclone.check, {"source": ".", "destination": "s3:ci-artifacts/releases/1.0.0"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/rclone/index";
+import * as rclone from "./fluentci_modules/rclone/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("rclone-check")
     .workdir(".")
-    .pipe(dependency.check, {"source":".","destination":"example-destination"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(rclone.check, {"source":".","destination":"s3:ci-artifacts/releases/1.0.0"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

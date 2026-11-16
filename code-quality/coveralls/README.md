@@ -74,8 +74,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload coverage reports using the universal Coveralls reporter.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -93,14 +95,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Coveralls as Dependency
+import FluentCI.Modules.Coveralls as Coveralls
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "coveralls-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "files": "coverage/lcov.info" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Coveralls.upload (Coveralls.uploadArgs { "files": "coverage/lcov.info" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -108,13 +110,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/coveralls as dependency
+import fluentci_modules/coveralls
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("coveralls-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("coverage/lcov.info"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> coveralls.upload(coveralls.upload_args("coverage/lcov.info"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -128,13 +130,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Coveralls, as: Dependency
+  alias FluentCI.Modules.Coveralls
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("coveralls-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"files" => "coverage/lcov.info"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Coveralls.upload(%{"files" => "coverage/lcov.info"})
     |> Flow.stdout()
   end
 end
@@ -148,13 +149,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.coveralls :as dependency]))
+            [fluentci-modules.coveralls :as coveralls]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "coveralls-upload")
       (flow/workdir ".")
-      (dependency/upload {:files "coverage/lcov.info"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (coveralls/upload {:files "coverage/lcov.info"})
       flow/run!))
 ```
 
@@ -162,10 +162,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("coveralls-upload")
   ->Flow.workdir(".")
   ->FluentciModulesCoveralls.upload(FluentciModulesCoveralls.uploadArgs(~files="coverage/lcov.info"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -173,15 +173,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import coveralls as dependency
+from fluentci_modules import coveralls
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("coveralls-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"files": "coverage/lcov.info"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(coveralls.upload, {"files": "coverage/lcov.info"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -190,13 +190,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/coveralls/index";
+import * as coveralls from "./fluentci_modules/coveralls/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("coveralls-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"files":"coverage/lcov.info"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(coveralls.upload, {"files":"coverage/lcov.info"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

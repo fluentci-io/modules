@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Scan directory contents with findings redacted and a failing exit status on leaks.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Gitleaks as Dependency
+import FluentCI.Modules.Gitleaks as Gitleaks
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "gitleaks-scan-dir"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Gitleaks.scanDir (Gitleaks.scanDirArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/gitleaks as dependency
+import fluentci_modules/gitleaks
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("gitleaks-scan-dir")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> gitleaks.scan_dir(gitleaks.scan_dir_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Gitleaks, as: Dependency
+  alias FluentCI.Modules.Gitleaks
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("gitleaks-scan-dir")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Gitleaks.scan_dir(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.gitleaks :as dependency]))
+            [fluentci-modules.gitleaks :as gitleaks]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "gitleaks-scan-dir")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (gitleaks/scan-dir {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("gitleaks-scan-dir")
   ->Flow.workdir(".")
-  ->FluentciModulesGitleaks.version(FluentciModulesGitleaks.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesGitleaks.scanDir(FluentciModulesGitleaks.scanDirArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import gitleaks as dependency
+from fluentci_modules import gitleaks
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("gitleaks-scan-dir")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(gitleaks.scan_dir, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/gitleaks/index";
+import * as gitleaks from "./fluentci_modules/gitleaks/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("gitleaks-scan-dir")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(gitleaks.scanDir, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

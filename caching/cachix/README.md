@@ -71,8 +71,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Push the result closure to a Cachix cache using host credentials.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -90,14 +92,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Cachix as Dependency
+import FluentCI.Modules.Cachix as Cachix
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "cachix-push"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs { "cache": "example-cache" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Cachix.push (Cachix.pushArgs { "cache": "acme-builds" })
+    # Flow.map (\result -> result.cache)
     # Flow.run
 ```
 
@@ -105,13 +107,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/cachix as dependency
+import fluentci_modules/cachix
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("cachix-push")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args("example-cache"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> cachix.push(cachix.push_args("acme-builds"))
+  |> flow.map(fn(result) { result.cache })
   |> flow.run
 }
 ```
@@ -125,13 +127,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Cachix, as: Dependency
+  alias FluentCI.Modules.Cachix
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("cachix-push")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{"cache" => "example-cache"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Cachix.push(%{"cache" => "acme-builds"})
     |> Flow.stdout()
   end
 end
@@ -145,13 +146,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.cachix :as dependency]))
+            [fluentci-modules.cachix :as cachix]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "cachix-push")
       (flow/workdir ".")
-      (dependency/setup {:cache "example-cache"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (cachix/push {:cache "acme-builds"})
       flow/run!))
 ```
 
@@ -159,10 +159,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("cachix-push")
   ->Flow.workdir(".")
-  ->FluentciModulesCachix.setup(FluentciModulesCachix.setupArgs(~cache="example-cache"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesCachix.push(FluentciModulesCachix.pushArgs(~cache="acme-builds"))
+  ->Flow.map(result => result.cache)
   ->Flow.run
 ```
 
@@ -170,15 +170,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import cachix as dependency
+from fluentci_modules import cachix
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("cachix-push")
         .workdir(".")
-        .pipe(dependency.setup, {"cache": "example-cache"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(cachix.push, {"cache": "acme-builds"})
+        .map(lambda result: result.cache)
         .run()
     )
 ```
@@ -187,13 +187,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/cachix/index";
+import * as cachix from "./fluentci_modules/cachix/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("cachix-push")
     .workdir(".")
-    .pipe(dependency.setup, {"cache":"example-cache"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(cachix.push, {"cache":"acme-builds"})
+    .map(result => result.cache)
     .run();
 }
 ```

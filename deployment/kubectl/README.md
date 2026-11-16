@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Wait for the api deployment rollout after your deployment step updates the Kubernetes manifests.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Kubectl as Dependency
+import FluentCI.Modules.Kubectl as Kubectl
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "kubectl-rollout-status"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Kubectl.rolloutStatus (Kubectl.rolloutStatusArgs { "resource": "deployment/api" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/kubectl as dependency
+import fluentci_modules/kubectl
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("kubectl-rollout-status")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> kubectl.rollout_status(kubectl.rollout_status_args("deployment/api"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Kubectl, as: Dependency
+  alias FluentCI.Modules.Kubectl
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("kubectl-rollout-status")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Kubectl.rollout_status(%{"resource" => "deployment/api"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.kubectl :as dependency]))
+            [fluentci-modules.kubectl :as kubectl]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "kubectl-rollout-status")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (kubectl/rollout-status {:resource "deployment/api"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("kubectl-rollout-status")
   ->Flow.workdir(".")
-  ->FluentciModulesKubectl.version(FluentciModulesKubectl.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesKubectl.rolloutStatus(FluentciModulesKubectl.rolloutStatusArgs(~resource="deployment/api"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import kubectl as dependency
+from fluentci_modules import kubectl
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("kubectl-rollout-status")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(kubectl.rollout_status, {"resource": "deployment/api"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/kubectl/index";
+import * as kubectl from "./fluentci_modules/kubectl/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("kubectl-rollout-status")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(kubectl.rolloutStatus, {"resource":"deployment/api"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

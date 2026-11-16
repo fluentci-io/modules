@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Build an image from a context.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Docker as Dependency
+import FluentCI.Modules.Docker as Docker
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "docker-build"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Docker.build (Docker.buildArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/docker as dependency
+import fluentci_modules/docker
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("docker-build")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> docker.build(docker.build_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Docker, as: Dependency
+  alias FluentCI.Modules.Docker
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("docker-build")
     |> Flow.workdir(".")
-    |> Dependency.build(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Docker.build(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.docker :as dependency]))
+            [fluentci-modules.docker :as docker]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "docker-build")
       (flow/workdir ".")
-      (dependency/build {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (docker/build {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("docker-build")
   ->Flow.workdir(".")
   ->FluentciModulesDocker.build(FluentciModulesDocker.buildArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import docker as dependency
+from fluentci_modules import docker
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("docker-build")
         .workdir(".")
-        .pipe(dependency.build, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(docker.build, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/docker/index";
+import * as docker from "./fluentci_modules/docker/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("docker-build")
     .workdir(".")
-    .pipe(dependency.build, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(docker.build, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

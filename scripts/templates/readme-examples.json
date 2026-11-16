@@ -1,0 +1,1568 @@
+{
+  "actionlint": {
+    "operation": "lint",
+    "arguments": {},
+    "scenario": "Lint workflows, discovering .github/workflows when files is empty."
+  },
+  "aerospike": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start aerospike for integration tests using aerospike/aerospike-server:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "apko": {
+    "operation": "build",
+    "arguments": {
+      "config": "apko.yaml",
+      "tag": "ghcr.io/acme/api:1.0.0",
+      "output": "dist"
+    },
+    "scenario": "Build an OCI image and SBOM from an APK package configuration."
+  },
+  "arangodb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start arangodb for integration tests using arangodb:3.12. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "argocd": {
+    "operation": "app_sync",
+    "arguments": {
+      "application": "api-staging"
+    },
+    "scenario": "Synchronize the api-staging Argo CD application after publishing its deployment manifests."
+  },
+  "artifactory": {
+    "operation": "upload",
+    "arguments": {
+      "pattern": "dist/*.tar.gz",
+      "target": "releases/api/1.0.0/"
+    },
+    "scenario": "Upload build artifacts using a configured JFrog server."
+  },
+  "aws": {
+    "operation": "s3_sync",
+    "arguments": {
+      "source": "dist/",
+      "destination": "s3://acme-releases/api/"
+    },
+    "scenario": "Synchronize a directory or S3 prefix."
+  },
+  "aws-emulator": {
+    "operation": "start",
+    "arguments": {
+      "stateDir": "/tmp/ci-aws-emulator"
+    },
+    "scenario": "Start aws-emulator for integration tests using fluentci/aws-emulator:local. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "azure": {
+    "operation": "group_deploy",
+    "arguments": {
+      "resourceGroup": "api-staging",
+      "templateFile": "infra/main.bicep"
+    },
+    "scenario": "Deploy an ARM or Bicep template to a resource group."
+  },
+  "bazel": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build selected Bazel targets."
+  },
+  "betterleaks": {
+    "operation": "scan_dir",
+    "arguments": {},
+    "scenario": "Scan files using Betterleaks 1.x with redaction and credential validation disabled."
+  },
+  "biome": {
+    "operation": "check",
+    "arguments": {},
+    "scenario": "Run formatter, linter, and import checks."
+  },
+  "black": {
+    "operation": "check",
+    "arguments": {},
+    "scenario": "Check Python formatting without writing files."
+  },
+  "buildkit": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build a Dockerfile with named local context and dockerfile directories."
+  },
+  "buildx": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Run Docker Buildx build and return execution report paths."
+  },
+  "cachix": {
+    "operation": "push",
+    "arguments": {
+      "cache": "acme-builds"
+    },
+    "scenario": "Push the result closure to a Cachix cache using host credentials."
+  },
+  "caddy": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start caddy for integration tests using caddy:2-alpine. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "cassandra": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start cassandra for integration tests using cassandra:5.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "checkov": {
+    "operation": "scan",
+    "arguments": {},
+    "scenario": "Scan infrastructure code, failing when policy checks fail."
+  },
+  "chroma": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start chroma for integration tests using chromadb/chroma:1.5.3. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "clickhouse": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start clickhouse for integration tests using clickhouse/clickhouse-server:25.8. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "cmake": {
+    "operation": "configure",
+    "arguments": {},
+    "scenario": "Configure a CMake build tree."
+  },
+  "cockroachdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start cockroachdb for integration tests using cockroachdb/cockroach:v25.4.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "codacy": {
+    "operation": "upload",
+    "arguments": {
+      "coverageFile": "coverage/lcov.info"
+    },
+    "scenario": "Upload an existing coverage report to Codacy."
+  },
+  "codecov": {
+    "operation": "upload",
+    "arguments": {
+      "files": "coverage/lcov.info"
+    },
+    "scenario": "Create a Codecov report and upload existing coverage files, failing on upload errors."
+  },
+  "consul": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start consul for integration tests using hashicorp/consul:1.21. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "cosign": {
+    "operation": "verify",
+    "arguments": {
+      "certificateIdentity": "https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0",
+      "certificateOidcIssuer": "https://token.actions.githubusercontent.com",
+      "image": "ghcr.io/acme/api:1.0.0"
+    },
+    "scenario": "Verify an OCI image signature against an exact keyless identity and issuer; fail the pipeline on verification errors."
+  },
+  "couchbase": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start couchbase for integration tests using couchbase:community-7.6.2. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "couchdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start couchdb for integration tests using couchdb:3. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "coveralls": {
+    "operation": "upload",
+    "arguments": {
+      "files": "coverage/lcov.info"
+    },
+    "scenario": "Upload coverage reports using the universal Coveralls reporter."
+  },
+  "cratedb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start cratedb for integration tests using crate:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "cypress": {
+    "operation": "test",
+    "arguments": {},
+    "scenario": "Run Cypress specs headlessly, returning a failure if any tests fail."
+  },
+  "databend": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start databend for integration tests using datafuselabs/databend:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "depot": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build container images on Depot remote builders, optionally pushing, loading, or saving the result."
+  },
+  "digitalocean": {
+    "operation": "apps_deploy",
+    "arguments": {
+      "app": "api-staging"
+    },
+    "scenario": "apps deploy."
+  },
+  "discord": {
+    "operation": "send",
+    "arguments": {
+      "message": "Release v1.0.0 deployed to staging: https://staging.example.com"
+    },
+    "scenario": "Send one Discord notification through curl and verify its delivery acknowledgement. Credentials come from the host environment."
+  },
+  "docker": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build an image from a context."
+  },
+  "doltdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start doltdb for integration tests using dolthub/dolt-sql-server:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "doppler": {
+    "operation": "names",
+    "arguments": {},
+    "scenario": "List the secret names available to the configured Doppler project without printing their values."
+  },
+  "dpkg": {
+    "operation": "build",
+    "arguments": {
+      "directory": "packaging/debian",
+      "arch": "amd64"
+    },
+    "scenario": "Build packages from a Linux dpkg package tree and target architecture."
+  },
+  "drizzlekit": {
+    "operation": "check",
+    "arguments": {},
+    "scenario": "Check generated migrations for collisions before merging."
+  },
+  "dynamodb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start dynamodb for integration tests using amazon/dynamodb-local:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "elasticsearch": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start elasticsearch for integration tests using docker.elastic.co/elasticsearch/elasticsearch:8.15.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "etcd": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start etcd for integration tests using quay.io/coreos/etcd:v3.6.5. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "flipt": {
+    "operation": "validate",
+    "arguments": {},
+    "scenario": "Validate flag-state YAML and fail the pipeline on validation issues."
+  },
+  "floci": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start floci for integration tests using floci/floci:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "flyctl": {
+    "operation": "deploy",
+    "arguments": {},
+    "scenario": "deploy."
+  },
+  "garden": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build selected actions and their build dependencies."
+  },
+  "gcloud": {
+    "operation": "run_deploy",
+    "arguments": {
+      "image": "us-docker.pkg.dev/acme/releases/api:1.0.0",
+      "region": "us-east-1",
+      "service": "api-staging"
+    },
+    "scenario": "Deploy a container image to Cloud Run."
+  },
+  "gemfury": {
+    "operation": "upload",
+    "arguments": {
+      "files": "dist/app.deb,dist/app.rpm"
+    },
+    "scenario": "Upload Linux packages to Gemfury using credentials from the host environment."
+  },
+  "gh": {
+    "operation": "pr_checks",
+    "arguments": {
+      "number": "42"
+    },
+    "scenario": "Check the CI status of pull request #42 before merging it. Authenticate gh before running this pipeline."
+  },
+  "gh-artifacts": {
+    "operation": "upload",
+    "arguments": {
+      "name": "api",
+      "files": "dist/api.tar.gz,dist/api.tar.gz.sha256"
+    },
+    "scenario": "Upload job artifacts using GitHub Actions runtime credentials and the official artifact client."
+  },
+  "git": {
+    "operation": "clone",
+    "arguments": {
+      "url": "https://github.com/acme/api.git"
+    },
+    "scenario": "Clone a repository with optional shallow, partial and submodule checkout."
+  },
+  "gitlab-artifacts": {
+    "operation": "upload",
+    "arguments": {
+      "archive": "dist/artifacts.zip",
+      "jobId": "123456"
+    },
+    "scenario": "Upload a prebuilt ZIP to the current job using GitLab job-token authentication."
+  },
+  "gitleaks": {
+    "operation": "scan_dir",
+    "arguments": {},
+    "scenario": "Scan directory contents with findings redacted and a failing exit status on leaks."
+  },
+  "glab": {
+    "operation": "mr_view",
+    "arguments": {
+      "number": "42"
+    },
+    "scenario": "Inspect merge request !42 in the current GitLab repository. Authenticate glab before running this pipeline."
+  },
+  "grype": {
+    "operation": "scan",
+    "arguments": {
+      "source": "ghcr.io/acme/api:1.0.0"
+    },
+    "scenario": "Scan an image, directory, or SBOM and fail on the configured severity threshold."
+  },
+  "helm": {
+    "operation": "lint",
+    "arguments": {
+      "chart": "charts/api"
+    },
+    "scenario": "lint."
+  },
+  "httpbin": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start httpbin for integration tests using ghcr.io/mccutchen/go-httpbin:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "infisical": {
+    "operation": "version",
+    "arguments": {},
+    "scenario": "Verify the Infisical CLI version available on the runner before a secrets-dependent build."
+  },
+  "influxdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start influxdb for integration tests using influxdb:2.7. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "jfrog-cli": {
+    "operation": "upload",
+    "arguments": {
+      "pattern": "dist/*.tar.gz",
+      "target": "releases/api/1.0.0/"
+    },
+    "scenario": "Upload build artifacts using a configured JFrog server."
+  },
+  "kafka": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start kafka for integration tests using apache/kafka:4.1.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "kamal": {
+    "operation": "deploy",
+    "arguments": {},
+    "scenario": "deploy."
+  },
+  "keycloak": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start keycloak for integration tests using quay.io/keycloak/keycloak:26.8.2. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "kubectl": {
+    "operation": "rollout_status",
+    "arguments": {
+      "resource": "deployment/api"
+    },
+    "scenario": "Wait for the api deployment rollout after your deployment step updates the Kubernetes manifests."
+  },
+  "mailcatcher": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start mailcatcher for integration tests using sj26/mailcatcher:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "mailhog": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start mailhog for integration tests using mailhog/mailhog:v1.0.1. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "mailpit": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start mailpit for integration tests using axllent/mailpit:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "mariadb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start mariadb for integration tests using mariadb:11.4. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "meson": {
+    "operation": "configure",
+    "arguments": {},
+    "scenario": "configure."
+  },
+  "microcks": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start microcks for integration tests using quay.io/microcks/microcks-uber:latest-native. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "mongodb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start mongodb for integration tests using mongo:8.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "mysql": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start mysql for integration tests using mysql:8.4. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "nats": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start nats for integration tests using nats:2-alpine. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "neo4j": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start neo4j for integration tests using neo4j:5-community. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "netlify": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "build."
+  },
+  "nexus": {
+    "operation": "upload",
+    "arguments": {
+      "file": "dist/app.tar.gz",
+      "url": "https://nexus.example.com/repository/releases/api/1.0.0/api.tar.gz"
+    },
+    "scenario": "Upload a file to a Nexus raw-repository URL."
+  },
+  "nginx": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start nginx for integration tests using nginx:1.28-alpine. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "ninja": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "build."
+  },
+  "nix-package": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build one or more flake installables."
+  },
+  "nix-publish": {
+    "operation": "check",
+    "arguments": {},
+    "scenario": "Evaluate and build flake checks without modifying flake.lock."
+  },
+  "nx": {
+    "operation": "affected",
+    "arguments": {
+      "targets": "lint,test"
+    },
+    "scenario": "Run lint and test targets for projects affected by the current change."
+  },
+  "openbao": {
+    "operation": "kv_list",
+    "arguments": {
+      "path": "."
+    },
+    "scenario": "List key names without reading secret data."
+  },
+  "openfga": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start openfga for integration tests using openfga/openfga:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "openldap": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start openldap for integration tests using osixia/openldap:1.5.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "opentofu": {
+    "operation": "plan",
+    "arguments": {},
+    "scenario": "Create an infrastructure plan without applying it."
+  },
+  "oras": {
+    "operation": "discover",
+    "arguments": {
+      "reference": "ghcr.io/acme/api:1.0.0"
+    },
+    "scenario": "Discover attestations and other OCI artifacts attached to the released api image."
+  },
+  "orientdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start orientdb for integration tests using orientdb:3.2. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "pgroll": {
+    "operation": "validate",
+    "arguments": {
+      "file": "dist/app.tar.gz"
+    },
+    "scenario": "Validate a migration file against the target database before application."
+  },
+  "pinecone": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start pinecone for integration tests using ghcr.io/pinecone-io/pinecone-local:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "planetscale": {
+    "operation": "branch_list",
+    "arguments": {
+      "database": "api"
+    },
+    "scenario": "List database branches for preview environment discovery."
+  },
+  "playwright": {
+    "operation": "test",
+    "arguments": {},
+    "scenario": "Run Playwright Test headlessly, optionally filtering projects and tests."
+  },
+  "plumber": {
+    "operation": "analyze",
+    "arguments": {},
+    "scenario": "Audit GitHub Actions/GitLab CI with a score gate and failing provider/collection errors."
+  },
+  "podman": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build an image from a context."
+  },
+  "postgres": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start postgres for integration tests using postgres:17-alpine. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "presto": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start presto for integration tests using prestodb/presto:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "prettier": {
+    "operation": "check",
+    "arguments": {},
+    "scenario": "Check formatting without writing files."
+  },
+  "prisma": {
+    "operation": "validate",
+    "arguments": {},
+    "scenario": "Validate the project Prisma schema."
+  },
+  "protolint": {
+    "operation": "lint",
+    "arguments": {},
+    "scenario": "Lint Protocol Buffer style and fail on findings or parser errors."
+  },
+  "pulumi": {
+    "operation": "preview",
+    "arguments": {},
+    "scenario": "Preview a stack update."
+  },
+  "qdrant": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start qdrant for integration tests using qdrant/qdrant:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "questdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start questdb for integration tests using questdb/questdb:10.2.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "rabbitmq": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start rabbitmq for integration tests using rabbitmq:4-management. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "railpack": {
+    "operation": "build",
+    "arguments": {
+      "name": "api"
+    },
+    "scenario": "Build a project into an image through a configured BuildKit daemon."
+  },
+  "railway": {
+    "operation": "up",
+    "arguments": {},
+    "scenario": "up."
+  },
+  "ravendb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start ravendb for integration tests using ravendb/ravendb:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "rclone": {
+    "operation": "check",
+    "arguments": {
+      "source": ".",
+      "destination": "s3:ci-artifacts/releases/1.0.0"
+    },
+    "scenario": "Verify transferred artifact content against the source."
+  },
+  "redis": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start redis for integration tests using redis:7-alpine. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "redpanda": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start redpanda for integration tests using docker.redpanda.com/redpandadata/redpanda:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "render": {
+    "operation": "deploy",
+    "arguments": {
+      "service": "srv-staging-api"
+    },
+    "scenario": "deploy."
+  },
+  "rethinkdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start rethinkdb for integration tests using rethinkdb:2.4. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "rpmbuild": {
+    "operation": "build",
+    "arguments": {
+      "directory": "packaging/rpm",
+      "arch": "x86_64",
+      "spec": "packaging/api.spec"
+    },
+    "scenario": "Build packages from a Linux rpmbuild package tree and target architecture."
+  },
+  "ruff": {
+    "operation": "check",
+    "arguments": {},
+    "scenario": "Lint Python sources; fixes require fix=true."
+  },
+  "rustfmt": {
+    "operation": "check",
+    "arguments": {
+      "files": "src/main.rs,src/lib.rs"
+    },
+    "scenario": "Check explicit Rust source files."
+  },
+  "s3mock": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start s3mock for integration tests using adobe/s3mock:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "sccache": {
+    "operation": "stats",
+    "arguments": {},
+    "scenario": "stats."
+  },
+  "scorecard": {
+    "operation": "scan",
+    "arguments": {
+      "repo": "github.com/acme/api"
+    },
+    "scenario": "Evaluate an upstream repository against OpenSSF Scorecard checks."
+  },
+  "scylladb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start scylladb for integration tests using scylladb/scylla:6.2.3. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "semgrep": {
+    "operation": "scan",
+    "arguments": {
+      "config": "auto"
+    },
+    "scenario": "Scan with explicit rule configurations and fail when findings are present."
+  },
+  "service-vault": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start service-vault for integration tests using hashicorp/vault:1.20. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "setup-actionlint": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision actionlint before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-android": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision android before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-apko": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision apko before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-argocd": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision argocd before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-artifactory": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision artifactory before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-aws": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision aws before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-azure": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision azure before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-babashka": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision babashka before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-bazel": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision bazel before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-betterleaks": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision betterleaks before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-binaryen": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision binaryen before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-biome": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision biome before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-black": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision black before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-buf": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision buf before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-buildkit": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision buildkit before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-buildx": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision buildx before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-bun": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision bun before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-cachix": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision cachix before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-checkov": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision checkov before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-clojure": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision clojure before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-cmake": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision cmake before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-codacy": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision codacy before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-codecov": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision codecov before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-cosign": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision cosign before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-coveralls": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision coveralls before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-curl": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision curl before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-cypress": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision cypress before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-dagger": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision dagger before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-deno": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision deno before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-depot": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision depot before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-determinate-nix": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision determinate-nix before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-devbox": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision devbox before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-devenv": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision devenv before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-digitalocean": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision digitalocean before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-docker": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision docker before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-doppler": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision doppler before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-dpkg": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision dpkg before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-drizzlekit": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision drizzlekit before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-elixir": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision elixir before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-erlang": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision erlang before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-expo": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision expo before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-extism": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision extism before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-extism-cli": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision extism-cli before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-extism-js": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision extism-js before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-extism-py": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision extism-py before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-flakehub-push": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision flakehub-push before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-flipt": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision flipt before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-flox": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision flox before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-flyctl": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision flyctl before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-garden": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision garden before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gcloud": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gcloud before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gemfury": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gemfury before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gh": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gh before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gh-artifacts": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gh-artifacts before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-git": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision git before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gitlab-artifacts": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gitlab-artifacts before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gitleaks": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gitleaks before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-glab": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision glab before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-gleam": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision gleam before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-go": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision go before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-grype": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision grype before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-helm": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision helm before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-infisical": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision infisical before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-java": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision java before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-jfrog-cli": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision jfrog-cli before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-kamal": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision kamal before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-kubectl": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision kubectl before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-macports": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision macports before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-macports-rs": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision macports-rs before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-meson": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision meson before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-mise": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision mise before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-netlify": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision netlify before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-nexus": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision nexus before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-ninja": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision ninja before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-nix": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision nix before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-nix-package": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision nix-package before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-node": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision node before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-nx": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision nx before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-openbao": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision openbao before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-opentofu": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision opentofu before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-oras": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision oras before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-pgroll": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision pgroll before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-php": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision php before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-pkgx": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision pkgx before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-pkl": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision pkl before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-planetscale": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision planetscale before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-playwright": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision playwright before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-plumber": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision plumber before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-podman": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision podman before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-prettier": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision prettier before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-prisma": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision prisma before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-protolint": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision protolint before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-pulumi": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision pulumi before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-purescript": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision purescript before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-railpack": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision railpack before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-railway": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision railway before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-rclone": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision rclone before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-render": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision render before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-rpmbuild": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision rpmbuild before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-ruff": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision ruff before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-rust": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision rust before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-rustfmt": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision rustfmt before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-sccache": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision sccache before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-scorecard": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision scorecard before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-semgrep": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision semgrep before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-shellcheck": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision shellcheck before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-snyk": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision snyk before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-sonarqube": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision sonarqube before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-sonarqube-scanner": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision sonarqube-scanner before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-spin": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision spin before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-sqlfluff": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision sqlfluff before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-sqruff": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision sqruff before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-syft": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision syft before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-tangled-artifacts": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision tangled-artifacts before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-terraform": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision terraform before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-terragrunt": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision terragrunt before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-tg": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision tg before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-tigerbeetle": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision tigerbeetle before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-trivy": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision trivy before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-trufflehog": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision trufflehog before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-turborepo": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision turborepo before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-ubicloud": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision ubicloud before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-uv": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision uv before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-vault": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision vault before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-vercel": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision vercel before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-wasmer": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision wasmer before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-wrangler": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision wrangler before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-xata": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision xata before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-xtp": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision xtp before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-yamllint": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision yamllint before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "setup-zig": {
+    "operation": "setup",
+    "arguments": {},
+    "scenario": "Provision zig before the build steps that require it. The setup result reports the installed version and executable directory."
+  },
+  "shellcheck": {
+    "operation": "version",
+    "arguments": {},
+    "scenario": "Report the ShellCheck version installed on the runner when diagnosing shell lint differences."
+  },
+  "slack": {
+    "operation": "send",
+    "arguments": {
+      "message": "Release v1.0.0 deployed to staging: https://staging.example.com"
+    },
+    "scenario": "Send one Slack notification through curl and verify its delivery acknowledgement. Credentials come from the host environment."
+  },
+  "smocker": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start smocker for integration tests using ghcr.io/smocker-dev/smocker:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "snyk": {
+    "operation": "test",
+    "arguments": {},
+    "scenario": "Test application dependencies and fail on vulnerabilities selected by policy."
+  },
+  "solr": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start solr for integration tests using solr:9-slim. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "sonarqube": {
+    "operation": "analyze",
+    "arguments": {},
+    "scenario": "Analyze code for quality and security issues Uses native credentials; for CI supply SONARQUBE_CLI_TOKEN and SONARQUBE_CLI_ORG or SONARQUBE_CLI_SERVER."
+  },
+  "sonarqube-scanner": {
+    "operation": "scan",
+    "arguments": {},
+    "scenario": "Analyze the configured project and submit results to SonarQube."
+  },
+  "spin": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "Build application components with the project toolchains."
+  },
+  "sqlfluff": {
+    "operation": "lint",
+    "arguments": {},
+    "scenario": "Lint SQL and fail the pipeline on violations or parsing errors."
+  },
+  "sqruff": {
+    "operation": "lint",
+    "arguments": {},
+    "scenario": "Lint SQL without modifying files and fail the pipeline on violations."
+  },
+  "stripe-mock": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start stripe-mock for integration tests using stripe/stripe-mock:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "surrealdb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start surrealdb for integration tests using surrealdb/surrealdb:v2.3.10. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "syft": {
+    "operation": "scan",
+    "arguments": {
+      "source": "dir:."
+    },
+    "scenario": "Generate an SBOM for a directory, image, or archive."
+  },
+  "tangled-artifacts": {
+    "operation": "upload",
+    "arguments": {
+      "username": "acme",
+      "tag": "v1.0.0",
+      "repository": "api",
+      "files": "dist/api.tar.gz"
+    },
+    "scenario": "Upload files as assets attached to an existing annotated Tangled tag."
+  },
+  "telegram": {
+    "operation": "send",
+    "arguments": {
+      "message": "Release v1.0.0 deployed to staging: https://staging.example.com",
+      "chatId": "-1001234567890"
+    },
+    "scenario": "Send one Telegram notification through curl and verify its delivery acknowledgement. Credentials come from the host environment."
+  },
+  "temporal": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start temporal for integration tests using temporalio/temporal:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "terraform": {
+    "operation": "plan",
+    "arguments": {},
+    "scenario": "Create an infrastructure plan without applying it."
+  },
+  "terragrunt": {
+    "operation": "plan",
+    "arguments": {},
+    "scenario": "Run plan in the current Terragrunt unit."
+  },
+  "tidb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start tidb for integration tests using pingcap/tidb:v8.5.4. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "tigerbeetle": {
+    "operation": "start",
+    "arguments": {
+      "stateDir": "/tmp/ci-tigerbeetle"
+    },
+    "scenario": "Start tigerbeetle for integration tests using the prebuilt native binary. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "timeplus": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start timeplus for integration tests using d.timeplus.com/timeplus-io/proton:latest. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "timescale": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start timescale for integration tests using timescale/timescaledb:latest-pg17. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "trino": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start trino for integration tests using trinodb/trino:484. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "trivy": {
+    "operation": "filesystem",
+    "arguments": {},
+    "scenario": "Scan a filesystem and fail when selected findings are present."
+  },
+  "trufflehog": {
+    "operation": "filesystem",
+    "arguments": {},
+    "scenario": "Scan local files for secrets without verifying credentials against remote services."
+  },
+  "turborepo": {
+    "operation": "run_tasks",
+    "arguments": {
+      "tasks": "lint,test"
+    },
+    "scenario": "Run the workspace lint and test tasks with Turborepo."
+  },
+  "typesense": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start typesense for integration tests using typesense/typesense:29.0. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "ubicloud": {
+    "operation": "vm_list",
+    "arguments": {},
+    "scenario": "List virtual machine resources. Requires a nonempty UBI_TOKEN environment variable, including help and version."
+  },
+  "uv": {
+    "operation": "sync",
+    "arguments": {},
+    "scenario": "Create or synchronize a project environment from pyproject.toml and uv.lock."
+  },
+  "valkey": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start valkey for integration tests using valkey/valkey:8-alpine. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "vault": {
+    "operation": "kv_list",
+    "arguments": {
+      "path": "."
+    },
+    "scenario": "List key names without reading secret data."
+  },
+  "vercel": {
+    "operation": "build",
+    "arguments": {},
+    "scenario": "build."
+  },
+  "wasmer": {
+    "operation": "deploy",
+    "arguments": {},
+    "scenario": "Deploy an application to Wasmer Edge without interactive prompts."
+  },
+  "weaviate": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start weaviate for integration tests using cr.weaviate.io/semitechnologies/weaviate:1.31.4. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "wiremock": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start wiremock for integration tests using wiremock/wiremock:3.13.2. Return the allocated endpoint to the caller; use it when configuring your test client."
+  },
+  "wrangler": {
+    "operation": "deploy",
+    "arguments": {},
+    "scenario": "Deploy a Worker using existing Cloudflare credentials."
+  },
+  "xata": {
+    "operation": "branch_list",
+    "arguments": {},
+    "scenario": "List database branches for the selected project."
+  },
+  "yamllint": {
+    "operation": "lint",
+    "arguments": {},
+    "scenario": "Lint YAML files and directories."
+  },
+  "yugabytedb": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start yugabytedb for integration tests using yugabytedb/yugabyte:2026.1.3.0-b100. Return the allocated endpoint to the caller; use it when configuring your test client."
+  }
+}

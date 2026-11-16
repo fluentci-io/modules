@@ -74,8 +74,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `scan` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Scan with explicit rule configurations and fail when findings are present.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -93,14 +95,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Semgrep as Dependency
+import FluentCI.Modules.Semgrep as Semgrep
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "semgrep-scan"
     # Flow.workdir "."
-    # Dependency.scan (Dependency.scanArgs { "config": "auto" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Semgrep.scan (Semgrep.scanArgs { "config": "auto" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -108,13 +110,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/semgrep as dependency
+import fluentci_modules/semgrep
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("semgrep-scan")
   |> flow.workdir(".")
-  |> dependency.scan(dependency.scan_args("auto"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> semgrep.scan(semgrep.scan_args("auto"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -128,13 +130,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Semgrep, as: Dependency
+  alias FluentCI.Modules.Semgrep
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("semgrep-scan")
     |> Flow.workdir(".")
-    |> Dependency.scan(%{"config" => "auto"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Semgrep.scan(%{"config" => "auto"})
     |> Flow.stdout()
   end
 end
@@ -148,13 +149,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.semgrep :as dependency]))
+            [fluentci-modules.semgrep :as semgrep]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "semgrep-scan")
       (flow/workdir ".")
-      (dependency/scan {:config "auto"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (semgrep/scan {:config "auto"})
       flow/run!))
 ```
 
@@ -162,10 +162,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("semgrep-scan")
   ->Flow.workdir(".")
   ->FluentciModulesSemgrep.scan(FluentciModulesSemgrep.scanArgs(~config="auto"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -173,15 +173,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import semgrep as dependency
+from fluentci_modules import semgrep
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("semgrep-scan")
         .workdir(".")
-        .pipe(dependency.scan, {"config": "auto"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(semgrep.scan, {"config": "auto"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -190,13 +190,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/semgrep/index";
+import * as semgrep from "./fluentci_modules/semgrep/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("semgrep-scan")
     .workdir(".")
-    .pipe(dependency.scan, {"config":"auto"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(semgrep.scan, {"config":"auto"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

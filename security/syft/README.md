@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `scan` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Generate an SBOM for a directory, image, or archive.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Syft as Dependency
+import FluentCI.Modules.Syft as Syft
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "syft-scan"
     # Flow.workdir "."
-    # Dependency.scan (Dependency.scanArgs { "source": "." })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Syft.scan (Syft.scanArgs { "source": "dir:." })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/syft as dependency
+import fluentci_modules/syft
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("syft-scan")
   |> flow.workdir(".")
-  |> dependency.scan(dependency.scan_args("."))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> syft.scan(syft.scan_args("dir:."))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Syft, as: Dependency
+  alias FluentCI.Modules.Syft
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("syft-scan")
     |> Flow.workdir(".")
-    |> Dependency.scan(%{"source" => "."})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Syft.scan(%{"source" => "dir:."})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.syft :as dependency]))
+            [fluentci-modules.syft :as syft]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "syft-scan")
       (flow/workdir ".")
-      (dependency/scan {:source "."})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (syft/scan {:source "dir:."})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("syft-scan")
   ->Flow.workdir(".")
-  ->FluentciModulesSyft.scan(FluentciModulesSyft.scanArgs(~source="."))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesSyft.scan(FluentciModulesSyft.scanArgs(~source="dir:."))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import syft as dependency
+from fluentci_modules import syft
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("syft-scan")
         .workdir(".")
-        .pipe(dependency.scan, {"source": "."})
-        .exec("git", "diff", "--exit-code")
+        .pipe(syft.scan, {"source": "dir:."})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/syft/index";
+import * as syft from "./fluentci_modules/syft/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("syft-scan")
     .workdir(".")
-    .pipe(dependency.scan, {"source":"."})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(syft.scan, {"source":"dir:."})
+    .map(result => result.reportPath)
     .run();
 }
 ```

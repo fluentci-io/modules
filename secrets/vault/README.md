@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+List key names without reading secret data.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Vault as Dependency
+import FluentCI.Modules.Vault as Vault
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "vault-kv-list"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Vault.kvList (Vault.kvListArgs { "path": "." })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/vault as dependency
+import fluentci_modules/vault
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("vault-kv-list")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> vault.kv_list(vault.kv_list_args("."))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Vault, as: Dependency
+  alias FluentCI.Modules.Vault
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("vault-kv-list")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Vault.kv_list(%{"path" => "."})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.vault :as dependency]))
+            [fluentci-modules.vault :as vault]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "vault-kv-list")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (vault/kv-list {:path "."})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("vault-kv-list")
   ->Flow.workdir(".")
-  ->FluentciModulesVault.version(FluentciModulesVault.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesVault.kvList(FluentciModulesVault.kvListArgs(~path="."))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import vault as dependency
+from fluentci_modules import vault
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("vault-kv-list")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(vault.kv_list, {"path": "."})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/vault/index";
+import * as vault from "./fluentci_modules/vault/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("vault-kv-list")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(vault.kvList, {"path":"."})
+    .map(result => result.reportPath)
     .run();
 }
 ```

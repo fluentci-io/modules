@@ -85,8 +85,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Provision determinate-nix before the build steps that require it. The setup result reports the installed version and executable directory.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -104,14 +106,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.SetupDeterminateNix as Dependency
+import FluentCI.Modules.SetupDeterminateNix as SetupDeterminateNix
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "setup-determinate-nix-setup"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # SetupDeterminateNix.setup (SetupDeterminateNix.setupArgs)
+    # Flow.map (\result -> result.version)
     # Flow.run
 ```
 
@@ -119,13 +121,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/setup_determinate_nix as dependency
+import fluentci_modules/setup_determinate_nix
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("setup-determinate-nix-setup")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> setup_determinate_nix.setup(setup_determinate_nix.setup_args())
+  |> flow.map(fn(result) { result.version })
   |> flow.run
 }
 ```
@@ -139,13 +141,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.SetupDeterminateNix, as: Dependency
+  alias FluentCI.Modules.SetupDeterminateNix
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("setup-determinate-nix-setup")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> SetupDeterminateNix.setup(%{})
     |> Flow.stdout()
   end
 end
@@ -159,13 +160,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.setup-determinate-nix :as dependency]))
+            [fluentci-modules.setup-determinate-nix :as setup_determinate_nix]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "setup-determinate-nix-setup")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (setup_determinate_nix/setup {})
       flow/run!))
 ```
 
@@ -173,10 +173,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("setup-determinate-nix-setup")
   ->Flow.workdir(".")
   ->FluentciModulesSetupDeterminateNix.setup(FluentciModulesSetupDeterminateNix.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.version)
   ->Flow.run
 ```
 
@@ -184,15 +184,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import setup_determinate_nix as dependency
+from fluentci_modules import setup_determinate_nix
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("setup-determinate-nix-setup")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(setup_determinate_nix.setup, {})
+        .map(lambda result: result.version)
         .run()
     )
 ```
@@ -201,13 +201,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/setup-determinate-nix/index";
+import * as setup_determinate_nix from "./fluentci_modules/setup-determinate-nix/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("setup-determinate-nix-setup")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(setup_determinate_nix.setup, {})
+    .map(result => result.version)
     .run();
 }
 ```

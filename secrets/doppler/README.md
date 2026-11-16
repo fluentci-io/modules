@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+List the secret names available to the configured Doppler project without printing their values.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Doppler as Dependency
+import FluentCI.Modules.Doppler as Doppler
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "doppler-names"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "file": "dist/artifact.tar.gz" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Doppler.names (Doppler.namesArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/doppler as dependency
+import fluentci_modules/doppler
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("doppler-names")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("dist/artifact.tar.gz"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> doppler.names(doppler.names_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Doppler, as: Dependency
+  alias FluentCI.Modules.Doppler
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("doppler-names")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"file" => "dist/artifact.tar.gz"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Doppler.names(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.doppler :as dependency]))
+            [fluentci-modules.doppler :as doppler]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "doppler-names")
       (flow/workdir ".")
-      (dependency/upload {:file "dist/artifact.tar.gz"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (doppler/names {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("doppler-names")
   ->Flow.workdir(".")
-  ->FluentciModulesDoppler.upload(FluentciModulesDoppler.uploadArgs(~file="dist/artifact.tar.gz"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesDoppler.names(FluentciModulesDoppler.namesArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import doppler as dependency
+from fluentci_modules import doppler
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("doppler-names")
         .workdir(".")
-        .pipe(dependency.upload, {"file": "dist/artifact.tar.gz"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(doppler.names, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/doppler/index";
+import * as doppler from "./fluentci_modules/doppler/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("doppler-names")
     .workdir(".")
-    .pipe(dependency.upload, {"file":"dist/artifact.tar.gz"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(doppler.names, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

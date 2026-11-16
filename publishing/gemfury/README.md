@@ -74,8 +74,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload Linux packages to Gemfury using credentials from the host environment.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -91,30 +93,33 @@ See [composition support and limitations](../../docs/COMPOSITION.md).
 module Main where
 
 import Prelude
+import Data.Array as Array
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Gemfury as Dependency
+import FluentCI.Modules.Gemfury as Gemfury
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "gemfury-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "files": "dist/app.deb,dist/app.rpm" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Gemfury.upload (Gemfury.uploadArgs { "files": "dist/app.deb,dist/app.rpm" })
+    # Flow.map (\result -> show (Array.length result.files))
     # Flow.run
 ```
 
 ### Gleam
 
 ```gleam
+import gleam/int
+import gleam/list
 import fluentci/flow
-import fluentci_modules/gemfury as dependency
+import fluentci_modules/gemfury
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("gemfury-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("dist/app.deb,dist/app.rpm"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> gemfury.upload(gemfury.upload_args("dist/app.deb,dist/app.rpm"))
+  |> flow.map(fn(result) { int.to_string(list.length(result.files)) })
   |> flow.run
 }
 ```
@@ -128,13 +133,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Gemfury, as: Dependency
+  alias FluentCI.Modules.Gemfury
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("gemfury-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"files" => "dist/app.deb,dist/app.rpm"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Gemfury.upload(%{"files" => "dist/app.deb,dist/app.rpm"})
     |> Flow.stdout()
   end
 end
@@ -148,13 +152,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.gemfury :as dependency]))
+            [fluentci-modules.gemfury :as gemfury]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "gemfury-upload")
       (flow/workdir ".")
-      (dependency/upload {:files "dist/app.deb,dist/app.rpm"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (gemfury/upload {:files "dist/app.deb,dist/app.rpm"})
       flow/run!))
 ```
 
@@ -162,10 +165,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("gemfury-upload")
   ->Flow.workdir(".")
   ->FluentciModulesGemfury.upload(FluentciModulesGemfury.uploadArgs(~files="dist/app.deb,dist/app.rpm"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => Js.Int.toString(Belt.Array.length(result.files)))
   ->Flow.run
 ```
 
@@ -173,15 +176,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import gemfury as dependency
+from fluentci_modules import gemfury
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("gemfury-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"files": "dist/app.deb,dist/app.rpm"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(gemfury.upload, {"files": "dist/app.deb,dist/app.rpm"})
+        .map(lambda result: str(len(result.files)))
         .run()
     )
 ```
@@ -190,13 +193,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/gemfury/index";
+import * as gemfury from "./fluentci_modules/gemfury/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("gemfury-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"files":"dist/app.deb,dist/app.rpm"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(gemfury.upload, {"files":"dist/app.deb,dist/app.rpm"})
+    .map(result => String(result.files.length))
     .run();
 }
 ```

@@ -74,8 +74,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Verify an OCI image signature against an exact keyless identity and issuer; fail the pipeline on verification errors.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -93,14 +95,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Cosign as Dependency
+import FluentCI.Modules.Cosign as Cosign
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "cosign-verify"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Cosign.verify (Cosign.verifyArgs { "certificateIdentity": "https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0", "certificateOidcIssuer": "https://token.actions.githubusercontent.com", "image": "ghcr.io/acme/api:1.0.0" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -108,13 +110,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/cosign as dependency
+import fluentci_modules/cosign
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("cosign-verify")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> cosign.verify(cosign.verify_args("https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0", "https://token.actions.githubusercontent.com", "ghcr.io/acme/api:1.0.0"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -128,13 +130,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Cosign, as: Dependency
+  alias FluentCI.Modules.Cosign
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("cosign-verify")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Cosign.verify(%{"certificate_identity" => "https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0", "certificate_oidc_issuer" => "https://token.actions.githubusercontent.com", "image" => "ghcr.io/acme/api:1.0.0"})
     |> Flow.stdout()
   end
 end
@@ -148,13 +149,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.cosign :as dependency]))
+            [fluentci-modules.cosign :as cosign]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "cosign-verify")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (cosign/verify {:certificateIdentity "https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0", :certificateOidcIssuer "https://token.actions.githubusercontent.com", :image "ghcr.io/acme/api:1.0.0"})
       flow/run!))
 ```
 
@@ -162,10 +162,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("cosign-verify")
   ->Flow.workdir(".")
-  ->FluentciModulesCosign.version(FluentciModulesCosign.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesCosign.verify(FluentciModulesCosign.verifyArgs(~certificateIdentity="https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0", ~certificateOidcIssuer="https://token.actions.githubusercontent.com", ~image="ghcr.io/acme/api:1.0.0"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -173,15 +173,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import cosign as dependency
+from fluentci_modules import cosign
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("cosign-verify")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(cosign.verify, {"certificate_identity": "https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0", "certificate_oidc_issuer": "https://token.actions.githubusercontent.com", "image": "ghcr.io/acme/api:1.0.0"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -190,13 +190,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/cosign/index";
+import * as cosign from "./fluentci_modules/cosign/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("cosign-verify")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(cosign.verify, {"certificateIdentity":"https://github.com/acme/api/.github/workflows/release.yml@refs/tags/v1.0.0","certificateOidcIssuer":"https://token.actions.githubusercontent.com","image":"ghcr.io/acme/api:1.0.0"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

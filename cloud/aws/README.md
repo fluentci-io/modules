@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Synchronize a directory or S3 prefix.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Aws as Dependency
+import FluentCI.Modules.Aws as Aws
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "aws-s3-sync"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Aws.s3Sync (Aws.s3SyncArgs { "source": "dist/", "destination": "s3://acme-releases/api/" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/aws as dependency
+import fluentci_modules/aws
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("aws-s3-sync")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> aws.s3_sync(aws.s3_sync_args("dist/", "s3://acme-releases/api/"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Aws, as: Dependency
+  alias FluentCI.Modules.Aws
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("aws-s3-sync")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Aws.s3_sync(%{"source" => "dist/", "destination" => "s3://acme-releases/api/"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.aws :as dependency]))
+            [fluentci-modules.aws :as aws]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "aws-s3-sync")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (aws/s3-sync {:source "dist/", :destination "s3://acme-releases/api/"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("aws-s3-sync")
   ->Flow.workdir(".")
-  ->FluentciModulesAws.version(FluentciModulesAws.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesAws.s3Sync(FluentciModulesAws.s3SyncArgs(~source="dist/", ~destination="s3://acme-releases/api/"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import aws as dependency
+from fluentci_modules import aws
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("aws-s3-sync")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(aws.s3_sync, {"source": "dist/", "destination": "s3://acme-releases/api/"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/aws/index";
+import * as aws from "./fluentci_modules/aws/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("aws-s3-sync")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(aws.s3Sync, {"source":"dist/","destination":"s3://acme-releases/api/"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

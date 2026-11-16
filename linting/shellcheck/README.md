@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Report the ShellCheck version installed on the runner when diagnosing shell lint differences.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Shellcheck as Dependency
+import FluentCI.Modules.Shellcheck as Shellcheck
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "shellcheck-version"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Shellcheck.version (Shellcheck.versionArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/shellcheck as dependency
+import fluentci_modules/shellcheck
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("shellcheck-version")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> shellcheck.version(shellcheck.version_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Shellcheck, as: Dependency
+  alias FluentCI.Modules.Shellcheck
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("shellcheck-version")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Shellcheck.version(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.shellcheck :as dependency]))
+            [fluentci-modules.shellcheck :as shellcheck]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "shellcheck-version")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (shellcheck/version {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("shellcheck-version")
   ->Flow.workdir(".")
   ->FluentciModulesShellcheck.version(FluentciModulesShellcheck.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import shellcheck as dependency
+from fluentci_modules import shellcheck
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("shellcheck-version")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(shellcheck.version, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/shellcheck/index";
+import * as shellcheck from "./fluentci_modules/shellcheck/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("shellcheck-version")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(shellcheck.version, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

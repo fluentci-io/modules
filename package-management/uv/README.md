@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Create or synchronize a project environment from pyproject.toml and uv.lock.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Uv as Dependency
+import FluentCI.Modules.Uv as Uv
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "uv-sync"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Uv.sync (Uv.syncArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/uv as dependency
+import fluentci_modules/uv
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("uv-sync")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> uv.sync(uv.sync_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Uv, as: Dependency
+  alias FluentCI.Modules.Uv
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("uv-sync")
     |> Flow.workdir(".")
-    |> Dependency.build(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Uv.sync(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.uv :as dependency]))
+            [fluentci-modules.uv :as uv]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "uv-sync")
       (flow/workdir ".")
-      (dependency/build {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (uv/sync {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("uv-sync")
   ->Flow.workdir(".")
-  ->FluentciModulesUv.build(FluentciModulesUv.buildArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesUv.sync(FluentciModulesUv.syncArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import uv as dependency
+from fluentci_modules import uv
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("uv-sync")
         .workdir(".")
-        .pipe(dependency.build, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(uv.sync, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/uv/index";
+import * as uv from "./fluentci_modules/uv/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("uv-sync")
     .workdir(".")
-    .pipe(dependency.build, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(uv.sync, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

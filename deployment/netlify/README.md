@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+build.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Netlify as Dependency
+import FluentCI.Modules.Netlify as Netlify
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "netlify-build"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Netlify.build (Netlify.buildArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/netlify as dependency
+import fluentci_modules/netlify
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("netlify-build")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> netlify.build(netlify.build_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Netlify, as: Dependency
+  alias FluentCI.Modules.Netlify
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("netlify-build")
     |> Flow.workdir(".")
-    |> Dependency.build(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Netlify.build(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.netlify :as dependency]))
+            [fluentci-modules.netlify :as netlify]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "netlify-build")
       (flow/workdir ".")
-      (dependency/build {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (netlify/build {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("netlify-build")
   ->Flow.workdir(".")
   ->FluentciModulesNetlify.build(FluentciModulesNetlify.buildArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import netlify as dependency
+from fluentci_modules import netlify
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("netlify-build")
         .workdir(".")
-        .pipe(dependency.build, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(netlify.build, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/netlify/index";
+import * as netlify from "./fluentci_modules/netlify/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("netlify-build")
     .workdir(".")
-    .pipe(dependency.build, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(netlify.build, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

@@ -78,8 +78,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `scan` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Evaluate an upstream repository against OpenSSF Scorecard checks.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -97,14 +99,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Scorecard as Dependency
+import FluentCI.Modules.Scorecard as Scorecard
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "scorecard-scan"
     # Flow.workdir "."
-    # Dependency.scan (Dependency.scanArgs { "repo": "example-repo" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Scorecard.scan (Scorecard.scanArgs { "repo": "github.com/acme/api" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -112,13 +114,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/scorecard as dependency
+import fluentci_modules/scorecard
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("scorecard-scan")
   |> flow.workdir(".")
-  |> dependency.scan(dependency.scan_args("example-repo"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> scorecard.scan(scorecard.scan_args("github.com/acme/api"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -132,13 +134,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Scorecard, as: Dependency
+  alias FluentCI.Modules.Scorecard
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("scorecard-scan")
     |> Flow.workdir(".")
-    |> Dependency.scan(%{"repo" => "example-repo"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Scorecard.scan(%{"repo" => "github.com/acme/api"})
     |> Flow.stdout()
   end
 end
@@ -152,13 +153,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.scorecard :as dependency]))
+            [fluentci-modules.scorecard :as scorecard]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "scorecard-scan")
       (flow/workdir ".")
-      (dependency/scan {:repo "example-repo"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (scorecard/scan {:repo "github.com/acme/api"})
       flow/run!))
 ```
 
@@ -166,10 +166,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("scorecard-scan")
   ->Flow.workdir(".")
-  ->FluentciModulesScorecard.scan(FluentciModulesScorecard.scanArgs(~repo="example-repo"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesScorecard.scan(FluentciModulesScorecard.scanArgs(~repo="github.com/acme/api"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -177,15 +177,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import scorecard as dependency
+from fluentci_modules import scorecard
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("scorecard-scan")
         .workdir(".")
-        .pipe(dependency.scan, {"repo": "example-repo"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(scorecard.scan, {"repo": "github.com/acme/api"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -194,13 +194,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/scorecard/index";
+import * as scorecard from "./fluentci_modules/scorecard/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("scorecard-scan")
     .workdir(".")
-    .pipe(dependency.scan, {"repo":"example-repo"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(scorecard.scan, {"repo":"github.com/acme/api"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

@@ -43,8 +43,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Run lint and test targets for projects affected by the current change.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -62,14 +64,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Nx as Dependency
+import FluentCI.Modules.Nx as Nx
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "nx-affected"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Nx.affected (Nx.affectedArgs { "targets": "lint,test" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -77,13 +79,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/nx as dependency
+import fluentci_modules/nx
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("nx-affected")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> nx.affected(nx.affected_args("lint,test"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -97,13 +99,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Nx, as: Dependency
+  alias FluentCI.Modules.Nx
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("nx-affected")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Nx.affected(%{"targets" => "lint,test"})
     |> Flow.stdout()
   end
 end
@@ -117,13 +118,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.nx :as dependency]))
+            [fluentci-modules.nx :as nx]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "nx-affected")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (nx/affected {:targets "lint,test"})
       flow/run!))
 ```
 
@@ -131,10 +131,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("nx-affected")
   ->Flow.workdir(".")
-  ->FluentciModulesNx.version(FluentciModulesNx.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesNx.affected(FluentciModulesNx.affectedArgs(~targets="lint,test"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -142,15 +142,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import nx as dependency
+from fluentci_modules import nx
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("nx-affected")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(nx.affected, {"targets": "lint,test"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -159,13 +159,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/nx/index";
+import * as nx from "./fluentci_modules/nx/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("nx-affected")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(nx.affected, {"targets":"lint,test"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

@@ -96,8 +96,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Check the CI status of pull request #42 before merging it. Authenticate gh before running this pipeline.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -115,14 +117,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Gh as Dependency
+import FluentCI.Modules.Gh as Gh
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "gh-pr-checks"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Gh.prChecks (Gh.prChecksArgs { "number": "42" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -130,13 +132,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/gh as dependency
+import fluentci_modules/gh
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("gh-pr-checks")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> gh.pr_checks(gh.pr_checks_args("42"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -150,13 +152,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Gh, as: Dependency
+  alias FluentCI.Modules.Gh
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("gh-pr-checks")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Gh.pr_checks(%{"number" => "42"})
     |> Flow.stdout()
   end
 end
@@ -170,13 +171,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.gh :as dependency]))
+            [fluentci-modules.gh :as gh]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "gh-pr-checks")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (gh/pr-checks {:number "42"})
       flow/run!))
 ```
 
@@ -184,10 +184,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("gh-pr-checks")
   ->Flow.workdir(".")
-  ->FluentciModulesGh.setup(FluentciModulesGh.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesGh.prChecks(FluentciModulesGh.prChecksArgs(~number="42"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -195,15 +195,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import gh as dependency
+from fluentci_modules import gh
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("gh-pr-checks")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(gh.pr_checks, {"number": "42"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -212,13 +212,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/gh/index";
+import * as gh from "./fluentci_modules/gh/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("gh-pr-checks")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(gh.prChecks, {"number":"42"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

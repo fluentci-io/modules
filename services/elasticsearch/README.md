@@ -65,8 +65,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start elasticsearch for integration tests using docker.elastic.co/elasticsearch/elasticsearch:8.15.0. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -84,14 +86,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Elasticsearch as Dependency
+import FluentCI.Modules.Elasticsearch as Elasticsearch
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "elasticsearch-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Elasticsearch.start (Elasticsearch.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -99,13 +101,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/elasticsearch as dependency
+import fluentci_modules/elasticsearch
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("elasticsearch-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> elasticsearch.start(elasticsearch.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -119,13 +121,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Elasticsearch, as: Dependency
+  alias FluentCI.Modules.Elasticsearch
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("elasticsearch-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Elasticsearch.start(%{})
     |> Flow.stdout()
   end
 end
@@ -139,13 +140,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.elasticsearch :as dependency]))
+            [fluentci-modules.elasticsearch :as elasticsearch]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "elasticsearch-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (elasticsearch/start {})
       flow/run!))
 ```
 
@@ -153,10 +153,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("elasticsearch-start")
   ->Flow.workdir(".")
   ->FluentciModulesElasticsearch.start(FluentciModulesElasticsearch.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -164,15 +164,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import elasticsearch as dependency
+from fluentci_modules import elasticsearch
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("elasticsearch-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(elasticsearch.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -181,13 +181,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/elasticsearch/index";
+import * as elasticsearch from "./fluentci_modules/elasticsearch/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("elasticsearch-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(elasticsearch.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

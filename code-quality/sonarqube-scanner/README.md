@@ -77,8 +77,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `scan` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Analyze the configured project and submit results to SonarQube.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -96,14 +98,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.SonarqubeScanner as Dependency
+import FluentCI.Modules.SonarqubeScanner as SonarqubeScanner
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "sonarqube-scanner-scan"
     # Flow.workdir "."
-    # Dependency.scan (Dependency.scanArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # SonarqubeScanner.scan (SonarqubeScanner.scanArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -111,13 +113,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/sonarqube_scanner as dependency
+import fluentci_modules/sonarqube_scanner
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("sonarqube-scanner-scan")
   |> flow.workdir(".")
-  |> dependency.scan(dependency.scan_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> sonarqube_scanner.scan(sonarqube_scanner.scan_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -131,13 +133,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.SonarqubeScanner, as: Dependency
+  alias FluentCI.Modules.SonarqubeScanner
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("sonarqube-scanner-scan")
     |> Flow.workdir(".")
-    |> Dependency.scan(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> SonarqubeScanner.scan(%{})
     |> Flow.stdout()
   end
 end
@@ -151,13 +152,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.sonarqube-scanner :as dependency]))
+            [fluentci-modules.sonarqube-scanner :as sonarqube_scanner]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "sonarqube-scanner-scan")
       (flow/workdir ".")
-      (dependency/scan {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (sonarqube_scanner/scan {})
       flow/run!))
 ```
 
@@ -165,10 +165,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("sonarqube-scanner-scan")
   ->Flow.workdir(".")
   ->FluentciModulesSonarqubeScanner.scan(FluentciModulesSonarqubeScanner.scanArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -176,15 +176,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import sonarqube_scanner as dependency
+from fluentci_modules import sonarqube_scanner
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("sonarqube-scanner-scan")
         .workdir(".")
-        .pipe(dependency.scan, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(sonarqube_scanner.scan, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -193,13 +193,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/sonarqube-scanner/index";
+import * as sonarqube_scanner from "./fluentci_modules/sonarqube-scanner/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("sonarqube-scanner-scan")
     .workdir(".")
-    .pipe(dependency.scan, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(sonarqube_scanner.scan, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

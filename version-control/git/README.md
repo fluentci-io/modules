@@ -90,8 +90,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Clone a repository with optional shallow, partial and submodule checkout.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -109,14 +111,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Git as Dependency
+import FluentCI.Modules.Git as Git
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "git-clone"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Git.clone (Git.cloneArgs { "url": "https://github.com/acme/api.git" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -124,13 +126,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/git as dependency
+import fluentci_modules/git
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("git-clone")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> git.clone(git.clone_args("https://github.com/acme/api.git"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -144,13 +146,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Git, as: Dependency
+  alias FluentCI.Modules.Git
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("git-clone")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Git.clone(%{"url" => "https://github.com/acme/api.git"})
     |> Flow.stdout()
   end
 end
@@ -164,13 +165,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.git :as dependency]))
+            [fluentci-modules.git :as git]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "git-clone")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (git/clone {:url "https://github.com/acme/api.git"})
       flow/run!))
 ```
 
@@ -178,10 +178,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("git-clone")
   ->Flow.workdir(".")
-  ->FluentciModulesGit.setup(FluentciModulesGit.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesGit.clone(FluentciModulesGit.cloneArgs(~url="https://github.com/acme/api.git"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -189,15 +189,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import git as dependency
+from fluentci_modules import git
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("git-clone")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(git.clone, {"url": "https://github.com/acme/api.git"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -206,13 +206,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/git/index";
+import * as git from "./fluentci_modules/git/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("git-clone")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(git.clone, {"url":"https://github.com/acme/api.git"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

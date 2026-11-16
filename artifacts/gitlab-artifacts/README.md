@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload a prebuilt ZIP to the current job using GitLab job-token authentication.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.GitlabArtifacts as Dependency
+import FluentCI.Modules.GitlabArtifacts as GitlabArtifacts
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "gitlab-artifacts-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "archive": "example-archive", "jobId": "example-job-id" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # GitlabArtifacts.upload (GitlabArtifacts.uploadArgs { "archive": "dist/artifacts.zip", "jobId": "123456" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/gitlab_artifacts as dependency
+import fluentci_modules/gitlab_artifacts
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("gitlab-artifacts-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("example-archive", "example-job-id"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> gitlab_artifacts.upload(gitlab_artifacts.upload_args("dist/artifacts.zip", "123456"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.GitlabArtifacts, as: Dependency
+  alias FluentCI.Modules.GitlabArtifacts
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("gitlab-artifacts-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"archive" => "example-archive", "job_id" => "example-job-id"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> GitlabArtifacts.upload(%{"archive" => "dist/artifacts.zip", "job_id" => "123456"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.gitlab-artifacts :as dependency]))
+            [fluentci-modules.gitlab-artifacts :as gitlab_artifacts]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "gitlab-artifacts-upload")
       (flow/workdir ".")
-      (dependency/upload {:archive "example-archive", :jobId "example-job-id"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (gitlab_artifacts/upload {:archive "dist/artifacts.zip", :jobId "123456"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("gitlab-artifacts-upload")
   ->Flow.workdir(".")
-  ->FluentciModulesGitlabArtifacts.upload(FluentciModulesGitlabArtifacts.uploadArgs(~archive="example-archive", ~jobId="example-job-id"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesGitlabArtifacts.upload(FluentciModulesGitlabArtifacts.uploadArgs(~archive="dist/artifacts.zip", ~jobId="123456"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import gitlab_artifacts as dependency
+from fluentci_modules import gitlab_artifacts
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("gitlab-artifacts-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"archive": "example-archive", "job_id": "example-job-id"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(gitlab_artifacts.upload, {"archive": "dist/artifacts.zip", "job_id": "123456"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/gitlab-artifacts/index";
+import * as gitlab_artifacts from "./fluentci_modules/gitlab-artifacts/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("gitlab-artifacts-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"archive":"example-archive","jobId":"example-job-id"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(gitlab_artifacts.upload, {"archive":"dist/artifacts.zip","jobId":"123456"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

@@ -62,8 +62,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start trino for integration tests using trinodb/trino:484. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -81,14 +83,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Trino as Dependency
+import FluentCI.Modules.Trino as Trino
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "trino-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Trino.start (Trino.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -96,13 +98,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/trino as dependency
+import fluentci_modules/trino
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("trino-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> trino.start(trino.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -116,13 +118,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Trino, as: Dependency
+  alias FluentCI.Modules.Trino
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("trino-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Trino.start(%{})
     |> Flow.stdout()
   end
 end
@@ -136,13 +137,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.trino :as dependency]))
+            [fluentci-modules.trino :as trino]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "trino-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (trino/start {})
       flow/run!))
 ```
 
@@ -150,10 +150,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("trino-start")
   ->Flow.workdir(".")
   ->FluentciModulesTrino.start(FluentciModulesTrino.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -161,15 +161,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import trino as dependency
+from fluentci_modules import trino
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("trino-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(trino.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -178,13 +178,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/trino/index";
+import * as trino from "./fluentci_modules/trino/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("trino-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(trino.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

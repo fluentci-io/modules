@@ -64,8 +64,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Build container images on Depot remote builders, optionally pushing, loading, or saving the result.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -83,14 +85,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Depot as Dependency
+import FluentCI.Modules.Depot as Depot
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "depot-build"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Depot.build (Depot.buildArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -98,13 +100,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/depot as dependency
+import fluentci_modules/depot
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("depot-build")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> depot.build(depot.build_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -118,13 +120,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Depot, as: Dependency
+  alias FluentCI.Modules.Depot
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("depot-build")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Depot.build(%{})
     |> Flow.stdout()
   end
 end
@@ -138,13 +139,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.depot :as dependency]))
+            [fluentci-modules.depot :as depot]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "depot-build")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (depot/build {})
       flow/run!))
 ```
 
@@ -152,10 +152,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("depot-build")
   ->Flow.workdir(".")
-  ->FluentciModulesDepot.setup(FluentciModulesDepot.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesDepot.build(FluentciModulesDepot.buildArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -163,15 +163,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import depot as dependency
+from fluentci_modules import depot
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("depot-build")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(depot.build, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -180,13 +180,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/depot/index";
+import * as depot from "./fluentci_modules/depot/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("depot-build")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(depot.build, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

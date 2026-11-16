@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Discover attestations and other OCI artifacts attached to the released api image.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Oras as Dependency
+import FluentCI.Modules.Oras as Oras
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "oras-discover"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Oras.discover (Oras.discoverArgs { "reference": "ghcr.io/acme/api:1.0.0" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/oras as dependency
+import fluentci_modules/oras
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("oras-discover")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> oras.discover(oras.discover_args("ghcr.io/acme/api:1.0.0"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Oras, as: Dependency
+  alias FluentCI.Modules.Oras
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("oras-discover")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Oras.discover(%{"reference" => "ghcr.io/acme/api:1.0.0"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.oras :as dependency]))
+            [fluentci-modules.oras :as oras]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "oras-discover")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (oras/discover {:reference "ghcr.io/acme/api:1.0.0"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("oras-discover")
   ->Flow.workdir(".")
-  ->FluentciModulesOras.version(FluentciModulesOras.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesOras.discover(FluentciModulesOras.discoverArgs(~reference="ghcr.io/acme/api:1.0.0"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import oras as dependency
+from fluentci_modules import oras
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("oras-discover")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(oras.discover, {"reference": "ghcr.io/acme/api:1.0.0"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/oras/index";
+import * as oras from "./fluentci_modules/oras/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("oras-discover")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(oras.discover, {"reference":"ghcr.io/acme/api:1.0.0"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

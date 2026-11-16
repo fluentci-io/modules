@@ -76,8 +76,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload job artifacts using GitHub Actions runtime credentials and the official artifact client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -95,14 +97,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.GhArtifacts as Dependency
+import FluentCI.Modules.GhArtifacts as GhArtifacts
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "gh-artifacts-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "name": "example", "files": "dist/app.deb,dist/app.rpm" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # GhArtifacts.upload (GhArtifacts.uploadArgs { "name": "api", "files": "dist/api.tar.gz,dist/api.tar.gz.sha256" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -110,13 +112,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/gh_artifacts as dependency
+import fluentci_modules/gh_artifacts
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("gh-artifacts-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("example", "dist/app.deb,dist/app.rpm"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> gh_artifacts.upload(gh_artifacts.upload_args("api", "dist/api.tar.gz,dist/api.tar.gz.sha256"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -130,13 +132,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.GhArtifacts, as: Dependency
+  alias FluentCI.Modules.GhArtifacts
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("gh-artifacts-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"name" => "example", "files" => "dist/app.deb,dist/app.rpm"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> GhArtifacts.upload(%{"name" => "api", "files" => "dist/api.tar.gz,dist/api.tar.gz.sha256"})
     |> Flow.stdout()
   end
 end
@@ -150,13 +151,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.gh-artifacts :as dependency]))
+            [fluentci-modules.gh-artifacts :as gh_artifacts]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "gh-artifacts-upload")
       (flow/workdir ".")
-      (dependency/upload {:name "example", :files "dist/app.deb,dist/app.rpm"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (gh_artifacts/upload {:name "api", :files "dist/api.tar.gz,dist/api.tar.gz.sha256"})
       flow/run!))
 ```
 
@@ -164,10 +164,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("gh-artifacts-upload")
   ->Flow.workdir(".")
-  ->FluentciModulesGhArtifacts.upload(FluentciModulesGhArtifacts.uploadArgs(~name="example", ~files="dist/app.deb,dist/app.rpm"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesGhArtifacts.upload(FluentciModulesGhArtifacts.uploadArgs(~name="api", ~files="dist/api.tar.gz,dist/api.tar.gz.sha256"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -175,15 +175,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import gh_artifacts as dependency
+from fluentci_modules import gh_artifacts
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("gh-artifacts-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"name": "example", "files": "dist/app.deb,dist/app.rpm"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(gh_artifacts.upload, {"name": "api", "files": "dist/api.tar.gz,dist/api.tar.gz.sha256"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -192,13 +192,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/gh-artifacts/index";
+import * as gh_artifacts from "./fluentci_modules/gh-artifacts/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("gh-artifacts-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"name":"example","files":"dist/app.deb,dist/app.rpm"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(gh_artifacts.upload, {"name":"api","files":"dist/api.tar.gz,dist/api.tar.gz.sha256"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

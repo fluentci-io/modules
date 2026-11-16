@@ -84,8 +84,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Provision extism before the build steps that require it. The setup result reports the installed version and executable directory.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -103,14 +105,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.SetupExtism as Dependency
+import FluentCI.Modules.SetupExtism as SetupExtism
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "setup-extism-setup"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # SetupExtism.setup (SetupExtism.setupArgs)
+    # Flow.map (\result -> result.version)
     # Flow.run
 ```
 
@@ -118,13 +120,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/setup_extism as dependency
+import fluentci_modules/setup_extism
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("setup-extism-setup")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> setup_extism.setup(setup_extism.setup_args())
+  |> flow.map(fn(result) { result.version })
   |> flow.run
 }
 ```
@@ -138,13 +140,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.SetupExtism, as: Dependency
+  alias FluentCI.Modules.SetupExtism
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("setup-extism-setup")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> SetupExtism.setup(%{})
     |> Flow.stdout()
   end
 end
@@ -158,13 +159,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.setup-extism :as dependency]))
+            [fluentci-modules.setup-extism :as setup_extism]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "setup-extism-setup")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (setup_extism/setup {})
       flow/run!))
 ```
 
@@ -172,10 +172,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("setup-extism-setup")
   ->Flow.workdir(".")
   ->FluentciModulesSetupExtism.setup(FluentciModulesSetupExtism.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.version)
   ->Flow.run
 ```
 
@@ -183,15 +183,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import setup_extism as dependency
+from fluentci_modules import setup_extism
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("setup-extism-setup")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(setup_extism.setup, {})
+        .map(lambda result: result.version)
         .run()
     )
 ```
@@ -200,13 +200,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/setup-extism/index";
+import * as setup_extism from "./fluentci_modules/setup-extism/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("setup-extism-setup")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(setup_extism.setup, {})
+    .map(result => result.version)
     .run();
 }
 ```

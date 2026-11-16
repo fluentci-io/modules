@@ -84,8 +84,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start postgres for integration tests using postgres:17-alpine. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -103,14 +105,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Postgres as Dependency
+import FluentCI.Modules.Postgres as Postgres
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "postgres-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Postgres.start (Postgres.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -118,13 +120,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/postgres as dependency
+import fluentci_modules/postgres
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("postgres-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> postgres.start(postgres.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -138,13 +140,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Postgres, as: Dependency
+  alias FluentCI.Modules.Postgres
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("postgres-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Postgres.start(%{})
     |> Flow.stdout()
   end
 end
@@ -158,13 +159,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.postgres :as dependency]))
+            [fluentci-modules.postgres :as postgres]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "postgres-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (postgres/start {})
       flow/run!))
 ```
 
@@ -172,10 +172,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("postgres-start")
   ->Flow.workdir(".")
   ->FluentciModulesPostgres.start(FluentciModulesPostgres.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -183,15 +183,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import postgres as dependency
+from fluentci_modules import postgres
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("postgres-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(postgres.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -200,13 +200,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/postgres/index";
+import * as postgres from "./fluentci_modules/postgres/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("postgres-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(postgres.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

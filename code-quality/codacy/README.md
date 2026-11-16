@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `upload` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Upload an existing coverage report to Codacy.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Codacy as Dependency
+import FluentCI.Modules.Codacy as Codacy
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "codacy-upload"
     # Flow.workdir "."
-    # Dependency.upload (Dependency.uploadArgs { "coverageFile": "example-coverage-file" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Codacy.upload (Codacy.uploadArgs { "coverageFile": "coverage/lcov.info" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/codacy as dependency
+import fluentci_modules/codacy
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("codacy-upload")
   |> flow.workdir(".")
-  |> dependency.upload(dependency.upload_args("example-coverage-file"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> codacy.upload(codacy.upload_args("coverage/lcov.info"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Codacy, as: Dependency
+  alias FluentCI.Modules.Codacy
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("codacy-upload")
     |> Flow.workdir(".")
-    |> Dependency.upload(%{"coverage_file" => "example-coverage-file"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Codacy.upload(%{"coverage_file" => "coverage/lcov.info"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.codacy :as dependency]))
+            [fluentci-modules.codacy :as codacy]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "codacy-upload")
       (flow/workdir ".")
-      (dependency/upload {:coverageFile "example-coverage-file"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (codacy/upload {:coverageFile "coverage/lcov.info"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("codacy-upload")
   ->Flow.workdir(".")
-  ->FluentciModulesCodacy.upload(FluentciModulesCodacy.uploadArgs(~coverageFile="example-coverage-file"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesCodacy.upload(FluentciModulesCodacy.uploadArgs(~coverageFile="coverage/lcov.info"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import codacy as dependency
+from fluentci_modules import codacy
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("codacy-upload")
         .workdir(".")
-        .pipe(dependency.upload, {"coverage_file": "example-coverage-file"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(codacy.upload, {"coverage_file": "coverage/lcov.info"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/codacy/index";
+import * as codacy from "./fluentci_modules/codacy/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("codacy-upload")
     .workdir(".")
-    .pipe(dependency.upload, {"coverageFile":"example-coverage-file"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(codacy.upload, {"coverageFile":"coverage/lcov.info"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Deploy an ARM or Bicep template to a resource group.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Azure as Dependency
+import FluentCI.Modules.Azure as Azure
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "azure-group-deploy"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Azure.groupDeploy (Azure.groupDeployArgs { "resourceGroup": "api-staging", "templateFile": "infra/main.bicep" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/azure as dependency
+import fluentci_modules/azure
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("azure-group-deploy")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> azure.group_deploy(azure.group_deploy_args("api-staging", "infra/main.bicep"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Azure, as: Dependency
+  alias FluentCI.Modules.Azure
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("azure-group-deploy")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Azure.group_deploy(%{"resource_group" => "api-staging", "template_file" => "infra/main.bicep"})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.azure :as dependency]))
+            [fluentci-modules.azure :as azure]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "azure-group-deploy")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (azure/group-deploy {:resourceGroup "api-staging", :templateFile "infra/main.bicep"})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("azure-group-deploy")
   ->Flow.workdir(".")
-  ->FluentciModulesAzure.version(FluentciModulesAzure.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesAzure.groupDeploy(FluentciModulesAzure.groupDeployArgs(~resourceGroup="api-staging", ~templateFile="infra/main.bicep"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import azure as dependency
+from fluentci_modules import azure
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("azure-group-deploy")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(azure.group_deploy, {"resource_group": "api-staging", "template_file": "infra/main.bicep"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/azure/index";
+import * as azure from "./fluentci_modules/azure/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("azure-group-deploy")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(azure.groupDeploy, {"resourceGroup":"api-staging","templateFile":"infra/main.bicep"})
+    .map(result => result.reportPath)
     .run();
 }
 ```

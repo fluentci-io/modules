@@ -104,8 +104,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Build packages from a Linux dpkg package tree and target architecture.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -121,30 +123,33 @@ See [composition support and limitations](../../docs/COMPOSITION.md).
 module Main where
 
 import Prelude
+import Data.Array as Array
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Dpkg as Dependency
+import FluentCI.Modules.Dpkg as Dpkg
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "dpkg-build"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs { "directory": ".", "arch": "x86_64" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Dpkg.build (Dpkg.buildArgs { "directory": "packaging/debian", "arch": "amd64" })
+    # Flow.map (\result -> show (Array.length result))
     # Flow.run
 ```
 
 ### Gleam
 
 ```gleam
+import gleam/int
+import gleam/list
 import fluentci/flow
-import fluentci_modules/dpkg as dependency
+import fluentci_modules/dpkg
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("dpkg-build")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args(".", "x86_64"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> dpkg.build(dpkg.build_args("packaging/debian", "amd64"))
+  |> flow.map(fn(result) { int.to_string(list.length(result)) })
   |> flow.run
 }
 ```
@@ -158,13 +163,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Dpkg, as: Dependency
+  alias FluentCI.Modules.Dpkg
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("dpkg-build")
     |> Flow.workdir(".")
-    |> Dependency.build(%{"directory" => ".", "arch" => "x86_64"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Dpkg.build(%{"directory" => "packaging/debian", "arch" => "amd64"})
     |> Flow.stdout()
   end
 end
@@ -178,13 +182,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.dpkg :as dependency]))
+            [fluentci-modules.dpkg :as dpkg]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "dpkg-build")
       (flow/workdir ".")
-      (dependency/build {:directory ".", :arch "x86_64"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (dpkg/build {:directory "packaging/debian", :arch "amd64"})
       flow/run!))
 ```
 
@@ -192,10 +195,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("dpkg-build")
   ->Flow.workdir(".")
-  ->FluentciModulesDpkg.build(FluentciModulesDpkg.buildArgs(~directory=".", ~arch="x86_64"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesDpkg.build(FluentciModulesDpkg.buildArgs(~directory="packaging/debian", ~arch="amd64"))
+  ->Flow.map(result => Js.Int.toString(Belt.Array.length(result)))
   ->Flow.run
 ```
 
@@ -203,15 +206,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import dpkg as dependency
+from fluentci_modules import dpkg
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("dpkg-build")
         .workdir(".")
-        .pipe(dependency.build, {"directory": ".", "arch": "x86_64"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(dpkg.build, {"directory": "packaging/debian", "arch": "amd64"})
+        .map(lambda result: str(len(result)))
         .run()
     )
 ```
@@ -220,13 +223,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/dpkg/index";
+import * as dpkg from "./fluentci_modules/dpkg/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("dpkg-build")
     .workdir(".")
-    .pipe(dependency.build, {"directory":".","arch":"x86_64"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(dpkg.build, {"directory":"packaging/debian","arch":"amd64"})
+    .map(result => String(result.length))
     .run();
 }
 ```

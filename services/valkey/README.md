@@ -78,8 +78,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start valkey for integration tests using valkey/valkey:8-alpine. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -97,14 +99,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Valkey as Dependency
+import FluentCI.Modules.Valkey as Valkey
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "valkey-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Valkey.start (Valkey.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -112,13 +114,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/valkey as dependency
+import fluentci_modules/valkey
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("valkey-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> valkey.start(valkey.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -132,13 +134,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Valkey, as: Dependency
+  alias FluentCI.Modules.Valkey
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("valkey-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Valkey.start(%{})
     |> Flow.stdout()
   end
 end
@@ -152,13 +153,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.valkey :as dependency]))
+            [fluentci-modules.valkey :as valkey]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "valkey-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (valkey/start {})
       flow/run!))
 ```
 
@@ -166,10 +166,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("valkey-start")
   ->Flow.workdir(".")
   ->FluentciModulesValkey.start(FluentciModulesValkey.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -177,15 +177,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import valkey as dependency
+from fluentci_modules import valkey
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("valkey-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(valkey.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -194,13 +194,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/valkey/index";
+import * as valkey from "./fluentci_modules/valkey/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("valkey-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(valkey.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Run Playwright Test headlessly, optionally filtering projects and tests.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Playwright as Dependency
+import FluentCI.Modules.Playwright as Playwright
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "playwright-test"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Playwright.test (Playwright.testArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/playwright as dependency
+import fluentci_modules/playwright
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("playwright-test")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> playwright.test(playwright.test_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Playwright, as: Dependency
+  alias FluentCI.Modules.Playwright
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("playwright-test")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Playwright.test(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.playwright :as dependency]))
+            [fluentci-modules.playwright :as playwright]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "playwright-test")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (playwright/test {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("playwright-test")
   ->Flow.workdir(".")
-  ->FluentciModulesPlaywright.setup(FluentciModulesPlaywright.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesPlaywright.test(FluentciModulesPlaywright.testArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import playwright as dependency
+from fluentci_modules import playwright
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("playwright-test")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(playwright.test, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/playwright/index";
+import * as playwright from "./fluentci_modules/playwright/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("playwright-test")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(playwright.test, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

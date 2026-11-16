@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `check` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Check formatting without writing files.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Prettier as Dependency
+import FluentCI.Modules.Prettier as Prettier
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "prettier-check"
     # Flow.workdir "."
-    # Dependency.check (Dependency.checkArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Prettier.check (Prettier.checkArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/prettier as dependency
+import fluentci_modules/prettier
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("prettier-check")
   |> flow.workdir(".")
-  |> dependency.check(dependency.check_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> prettier.check(prettier.check_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Prettier, as: Dependency
+  alias FluentCI.Modules.Prettier
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("prettier-check")
     |> Flow.workdir(".")
-    |> Dependency.check(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Prettier.check(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.prettier :as dependency]))
+            [fluentci-modules.prettier :as prettier]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "prettier-check")
       (flow/workdir ".")
-      (dependency/check {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (prettier/check {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("prettier-check")
   ->Flow.workdir(".")
   ->FluentciModulesPrettier.check(FluentciModulesPrettier.checkArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import prettier as dependency
+from fluentci_modules import prettier
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("prettier-check")
         .workdir(".")
-        .pipe(dependency.check, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(prettier.check, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/prettier/index";
+import * as prettier from "./fluentci_modules/prettier/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("prettier-check")
     .workdir(".")
-    .pipe(dependency.check, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(prettier.check, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

@@ -75,8 +75,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Build selected Bazel targets.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -94,14 +96,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Bazel as Dependency
+import FluentCI.Modules.Bazel as Bazel
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "bazel-build"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Bazel.build (Bazel.buildArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -109,13 +111,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/bazel as dependency
+import fluentci_modules/bazel
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("bazel-build")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> bazel.build(bazel.build_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -129,13 +131,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Bazel, as: Dependency
+  alias FluentCI.Modules.Bazel
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("bazel-build")
     |> Flow.workdir(".")
-    |> Dependency.build(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Bazel.build(%{})
     |> Flow.stdout()
   end
 end
@@ -149,13 +150,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.bazel :as dependency]))
+            [fluentci-modules.bazel :as bazel]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "bazel-build")
       (flow/workdir ".")
-      (dependency/build {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (bazel/build {})
       flow/run!))
 ```
 
@@ -163,10 +163,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("bazel-build")
   ->Flow.workdir(".")
   ->FluentciModulesBazel.build(FluentciModulesBazel.buildArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -174,15 +174,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import bazel as dependency
+from fluentci_modules import bazel
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("bazel-build")
         .workdir(".")
-        .pipe(dependency.build, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(bazel.build, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -191,13 +191,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/bazel/index";
+import * as bazel from "./fluentci_modules/bazel/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("bazel-build")
     .workdir(".")
-    .pipe(dependency.build, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(bazel.build, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

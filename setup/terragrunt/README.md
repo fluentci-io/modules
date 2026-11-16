@@ -69,8 +69,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Provision terragrunt before the build steps that require it. The setup result reports the installed version and executable directory.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -88,14 +90,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.SetupTerragrunt as Dependency
+import FluentCI.Modules.SetupTerragrunt as SetupTerragrunt
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "setup-terragrunt-setup"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # SetupTerragrunt.setup (SetupTerragrunt.setupArgs)
+    # Flow.map (\result -> result.version)
     # Flow.run
 ```
 
@@ -103,13 +105,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/setup_terragrunt as dependency
+import fluentci_modules/setup_terragrunt
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("setup-terragrunt-setup")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> setup_terragrunt.setup(setup_terragrunt.setup_args())
+  |> flow.map(fn(result) { result.version })
   |> flow.run
 }
 ```
@@ -123,13 +125,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.SetupTerragrunt, as: Dependency
+  alias FluentCI.Modules.SetupTerragrunt
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("setup-terragrunt-setup")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> SetupTerragrunt.setup(%{})
     |> Flow.stdout()
   end
 end
@@ -143,13 +144,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.setup-terragrunt :as dependency]))
+            [fluentci-modules.setup-terragrunt :as setup_terragrunt]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "setup-terragrunt-setup")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (setup_terragrunt/setup {})
       flow/run!))
 ```
 
@@ -157,10 +157,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("setup-terragrunt-setup")
   ->Flow.workdir(".")
   ->FluentciModulesSetupTerragrunt.setup(FluentciModulesSetupTerragrunt.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.version)
   ->Flow.run
 ```
 
@@ -168,15 +168,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import setup_terragrunt as dependency
+from fluentci_modules import setup_terragrunt
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("setup-terragrunt-setup")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(setup_terragrunt.setup, {})
+        .map(lambda result: result.version)
         .run()
     )
 ```
@@ -185,13 +185,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/setup-terragrunt/index";
+import * as setup_terragrunt from "./fluentci_modules/setup-terragrunt/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("setup-terragrunt-setup")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(setup_terragrunt.setup, {})
+    .map(result => result.version)
     .run();
 }
 ```

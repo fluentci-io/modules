@@ -63,8 +63,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Start wiremock for integration tests using wiremock/wiremock:3.13.2. Return the allocated endpoint to the caller; use it when configuring your test client.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -82,14 +84,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Wiremock as Dependency
+import FluentCI.Modules.Wiremock as Wiremock
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "wiremock-start"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Wiremock.start (Wiremock.startArgs)
+    # Flow.map (\result -> result.endpoint)
     # Flow.run
 ```
 
@@ -97,13 +99,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/wiremock as dependency
+import fluentci_modules/wiremock
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("wiremock-start")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> wiremock.start(wiremock.start_args())
+  |> flow.map(fn(result) { result.endpoint })
   |> flow.run
 }
 ```
@@ -117,13 +119,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Wiremock, as: Dependency
+  alias FluentCI.Modules.Wiremock
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("wiremock-start")
     |> Flow.workdir(".")
-    |> Dependency.start(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Wiremock.start(%{})
     |> Flow.stdout()
   end
 end
@@ -137,13 +138,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.wiremock :as dependency]))
+            [fluentci-modules.wiremock :as wiremock]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "wiremock-start")
       (flow/workdir ".")
-      (dependency/start {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (wiremock/start {})
       flow/run!))
 ```
 
@@ -151,10 +151,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("wiremock-start")
   ->Flow.workdir(".")
   ->FluentciModulesWiremock.start(FluentciModulesWiremock.startArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.endpoint)
   ->Flow.run
 ```
 
@@ -162,15 +162,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import wiremock as dependency
+from fluentci_modules import wiremock
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("wiremock-start")
         .workdir(".")
-        .pipe(dependency.start, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(wiremock.start, {})
+        .map(lambda result: result.endpoint)
         .run()
     )
 ```
@@ -179,13 +179,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/wiremock/index";
+import * as wiremock from "./fluentci_modules/wiremock/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("wiremock-start")
     .workdir(".")
-    .pipe(dependency.start, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(wiremock.start, {})
+    .map(result => result.endpoint)
     .run();
 }
 ```

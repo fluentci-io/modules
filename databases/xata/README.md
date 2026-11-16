@@ -103,8 +103,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `version` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+List database branches for the selected project.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -122,14 +124,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Xata as Dependency
+import FluentCI.Modules.Xata as Xata
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "xata-branch-list"
     # Flow.workdir "."
-    # Dependency.version (Dependency.versionArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Xata.branchList (Xata.branchListArgs)
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -137,13 +139,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/xata as dependency
+import fluentci_modules/xata
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("xata-branch-list")
   |> flow.workdir(".")
-  |> dependency.version(dependency.version_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> xata.branch_list(xata.branch_list_args())
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -157,13 +159,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Xata, as: Dependency
+  alias FluentCI.Modules.Xata
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("xata-branch-list")
     |> Flow.workdir(".")
-    |> Dependency.version(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Xata.branch_list(%{})
     |> Flow.stdout()
   end
 end
@@ -177,13 +178,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.xata :as dependency]))
+            [fluentci-modules.xata :as xata]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "xata-branch-list")
       (flow/workdir ".")
-      (dependency/version {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (xata/branch-list {})
       flow/run!))
 ```
 
@@ -191,10 +191,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("xata-branch-list")
   ->Flow.workdir(".")
-  ->FluentciModulesXata.version(FluentciModulesXata.versionArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesXata.branchList(FluentciModulesXata.branchListArgs)
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -202,15 +202,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import xata as dependency
+from fluentci_modules import xata
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("xata-branch-list")
         .workdir(".")
-        .pipe(dependency.version, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(xata.branch_list, {})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -219,13 +219,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/xata/index";
+import * as xata from "./fluentci_modules/xata/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("xata-branch-list")
     .workdir(".")
-    .pipe(dependency.version, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(xata.branchList, {})
+    .map(result => result.reportPath)
     .run();
 }
 ```

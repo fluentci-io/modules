@@ -114,8 +114,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `build` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Build packages from a Linux rpmbuild package tree and target architecture.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -131,30 +133,33 @@ See [composition support and limitations](../../docs/COMPOSITION.md).
 module Main where
 
 import Prelude
+import Data.Array as Array
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Rpmbuild as Dependency
+import FluentCI.Modules.Rpmbuild as Rpmbuild
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "rpmbuild-build"
     # Flow.workdir "."
-    # Dependency.build (Dependency.buildArgs { "directory": ".", "arch": "x86_64", "spec": "example-spec" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Rpmbuild.build (Rpmbuild.buildArgs { "directory": "packaging/rpm", "arch": "x86_64", "spec": "packaging/api.spec" })
+    # Flow.map (\result -> show (Array.length result))
     # Flow.run
 ```
 
 ### Gleam
 
 ```gleam
+import gleam/int
+import gleam/list
 import fluentci/flow
-import fluentci_modules/rpmbuild as dependency
+import fluentci_modules/rpmbuild
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("rpmbuild-build")
   |> flow.workdir(".")
-  |> dependency.build(dependency.build_args(".", "x86_64", "example-spec"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> rpmbuild.build(rpmbuild.build_args("packaging/rpm", "x86_64", "packaging/api.spec"))
+  |> flow.map(fn(result) { int.to_string(list.length(result)) })
   |> flow.run
 }
 ```
@@ -168,13 +173,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Rpmbuild, as: Dependency
+  alias FluentCI.Modules.Rpmbuild
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("rpmbuild-build")
     |> Flow.workdir(".")
-    |> Dependency.build(%{"directory" => ".", "arch" => "x86_64", "spec" => "example-spec"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Rpmbuild.build(%{"directory" => "packaging/rpm", "arch" => "x86_64", "spec" => "packaging/api.spec"})
     |> Flow.stdout()
   end
 end
@@ -188,13 +192,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.rpmbuild :as dependency]))
+            [fluentci-modules.rpmbuild :as rpmbuild]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "rpmbuild-build")
       (flow/workdir ".")
-      (dependency/build {:directory ".", :arch "x86_64", :spec "example-spec"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (rpmbuild/build {:directory "packaging/rpm", :arch "x86_64", :spec "packaging/api.spec"})
       flow/run!))
 ```
 
@@ -202,10 +205,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("rpmbuild-build")
   ->Flow.workdir(".")
-  ->FluentciModulesRpmbuild.build(FluentciModulesRpmbuild.buildArgs(~directory=".", ~arch="x86_64", ~spec="example-spec"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesRpmbuild.build(FluentciModulesRpmbuild.buildArgs(~directory="packaging/rpm", ~arch="x86_64", ~spec="packaging/api.spec"))
+  ->Flow.map(result => Js.Int.toString(Belt.Array.length(result)))
   ->Flow.run
 ```
 
@@ -213,15 +216,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import rpmbuild as dependency
+from fluentci_modules import rpmbuild
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("rpmbuild-build")
         .workdir(".")
-        .pipe(dependency.build, {"directory": ".", "arch": "x86_64", "spec": "example-spec"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(rpmbuild.build, {"directory": "packaging/rpm", "arch": "x86_64", "spec": "packaging/api.spec"})
+        .map(lambda result: str(len(result)))
         .run()
     )
 ```
@@ -230,13 +233,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/rpmbuild/index";
+import * as rpmbuild from "./fluentci_modules/rpmbuild/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("rpmbuild-build")
     .workdir(".")
-    .pipe(dependency.build, {"directory":".","arch":"x86_64","spec":"example-spec"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(rpmbuild.build, {"directory":"packaging/rpm","arch":"x86_64","spec":"packaging/api.spec"})
+    .map(result => String(result.length))
     .run();
 }
 ```

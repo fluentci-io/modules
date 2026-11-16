@@ -52,6 +52,32 @@ fn sample(key: String, prop: d.Value) -> d.Value {
 
 pub fn example(schema: d.Value) -> Result(#(String, d.Value), String) {
   let exports = d.get(schema, "exports")
+  let configured = d.get(schema, "readmeExample")
+  case configured {
+    d.Null -> default_example(schema)
+    _ -> {
+      let operation = d.s(configured, "operation")
+      use _ <- result.try(c.require(
+        d.get(exports, operation) != d.Null,
+        "Unknown README operation: " <> operation,
+      ))
+      let arguments = d.get(configured, "arguments")
+      let input = d.get(d.get(exports, operation), "input")
+      use _ <- result.try(
+        c.all(d.strings(d.get(input, "required")), fn(key) {
+          c.require(
+            key == "runDir" || d.get(arguments, key) != d.Null,
+            "Missing README argument: " <> key,
+          )
+        }),
+      )
+      Ok(#(operation, arguments))
+    }
+  }
+}
+
+fn default_example(schema: d.Value) -> Result(#(String, d.Value), String) {
+  let exports = d.get(schema, "exports")
   let preferred = [
     "setup",
     "start",
@@ -155,11 +181,50 @@ fn project(output: d.Value, python: Bool) -> String {
         }
     }
   case d.s(prop, "type"), python {
-    "array", True -> "\",\".join(" <> access <> ")"
-    "array", False -> access <> ".join(\",\")"
+    "array", True -> "str(len(" <> access <> "))"
+    "array", False -> "String(" <> access <> ".length)"
     "string", _ -> access
     _, True -> "str(" <> access <> ")"
     _, False -> "String(" <> access <> ")"
+  }
+}
+
+fn native_projection(output: d.Value, sdk: String) -> String {
+  let fields = d.get(output, "properties")
+  let key =
+    list.find(
+      [
+        "endpoint",
+        "reportPath",
+        "version",
+        "cache",
+        "messageId",
+        "binDir",
+        "name",
+        "files",
+      ],
+      fn(key) { d.get(fields, key) != d.Null },
+    )
+    |> result.unwrap("")
+  let prop = case key {
+    "" -> output
+    _ -> d.get(fields, key)
+  }
+  let access =
+    "result"
+    <> case key {
+      "" -> ""
+      _ ->
+        "."
+        <> case sdk {
+          "gleam" -> snake(key)
+          _ -> camel(key)
+        }
+    }
+  case d.s(prop, "type"), sdk {
+    "array", "purs" -> "show (Array.length " <> access <> ")"
+    "array", "gleam" -> "int.to_string(list.length(" <> access <> "))"
+    _, _ -> access
   }
 }
 
@@ -221,11 +286,41 @@ pub fn section(
   let module_title = f.title(f.kebab(d.s(module, "name")))
   let operation = camel(selected.0)
   let replacements = [
+    #(
+      "purs_extra_imports",
+      case
+        string.contains(
+          native_projection(d.get(contract, "output"), "purs"),
+          "Array.length",
+        )
+      {
+        True -> "import Data.Array as Array\n"
+        False -> ""
+      },
+    ),
+    #(
+      "gleam_extra_imports",
+      case
+        string.contains(
+          native_projection(d.get(contract, "output"), "gleam"),
+          "list.length",
+        )
+      {
+        True -> "import gleam/int\nimport gleam/list\n"
+        False -> ""
+      },
+    ),
+    #("scenario", d.s(d.get(schema, "readmeExample"), "scenario")),
+    #(
+      "pipeline_name",
+      f.kebab(d.s(module, "name")) <> "-" <> f.kebab(selected.0),
+    ),
     #("module_pascal", module_title),
     #("function_kebab", f.kebab(selected.0)),
     #(
       "purs_arguments",
-      "Dependency."
+      module_title
+        <> "."
         <> operation
         <> "Args"
         <> case values {
@@ -291,6 +386,23 @@ pub fn section(
     #("function", selected.0),
     #("js_function", camel(selected.0)),
     #("js_object", js_object),
+    #("purs_projection", native_projection(d.get(contract, "output"), "purs")),
+    #("gleam_projection", native_projection(d.get(contract, "output"), "gleam")),
+    #(
+      "rescript_projection",
+      case
+        string.contains(
+          native_projection(d.get(contract, "output"), "purs"),
+          "Array.length",
+        )
+      {
+        True ->
+          "Js.Int.toString(Belt.Array.length("
+          <> native_projection(d.get(contract, "output"), "rescript")
+          <> "))"
+        False -> native_projection(d.get(contract, "output"), "rescript")
+      },
+    ),
     #("js_projection", project(d.get(contract, "output"), False)),
     #("python_projection", project(d.get(contract, "output"), True)),
     #("projection_description", "a useful field (or comma-joined list)"),
@@ -411,10 +523,22 @@ pub fn run(root: String, check: Bool) -> Result(Nil, String) {
   use template <- result.try(c.text(
     root <> "/scripts/templates/readme-languages.md",
   ))
+  use scenarios <- result.try(f.json(
+    root <> "/scripts/templates/readme-examples.json",
+  ))
   c.all(modules, fn(module) {
     let directory = root <> "/" <> d.s(module, "path")
     use schema <- result.try(f.json(directory <> "/schema.json"))
-    use examples <- result.try(section(template, module, schema))
+    let scenario = d.get(scenarios, d.s(module, "name"))
+    use _ <- result.try(c.require(
+      scenario != d.Null,
+      "Missing module-specific README example: " <> d.s(module, "name"),
+    ))
+    use examples <- result.try(section(
+      template,
+      module,
+      d.put(schema, "readmeExample", scenario),
+    ))
     use document <- result.try(c.text(directory <> "/README.md"))
     use rendered <- result.try(render(document, examples))
     f.generated(directory <> "/README.md", rendered, check)

@@ -60,8 +60,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `setup` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Provision macports-rs before the build steps that require it. The setup result reports the installed version and executable directory.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -79,14 +81,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.SetupMacportsRs as Dependency
+import FluentCI.Modules.SetupMacportsRs as SetupMacportsRs
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "setup-macports-rs-setup"
     # Flow.workdir "."
-    # Dependency.setup (Dependency.setupArgs)
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # SetupMacportsRs.setup (SetupMacportsRs.setupArgs)
+    # Flow.map (\result -> result.version)
     # Flow.run
 ```
 
@@ -94,13 +96,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/setup_macports_rs as dependency
+import fluentci_modules/setup_macports_rs
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("setup-macports-rs-setup")
   |> flow.workdir(".")
-  |> dependency.setup(dependency.setup_args())
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> setup_macports_rs.setup(setup_macports_rs.setup_args())
+  |> flow.map(fn(result) { result.version })
   |> flow.run
 }
 ```
@@ -114,13 +116,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.SetupMacportsRs, as: Dependency
+  alias FluentCI.Modules.SetupMacportsRs
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("setup-macports-rs-setup")
     |> Flow.workdir(".")
-    |> Dependency.setup(%{})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> SetupMacportsRs.setup(%{})
     |> Flow.stdout()
   end
 end
@@ -134,13 +135,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.setup-macports-rs :as dependency]))
+            [fluentci-modules.setup-macports-rs :as setup_macports_rs]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "setup-macports-rs-setup")
       (flow/workdir ".")
-      (dependency/setup {})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (setup_macports_rs/setup {})
       flow/run!))
 ```
 
@@ -148,10 +148,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("setup-macports-rs-setup")
   ->Flow.workdir(".")
   ->FluentciModulesSetupMacportsRs.setup(FluentciModulesSetupMacportsRs.setupArgs)
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->Flow.map(result => result.version)
   ->Flow.run
 ```
 
@@ -159,15 +159,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import setup_macports_rs as dependency
+from fluentci_modules import setup_macports_rs
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("setup-macports-rs-setup")
         .workdir(".")
-        .pipe(dependency.setup, {})
-        .exec("git", "diff", "--exit-code")
+        .pipe(setup_macports_rs.setup, {})
+        .map(lambda result: result.version)
         .run()
     )
 ```
@@ -176,13 +176,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/setup-macports-rs/index";
+import * as setup_macports_rs from "./fluentci_modules/setup-macports-rs/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("setup-macports-rs-setup")
     .workdir(".")
-    .pipe(dependency.setup, {})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(setup_macports_rs.setup, {})
+    .map(result => result.version)
     .run();
 }
 ```

@@ -106,8 +106,10 @@ named bindings from the installed component's WIT; no handwritten FFI or CLI
 subprocess is needed. Include generated source directories in the caller's SDK
 project. The callee can use a different SDK from the caller.
 
-These examples append `start` and a native Git check to one pipeline.
-Replace sample paths and identifiers with your own. Optional arguments use the
+Validate a migration file against the target database before application.
+
+Replace the sample organization, paths and identifiers with your own. Configure
+credentials through your CI secret provider before running authenticated operations. Optional arguments use the
 callee's defaults, and public list fields use comma-separated strings. See
 [COMPONENT.md](./COMPONENT.md) for argument descriptions and return types.
 
@@ -125,14 +127,14 @@ module Main where
 import Prelude
 import Effect (Effect)
 import FluentCI.Flow as Flow
-import FluentCI.Modules.Pgroll as Dependency
+import FluentCI.Modules.Pgroll as Pgroll
 
 run :: Effect String
 run =
-  Flow.pipeline "ci"
+  Flow.pipeline "pgroll-validate"
     # Flow.workdir "."
-    # Dependency.start (Dependency.startArgs { "file": "dist/artifact.tar.gz" })
-    # Flow.exec [ "git", "diff", "--exit-code" ]
+    # Pgroll.validate (Pgroll.validateArgs { "file": "dist/app.tar.gz" })
+    # Flow.map (\result -> result.reportPath)
     # Flow.run
 ```
 
@@ -140,13 +142,13 @@ run =
 
 ```gleam
 import fluentci/flow
-import fluentci_modules/pgroll as dependency
+import fluentci_modules/pgroll
 
 pub fn run() -> String {
-  flow.pipeline("ci")
+  flow.pipeline("pgroll-validate")
   |> flow.workdir(".")
-  |> dependency.start(dependency.start_args("dist/artifact.tar.gz"))
-  |> flow.exec("git", ["diff", "--exit-code"])
+  |> pgroll.validate(pgroll.validate_args("dist/app.tar.gz"))
+  |> flow.map(fn(result) { result.report_path })
   |> flow.run
 }
 ```
@@ -160,13 +162,12 @@ automation are separate from component guests.
 defmodule Main do
   use FluentCI.Plugin
   alias FluentCI.Flow
-  alias FluentCI.Modules.Pgroll, as: Dependency
+  alias FluentCI.Modules.Pgroll
 
   defplugin run do
-    Flow.pipeline("ci")
+    Flow.pipeline("pgroll-validate")
     |> Flow.workdir(".")
-    |> Dependency.start(%{"file" => "dist/artifact.tar.gz"})
-    |> Flow.exec(["git", "diff", "--exit-code"])
+    |> Pgroll.validate(%{"file" => "dist/app.tar.gz"})
     |> Flow.stdout()
   end
 end
@@ -180,13 +181,12 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 ```clojure
 (ns main.plugin
   (:require [fluentci.flow :as flow]
-            [fluentci-modules.pgroll :as dependency]))
+            [fluentci-modules.pgroll :as pgroll]))
 
 (defn run []
-  (-> (flow/pipeline "ci")
+  (-> (flow/pipeline "pgroll-validate")
       (flow/workdir ".")
-      (dependency/start {:file "dist/artifact.tar.gz"})
-      (flow/exec ["git" "diff" "--exit-code"])
+      (pgroll/validate {:file "dist/app.tar.gz"})
       flow/run!))
 ```
 
@@ -194,10 +194,10 @@ provide the typed result callbacks or cleanup combinators of the other examples.
 
 ```rescript
 let run = (): string =>
-  Flow.pipeline("ci")
+  Flow.pipeline("pgroll-validate")
   ->Flow.workdir(".")
-  ->FluentciModulesPgroll.start(FluentciModulesPgroll.startArgs(~file="dist/artifact.tar.gz"))
-  ->Flow.exec(["git", "diff", "--exit-code"])
+  ->FluentciModulesPgroll.validate(FluentciModulesPgroll.validateArgs(~file="dist/app.tar.gz"))
+  ->Flow.map(result => result.reportPath)
   ->Flow.run
 ```
 
@@ -205,15 +205,15 @@ let run = (): string =>
 
 ```python
 from fluentci.flow import pipeline
-from fluentci_modules import pgroll as dependency
+from fluentci_modules import pgroll
 
 
 def run() -> str:
     return (
-        pipeline("ci")
+        pipeline("pgroll-validate")
         .workdir(".")
-        .pipe(dependency.start, {"file": "dist/artifact.tar.gz"})
-        .exec("git", "diff", "--exit-code")
+        .pipe(pgroll.validate, {"file": "dist/app.tar.gz"})
+        .map(lambda result: result.report_path)
         .run()
     )
 ```
@@ -222,13 +222,13 @@ def run() -> str:
 
 ```typescript
 import * as flow from "./fluentci_modules/flow";
-import * as dependency from "./fluentci_modules/pgroll/index";
+import * as pgroll from "./fluentci_modules/pgroll/index";
 
 export function run(): string {
-  return flow.pipeline("ci")
+  return flow.pipeline("pgroll-validate")
     .workdir(".")
-    .pipe(dependency.start, {"file":"dist/artifact.tar.gz"})
-    .exec(["git", "diff", "--exit-code"])
+    .pipe(pgroll.validate, {"file":"dist/app.tar.gz"})
+    .map(result => result.reportPath)
     .run();
 }
 ```
