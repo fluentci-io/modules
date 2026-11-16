@@ -383,7 +383,7 @@ fn connectivity(
     }),
   )
   use _ <- result.try(case d.s(profile, "name") {
-    "redis" | "valkey" -> {
+    "redis" | "valkey" | "dragonfly" -> {
       use output <- result.try(native.tcp(port, "PING\r\n", True))
       c.require(string.contains(output, "PONG"), "Unexpected Redis response")
     }

@@ -362,6 +362,37 @@
     "files": {}
   },
   {
+    "name": "dragonfly",
+    "title": "Dragonfly",
+    "image": "ghcr.io/dragonflydb/dragonfly",
+    "version": "v2.0.2",
+    "port": 6379,
+    "ports": [
+      6379
+    ],
+    "scheme": "redis",
+    "command": [
+      "--bind=0.0.0.0",
+      "--port=6379",
+      "--force_epoll=true",
+      "--proactor_threads=1",
+      "--maxmemory=256mb",
+      "--version_check=false",
+      "--dir=/data"
+    ],
+    "env": {},
+    "probe": "tcp",
+    "path": "/",
+    "exec": [],
+    "timeout": 60000,
+    "notes": "Single-node Redis-compatible test cache without authentication. Uses epoll instead of io_uring for standard Docker sandbox compatibility, one I/O thread and a 256 MiB memory limit. Readiness checks the allocated loopback binding; full E2E also requires a Redis PONG. Mount /data for snapshots; explicit named or bind-mounted data survives stop. These settings target disposable CI workloads.",
+    "source": "https://github.com/dragonflydb/dragonfly/blob/v2.0.2/README.md",
+    "volumes": [
+      "/data"
+    ],
+    "files": {}
+  },
+  {
     "name": "dynamodb",
     "title": "DynamoDB Local",
     "image": "amazon/dynamodb-local",

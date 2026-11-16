@@ -279,6 +279,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "dragonfly"
+version = "0.1.0"
+path = "services/dragonfly"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "drizzlekit"
 version = "0.1.0"
 path = "databases/drizzlekit"

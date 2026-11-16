@@ -432,6 +432,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [doltdb](./services/doltdb/README.md) | Run Dolt with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/doltdb/COMPONENT.md) |
 | [doppler](./secrets/doppler/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `run-command`, [typed contract](./secrets/doppler/COMPONENT.md) |
 | [dpkg](./packaging/dpkg/README.md) | Build packages from a Linux dpkg package tree and target architecture. | `build`, `validate`, [typed contract](./packaging/dpkg/COMPONENT.md) |
+| [dragonfly](./services/dragonfly/README.md) | Run Dragonfly with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/dragonfly/COMPONENT.md) |
 | [drizzlekit](./databases/drizzlekit/README.md) | Generate, check and apply SQL migrations. | `run`, `version`, `migrate`, [typed contract](./databases/drizzlekit/COMPONENT.md) |
 | [dynamodb](./services/dynamodb/README.md) | Run DynamoDB Local with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/dynamodb/COMPONENT.md) |
 | [elasticsearch](./services/elasticsearch/README.md) | Run Elasticsearch with native readiness, logs and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/elasticsearch/COMPONENT.md) |

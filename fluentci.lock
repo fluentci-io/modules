@@ -117,6 +117,7 @@
     "dependency:services/cratedb:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/cratedb/../../setup/docker\"\nsdk = \"purescript\"\n",
     "dependency:services/databend:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/databend/../../setup/docker\"\nsdk = \"purescript\"\n",
     "dependency:services/doltdb:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/doltdb/../../setup/docker\"\nsdk = \"purescript\"\n",
+    "dependency:services/dragonfly:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/dragonfly/../../setup/docker\"\nsdk = \"purescript\"\n",
     "dependency:services/dynamodb:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/dynamodb/../../setup/docker\"\nsdk = \"purescript\"\n",
     "dependency:services/elasticsearch:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/elasticsearch/../../setup/docker\"\nsdk = \"purescript\"\n",
     "dependency:services/etcd:setup-docker": "path:name = \"setup-docker\"\nruntime = \"component\"\npath = \"services/etcd/../../setup/docker\"\nsdk = \"purescript\"\n",

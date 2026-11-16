@@ -235,6 +235,11 @@
     },
     "scenario": "Build packages from a Linux dpkg package tree and target architecture."
   },
+  "dragonfly": {
+    "operation": "start",
+    "arguments": {},
+    "scenario": "Start Dragonfly for Redis-compatible integration tests using ghcr.io/dragonflydb/dragonfly:v2.0.2. Return the allocated endpoint to the caller; use it when configuring your Redis client."
+  },
   "drizzlekit": {
     "operation": "check",
     "arguments": {},

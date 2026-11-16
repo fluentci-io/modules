@@ -105,6 +105,7 @@ checks remain sequential on one Ubuntu runner to limit memory use.
 | [CrateDB](./cratedb/README.md) | `crate:latest` | `4200` | http `/` |
 | [Databend](./databend/README.md) | `datafuselabs/databend:latest` | `8000` | tcp |
 | [Dolt](./doltdb/README.md) | `dolthub/dolt-sql-server:latest` | `3306` | tcp |
+| [Dragonfly](./dragonfly/README.md) | `ghcr.io/dragonflydb/dragonfly:v2.0.2` | `6379` | tcp |
 | [DynamoDB Local](./dynamodb/README.md) | `amazon/dynamodb-local:latest` | `8000` | tcp |
 | [Elasticsearch](./elasticsearch/README.md) | `docker.elastic.co/elasticsearch/elasticsearch:8.15.0` | `9200` | http `/_cluster/health?wait_for_status=yellow&timeout=1s` |
 | [etcd](./etcd/README.md) | `quay.io/coreos/etcd:v3.6.5` | `2379` | http `/health` |

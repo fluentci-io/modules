@@ -124,6 +124,9 @@
   "dpkg": [
     "setup-dpkg"
   ],
+  "dragonfly": [
+    "setup-docker"
+  ],
   "drizzlekit": [
     "setup-drizzlekit"
   ],
