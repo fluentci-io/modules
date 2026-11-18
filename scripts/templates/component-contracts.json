@@ -6122,7 +6122,6 @@
   },
   "cache": {
     "imports": [
-      "import Prelude",
       "import Data.Maybe (Maybe)",
       "import Effect (Effect)",
       "import CI.Cache as Native"
