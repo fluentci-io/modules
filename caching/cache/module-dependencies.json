@@ -1,0 +1,22 @@
+{
+  "module": "cache",
+  "requirements": [
+    {
+      "alias": "setup-node",
+      "program": "node",
+      "probe": [
+        "node",
+        "-e",
+        "if(Number(process.versions.node.split('.')[0])<24)process.exit(1)"
+      ]
+    },
+    {
+      "alias": "setup-nix",
+      "program": "nix",
+      "probe": [
+        "which",
+        "nix"
+      ]
+    }
+  ]
+}

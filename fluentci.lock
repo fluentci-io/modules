@@ -17,6 +17,8 @@
     "dependency:build/ninja:setup-ninja": "path:name = \"setup-ninja\"\nruntime = \"component\"\npath = \"build/ninja/../../setup/ninja\"\nsdk = \"purescript\"\n",
     "dependency:build/nx:setup-nx": "path:name = \"setup-nx\"\nruntime = \"component\"\npath = \"build/nx/../../setup/nx\"\nsdk = \"purescript\"\n",
     "dependency:build/turborepo:setup-turborepo": "path:name = \"setup-turborepo\"\nruntime = \"component\"\npath = \"build/turborepo/../../setup/turborepo\"\nsdk = \"purescript\"\n",
+    "dependency:caching/cache:setup-nix": "path:name = \"setup-nix\"\nruntime = \"component\"\npath = \"caching/cache/../../setup/nix\"\nsdk = \"purescript\"\n",
+    "dependency:caching/cache:setup-node": "path:name = \"setup-node\"\nruntime = \"component\"\npath = \"caching/cache/../../setup/node\"\nsdk = \"purescript\"\n",
     "dependency:caching/cachix:setup-cachix": "path:name = \"setup-cachix\"\nruntime = \"component\"\npath = \"caching/cachix/../../setup/cachix\"\nsdk = \"purescript\"\n",
     "dependency:caching/cachix:setup-nix": "path:name = \"setup-nix\"\nruntime = \"component\"\npath = \"caching/cachix/../../setup/nix\"\nsdk = \"purescript\"\n",
     "dependency:caching/sccache:setup-sccache": "path:name = \"setup-sccache\"\nruntime = \"component\"\npath = \"caching/sccache/../../setup/sccache\"\nsdk = \"purescript\"\n",

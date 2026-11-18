@@ -1,0 +1,17 @@
+{
+  "name": "fluentci-ci-cache",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.3",
+    "tar": "7.5.23"
+  }
+}

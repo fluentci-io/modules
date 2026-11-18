@@ -67,6 +67,14 @@ pub fn definitions(
             True -> [requirement("setup-curl", "curl", ["which", "curl"])]
             False ->
               case name {
+                "cache" -> [
+                  requirement("setup-node", "node", [
+                    "node",
+                    "-e",
+                    "if(Number(process.versions.node.split('.')[0])<24)process.exit(1)",
+                  ]),
+                  requirement("setup-nix", "nix", ["which", "nix"]),
+                ]
                 "nix-publish" -> [
                   requirement("setup-nix", "nix", ["which", "nix"]),
                   requirement("setup-bun", "bun", ["which", "bun"]),

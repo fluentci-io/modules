@@ -46,6 +46,10 @@
     "setup-docker",
     "setup-buildx"
   ],
+  "cache": [
+    "setup-node",
+    "setup-nix"
+  ],
   "cachix": [
     "setup-nix",
     "setup-cachix"

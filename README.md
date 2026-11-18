@@ -407,6 +407,7 @@ See the [pipeline audit](./docs/PIPELINE_AUDIT.md) and [CI integration guide](./
 | [black](./formatting/black/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `format`, [typed contract](./formatting/black/COMPONENT.md) |
 | [buildkit](./containers/buildkit/README.md) | Execute arbitrary literal CLI arguments. | `run`, `version`, `build`, [typed contract](./containers/buildkit/COMPONENT.md) |
 | [buildx](./containers/buildx/README.md) | Run Docker Buildx buildx and return execution report paths. | `setup`, `buildx`, `dap`, `debug`, [typed contract](./containers/buildx/COMPONENT.md) |
+| [cache](./caching/cache/README.md) | Configure a FluentCI cache protocol using required environment credentials. | `setup`, `nix-build`, `save`, `restore`, [typed contract](./caching/cache/COMPONENT.md) |
 | [cachix](./caching/cachix/README.md) | Configure a Cachix cache using host credentials. | `setup`, `push`, [typed contract](./caching/cachix/COMPONENT.md) |
 | [caddy](./services/caddy/README.md) | Run Caddy with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/caddy/COMPONENT.md) |
 | [cassandra](./services/cassandra/README.md) | Run Cassandra with native service readiness and lifecycle. | `start`, `stop`, `restart`, `status`, `logs`, [typed contract](./services/cassandra/COMPONENT.md) |

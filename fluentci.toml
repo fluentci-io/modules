@@ -104,6 +104,13 @@ sdk = "purescript"
 runtime = "component"
 
 [[modules]]
+name = "cache"
+version = "0.1.0"
+path = "caching/cache"
+sdk = "purescript"
+runtime = "component"
+
+[[modules]]
 name = "cachix"
 version = "0.1.0"
 path = "caching/cachix"
